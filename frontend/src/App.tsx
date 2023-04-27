@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
-// SPDX-FileCopyrightText: 2010-2021 Dirk Riehle <dirk@riehle.org
-// SPDX-FileCopyrightText: 2019 Georg Schwarz <georg. schwarz@fau.de>
+// SPDX-FileCopyrightText: 2010-2021 Dirk Riehle <dirk@riehle.org>
+// SPDX-FileCopyrightText: 2019 Georg Schwarz <georg.schwarz@fau.de>
 import React from 'react'
 import logo from './logo.svg'
 import './App.css'
