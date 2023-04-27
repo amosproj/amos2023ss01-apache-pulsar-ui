@@ -17,9 +17,11 @@ A comparison of the capabilities of both APIs can be found [here](https://pulsar
 
 # What libraries exist to facilitate the interaction
 Pulsar provides the complete Java API including all available packages to interact with the Admin API [here](https://pulsar.apache.org/api/admin/2.11.x/).
-Basic setup info on how to interact with the a Pulsar application via the Java API can be found [here](https://pulsar.apache.org/docs/2.11.x/admin-api-get-started/).
 
-Minimum example using localhost:
+- Link to [maven repository](https://mvnrepository.com/artifact/org.apache.pulsar/pulsar-client-admin-api/2.11.1).
+- Basic setup info on how to interact with the a Pulsar application via the Java API can be found [here](https://pulsar.apache.org/docs/2.11.x/admin-api-get-started/).
+
+Minimum example using localhost taken from the setup info page:
 ```java
 String url = "http://localhost:8080";
 // Pass auth-plugin class fully-qualified name if Pulsar-security enabled
