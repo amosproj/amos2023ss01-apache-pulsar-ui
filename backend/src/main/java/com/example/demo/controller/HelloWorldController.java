@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Controller
 public class HelloWorldController {
@@ -23,26 +24,28 @@ public class HelloWorldController {
 
         try (PulsarAdmin admin = PulsarAdminFactory.create(pulsarConnectionUrl)) {
 
-            List<String> tenants = admin.tenants().getTenants();
-            String fooTenant = tenants.get(0);
+            // just create some random topics
+            admin.topics().createNonPartitionedTopic(UUID.randomUUID().toString());
+            admin.topics().createNonPartitionedTopic(UUID.randomUUID().toString());
+            admin.topics().createNonPartitionedTopic(UUID.randomUUID().toString());
 
-            List<String> namespaces = admin.namespaces().getNamespaces(fooTenant);
-
-            List<List<String>> allTopicsOfTenant = namespaces.stream()
-                    .map(namespace -> {
+            // get all topics of "public" tenant
+            List<String> namespaces = admin.namespaces().getNamespaces("public");
+            List<String> topics = namespaces.stream()
+                    .flatMap(namespace -> {
                         try {
-                            return admin.topics().getList(namespace);
+                            return admin.topics().getList(namespace).stream();
                         } catch (PulsarAdminException e) {
                             throw new RuntimeException(e);
                         }
                     })
                     .toList();
 
-            return new ResponseEntity<>(allTopicsOfTenant, HttpStatus.OK);
+            return new ResponseEntity<>(topics, HttpStatus.OK);
 
         } catch (PulsarClientException | PulsarAdminException e) {
             return new ResponseEntity<>(
-                    "Somethin went wrong while querying the pulsar applications state",
+                    "Something went wrong while querying the pulsar applications state: %s".formatted(e),
                     HttpStatus.SERVICE_UNAVAILABLE
             );
         }
