@@ -66,6 +66,14 @@
 			<scope>test</scope>
 			<version>5.8.2</version>
 		</dependency>
+
+		<!-- pulsar dependencies -->
+		<dependency>
+			<groupId>org.apache.pulsar</groupId>
+			<artifactId>pulsar-client-admin</artifactId>
+			<version>2.11.1</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
