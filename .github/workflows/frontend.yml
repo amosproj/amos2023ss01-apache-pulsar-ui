@@ -22,3 +22,7 @@ jobs:
       - name: Run lint
         run: yarn lint
         working-directory: ./frontend
+
+      - name: Run jest
+      run: yarn test
+      working-directory: ./frontend
