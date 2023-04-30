@@ -58,7 +58,7 @@ Executes prettier and formats code according to our predefined style. Fixes all 
 
 Builds the docker image of the frontend.
 
-### `docker run -p 8080:8080 pui-frontend`
+### `docker run -p 8082:8082 pui-frontend`
 
 Starts the frontend docker container on port 8080. 
 
