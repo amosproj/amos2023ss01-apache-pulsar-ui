@@ -3,7 +3,7 @@ name: test-frontend
 on: push
 
 jobs:
-  lint-frontend:
+  test-frontend:
     runs-on: ubuntu-latest
 
     steps:
