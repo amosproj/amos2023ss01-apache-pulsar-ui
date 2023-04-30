@@ -1,11 +1,9 @@
 import React from 'react'
 import { useState } from 'react'
 
-//TODO correct type
-// prettier-ignore
 interface LinkProps {
-	page?: any
-	children: any
+	page?: string,
+	children: React.ReactNode
 }
 
 const STATUS = {
