@@ -52,8 +52,18 @@ Executes the `eslint --fix` command which should handle all fixable linting erro
 
 Executes prettier and formats code according to our predefined style. Fixes all prettier linting errors.
 
+## Docker Container
 
+### `docker build -t pui-frontend .`
 
+Builds the docker image of the frontend.
+
+### `docker run -p 8080:8080 pui-frontend`
+
+Starts the frontend docker container on port 8080. 
+
+The port on the host machine can still be adjusted if necessary by changing the first of the two ports.
+Recommend changing the app/container port in the `.env` file as well.
 
 ## Learn More
 
