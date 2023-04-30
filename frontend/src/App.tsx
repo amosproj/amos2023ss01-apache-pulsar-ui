@@ -2,8 +2,9 @@
 // SPDX-FileCopyrightText: 2010-2021 Dirk Riehle <dirk@riehle.org>
 // SPDX-FileCopyrightText: 2019 Georg Schwarz <georg.schwarz@fau.de>
 import React from 'react'
-import logo from './logo.svg'
+import logo from './assets/images/team-logo.png'
 import './App.css'
+import Counter from './components/Counter';
 
 function App() {
 	return (
@@ -22,6 +23,7 @@ function App() {
 					Learn React
 				</a>
 			</header>
+			<Counter/>
 		</div>
 	)
 }
