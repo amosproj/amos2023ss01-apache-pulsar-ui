@@ -8,11 +8,11 @@
 		<version>2.7.11</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.example</groupId>
-	<artifactId>demo</artifactId>
+	<groupId>de.amos</groupId>
+	<artifactId>apachepulsarui</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>demo</name>
-	<description>Demo project for Spring Boot</description>
+	<name>Apache Pulsar Ui Application</name>
+	<description>Application die Read and Create Datastream for an Apache Pulsar Installation.</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>

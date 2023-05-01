@@ -1,4 +1,9 @@
-package com.example.demo.factory;
+/*
+ * SPDX-License-Identifier: MIT
+ * SPDX-FileCopyrightText: 2023 Jonas Arnhold <jonasarnhold@web.de>
+ */
+
+package de.amos.apachepulsarui.factory;
 
 import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.apache.pulsar.client.api.PulsarClientException;
