@@ -12,7 +12,7 @@
 	<artifactId>apachepulsarui</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Apache Pulsar Ui Application</name>
-	<description>Application die Read and Create Datastream for an Apache Pulsar Installation.</description>
+	<description>Application to read and manipulate streams of an Apache Pulsar installation.</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
