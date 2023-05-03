@@ -1,0 +1,13 @@
+.MuiInputBase-root.primary-textfield {
+    color: $primary-blue;
+}
+.MuiButton-root.primary-button {
+    background-color: $primary-blue;
+    color: $primary-white;
+    text-transform: unset;
+    &:hover {
+        color: $primary-blue;
+        background-color: $primary-white;
+        border: 1px solid $primary-blue;
+    }
+}
