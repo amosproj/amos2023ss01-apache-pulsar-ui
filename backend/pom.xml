@@ -73,6 +73,11 @@
 			<artifactId>pulsar-client</artifactId>
 			<version>2.11.1</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.pulsar</groupId>
+			<artifactId>pulsar-client-admin</artifactId>
+			<version>2.11.1</version>
+		</dependency>
 
 	</dependencies>
 
