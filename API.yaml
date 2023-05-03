@@ -1,0 +1,105 @@
+openapi: 3.0.3
+info:
+  title: Apache Pulsar UI backend API - OpenAPI 3.0
+  description: |-
+    TODO: Insert some description here later...
+  version: 1.0.11
+servers:
+  - url: https://www.wedonthavearunningserveryet.com # TODO
+tags:
+  - name: messages
+    description: Read stream data.
+  - name: topics
+    description: Topics and meta information.
+paths:
+
+  /topics:
+    get:
+      tags:
+        - topics
+      summary: Get all topics.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Topic'
+
+  /messages:
+    get:
+      tags:
+        - messages
+      summary: Get all messages regardless of the topic
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Topic'
+
+  /messages/{topic}:
+    get:
+      tags:
+        - messages
+      summary: Get a message of a specific topic.
+      parameters:
+        - in: path
+          name: topic
+          required: true
+          schema:
+            type: string
+          description: The topic a user wants to get messages from.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Topic'
+    post:
+      tags:
+        - messages
+      summary: Send a message to a specific topic.
+      parameters:
+        - in: path
+          name: topic
+          required: true
+          schema:
+            type: string
+          description: The topic a user want to send a message to.
+      responses:
+        '200':
+          description: OK
+
+components:
+  schemas:
+    Topic:
+      description: A pulsar topic.
+      properties:
+        id:
+          type: string
+          example: persistent://some-tenant/foo-namespace/bar-topic
+      required:
+        - tenant
+        - namespace
+        - name
+        - persistent
+
+    Message:
+      description: A pulsar message.
+      properties:
+        messageId:
+          type: string
+          example: 5e7873e8-537b-4abd-8ad8-e831656e8445
+        payload:
+          type: string
+          example: f3a19f87f399bff44fb0
+          description: Depending on withSchemaApplied, the payload is a JSON object or just raw bytes.
