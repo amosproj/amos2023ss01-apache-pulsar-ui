@@ -1,3 +1,8 @@
+/*
+ * SPDX-License-Identifier: MIT
+ * SPDX-FileCopyrightText: 2023 Anna Haverkamp <anna.lucia.haverkamp@gmail.com>
+ */
+
 package de.amos.apachepulsarui.controller;
 
 import de.amos.apachepulsarui.service.TopicService;

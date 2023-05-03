@@ -1,15 +1,18 @@
 /*
  * SPDX-License-Identifier: MIT
  * SPDX-FileCopyrightText: 2023 Niklas Teschner <niklas.teschner@web.de>
+ * SPDX-FileCopyrightText: 2023 Anna Haverkamp <anna.lucia.haverkamp@gmail.com>
  */
 
 package de.amos.apachepulsarui.service;
 
-import de.amos.apachepulsarui.dto.MessageDto;
 import lombok.RequiredArgsConstructor;
 import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.apache.pulsar.client.admin.PulsarAdminException;
-import org.apache.pulsar.client.api.*;
+import org.apache.pulsar.client.api.CompressionType;
+import org.apache.pulsar.client.api.Producer;
+import org.apache.pulsar.client.api.PulsarClient;
+import org.apache.pulsar.client.api.PulsarClientException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,10 +26,6 @@ public class TopicService {
     private final PulsarAdmin pulsarAdmin;
 
     private final NamespaceService namespaceService;
-
-    private final MessageService messageService;
-
-
 
     public void sendMessageToTopic(String topicName) {
         Producer<byte[]> producer = createProducer(topicName);
@@ -65,9 +64,5 @@ public class TopicService {
                 })
                 .toList();
 
-    }
-
-    public List<MessageDto> getMessagesByTopicName(String topicName) {
-        return messageService.getMessagesByTopicName(topicName);
     }
 }
