@@ -5,6 +5,7 @@
 
 package de.amos.apachepulsarui.service;
 
+import de.amos.apachepulsarui.dto.MessageDto;
 import lombok.RequiredArgsConstructor;
 import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.apache.pulsar.client.admin.PulsarAdminException;
@@ -40,9 +41,7 @@ public class TopicService {
         } catch (PulsarClientException e) {
             throw new RuntimeException(e);
         }
-
     }
-
 
     private Producer<byte[]> createProducer(String topicName) {
         try {
@@ -68,7 +67,7 @@ public class TopicService {
 
     }
 
-    public byte[] getMessagesByTopicName(String topicName) {
+    public List<MessageDto> getMessagesByTopicName(String topicName) {
         return messageService.getMessagesByTopicName(topicName);
     }
 }

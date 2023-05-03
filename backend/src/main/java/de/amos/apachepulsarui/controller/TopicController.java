@@ -5,6 +5,7 @@
 
 package de.amos.apachepulsarui.controller;
 
+import de.amos.apachepulsarui.dto.MessageDto;
 import de.amos.apachepulsarui.service.TopicService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -29,7 +30,7 @@ public class TopicController extends BaseController{
     }
 
     @GetMapping("/{name}/messages")
-    public ResponseEntity<byte[]> getMessagesByTopic(@PathVariable String name) {
+    public ResponseEntity<List<MessageDto>> getMessagesByTopic(@PathVariable String name) {
         return new ResponseEntity<>(topicService.getMessagesByTopicName(name), HttpStatus.OK);
     }
 }

@@ -5,9 +5,16 @@
 
 package de.amos.apachepulsarui.service;
 
+import de.amos.apachepulsarui.dto.MessageDto;
 import lombok.RequiredArgsConstructor;
-import org.apache.pulsar.client.api.*;
+import org.apache.pulsar.client.api.Message;
+import org.apache.pulsar.client.api.PulsarClient;
+import org.apache.pulsar.client.api.PulsarClientException;
+import org.apache.pulsar.client.api.Reader;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -15,24 +22,27 @@ public class MessageService {
 
     private final PulsarClient pulsarClient;
 
-    public byte[] getMessagesByTopicName (String name) {
-        Consumer<byte[]> messageConsumer = createConsumer(name);
+    public List<MessageDto> getMessagesByTopicName (String name) {
+        Reader<byte[]> messageReader = createReader(name);
+        List<MessageDto> messages = new ArrayList<>();
         try {
-            return messageConsumer.receive().getData();
+            while (messageReader.hasReachedEndOfTopic()) {
+                Message<byte []> message = messageReader.readNext();
+                messages.add(MessageDto.builder().data(message.getData().toString()).id(message.getSequenceId()).build());
+            }
+            return messages;
+
         } catch (PulsarClientException e) {
             throw new RuntimeException(e);
         }
 
 
     }
-    private Consumer<byte[]> createConsumer(String topicName) {
+    private Reader<byte[]> createReader(String topicName) {
         try {
-            return pulsarClient.newConsumer()
+            return pulsarClient.newReader()
                     .topic(topicName)
-                    .subscriptionName("A_2")
-                    .subscriptionType(SubscriptionType.Exclusive)
-                    .subscriptionInitialPosition(SubscriptionInitialPosition.Earliest)
-                    .subscribe();
+                    .create();
         } catch (PulsarClientException e) {
             throw new RuntimeException(e);
         }
