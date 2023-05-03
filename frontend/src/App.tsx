@@ -5,6 +5,7 @@ import React from 'react'
 import logo from './assets/images/team-logo.png'
 import './App.css'
 import Counter from './components/Counter'
+import { ReduxCounter } from './features/counter/ReduxCounter'
 
 function App() {
 	return (
@@ -24,6 +25,7 @@ function App() {
 				</a>
 			</header>
 			<Counter />
+			<ReduxCounter />
 		</div>
 	)
 }
