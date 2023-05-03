@@ -5,22 +5,14 @@
 
 package de.amos.apachepulsarui.domain;
 
-import lombok.Getter;
-import lombok.Setter;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
 
-@Entity
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
 public class Message {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
     String data;

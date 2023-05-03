@@ -1,13 +1,13 @@
 /*
  * SPDX-License-Identifier: MIT
  * SPDX-FileCopyrightText: 2023 Niklas Teschner <niklas.teschner@web.de>
+ * SPDX-FileCopyrightText: 2023 Anna Haverkamp <anna.lucia.haverkamp@gmail.com>
  */
 
 package de.amos.apachepulsarui.service;
 
-import de.amos.apachepulsarui.dto.MessageDto;
+import de.amos.apachepulsarui.domain.Message;
 import lombok.RequiredArgsConstructor;
-import org.apache.pulsar.client.api.Message;
 import org.apache.pulsar.client.api.PulsarClient;
 import org.apache.pulsar.client.api.PulsarClientException;
 import org.apache.pulsar.client.api.Reader;
@@ -22,13 +22,13 @@ public class MessageService {
 
     private final PulsarClient pulsarClient;
 
-    public List<MessageDto> getMessagesByTopicName (String name) {
+    public List<Message> getMessagesByTopicName (String name) {
         Reader<byte[]> messageReader = createReader(name);
-        List<MessageDto> messages = new ArrayList<>();
+        List<Message> messages = new ArrayList<>();
         try {
             while (messageReader.hasReachedEndOfTopic()) {
-                Message<byte []> message = messageReader.readNext();
-                messages.add(MessageDto.builder().data(message.getData().toString()).id(message.getSequenceId()).build());
+                var message = messageReader.readNext();
+                messages.add(new Message(message.getSequenceId(), message.getData().toString()));
             }
             return messages;
 

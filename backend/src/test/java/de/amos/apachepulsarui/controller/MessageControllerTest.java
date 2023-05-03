@@ -5,7 +5,7 @@
 
 package de.amos.apachepulsarui.controller;
 
-import de.amos.apachepulsarui.dto.MessageDto;
+import de.amos.apachepulsarui.domain.Message;
 import de.amos.apachepulsarui.service.MessageService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -35,18 +35,18 @@ public class MessageControllerTest {
     @Test
     void getMessagesByTopic_returnsMessages() throws Exception {
         var messages = List.of(
-                MessageDto.builder().id(1).data("Nebuchadnezzar").build(),
-                MessageDto.builder().id(2).data("Serenity").build()
+                new Message(1L, "Nebuchadnezzar"),
+                new Message(2L, "Serenity")
         );
         Mockito.when(messageService.getMessagesByTopicName("spaceships")).thenReturn(messages);
 
         mockMvc.perform(get("/message/spaceships/messages")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0].id", equalTo(1)))
-                .andExpect(jsonPath("$[0].data", equalTo("Nebuchadnezzar")))
-                .andExpect(jsonPath("$[1].id", equalTo(2)))
-                .andExpect(jsonPath("$[1].data", equalTo("Serenity")));
+                .andExpect(jsonPath("$.messages", hasSize(2)))
+                .andExpect(jsonPath("$.messages[0].id", equalTo(1)))
+                .andExpect(jsonPath("$.messages[0].data", equalTo("Nebuchadnezzar")))
+                .andExpect(jsonPath("$.messages[1].id", equalTo(2)))
+                .andExpect(jsonPath("$.messages[1].data", equalTo("Serenity")));
     }
 }

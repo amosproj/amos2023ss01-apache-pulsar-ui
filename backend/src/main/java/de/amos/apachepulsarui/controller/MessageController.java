@@ -6,7 +6,8 @@
 
 package de.amos.apachepulsarui.controller;
 
-import de.amos.apachepulsarui.dto.MessageDto;
+import de.amos.apachepulsarui.domain.Message;
+import de.amos.apachepulsarui.dto.MessagesDto;
 import de.amos.apachepulsarui.service.MessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,7 +26,10 @@ public class MessageController extends BaseController {
     private final MessageService messageService;
 
     @GetMapping("/{topicName}/messages")
-    public ResponseEntity<List<MessageDto>> getMessagesByTopic(@PathVariable String topicName) {
-        return new ResponseEntity<>(messageService.getMessagesByTopicName(topicName), HttpStatus.OK);
+    public ResponseEntity<MessagesDto> getMessagesByTopic(@PathVariable String topicName) {
+
+        List<Message> messages = messageService.getMessagesByTopicName(topicName);
+        return new ResponseEntity<>(MessagesDto.fromMessages(messages), HttpStatus.OK);
     }
+
 }
