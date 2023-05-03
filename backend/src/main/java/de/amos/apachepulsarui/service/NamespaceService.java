@@ -5,6 +5,7 @@
 
 package de.amos.apachepulsarui.service;
 
+import de.amos.apachepulsarui.domain.Namespace;
 import lombok.RequiredArgsConstructor;
 import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.apache.pulsar.client.admin.PulsarAdminException;
@@ -19,12 +20,20 @@ import java.util.List;
 public class NamespaceService {
 
     private final PulsarAdmin pulsarAdmin;
+    private final TenantService tenantService;
 
-    public List<String> getAllPublicNamespaces() {
-        try {
-            return pulsarAdmin.namespaces().getNamespaces("public");
-        } catch (PulsarAdminException e) {
-            throw new RuntimeException(e);
-        }
+    public List<Namespace> getAllNamespaces() {
+        return tenantService.getAllTenants().stream()
+                .flatMap(tenant -> {
+                    try {
+                        return pulsarAdmin.namespaces().getNamespaces(tenant.getId()).stream()
+                                .map(namespace -> Namespace.builder()
+                                        .id(namespace)
+                                        .build());
+                    } catch (PulsarAdminException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+                .toList();
     }
 }

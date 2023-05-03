@@ -6,13 +6,10 @@
 
 package de.amos.apachepulsarui.service;
 
+import de.amos.apachepulsarui.domain.Namespace;
 import lombok.RequiredArgsConstructor;
 import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.apache.pulsar.client.admin.PulsarAdminException;
-import org.apache.pulsar.client.api.CompressionType;
-import org.apache.pulsar.client.api.Producer;
-import org.apache.pulsar.client.api.PulsarClient;
-import org.apache.pulsar.client.api.PulsarClientException;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
@@ -23,43 +20,16 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TopicService {
 
-    private final PulsarClient pulsarClient;
-
     private final PulsarAdmin pulsarAdmin;
 
     private final NamespaceService namespaceService;
 
-    public void sendMessageToTopic(String topicName) {
-        Producer<byte[]> producer = createProducer(topicName);
-
-        try {
-            producer.newMessage()
-                    .key("my-message-key")
-                    .value("my-async-message".getBytes())
-                    .property("my-key", "my-value")
-                    .property("my-other-key", "my-other-value")
-                    .send();
-        } catch (PulsarClientException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private Producer<byte[]> createProducer(String topicName) {
-        try {
-            return pulsarClient.newProducer().topic(topicName).compressionType(CompressionType.LZ4).create();
-        } catch (PulsarClientException e) {
-            throw new RuntimeException(e);
-        }
-
-    }
-
-
     public List<String> getAllTopics() {
-        List<String> namespaces = namespaceService.getAllPublicNamespaces();
+        List<Namespace> namespaces = namespaceService.getAllNamespaces();
         return namespaces.stream()
                 .flatMap(namespace -> {
                     try {
-                        return pulsarAdmin.topics().getList(namespace).stream();
+                        return pulsarAdmin.topics().getList(namespace.getId()).stream();
                     } catch (PulsarAdminException e) {
                         throw new RuntimeException(e);
                     }
@@ -67,4 +37,7 @@ public class TopicService {
                 .toList();
 
     }
+
+
+
 }
