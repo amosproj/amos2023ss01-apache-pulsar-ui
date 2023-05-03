@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { TextField, Button } from '@mui/material'
 import TopicSelect from './CustomSelect'
+import CustomAccordion from './CustomAccordion'
 
 const Form = () => {
 	const [topic, setTopic] = useState<string>('')
@@ -30,7 +31,7 @@ const Form = () => {
 		getData()
 	}, [])
 
-	const handleSubmit = (event: any) => {
+	const handleSubmit = (event: { preventDefault: () => void }) => {
 		event.preventDefault()
 
 		setMessageError(false)
@@ -52,7 +53,7 @@ const Form = () => {
 		dataCopy.map((single) => {
 			if (single.id === topic) {
 				const tempId = topic + (single.messages.length + 1)
-				const newMessage = { id: tempId, message: message, topicID: topic }
+				const newMessage = { id: tempId, value: message, topicID: topic }
 				single.messages = [...single.messages, newMessage]
 			}
 		})
@@ -61,13 +62,18 @@ const Form = () => {
 	}
 
 	return (
-		<div className="flex justify-center">
+		<div className="flex justify-center gap-8 align-start">
 			<form
 				autoComplete="off"
 				onSubmit={handleSubmit}
 				className="bg-white shadow-lg px-16 py-16 self-center my-4 lg:w-2/5 lg:max-w-md rounded-md w-full"
 			>
-				<h2 className="text-white text-4xl mb-8 font-semibold"></h2>
+				<h4 className="text-black text-center text-3xl mb-4 font-semibold">
+					Message Management
+				</h4>
+				<p className="text-center text-black pb-4">
+					Use the form below to add a message to one of the existing Topics.
+				</p>
 				<div className="flex flex-col gap-4">
 					<TopicSelect
 						data={data}
@@ -79,7 +85,7 @@ const Form = () => {
 					<TextField
 						className="primary-textfield"
 						label="Message"
-						onChange={(e) => setMessage(e.target.value)}
+						onChange={(e: any) => setMessage(e.target.value)}
 						variant="outlined"
 						type="text"
 						sx={{ mb: 3 }}
@@ -92,6 +98,15 @@ const Form = () => {
 					Add message
 				</Button>
 			</form>
+			<div className="bg-white shadow-lg px-16 py-16 self-center my-4 lg:w-2/5 lg:max-w-md rounded-md w-full">
+				<h4 className="text-black text-center text-3xl my-4 font-semibold">
+					Topic View
+				</h4>
+				<p className="text-center text-black pb-4">
+					Click on a Topic to view the associated Messages.
+				</p>
+				<CustomAccordion data={data} />
+			</div>
 		</div>
 	)
 }
