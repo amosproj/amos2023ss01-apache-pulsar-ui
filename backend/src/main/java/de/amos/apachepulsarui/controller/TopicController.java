@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/topic")
-public class TopicController extends BaseController{
+public class TopicController {
 
     private final TopicService topicService;
 

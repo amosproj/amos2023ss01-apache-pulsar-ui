@@ -22,7 +22,7 @@ import java.util.List;
 @RequestMapping("/messages")
 @Controller
 @RequiredArgsConstructor
-public class MessageController extends BaseController {
+public class MessageController {
     private final MessageService messageService;
 
     @GetMapping
