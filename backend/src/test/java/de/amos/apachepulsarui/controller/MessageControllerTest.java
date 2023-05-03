@@ -33,14 +33,14 @@ public class MessageControllerTest {
     MessageService messageService;
 
     @Test
-    void getMessagesByTopic_returnsMessages() throws Exception {
+    void getMessages_returnsMessages() throws Exception {
         var messages = List.of(
                 new Message(1L, "Nebuchadnezzar"),
                 new Message(2L, "Serenity")
         );
-        Mockito.when(messageService.getMessagesByTopicName("spaceships")).thenReturn(messages);
+        Mockito.when(messageService.peekMessages("spaceships", "nasa-subscription")).thenReturn(messages);
 
-        mockMvc.perform(get("/message/spaceships/messages")
+        mockMvc.perform(get("/messages?topic=spaceships&subscription=nasa-subscription")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.messages", hasSize(2)))
@@ -48,5 +48,12 @@ public class MessageControllerTest {
                 .andExpect(jsonPath("$.messages[0].data", equalTo("Nebuchadnezzar")))
                 .andExpect(jsonPath("$.messages[1].id", equalTo(2)))
                 .andExpect(jsonPath("$.messages[1].data", equalTo("Serenity")));
+    }
+
+    @Test
+    void getMessages_withMissingQueryParameters_returnsBadRequest() throws Exception {
+        mockMvc.perform(get("/messages")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
     }
 }

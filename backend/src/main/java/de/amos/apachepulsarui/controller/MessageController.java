@@ -14,21 +14,21 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-@RequestMapping("/message")
+@RequestMapping("/messages")
 @Controller
 @RequiredArgsConstructor
 public class MessageController extends BaseController {
     private final MessageService messageService;
 
-    @GetMapping("/{topicName}/messages")
-    public ResponseEntity<MessagesDto> getMessagesByTopic(@PathVariable String topicName) {
+    @GetMapping
+    public ResponseEntity<MessagesDto> getMessages(@RequestParam String topic, @RequestParam String subscription) {
 
-        List<Message> messages = messageService.getMessagesByTopicName(topicName);
+        List<Message> messages = messageService.peekMessages(topic, subscription);
         return new ResponseEntity<>(MessagesDto.fromMessages(messages), HttpStatus.OK);
     }
 
