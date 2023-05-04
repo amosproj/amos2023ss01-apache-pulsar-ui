@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -39,7 +40,7 @@ public class MessageController {
             value = "/send",
             consumes = {MediaType.APPLICATION_JSON_VALUE}
     )
-    public ResponseEntity<Void> sendMessage(@RequestBody Message message) {
+    public ResponseEntity<Void> sendMessage(@RequestBody @Valid Message message) {
         if (!messageService.isValidMessage(message)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
