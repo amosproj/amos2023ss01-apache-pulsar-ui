@@ -26,6 +26,7 @@ import java.util.List;
 @RequestMapping("/messages")
 @RequiredArgsConstructor
 public class MessageController {
+
     private final MessageService messageService;
 
     @GetMapping
@@ -39,6 +40,9 @@ public class MessageController {
             consumes = {MediaType.APPLICATION_JSON_VALUE}
     )
     public ResponseEntity<Void> sendMessage(@RequestBody Message message) {
+        if (!messageService.isValidMessage(message)) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         if (messageService.sendMessage(message)) {
             return new ResponseEntity<>(HttpStatus.OK);
         }

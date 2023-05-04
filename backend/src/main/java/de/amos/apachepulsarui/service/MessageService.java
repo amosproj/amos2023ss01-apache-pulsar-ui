@@ -14,6 +14,7 @@ import org.apache.pulsar.client.admin.PulsarAdminException;
 import org.apache.pulsar.client.api.Producer;
 import org.apache.pulsar.client.api.PulsarClient;
 import org.apache.pulsar.client.api.PulsarClientException;
+import org.apache.pulsar.common.naming.TopicName;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
@@ -51,7 +52,6 @@ public class MessageService {
     }
 
     public boolean sendMessage(Message message) {
-        // TODO: topic validation
         try (Producer<byte[]> producer = pulsarClient.newProducer()
                 .topic(message.getTopic())
                 .create()
@@ -62,6 +62,10 @@ public class MessageService {
             log.error("Could not create producer for topic %s.".formatted(message.getTopic()));
             return false;
         }
+    }
+
+    public boolean isValidMessage(Message message) {
+        return TopicName.isValid(message.getTopic());
     }
 
 }
