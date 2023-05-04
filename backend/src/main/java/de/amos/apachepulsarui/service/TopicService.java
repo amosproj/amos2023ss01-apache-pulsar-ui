@@ -8,6 +8,7 @@ package de.amos.apachepulsarui.service;
 
 import de.amos.apachepulsarui.domain.Namespace;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.apache.pulsar.client.admin.PulsarAdminException;
 import org.springframework.context.annotation.Scope;
@@ -18,10 +19,10 @@ import java.util.List;
 @Service
 @Scope("singleton")
 @RequiredArgsConstructor
+@Slf4j
 public class TopicService {
 
     private final PulsarAdmin pulsarAdmin;
-
     private final NamespaceService namespaceService;
 
     public List<String> getAllTopics() {
@@ -38,6 +39,14 @@ public class TopicService {
 
     }
 
-
+    public boolean createNewTopic(String topic) {
+        try {
+            pulsarAdmin.topics().createNonPartitionedTopic(topic);
+            return true;
+        } catch (PulsarAdminException e) {
+            log.error("Could not create new topic %s. E: %s".formatted(topic, e));
+        }
+        return false;
+    }
 
 }
