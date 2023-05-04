@@ -1,105 +1,160 @@
-openapi: 3.0.3
+---
+openapi: 3.0.1
 info:
-  title: Apache Pulsar UI backend API - OpenAPI 3.0
-  description: |-
-    TODO: Insert some description here later...
-  version: 1.0.11
+  title: OpenAPI definition
+  version: v0
 servers:
-  - url: https://www.wedonthavearunningserveryet.com # TODO
-tags:
-  - name: messages
-    description: Read stream data.
-  - name: topics
-    description: Topics and meta information.
+  - url: http://localhost:8081/api
+    description: Generated server url
 paths:
-
-  /topics:
-    get:
-      tags:
-        - topics
-      summary: Get all topics.
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Topic'
-
-  /messages:
-    get:
-      tags:
-        - messages
-      summary: Get all messages regardless of the topic
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Topic'
-
-  /messages/{topic}:
-    get:
-      tags:
-        - messages
-      summary: Get a message of a specific topic.
-      parameters:
-        - in: path
-          name: topic
-          required: true
-          schema:
-            type: string
-          description: The topic a user wants to get messages from.
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Topic'
+  "/topic/{topic}":
     post:
       tags:
-        - messages
-      summary: Send a message to a specific topic.
+        - topic-controller
+      operationId: newTopic
       parameters:
-        - in: path
-          name: topic
+        - name: topic
+          in: path
           required: true
           schema:
             type: string
-          description: The topic a user want to send a message to.
       responses:
         '200':
           description: OK
-
+  "/messages/send":
+    post:
+      tags:
+        - message-controller
+      operationId: sendMessage
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/Message"
+        required: true
+      responses:
+        '200':
+          description: OK
+  "/topology":
+    get:
+      tags:
+        - topology-controller
+      operationId: getTopology
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Cluster"
+  "/topic":
+    get:
+      tags:
+        - topic-controller
+      operationId: getAllTopics
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/TopicsDto"
+  "/messages":
+    get:
+      tags:
+        - message-controller
+      operationId: getMessages
+      parameters:
+        - name: topic
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: subscription
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/MessagesDto"
 components:
   schemas:
-    Topic:
-      description: A pulsar topic.
+    Message:
+      required:
+        - topic
+      type: object
+      properties:
+        key:
+          type: string
+        payload:
+          type: string
+        topic:
+          type: string
+    Cluster:
+      type: object
       properties:
         id:
           type: string
-          example: persistent://some-tenant/foo-namespace/bar-topic
-      required:
-        - tenant
-        - namespace
-        - name
-        - persistent
-
-    Message:
-      description: A pulsar message.
+        tenants:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Tenant"
+    Namespace:
+      type: object
       properties:
-        messageId:
+        id:
           type: string
-          example: 5e7873e8-537b-4abd-8ad8-e831656e8445
+        topics:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Topic"
+    Tenant:
+      type: object
+      properties:
+        id:
+          type: string
+        namespaces:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Namespace"
+    Topic:
+      type: object
+      properties:
+        topic:
+          type: string
+        localName:
+          type: string
+        namespace:
+          type: string
+        tenant:
+          type: string
+        persistent:
+          type: boolean
+    TopicsDto:
+      type: object
+      properties:
+        topics:
+          type: array
+          items:
+            type: string
+    MessageDto:
+      type: object
+      properties:
+        key:
+          type: string
         payload:
           type: string
-          example: f3a19f87f399bff44fb0
-          description: Depending on withSchemaApplied, the payload is a JSON object or just raw bytes.
+    MessagesDto:
+      type: object
+      properties:
+        messages:
+          type: array
+          items:
+            "$ref": "#/components/schemas/MessageDto"
