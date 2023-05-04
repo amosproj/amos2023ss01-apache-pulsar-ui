@@ -34,9 +34,9 @@ public class MessageControllerTest {
 
     @Test
     void getMessages_returnsMessages() throws Exception {
-        var messages = List.of(
-                new Message(1L, "Nebuchadnezzar"),
-                new Message(2L, "Serenity")
+        List<Message> messages = List.of(
+                new Message("key-1", "Nebuchadnezzar", "topic-1"),
+                new Message("key-2", "Serenity", "topic-2")
         );
         Mockito.when(messageService.peekMessages("spaceships", "nasa-subscription")).thenReturn(messages);
 
@@ -44,10 +44,10 @@ public class MessageControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.messages", hasSize(2)))
-                .andExpect(jsonPath("$.messages[0].id", equalTo(1)))
-                .andExpect(jsonPath("$.messages[0].data", equalTo("Nebuchadnezzar")))
-                .andExpect(jsonPath("$.messages[1].id", equalTo(2)))
-                .andExpect(jsonPath("$.messages[1].data", equalTo("Serenity")));
+                .andExpect(jsonPath("$.messages[0].key", equalTo("key-1")))
+                .andExpect(jsonPath("$.messages[0].payload", equalTo("Nebuchadnezzar")))
+                .andExpect(jsonPath("$.messages[1].key", equalTo("key-2")))
+                .andExpect(jsonPath("$.messages[1].payload", equalTo("Serenity")));
     }
 
     @Test

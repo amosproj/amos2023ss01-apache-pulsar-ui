@@ -6,14 +6,16 @@
 package de.amos.apachepulsarui.domain;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
-
 @Data
+@Builder
 @AllArgsConstructor
 public class Message {
 
-    Long id;
+    String key;
+    String payload;
+    String topic;
 
-    String data;
 }

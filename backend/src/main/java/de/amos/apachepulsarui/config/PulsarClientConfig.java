@@ -15,18 +15,21 @@ import org.apache.pulsar.client.api.PulsarClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 
 @Configuration
 public class PulsarClientConfig {
 
     @Value("${pulsar.consumer.url}")
-    private String consumerUrl;
+    private String pulsarConnectionUrl;
 
-    @SneakyThrows
     @Bean
+    @Scope("singleton")
+    @SneakyThrows
     public PulsarClient buildClient() {
         return PulsarClient.builder()
-                .serviceUrl(consumerUrl)
+                .serviceUrl(pulsarConnectionUrl)
                 .build();
     }
+
 }

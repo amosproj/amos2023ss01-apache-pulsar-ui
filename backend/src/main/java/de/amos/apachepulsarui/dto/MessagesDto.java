@@ -20,8 +20,9 @@ public class MessagesDto {
 
     public static MessagesDto fromMessages(List<Message> messages) {
         var messageDtos = messages.stream()
-                .map(message -> new MessageDto(message.getId(), message.getData()))
+                .map(message -> new MessageDto(message.getKey(), message.getPayload()))
                 .toList();
         return new MessagesDto(messageDtos);
     }
+
 }
