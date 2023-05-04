@@ -7,6 +7,8 @@
 package de.amos.apachepulsarui.service;
 
 import de.amos.apachepulsarui.domain.Namespace;
+import de.amos.apachepulsarui.domain.Topic;
+import de.amos.apachepulsarui.parser.TopicParser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pulsar.client.admin.PulsarAdmin;
@@ -39,6 +41,21 @@ public class TopicService {
 
     }
 
+    public List<Topic> getByNamespace(Namespace namespace, int maxCount) {
+        try {
+            List<Topic> topics = pulsarAdmin.topics()
+                    .getList(namespace.getId()).stream()
+                    .map(TopicParser::fromString)
+                    .toList();
+
+            return this.sublistOfMaxSize(topics, maxCount);
+
+        } catch (PulsarAdminException e) {
+            log.error("Could not fetch topics of namespace %s. E: %s".formatted(namespace.getId(), e));
+            return List.of();
+        }
+    }
+
     public boolean createNewTopic(String topic) {
         try {
             pulsarAdmin.topics().createNonPartitionedTopic(topic);
@@ -47,6 +64,10 @@ public class TopicService {
             log.error("Could not create new topic %s. E: %s".formatted(topic, e));
         }
         return false;
+    }
+
+    private List<Topic> sublistOfMaxSize(List<Topic> list, int maxCount) {
+        return list.subList(0, Math.min(list.size(), maxCount));
     }
 
 }

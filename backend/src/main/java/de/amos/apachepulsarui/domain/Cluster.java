@@ -1,15 +1,15 @@
 package de.amos.apachepulsarui.domain;
 
 import lombok.Builder;
-import lombok.Value;
+import lombok.Data;
 
 import java.util.List;
 
-@Value
+@Data
 @Builder(toBuilder = true)
-public class Namespace {
+public class Cluster {
 
-    String id;
-    List<Topic> topics;
+    private String id;
+    private List<Tenant> tenants;
 
 }

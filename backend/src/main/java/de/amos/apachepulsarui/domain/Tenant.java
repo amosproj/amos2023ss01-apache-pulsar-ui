@@ -6,7 +6,7 @@ import lombok.Value;
 import java.util.List;
 
 @Value
-@Builder
+@Builder(toBuilder = true)
 public class Tenant {
 
     String id;

@@ -51,6 +51,7 @@ public class MessageService {
     }
 
     public boolean sendMessage(Message message) {
+        // TODO: topic validation
         try (Producer<byte[]> producer = pulsarClient.newProducer()
                 .topic(message.getTopic())
                 .create()
