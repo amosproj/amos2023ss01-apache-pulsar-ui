@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -28,7 +29,7 @@ public class TopicController {
         return new ResponseEntity<>(new TopicsDto(topicService.getAllTopics()), HttpStatus.OK);
     }
 
-    @GetMapping("/{topic}")
+    @PostMapping("/{topic}")
     public ResponseEntity<Void> newTopic(@PathVariable String topic) {
         if (topicService.createNewTopic(topic)) {
             return new ResponseEntity<>(HttpStatus.OK);
