@@ -4,6 +4,7 @@ import de.amos.apachepulsarui.domain.Cluster;
 import de.amos.apachepulsarui.domain.Topic;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +27,7 @@ public class TopologyService {
      * @return A list of {@link Cluster}'s of Pulsar deployment with all topology elements till {@link Topic} level.
      * Returns maximum 10 topics per namespace.
      */
+    @Cacheable("topology.topic_level")
     public List<Cluster> getTopicLevelTopology() {
         return clusterService.getAllClusters().stream()
                 .map(cluster -> cluster.toBuilder()
