@@ -3,23 +3,23 @@ import Box from '@mui/material/Box'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
-import Select from '@mui/material/Select'
+import Select, { SelectChangeEvent } from '@mui/material/Select'
 
-interface CustomSelectProps {
-	data: Array<any>
-	onChange: any
-	value: string
+interface CustomSelectProps<T> {
+	data: Array<MessageList>
+	onChange: (event: SelectChangeEvent<T>) => void
+	value: T
 	label: string
 	error: boolean
 }
 
-const CustomSelect: React.FC<CustomSelectProps> = ({
+const CustomSelect = <T extends string>({
 	data,
 	onChange,
 	value,
 	label,
 	error,
-}) => {
+}: CustomSelectProps<T>) => {
 	return (
 		<Box sx={{ minWidth: 120 }}>
 			<FormControl fullWidth>
