@@ -3,14 +3,28 @@ import { TextField, Button } from '@mui/material'
 import TopicSelect from './CustomSelect'
 import CustomAccordion from './CustomAccordion'
 import { SelectChangeEvent } from '@mui/material/Select'
+import {
+	selectData,
+	selectMessage,
+	selectTopic,
+	setData,
+	setMessage,
+	setTopic,
+	updateData,
+} from './formControllerSlice'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
 
 const Form = () => {
-	const [topic, setTopic] = useState<string>('')
-	const [message, setMessage] = useState<string>('')
 	const [topicError, setTopicError] = useState<boolean>(false)
 	const [messageError, setMessageError] = useState<boolean>(false)
-	const [data, setData] = useState<Array<MessageList>>([])
 
+	const data = useAppSelector(selectData)
+	const topic = useAppSelector(selectTopic)
+	const message = useAppSelector(selectMessage)
+
+	const dispatch = useAppDispatch()
+
+	//can later on be replaced by the fetchDataThunk
 	const getData = () => {
 		fetch('dummy/dummy.json', {
 			headers: {
@@ -22,12 +36,11 @@ const Form = () => {
 				console.log(response)
 				return response.json()
 			})
-			.then(function (myJson) {
-				console.log(myJson)
-				setData(myJson)
+			.then(function (json) {
+				console.log(json)
+				dispatch(setData(json))
 			})
 	}
-
 	useEffect(() => {
 		getData()
 	}, [])
@@ -49,17 +62,7 @@ const Form = () => {
 			console.log(message, topic)
 		}
 
-		const dataCopy = [...data]
-
-		dataCopy.map((single) => {
-			if (single.id === topic) {
-				const tempId = topic + (single.messages.length + 1)
-				const newMessage = { id: tempId, value: message, topic: topic }
-				single.messages = [...single.messages, newMessage]
-			}
-		})
-
-		setData(dataCopy)
+		dispatch(updateData({ message: message, topic: topic }))
 	}
 
 	return (
@@ -80,7 +83,7 @@ const Form = () => {
 						data={data}
 						value={topic}
 						onChange={(e: SelectChangeEvent<string>) =>
-							setTopic(e.target.value)
+							dispatch(setTopic(e.target.value))
 						}
 						label="Topic"
 						error={topicError}
@@ -89,7 +92,7 @@ const Form = () => {
 						className="primary-textfield"
 						label="Message"
 						onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-							setMessage(e.target.value)
+							dispatch(setMessage(e.target.value))
 						}
 						variant="outlined"
 						type="text"

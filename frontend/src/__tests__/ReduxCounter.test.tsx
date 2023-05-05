@@ -1,8 +1,8 @@
 import React from 'react'
 import { render, screen } from '@testing-library/react'
-import { ReduxCounter } from '../features/counter/ReduxCounter'
+import { ReduxCounter } from '../components/sampleCounter/ReduxCounter'
 import { Provider } from 'react-redux'
-import { store } from '../app/store'
+import store from '../store'
 
 test('should render ReduxCounter component', () => {
 	render(

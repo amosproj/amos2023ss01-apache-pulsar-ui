@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2010-2021 Dirk Riehle <dirk@riehle.org>
 // SPDX-FileCopyrightText: 2019 Georg Schwarz <georg.schwarz@fau.de>
+
 import React from 'react'
 import './App.css'
 import './assets/styles/styles.scss'
 import logo from './assets/images/team-logo-light.png'
-import Form from './components/Form'
-import { ReduxCounter } from './features/counter/ReduxCounter'
+import Form from './components/form/Form'
 
 function App() {
 	return (
@@ -16,7 +16,6 @@ function App() {
 					<img className="home-logo" src={logo} alt="logo" />
 				</nav>
 				<Form></Form>
-				<ReduxCounter />
 			</div>
 		</div>
 	)
