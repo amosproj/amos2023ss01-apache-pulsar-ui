@@ -11,7 +11,7 @@ const Form = () => {
 	const [data, setData] = useState<Array<any>>([])
 
 	const getData = () => {
-		fetch('data/dummy.json', {
+		fetch('dummy/dummy.json', {
 			headers: {
 				'Content-Type': 'application/json',
 				Accept: 'application/json',
@@ -53,7 +53,7 @@ const Form = () => {
 		dataCopy.map((single) => {
 			if (single.id === topic) {
 				const tempId = topic + (single.messages.length + 1)
-				const newMessage = { id: tempId, value: message, topicID: topic }
+				const newMessage = { id: tempId, value: message, topic: topic }
 				single.messages = [...single.messages, newMessage]
 			}
 		})
