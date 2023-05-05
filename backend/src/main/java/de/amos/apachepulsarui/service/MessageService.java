@@ -33,9 +33,17 @@ public class MessageService {
     private final PulsarClient pulsarClient;
     private final PulsarAdmin pulsarAdmin;
 
-    // TODO: admin.topics().getSubscriptions(topic);
-    //  -> It's possible to peekMessages messages without knowing the subscription. We just need to query for
-    //  all subscriptions of this topic. Probably the subscription should be an optional parameter.
+
+    // TODO get all messages for all topics, instead of just the first one
+    public List<Message> peekMessages(String topic) {
+        try {
+            List<String> subscriptions = pulsarAdmin.topics().getSubscriptions(topic);
+            return peekMessages(topic, subscriptions.get(0));
+        } catch (PulsarAdminException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public List<Message> peekMessages(String topic, String subscription) {
         try {
             var messages = pulsarAdmin.topics().peekMessages(topic, subscription, MAX_NUM_MESSAGES);
