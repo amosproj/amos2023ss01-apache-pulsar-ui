@@ -1,11 +1,12 @@
 // SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2010-2021 Dirk Riehle <dirk@riehle.org>
 // SPDX-FileCopyrightText: 2019 Georg Schwarz <georg.schwarz@fau.de>
+
 import React from 'react'
 import './App.css'
 import './assets/styles/styles.scss'
 import logo from './assets/images/team-logo-light.png'
-import Form from './components/Form'
+import Form from './components/form/Form'
 
 function App() {
 	return (
