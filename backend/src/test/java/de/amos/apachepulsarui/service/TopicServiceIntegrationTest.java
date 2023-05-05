@@ -16,9 +16,9 @@ public class TopicServiceIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     void getAllTopics_returnsCreatedTopics() {
-        topicService.createNewTopic("greatTopic");
+        topicService.createNewTopic("topic-service-integration-test");
         var topics = topicService.getAllTopics();
-        Assertions.assertThat(topics).containsExactly("persistent://public/default/greatTopic");
+        Assertions.assertThat(topics).contains("persistent://public/default/topic-service-integration-test");
     }
 
 }

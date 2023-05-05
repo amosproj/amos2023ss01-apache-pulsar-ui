@@ -30,8 +30,8 @@ public class MessageServiceIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     void peekMessages_returnsSentMessages() throws PulsarAdminException {
-        topicService.createNewTopic("greatTopic");
-        String topicName = "persistent://public/default/greatTopic";
+        topicService.createNewTopic("message-service-integration-test");
+        String topicName = "persistent://public/default/message-service-integration-test";
         pulsarAdmin.topics().createSubscription(topicName, "getGreatMessages", MessageId.latest);
         Message message = new Message("1", base64Encode("Hello World"), topicName);
         messageService.sendMessage(message);
