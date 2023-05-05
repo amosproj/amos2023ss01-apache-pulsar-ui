@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react'
 import { TextField, Button } from '@mui/material'
 import TopicSelect from './CustomSelect'
 import CustomAccordion from './CustomAccordion'
+import { SelectChangeEvent } from '@mui/material/Select'
 
 const Form = () => {
 	const [topic, setTopic] = useState<string>('')
 	const [message, setMessage] = useState<string>('')
 	const [topicError, setTopicError] = useState<boolean>(false)
 	const [messageError, setMessageError] = useState<boolean>(false)
-	const [data, setData] = useState<Array<any>>([])
+	const [data, setData] = useState<Array<MessageList>>([])
 
 	const getData = () => {
 		fetch('dummy/dummy.json', {
@@ -78,14 +79,18 @@ const Form = () => {
 					<TopicSelect
 						data={data}
 						value={topic}
-						onChange={(e: any) => setTopic(e.target.value)}
+						onChange={(e: SelectChangeEvent<string>) =>
+							setTopic(e.target.value)
+						}
 						label="Topic"
 						error={topicError}
 					/>
 					<TextField
 						className="primary-textfield"
 						label="Message"
-						onChange={(e: any) => setMessage(e.target.value)}
+						onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+							setMessage(e.target.value)
+						}
 						variant="outlined"
 						type="text"
 						sx={{ mb: 3 }}

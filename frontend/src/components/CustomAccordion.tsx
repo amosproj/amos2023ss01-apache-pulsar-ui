@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
 interface CustomAccordionProps {
-	data: Array<any>
+	data: Array<MessageList>
 }
 
 const CustomAccordion: React.FC<CustomAccordionProps> = ({ data }) => {
@@ -26,7 +26,7 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ data }) => {
 						<AccordionDetails>
 							<p className="text-blue">Topic Messages:</p>
 							{item.messages.length > 0 &&
-								item.messages.map((message: any) => (
+								item.messages.map((message: Message) => (
 									<Typography key={message.id}>{message.value}</Typography>
 								))}
 						</AccordionDetails>
