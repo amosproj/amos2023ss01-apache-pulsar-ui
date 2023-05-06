@@ -13,9 +13,6 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
-
 public class MessageServiceIntegrationTest extends AbstractIntegrationTest {
 
     @Autowired
@@ -33,15 +30,9 @@ public class MessageServiceIntegrationTest extends AbstractIntegrationTest {
         topicService.createNewTopic("message-service-integration-test");
         String topicName = "persistent://public/default/message-service-integration-test";
         pulsarAdmin.topics().createSubscription(topicName, "getGreatMessages", MessageId.latest);
-        Message message = new Message("1", base64Encode("Hello World"), topicName);
+        Message message = Message.builder().payload("Hello World").topic(topicName).build();
         messageService.sendMessage(message);
         var messages = messageService.peekMessages(topicName);
-        // TODO why is the key null?
-        Assertions.assertThat(messages).containsExactly(new Message(null, "Hello World", topicName));
+        Assertions.assertThat(messages).containsExactly(message);
     }
-
-    private static String base64Encode(String payload) {
-        return Base64.getEncoder().encodeToString(payload.getBytes(StandardCharsets.UTF_8));
-    }
-
 }

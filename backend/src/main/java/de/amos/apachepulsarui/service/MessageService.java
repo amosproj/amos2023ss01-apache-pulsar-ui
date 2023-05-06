@@ -19,7 +19,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 import java.util.List;
 
 @Service
@@ -64,7 +63,7 @@ public class MessageService {
                 .topic(message.getTopic())
                 .create()
         ) {
-            producer.send(Base64.getDecoder().decode(message.getPayload()));
+            producer.send(message.getPayload().getBytes(StandardCharsets.UTF_8));
             return true;
         } catch (PulsarClientException e) {
             log.error("Could not create producer for topic %s.".formatted(message.getTopic()));
