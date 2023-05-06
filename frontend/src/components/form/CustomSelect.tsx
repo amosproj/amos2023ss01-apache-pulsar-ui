@@ -26,9 +26,9 @@ const CustomSelect = <T extends string>({
 				<InputLabel id="demo-simple-select-label">{label}</InputLabel>
 				<Select
 					labelId="demo-simple-select-label"
-					id="demo-simple-select"
 					value={value}
 					label="Topic"
+					inputProps={{ 'data-testid': 'demo-simple-select' }}
 					onChange={onChange}
 					error={error}
 				>

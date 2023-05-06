@@ -11,7 +11,7 @@ interface CustomAccordionProps {
 
 const CustomAccordion: React.FC<CustomAccordionProps> = ({ data }) => {
 	return (
-		<div>
+		<div data-testid="demo-accordion">
 			{data &&
 				data.length > 0 &&
 				data.map((item) => (

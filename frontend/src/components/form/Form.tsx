@@ -68,6 +68,7 @@ const Form = () => {
 	return (
 		<div className="flex justify-center gap-8 align-start">
 			<form
+				data-testid="demo-message-form"
 				autoComplete="off"
 				onSubmit={handleSubmit}
 				className="bg-white shadow-lg px-16 py-16 self-center my-4 lg:w-2/5 lg:max-w-md rounded-md w-full"
@@ -89,6 +90,7 @@ const Form = () => {
 						error={topicError}
 					/>
 					<TextField
+						inputProps={{ 'data-testid': 'demo-simple-texfield' }}
 						className="primary-textfield"
 						label="Message"
 						onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
