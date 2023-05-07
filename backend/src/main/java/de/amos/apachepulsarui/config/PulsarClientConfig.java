@@ -10,7 +10,6 @@ import org.apache.pulsar.client.api.PulsarClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
 
 @Configuration
 public class PulsarClientConfig {
@@ -19,7 +18,6 @@ public class PulsarClientConfig {
     private String pulsarConnectionUrl;
 
     @Bean
-    @Scope("singleton")
     @SneakyThrows
     public PulsarClient buildClient() {
         return PulsarClient.builder()

@@ -10,7 +10,6 @@ import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
 
 @Configuration
 public class PulsarAdminConfig {
@@ -19,7 +18,6 @@ public class PulsarAdminConfig {
     private String adminUrl;
 
     @Bean
-    @Scope("singleton")
     @SneakyThrows
     public PulsarAdmin createPulsarAdmin() {
         boolean tlsAllowInsecureConnection = false;

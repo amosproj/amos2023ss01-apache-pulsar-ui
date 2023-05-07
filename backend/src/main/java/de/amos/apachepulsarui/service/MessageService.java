@@ -22,7 +22,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Service
-@Scope("singleton")
 @Slf4j
 @RequiredArgsConstructor
 public class MessageService {
