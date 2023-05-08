@@ -25,33 +25,15 @@ public class TopicService {
     private final PulsarAdmin pulsarAdmin;
     private final NamespaceService namespaceService;
 
-    public List<String> getAllTopics() {
+    public List<Topic> getAllTopics() {
         List<Namespace> namespaces = namespaceService.getAllNamespaces();
         return namespaces.stream()
-                .flatMap(namespace -> {
-                    try {
-                        return pulsarAdmin.topics().getList(namespace.getId()).stream();
-                    } catch (PulsarAdminException e) {
-                        throw new RuntimeException(e);
-                    }
-                })
+                .flatMap(namespace -> this.getByNamespace(namespace).stream())
                 .toList();
-
     }
 
     public List<Topic> getByNamespace(Namespace namespace, int maxCount) {
-        try {
-            List<Topic> topics = pulsarAdmin.topics()
-                    .getList(namespace.getId()).stream()
-                    .map(TopicParser::fromString)
-                    .toList();
-
-            return this.sublistOfMaxSize(topics, maxCount);
-
-        } catch (PulsarAdminException e) {
-            log.error("Could not fetch topics of namespace %s. E: %s".formatted(namespace.getId(), e));
-            return List.of();
-        }
+        return this.sublistOfMaxSize(this.getByNamespace(namespace), maxCount);
     }
 
     public boolean createNewTopic(String topic) {
@@ -62,6 +44,18 @@ public class TopicService {
             log.error("Could not create new topic %s. E: %s".formatted(topic, e));
         }
         return false;
+    }
+
+    private List<Topic> getByNamespace(Namespace namespace) {
+        try {
+            return pulsarAdmin.topics()
+                    .getList(namespace.getId()).stream()
+                    .map(TopicParser::fromString)
+                    .toList();
+        } catch (PulsarAdminException e) {
+            log.error("Could not fetch topics of namespace %s. E: %s".formatted(namespace.getId(), e));
+            return List.of();
+        }
     }
 
     private List<Topic> sublistOfMaxSize(List<Topic> list, int maxCount) {

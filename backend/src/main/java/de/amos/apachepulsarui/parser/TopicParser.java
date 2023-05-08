@@ -8,6 +8,7 @@ public class TopicParser {
     public static Topic fromString(String topic) {
         TopicName topicName = TopicName.get(topic);
         return Topic.builder()
+                .name(topic)
                 .localName(topicName.getLocalName())
                 .namespace(topicName.getNamespace())
                 .tenant(topicName.getTenant())

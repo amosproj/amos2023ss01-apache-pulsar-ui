@@ -6,16 +6,15 @@
 
 package de.amos.apachepulsarui.controller;
 
+import de.amos.apachepulsarui.domain.Topic;
 import de.amos.apachepulsarui.dto.TopicsDto;
 import de.amos.apachepulsarui.service.TopicService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,8 +24,8 @@ public class TopicController {
     private final TopicService topicService;
 
     @GetMapping
-    public ResponseEntity<TopicsDto> getAllTopics() {
-        return new ResponseEntity<>(new TopicsDto(topicService.getAllTopics()), HttpStatus.OK);
+    public ResponseEntity<List<Topic>> getAllTopics() {
+        return new ResponseEntity<>(new TopicsDto(topicService.getAllTopics()).getTopics(), HttpStatus.OK);
     }
 
     @PostMapping("/{topic}")

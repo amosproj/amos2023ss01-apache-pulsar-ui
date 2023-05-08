@@ -7,7 +7,7 @@ import lombok.Value;
 @Builder
 public class Topic {
 
-    String topic;
+    String name;
     String localName;
     String namespace;
     String tenant;

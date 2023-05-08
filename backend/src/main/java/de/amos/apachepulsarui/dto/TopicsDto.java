@@ -5,15 +5,16 @@
 
 package de.amos.apachepulsarui.dto;
 
+import de.amos.apachepulsarui.domain.Topic;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.List;
 
-
 @AllArgsConstructor
 @Data
 public class TopicsDto {
 
-    private List<String> topics;
+    private List<Topic> topics;
+
 }

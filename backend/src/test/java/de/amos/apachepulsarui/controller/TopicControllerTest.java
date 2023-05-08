@@ -5,6 +5,8 @@
 
 package de.amos.apachepulsarui.controller;
 
+import de.amos.apachepulsarui.domain.Topic;
+import de.amos.apachepulsarui.parser.TopicParser;
 import de.amos.apachepulsarui.service.TopicService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -15,6 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -32,12 +35,20 @@ public class TopicControllerTest {
 
     @Test
     void getAllTopics_returnsAllTopics() throws Exception {
-        var topics = List.of("Tatooine", "Naboo", "Coruscant");
+
+        List<Topic> topics = Stream.of(
+                "persistent://public/default/tatooine",
+                "non-persistent://fizz/foo/naboo",
+                "persistent://buzz/bar/coruscant"
+        ).map(TopicParser::fromString).toList();
+
         Mockito.when(topicService.getAllTopics()).thenReturn(topics);
 
         mockMvc.perform(get("/topic")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.topics", equalTo(topics)));
+                .andExpect(jsonPath("$.[0].name", equalTo(topics.get(0).getName())))
+                .andExpect(jsonPath("$.[1].name", equalTo(topics.get(1).getName())))
+                .andExpect(jsonPath("$.[2].name", equalTo(topics.get(2).getName())));
     }
 }
