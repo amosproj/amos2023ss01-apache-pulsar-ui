@@ -6,13 +6,13 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { RootState } from '../../store'
 
-export type formControllerState = {
+export type FormControllerState = {
 	data: Array<MessageList>
 	topic: string
 	message: string
 }
 
-const initialState: formControllerState = {
+const initialState: FormControllerState = {
 	data: [],
 	topic: '',
 	message: '',
@@ -36,15 +36,22 @@ interface UpdateForData {
 	topic: string
 }
 
+// eslint-disable-next-line
 const formControllerSlice = createSlice({
 	name: 'formControl',
 	initialState,
 	reducers: {
-		setData: (state, action: PayloadAction<Array<MessageList>>) => {
+		setData: (
+			state: FormControllerState,
+			action: PayloadAction<Array<MessageList>>
+		) => {
 			state.data = action.payload
 		},
-		updateData: (state, action: PayloadAction<UpdateForData>) => {
-			state.data.map((single) => {
+		updateData: (
+			state: FormControllerState,
+			action: PayloadAction<UpdateForData>
+		) => {
+			state.data.map((single: MessageList) => {
 				if (single.id === action.payload.topic) {
 					const tempId = action.payload.topic + (single.messages.length + 1)
 					const newMessage = {
@@ -57,21 +64,12 @@ const formControllerSlice = createSlice({
 				return single
 			})
 		},
-		setTopic: (state, action: PayloadAction<string>) => {
+		setTopic: (state: FormControllerState, action: PayloadAction<string>) => {
 			state.topic = action.payload
 		},
-		setMessage: (state, action: PayloadAction<string>) => {
+		setMessage: (state: FormControllerState, action: PayloadAction<string>) => {
 			state.message = action.payload
 		},
-	},
-	extraReducers: (builder) => {
-		builder.addCase(fetchDataThunk.fulfilled, (state, action) => {
-			state.data = action.payload
-		})
-		builder.addCase(fetchDataThunk.rejected, (state) => {
-			state.data = []
-			console.log('fetch data rejected')
-		})
 	},
 })
 
