@@ -30,6 +30,9 @@ public class TopicController {
 
     @PostMapping("/{topic}")
     public ResponseEntity<Void> newTopic(@PathVariable String topic) {
+        if (!topicService.isValidTopic(topic)) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         if (topicService.createNewTopic(topic)) {
             return new ResponseEntity<>(HttpStatus.OK);
         }

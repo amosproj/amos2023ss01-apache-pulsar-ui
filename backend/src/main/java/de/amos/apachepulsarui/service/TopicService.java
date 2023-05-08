@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.apache.pulsar.client.admin.PulsarAdminException;
+import org.apache.pulsar.common.naming.TopicName;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -44,6 +45,10 @@ public class TopicService {
             log.error("Could not create new topic %s. E: %s".formatted(topic, e));
         }
         return false;
+    }
+
+    public boolean isValidTopic(String topic) {
+        return TopicName.isValid(topic);
     }
 
     private List<Topic> getByNamespace(Namespace namespace) {
