@@ -15,7 +15,6 @@ import org.apache.pulsar.client.api.Producer;
 import org.apache.pulsar.client.api.PulsarClient;
 import org.apache.pulsar.client.api.PulsarClientException;
 import org.apache.pulsar.common.naming.TopicName;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
@@ -63,6 +62,7 @@ public class MessageService {
                 .create()
         ) {
             producer.send(message.getPayload().getBytes(StandardCharsets.UTF_8));
+            producer.close();
             return true;
         } catch (PulsarClientException e) {
             log.error("Could not create producer for topic %s.".formatted(message.getTopic()));
