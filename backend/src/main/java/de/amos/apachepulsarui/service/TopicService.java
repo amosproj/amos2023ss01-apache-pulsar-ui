@@ -26,7 +26,7 @@ public class TopicService {
     private final NamespaceService namespaceService;
 
     public List<Topic> getAllTopics() {
-        List<Namespace> namespaces = namespaceService.getAllNamespaces();
+        List<Namespace> namespaces = namespaceService.getAll();
         return namespaces.stream()
                 .flatMap(namespace -> this.getByNamespace(namespace).stream())
                 .toList();

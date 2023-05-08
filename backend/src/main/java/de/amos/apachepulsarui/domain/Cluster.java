@@ -12,4 +12,10 @@ public class Cluster {
     private String id;
     private List<Tenant> tenants;
 
+    public Cluster withTenants(List<Tenant> tenants) {
+        return this.toBuilder()
+                .tenants(tenants)
+                .build();
+    }
+
 }
