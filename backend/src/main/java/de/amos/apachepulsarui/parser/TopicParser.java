@@ -5,12 +5,15 @@ import org.apache.pulsar.common.naming.TopicName;
 
 public class TopicParser {
 
-    public static Topic fromString(String topic) {
-        TopicName topicName = TopicName.get(topic);
+    /**
+     * Converts a valid complete topic name (like "persistent://eu-tenant/hr/fizzbuzz" into a {@link Topic}.
+     */
+    public static Topic fromString(String completeTopicName) {
+        TopicName topicName = TopicName.get(completeTopicName);
         return Topic.builder()
-                .name(topic)
+                .name(topicName.toString())
                 .localName(topicName.getLocalName())
-                .namespace(topicName.getNamespace())
+                .namespace(topicName.getNamespacePortion())
                 .tenant(topicName.getTenant())
                 .isPersistent(topicName.isPersistent())
                 .build();

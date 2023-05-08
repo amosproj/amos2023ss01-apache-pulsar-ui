@@ -57,21 +57,41 @@ public class MessageService {
     }
 
     public boolean sendMessage(Message message) {
-        try (Producer<byte[]> producer = pulsarClient.newProducer()
-                .topic(message.getTopic())
-                .create()
-        ) {
+        try {
+            Producer<byte[]> producer = this.createProducerFor(message.getTopic());
             producer.send(message.getPayload().getBytes(StandardCharsets.UTF_8));
             producer.close();
             return true;
         } catch (PulsarClientException e) {
-            log.error("Could not create producer for topic %s.".formatted(message.getTopic()));
+            log.error("Could not send message to topic %s.".formatted(message.getTopic()));
+            return false;
+        }
+    }
+
+    public boolean sendMessages(List<Message> messages) {
+        try {
+            Producer<byte[]> producer = this.createProducerFor(messages.iterator().next().getTopic());
+            for (Message message : messages) {
+                producer.send(message.getPayload().getBytes(StandardCharsets.UTF_8));
+            }
+            producer.close();
+            return true;
+        } catch (PulsarClientException e) {
+            log.error("Could not list of %s messages to topic %s."
+                    .formatted(messages.size(), messages.iterator().next().getTopic())
+            );
             return false;
         }
     }
 
     public boolean isValidMessage(Message message) {
         return TopicName.isValid(message.getTopic());
+    }
+
+    private Producer<byte []> createProducerFor(String topicName) throws PulsarClientException {
+        return pulsarClient.newProducer()
+                .topic(topicName)
+                .create();
     }
 
 }
