@@ -1,49 +1,31 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { TextField, Button } from '@mui/material'
 import TopicSelect from './CustomSelect'
 import CustomAccordion from './CustomAccordion'
 import { SelectChangeEvent } from '@mui/material/Select'
 import {
-	selectData,
 	selectMessage,
 	selectTopic,
-	setData,
 	setMessage,
 	setTopic,
-	updateData,
 } from './formControllerSlice'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 
-const Form = () => {
+interface formProps {
+	data: Array<MessageList>
+	triggerUpdate(message: string, topic: string): void
+}
+
+const Form = (props: formProps) => {
+	const { data, triggerUpdate }: formProps = props
+
 	const [topicError, setTopicError] = useState<boolean>(false)
 	const [messageError, setMessageError] = useState<boolean>(false)
 
-	const data = useAppSelector(selectData)
 	const topic = useAppSelector(selectTopic)
 	const message = useAppSelector(selectMessage)
 
 	const dispatch = useAppDispatch()
-
-	//can later on be replaced by the fetchDataThunk
-	const getData = () => {
-		fetch('dummy/dummy.json', {
-			headers: {
-				'Content-Type': 'application/json',
-				Accept: 'application/json',
-			},
-		})
-			.then(function (response) {
-				console.log(response)
-				return response.json()
-			})
-			.then(function (json) {
-				console.log(json)
-				dispatch(setData(json))
-			})
-	}
-	useEffect(() => {
-		getData()
-	}, [])
 
 	const handleSubmit = (event: { preventDefault: () => void }) => {
 		event.preventDefault()
@@ -62,7 +44,7 @@ const Form = () => {
 			console.log(message, topic)
 		}
 
-		dispatch(updateData({ message: message, topic: topic }))
+		triggerUpdate(message, topic)
 	}
 
 	return (
