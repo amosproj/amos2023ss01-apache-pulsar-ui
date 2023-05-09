@@ -1,0 +1,12 @@
+body {
+  @apply h-full overflow-x-hidden;
+  background-color: $primary-blue; 
+}
+
+#root {
+  @apply h-full;
+}
+
+html {
+  @apply h-full;
+}
