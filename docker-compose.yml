@@ -34,7 +34,7 @@ services:
       - pulsar
     command: >
       bin/pulsar initialize-cluster-metadata \
-               --cluster cluster-a \
+               --cluster amos-demo \
                --zookeeper zookeeper:2181 \
                --configuration-store zookeeper:2181 \
                --web-service-url http://broker:8080 \
@@ -51,7 +51,7 @@ services:
     networks:
       - pulsar
     environment:
-      - clusterName=cluster-a
+      - clusterName=amos-demo
       - zkServers=zookeeper:2181
       - metadataServiceUri=metadata-store:zk:zookeeper:2181
       # otherwise every time we run docker compose uo or down we fail to start due to Cookie
@@ -77,9 +77,10 @@ services:
     networks:
       - pulsar
     environment:
+      - brokerDeleteInactiveTopicsEnabled=false
       - metadataStoreUrl=zk:zookeeper:2181
       - zookeeperServers=zookeeper:2181
-      - clusterName=cluster-a
+      - clusterName=amos-demo
       - managedLedgerDefaultEnsembleSize=1
       - managedLedgerDefaultWriteQuorum=1
       - managedLedgerDefaultAckQuorum=1

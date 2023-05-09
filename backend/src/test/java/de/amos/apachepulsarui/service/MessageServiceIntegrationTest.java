@@ -30,7 +30,11 @@ public class MessageServiceIntegrationTest extends AbstractIntegrationTest {
         topicService.createNewTopic("message-service-integration-test");
         String topicName = "persistent://public/default/message-service-integration-test";
         pulsarAdmin.topics().createSubscription(topicName, "getGreatMessages", MessageId.latest);
-        Message message = Message.builder().payload("Hello World").topic(topicName).build();
+        Message message = Message.builder()
+                .messageId("1:0:-1") // pulsar will auto-generate this!
+                .payload("Hello World")
+                .topic(topicName)
+                .build();
         messageService.sendMessage(message);
         var messages = messageService.peekMessages(topicName);
         Assertions.assertThat(messages).containsExactly(message);

@@ -45,7 +45,7 @@ public class MessageController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         if (messageService.sendMessage(message)) {
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.CREATED);
         }
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }

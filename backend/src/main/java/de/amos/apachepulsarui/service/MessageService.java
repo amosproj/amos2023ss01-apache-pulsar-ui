@@ -46,7 +46,7 @@ public class MessageService {
             var messages = pulsarAdmin.topics().peekMessages(topic, subscription, MAX_NUM_MESSAGES);
             return messages.stream()
                     .map(message -> Message.builder()
-                            .key(message.getKey())
+                            .messageId(message.getMessageId().toString())
                             .payload(new String(message.getData(), StandardCharsets.UTF_8))
                             .topic(message.getTopicName())
                             .build())

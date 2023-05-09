@@ -28,13 +28,13 @@ public class TopicController {
         return new ResponseEntity<>(new TopicsDto(topicService.getAllTopics()).getTopics(), HttpStatus.OK);
     }
 
-    @PostMapping("/{topic}")
-    public ResponseEntity<Void> newTopic(@PathVariable String topic) {
+    @PostMapping("/new")
+    public ResponseEntity<Void> newTopic(@RequestParam String topic) {
         if (!topicService.isValidTopic(topic)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         if (topicService.createNewTopic(topic)) {
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.CREATED);
         }
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }

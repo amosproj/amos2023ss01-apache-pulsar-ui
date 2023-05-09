@@ -16,8 +16,9 @@ import javax.validation.constraints.NotEmpty;
 @AllArgsConstructor
 public class Message {
 
-    String key;
+    String messageId;
 
+    @NotEmpty
     String payload;
 
     @NotEmpty

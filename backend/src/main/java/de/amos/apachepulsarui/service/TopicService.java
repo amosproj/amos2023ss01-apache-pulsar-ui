@@ -56,10 +56,22 @@ public class TopicService {
             return pulsarAdmin.topics()
                     .getList(namespace.getId()).stream()
                     .map(TopicParser::fromString)
+                    .map(this::enrichWithSubscriptions)
                     .toList();
         } catch (PulsarAdminException e) {
             log.error("Could not fetch topics of namespace %s. E: %s".formatted(namespace.getId(), e));
             return List.of();
+        }
+    }
+
+    private Topic enrichWithSubscriptions(Topic topic) {
+        try {
+            return topic.toBuilder()
+                    .subscriptions(pulsarAdmin.topics().getSubscriptions(topic.getName()))
+                    .build();
+        } catch (PulsarAdminException e) {
+            log.error("Could not fetch subscriptions of topic %s. E: %s".formatted(topic, e));
+            return topic;
         }
     }
 

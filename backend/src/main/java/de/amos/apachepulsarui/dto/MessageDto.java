@@ -12,7 +12,7 @@ import lombok.Data;
 @Builder
 public class MessageDto {
 
-    private String key;
+    private String messageId;
     private String payload;
 
 }

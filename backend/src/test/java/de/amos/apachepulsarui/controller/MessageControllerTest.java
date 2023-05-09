@@ -44,9 +44,7 @@ public class MessageControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.messages", hasSize(2)))
-                .andExpect(jsonPath("$.messages[0].key", equalTo("key-1")))
                 .andExpect(jsonPath("$.messages[0].payload", equalTo("Nebuchadnezzar")))
-                .andExpect(jsonPath("$.messages[1].key", equalTo("key-2")))
                 .andExpect(jsonPath("$.messages[1].payload", equalTo("Serenity")));
     }
 
