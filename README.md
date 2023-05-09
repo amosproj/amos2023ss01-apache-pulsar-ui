@@ -5,6 +5,7 @@
 * Java Version **17.0.1** or higher 
 * Node.js Version **20.0.0** or higher
 * Docker Desktop
+* Maven
 
 ## Backend
 
@@ -14,7 +15,7 @@ First start Docker Desktop and create the pulsar setup from the root-directory w
 
 Then start the application from the `backend` directory with:
 
-```./mvnw spring-boot:run```
+```mvn spring-boot:run```
 
 After the start, all old topics are automatically removed from the Pulsar instance and some new topics, messages and
 consumers are added.
@@ -26,7 +27,7 @@ but instead use testcontainers. Therefore, docker needs to be running.
 
 To start the tests use:
 
-```./mvnw test```
+```mvn test```
 
 ### REST API
 
