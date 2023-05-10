@@ -1,6 +1,6 @@
 package de.amos.apachepulsarui.controller;
 
-import de.amos.apachepulsarui.domain.Cluster;
+import de.amos.apachepulsarui.dto.ClusterDto;
 import de.amos.apachepulsarui.service.TopologyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,7 +19,7 @@ public class TopologyController {
     private final TopologyService topologyService;
 
     @GetMapping()
-    public ResponseEntity<List<Cluster>> getTopology() {
+    public ResponseEntity<List<ClusterDto>> getTopology() {
         return new ResponseEntity<>(topologyService.getTopicLevelTopology(), HttpStatus.OK);
     }
 

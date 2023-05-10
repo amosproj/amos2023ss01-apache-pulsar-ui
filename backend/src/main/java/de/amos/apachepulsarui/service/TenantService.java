@@ -1,6 +1,6 @@
 package de.amos.apachepulsarui.service;
 
-import de.amos.apachepulsarui.domain.Tenant;
+import de.amos.apachepulsarui.dto.TenantDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pulsar.client.admin.PulsarAdmin;
@@ -17,10 +17,10 @@ public class TenantService {
 
     private final PulsarAdmin pulsarAdmin;
 
-    public List<Tenant> getAllTenants() {
+    public List<TenantDto> getAllTenants() {
         try {
             return pulsarAdmin.tenants().getTenants().stream()
-                    .map(tenant -> Tenant.builder()
+                    .map(tenant -> TenantDto.builder()
                             .id(tenant)
                             .build())
                     .map(this::enrichWithTenantInfo)
@@ -31,7 +31,7 @@ public class TenantService {
         }
     }
 
-    private Tenant enrichWithTenantInfo(Tenant tenant) {
+    private TenantDto enrichWithTenantInfo(TenantDto tenant) {
         try {
             TenantInfo info = pulsarAdmin.tenants().getTenantInfo(tenant.getId());
             return tenant.toBuilder()

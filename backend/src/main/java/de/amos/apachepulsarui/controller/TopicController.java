@@ -6,7 +6,7 @@
 
 package de.amos.apachepulsarui.controller;
 
-import de.amos.apachepulsarui.domain.Topic;
+import de.amos.apachepulsarui.dto.TopicDto;
 import de.amos.apachepulsarui.dto.TopicsDto;
 import de.amos.apachepulsarui.service.TopicService;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ public class TopicController {
     private final TopicService topicService;
 
     @GetMapping
-    public ResponseEntity<List<Topic>> getAllTopics() {
+    public ResponseEntity<List<TopicDto>> getAllTopics() {
         return new ResponseEntity<>(new TopicsDto(topicService.getAllTopics()).getTopics(), HttpStatus.OK);
     }
 

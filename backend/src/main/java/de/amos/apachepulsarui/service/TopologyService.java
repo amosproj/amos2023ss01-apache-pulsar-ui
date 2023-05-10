@@ -1,9 +1,6 @@
 package de.amos.apachepulsarui.service;
 
-import de.amos.apachepulsarui.domain.Cluster;
-import de.amos.apachepulsarui.domain.Namespace;
-import de.amos.apachepulsarui.domain.Tenant;
-import de.amos.apachepulsarui.domain.Topic;
+import de.amos.apachepulsarui.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
@@ -24,14 +21,14 @@ public class TopologyService {
     private final TopicService topicService;
 
     /**
-     * @return A list of {@link Cluster}'s of Pulsar deployment with all topology elements till {@link Topic} level.
+     * @return A list of {@link ClusterDto}'s of Pulsar deployment with all topology elements till {@link TopicDto} level.
      * Returns maximum 10 topics per namespace.
      */
     @Cacheable("topology.topic_level")
-    public List<Cluster> getTopicLevelTopology() {
+    public List<ClusterDto> getTopicLevelTopology() {
 
-        List<Cluster> allClusters = clusterService.getAllClusters();
-        List<Tenant> allTenants = tenantService.getAllTenants();
+        List<ClusterDto> allClusters = clusterService.getAllClusters();
+        List<TenantDto> allTenants = tenantService.getAllTenants();
 
         return allClusters.stream()
                 // tenants have not direct cluster mapping, but a list of allowed clusters,
@@ -42,8 +39,8 @@ public class TopologyService {
                 .toList();
     }
 
-    private Cluster determineTenants(Cluster cluster, List<Tenant> tenants) {
-        List<Tenant> clustersTenants = tenants.stream()
+    private ClusterDto determineTenants(ClusterDto cluster, List<TenantDto> tenants) {
+        List<TenantDto> clustersTenants = tenants.stream()
                 .filter(tenant -> tenant.getTenantInfo()
                         .getAllowedClusters()
                         .contains(cluster.getId()))
@@ -51,8 +48,8 @@ public class TopologyService {
         return cluster.withTenants(clustersTenants);
     }
 
-    private Cluster enrichClustersTenantsWithNamespaces(Cluster cluster) {
-        List<Tenant> tenants = cluster.getTenants().stream()
+    private ClusterDto enrichClustersTenantsWithNamespaces(ClusterDto cluster) {
+        List<TenantDto> tenants = cluster.getTenants().stream()
                 .map(tenant -> tenant.toBuilder()
                         .namespaces(namespaceService.getAllOfTenant(tenant))
                         .build())
@@ -60,14 +57,14 @@ public class TopologyService {
         return cluster.withTenants(tenants);
     }
 
-    private Cluster enrichClustersNamespacesWithTopics(Cluster cluster) {
+    private ClusterDto enrichClustersNamespacesWithTopics(ClusterDto cluster) {
 
-        List<Tenant> tenants = cluster.getTenants().stream()
+        List<TenantDto> tenants = cluster.getTenants().stream()
                 .map(tenant -> {
 
-                    List<Namespace> namespaces = tenant.getNamespaces().stream()
+                    List<NamespaceDto> namespaces = tenant.getNamespaces().stream()
                             .map(namespace -> {
-                                List<Topic> topics = topicService.getByNamespace(namespace, MAX_INITIAL_TOPIC_COUNT);
+                                List<TopicDto> topics = topicService.getByNamespace(namespace, MAX_INITIAL_TOPIC_COUNT);
                                 return namespace.toBuilder()
                                         .topics(topics)
                                         .build();

@@ -5,7 +5,7 @@
 
 package de.amos.apachepulsarui.controller;
 
-import de.amos.apachepulsarui.domain.Message;
+import de.amos.apachepulsarui.dto.MessageDto;
 import de.amos.apachepulsarui.service.MessageService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -34,11 +34,11 @@ public class MessageControllerTest {
 
     @Test
     void getMessages_returnsMessages() throws Exception {
-        List<Message> messages = List.of(
-                new Message("key-1", "Nebuchadnezzar", "topic-1"),
-                new Message("key-2", "Serenity", "topic-2")
+        List<MessageDto> messageDtos = List.of(
+                new MessageDto("key-1", "Nebuchadnezzar", "topic-1"),
+                new MessageDto("key-2", "Serenity", "topic-2")
         );
-        Mockito.when(messageService.peekMessages("spaceships", "nasa-subscription")).thenReturn(messages);
+        Mockito.when(messageService.peekMessages("spaceships", "nasa-subscription")).thenReturn(messageDtos);
 
         mockMvc.perform(get("/messages?topic=spaceships&subscription=nasa-subscription")
                 .contentType(MediaType.APPLICATION_JSON))

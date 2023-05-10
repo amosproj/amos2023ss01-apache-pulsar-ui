@@ -5,8 +5,8 @@
 
 package de.amos.apachepulsarui.service;
 
-import de.amos.apachepulsarui.domain.Namespace;
-import de.amos.apachepulsarui.domain.Tenant;
+import de.amos.apachepulsarui.dto.NamespaceDto;
+import de.amos.apachepulsarui.dto.TenantDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pulsar.client.admin.PulsarAdmin;
@@ -23,17 +23,17 @@ public class NamespaceService {
     private final PulsarAdmin pulsarAdmin;
     private final TenantService tenantService;
 
-    public List<Namespace> getAll() {
+    public List<NamespaceDto> getAll() {
         return tenantService.getAllTenants().stream()
                 .flatMap(tenant -> this.getAllOfTenant(tenant).stream())
                 .toList();
     }
 
-    public List<Namespace> getAllOfTenant(Tenant tenant) {
+    public List<NamespaceDto> getAllOfTenant(TenantDto tenant) {
         try {
             return pulsarAdmin.namespaces()
                     .getNamespaces(tenant.getId()).stream()
-                    .map(namespace -> Namespace.builder()
+                    .map(namespace -> NamespaceDto.builder()
                             .id(namespace)
                             .build())
                     .toList();
