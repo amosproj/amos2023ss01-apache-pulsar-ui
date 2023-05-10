@@ -1,12 +1,15 @@
 package de.amos.apachepulsarui.service;
 
-import de.amos.apachepulsarui.dto.*;
+import java.util.List;
+
+import de.amos.apachepulsarui.dto.ClusterDto;
+import de.amos.apachepulsarui.dto.NamespaceDto;
+import de.amos.apachepulsarui.dto.TenantDto;
+import de.amos.apachepulsarui.dto.TopicDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -31,53 +34,40 @@ public class TopologyService {
         List<TenantDto> allTenants = tenantService.getAllTenants();
 
         return allClusters.stream()
-                // tenants have not direct cluster mapping, but a list of allowed clusters,
-                // so we need to map them manually
-                .map(cluster -> this.determineTenants(cluster, allTenants))
-                .map(this::enrichClustersTenantsWithNamespaces)
-                .map(this::enrichClustersNamespacesWithTopics)
+                .peek(cluster -> {
+
+					List<TenantDto> clustersTenants = this.determineTenants(cluster, allTenants);
+					List<TenantDto> tenantsWithNamespaces = this.enrichWithNamespaces(clustersTenants);
+					List<TenantDto> tenantsWithNamespacesAndTopics = this.enrichNamespacesWithTopics(tenantsWithNamespaces);
+
+					cluster.setTenants(tenantsWithNamespacesAndTopics);
+				})
                 .toList();
     }
 
-    private ClusterDto determineTenants(ClusterDto cluster, List<TenantDto> tenants) {
-        List<TenantDto> clustersTenants = tenants.stream()
+    private List<TenantDto> determineTenants(ClusterDto cluster, List<TenantDto> tenants) {
+        return tenants.stream()
                 .filter(tenant -> tenant.getTenantInfo()
                         .getAllowedClusters()
                         .contains(cluster.getId()))
                 .toList();
-        return cluster.withTenants(clustersTenants);
     }
 
-    private ClusterDto enrichClustersTenantsWithNamespaces(ClusterDto cluster) {
-        List<TenantDto> tenants = cluster.getTenants().stream()
-                .map(tenant -> tenant.toBuilder()
-                        .namespaces(namespaceService.getAllOfTenant(tenant))
-                        .build())
+    private List<TenantDto> enrichWithNamespaces(List<TenantDto> tenants) {
+        return tenants.stream()
+                .peek(tenant -> tenant.setNamespaces(namespaceService.getAllOfTenant(tenant)))
                 .toList();
-        return cluster.withTenants(tenants);
     }
 
-    private ClusterDto enrichClustersNamespacesWithTopics(ClusterDto cluster) {
-
-        List<TenantDto> tenants = cluster.getTenants().stream()
-                .map(tenant -> {
-
+    private List<TenantDto> enrichNamespacesWithTopics(List<TenantDto> tenants) {
+		return tenants.stream()
+                .peek(tenant -> {
                     List<NamespaceDto> namespaces = tenant.getNamespaces().stream()
-                            .map(namespace -> {
-                                List<TopicDto> topics = topicService.getByNamespace(namespace, MAX_INITIAL_TOPIC_COUNT);
-                                return namespace.toBuilder()
-                                        .topics(topics)
-                                        .build();
-                            })
+                            .peek(namespace -> namespace.setTopics(topicService.getByNamespace(namespace, MAX_INITIAL_TOPIC_COUNT)))
                             .toList();
-
-                    return tenant.toBuilder()
-                            .namespaces(namespaces)
-                            .build();
-                })
+                    tenant.setNamespaces(namespaces);
+				})
                 .toList();
-
-        return cluster.withTenants(tenants);
     }
 
 }

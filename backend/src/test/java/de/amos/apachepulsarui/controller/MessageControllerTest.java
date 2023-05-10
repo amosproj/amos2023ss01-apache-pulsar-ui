@@ -5,6 +5,14 @@
 
 package de.amos.apachepulsarui.controller;
 
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.List;
+
 import de.amos.apachepulsarui.dto.MessageDto;
 import de.amos.apachepulsarui.service.MessageService;
 import org.junit.jupiter.api.Test;
@@ -14,14 +22,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.List;
-
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(MessageController.class)
 public class MessageControllerTest {
@@ -35,8 +35,8 @@ public class MessageControllerTest {
     @Test
     void getMessages_returnsMessages() throws Exception {
         List<MessageDto> messageDtos = List.of(
-                new MessageDto("key-1", "Nebuchadnezzar", "topic-1"),
-                new MessageDto("key-2", "Serenity", "topic-2")
+                MessageDto.fromExistingMessage("key-1", "Nebuchadnezzar", "topic-1"),
+                MessageDto.fromExistingMessage("key-2", "Serenity", "topic-2")
         );
         Mockito.when(messageService.peekMessages("spaceships", "nasa-subscription")).thenReturn(messageDtos);
 

@@ -5,18 +5,25 @@
 
 package de.amos.apachepulsarui.dto;
 
-import lombok.Builder;
-import lombok.Value;
-import org.apache.pulsar.common.policies.data.TenantInfo;
-
 import java.util.List;
 
-@Value
-@Builder(toBuilder = true)
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.apache.pulsar.common.policies.data.TenantInfo;
+
+@Data
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TenantDto {
 
-    String id;
-    List<NamespaceDto> namespaces;
-    TenantInfo tenantInfo;
+    private String id;
+    private List<NamespaceDto> namespaces;
+    private TenantInfo tenantInfo;
+
+	public static TenantDto fromString(String tenantId) {
+		TenantDto tenantDto = new TenantDto();
+		tenantDto.id = tenantId;
+		return tenantDto;
+	}
 
 }

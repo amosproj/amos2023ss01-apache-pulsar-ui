@@ -5,10 +5,10 @@
 
 package de.amos.apachepulsarui.dto;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
-
-import java.util.List;
 
 
 @AllArgsConstructor
@@ -18,9 +18,14 @@ public class MessagesDto {
     private List<MessageDto> messages;
 
     public static MessagesDto fromMessages(List<MessageDto> messages) {
-        var messageDtos = messages.stream()
-                .map(message -> new MessageDto(message.getMessageId(), message.getPayload(), message.getTopic()))
-                .toList();
+		List<MessageDto> messageDtos = messages.stream()
+											   .map(message -> MessageDto.fromExistingMessage(
+															message.getMessageId(),
+															message.getPayload(),
+															message.getTopic()
+													)
+											   )
+											   .toList();
         return new MessagesDto(messageDtos);
     }
 
