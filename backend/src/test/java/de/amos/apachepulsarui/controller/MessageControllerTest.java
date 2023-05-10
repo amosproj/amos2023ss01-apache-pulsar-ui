@@ -35,8 +35,8 @@ public class MessageControllerTest {
     @Test
     void getMessages_returnsMessages() throws Exception {
         List<MessageDto> messageDtos = List.of(
-                MessageDto.fromExistingMessage("key-1", "Nebuchadnezzar", "topic-1"),
-                MessageDto.fromExistingMessage("key-2", "Serenity", "topic-2")
+                MessageDto.fromExistingMessage("key-1", "topic-1", "Nebuchadnezzar"),
+                MessageDto.fromExistingMessage("key-2", "topic-2", "Serenity")
         );
         Mockito.when(messageService.peekMessages("spaceships", "nasa-subscription")).thenReturn(messageDtos);
 

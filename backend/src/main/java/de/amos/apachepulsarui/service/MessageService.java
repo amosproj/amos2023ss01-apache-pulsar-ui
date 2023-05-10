@@ -45,11 +45,7 @@ public class MessageService {
         try {
             var messages = pulsarAdmin.topics().peekMessages(topic, subscription, MAX_NUM_MESSAGES);
             return messages.stream()
-                    .map(message -> MessageDto.fromExistingMessage(
-                            message.getMessageId().toString(),
-                            message.getTopicName(),
-                            new String(message.getData(), StandardCharsets.UTF_8)
-					))
+                    .map(MessageDto::fromExistingMessage)
                     .toList();
         } catch (PulsarAdminException e) {
             throw new RuntimeException(e);
