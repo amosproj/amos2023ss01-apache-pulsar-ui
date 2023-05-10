@@ -5,14 +5,13 @@
 
 package de.amos.apachepulsarui.dto;
 
-import java.nio.charset.StandardCharsets;
-
-import javax.validation.constraints.NotEmpty;
-
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.pulsar.client.api.Message;
+
+import javax.validation.constraints.NotEmpty;
+import java.nio.charset.StandardCharsets;
 
 @Data
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -40,7 +39,7 @@ public class MessageDto {
 		messageDto.messageId = message.getMessageId().toString();
 		messageDto.topic = message.getTopicName();
 		messageDto.payload = new String(message.getData(), StandardCharsets.UTF_8);
-		// TODO
+		// TODO => can be obtained from TopicName() class
 		messageDto.cluster = "";
 		messageDto.namespace = "";
 		messageDto.publishTime = message.getPublishTime();
