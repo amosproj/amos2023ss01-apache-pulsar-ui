@@ -6,8 +6,6 @@
 
 package de.amos.apachepulsarui.service;
 
-import java.util.List;
-
 import de.amos.apachepulsarui.dto.NamespaceDto;
 import de.amos.apachepulsarui.dto.TopicDto;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +13,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.apache.pulsar.client.admin.PulsarAdminException;
 import org.apache.pulsar.common.naming.TopicName;
+import org.apache.pulsar.common.policies.data.TopicStats;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -52,26 +53,30 @@ public class TopicService {
 
     private List<TopicDto> getByNamespace(NamespaceDto namespace) {
         try {
+
             return pulsarAdmin.topics()
                     .getList(namespace.getId()).stream()
-                    .map(TopicDto::fromString)
-                    .map(this::enrichWithSubscriptions)
+                    .map(this::createTopicDto)
                     .toList();
+
         } catch (PulsarAdminException e) {
             log.error("Could not fetch topics of namespace %s. E: %s".formatted(namespace.getId(), e));
             return List.of();
         }
     }
 
-    private TopicDto enrichWithSubscriptions(TopicDto topic) {
+    private TopicDto createTopicDto(String completeTopicName) {
+        return TopicDto.createTopicDto(completeTopicName, getTopicStats(completeTopicName) );
+    }
+
+    private TopicStats getTopicStats(String fullTopicName) {
         try {
-			topic.setSubscriptions(pulsarAdmin.topics().getSubscriptions(topic.getName()));
-            return topic;
+            return pulsarAdmin.topics().getStats(fullTopicName);
         } catch (PulsarAdminException e) {
-            log.error("Could not fetch subscriptions of topic %s. E: %s".formatted(topic, e));
-            return topic;
+            throw new RuntimeException(e);
         }
     }
+
 
     private List<TopicDto> sublistOfMaxSize(List<TopicDto> list, int maxCount) {
         return list.subList(0, Math.min(list.size(), maxCount));
