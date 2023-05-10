@@ -1,13 +1,13 @@
 package de.amos.apachepulsarui.service;
 
+import java.util.List;
+
 import de.amos.apachepulsarui.dto.ClusterDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.apache.pulsar.client.admin.PulsarAdminException;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @Slf4j
@@ -19,9 +19,7 @@ public class ClusterService {
     public List<ClusterDto> getAllClusters() {
         try {
             return pulsarAdmin.clusters().getClusters().stream()
-                    .map(cluster -> ClusterDto.builder()
-                            .id(cluster)
-                            .build())
+                    .map(ClusterDto::fromString)
                     .toList();
         } catch (PulsarAdminException e) {
             log.error("Could not get list of all clusters. E: %s".formatted(e));

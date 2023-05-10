@@ -5,41 +5,41 @@
 
 package de.amos.apachepulsarui.dto;
 
-import lombok.Builder;
-import lombok.Value;
-import org.apache.pulsar.common.naming.TopicName;
-
 import java.util.List;
 
-@Value
-@Builder(toBuilder = true)
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.apache.pulsar.common.naming.TopicName;
+
+@Data
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TopicDto {
 
-    String name;
+    private String name;
 
-    String localName;
+	private String localName;
 
-    String namespace;
+	private String namespace;
 
-    String tenant;
+	private String tenant;
 
-    boolean isPersistent;
+	private boolean isPersistent;
 
-    @Builder.Default
-    List<String> subscriptions = List.of();
+	private List<String> subscriptions = List.of();
 
     /**
      * Converts a valid complete topic name (like "persistent://eu-tenant/hr/fizzbuzz" into a {@link TopicDto}.
      */
     public static TopicDto fromString(String completeTopicName) {
         TopicName topicName = TopicName.get(completeTopicName);
-        return TopicDto.builder()
-                .name(topicName.toString())
-                .localName(topicName.getLocalName())
-                .namespace(topicName.getNamespacePortion())
-                .tenant(topicName.getTenant())
-                .isPersistent(topicName.isPersistent())
-                .build();
+		TopicDto topicDto = new TopicDto();
+		topicDto.name = topicName.toString();
+		topicDto.localName = topicName.getLocalName();
+		topicDto.namespace = topicName.getNamespacePortion();
+		topicDto.tenant = topicName.getTenant();
+		topicDto.isPersistent = topicName.isPersistent();
+		return topicDto;
     }
 
 }

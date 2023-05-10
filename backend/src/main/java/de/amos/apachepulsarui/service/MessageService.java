@@ -6,6 +6,9 @@
 
 package de.amos.apachepulsarui.service;
 
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+
 import de.amos.apachepulsarui.dto.MessageDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,9 +19,6 @@ import org.apache.pulsar.client.api.PulsarClient;
 import org.apache.pulsar.client.api.PulsarClientException;
 import org.apache.pulsar.common.naming.TopicName;
 import org.springframework.stereotype.Service;
-
-import java.nio.charset.StandardCharsets;
-import java.util.List;
 
 @Service
 @Slf4j
@@ -45,11 +45,11 @@ public class MessageService {
         try {
             var messages = pulsarAdmin.topics().peekMessages(topic, subscription, MAX_NUM_MESSAGES);
             return messages.stream()
-                    .map(message -> MessageDto.builder()
-                            .messageId(message.getMessageId().toString())
-                            .payload(new String(message.getData(), StandardCharsets.UTF_8))
-                            .topic(message.getTopicName())
-                            .build())
+                    .map(message -> MessageDto.fromExistingMessage(
+                            message.getMessageId().toString(),
+                            message.getTopicName(),
+                            new String(message.getData(), StandardCharsets.UTF_8)
+					))
                     .toList();
         } catch (PulsarAdminException e) {
             throw new RuntimeException(e);

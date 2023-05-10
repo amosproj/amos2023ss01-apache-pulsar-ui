@@ -5,16 +5,23 @@
 
 package de.amos.apachepulsarui.dto;
 
-import lombok.Builder;
-import lombok.Value;
-
 import java.util.List;
 
-@Value
-@Builder(toBuilder = true)
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class NamespaceDto {
 
-    String id;
-    List<TopicDto> topics;
+    private String id;
+    private List<TopicDto> topics = List.of();
+
+	public static NamespaceDto fromString(String namespaceId) {
+		NamespaceDto namespaceDto = new NamespaceDto();
+		namespaceDto.setId(namespaceId);
+		return namespaceDto;
+	}
 
 }

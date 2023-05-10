@@ -6,6 +6,8 @@
 
 package de.amos.apachepulsarui.service;
 
+import java.util.List;
+
 import de.amos.apachepulsarui.dto.NamespaceDto;
 import de.amos.apachepulsarui.dto.TopicDto;
 import lombok.RequiredArgsConstructor;
@@ -14,8 +16,6 @@ import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.apache.pulsar.client.admin.PulsarAdminException;
 import org.apache.pulsar.common.naming.TopicName;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -65,9 +65,8 @@ public class TopicService {
 
     private TopicDto enrichWithSubscriptions(TopicDto topic) {
         try {
-            return topic.toBuilder()
-                    .subscriptions(pulsarAdmin.topics().getSubscriptions(topic.getName()))
-                    .build();
+			topic.setSubscriptions(pulsarAdmin.topics().getSubscriptions(topic.getName()));
+            return topic;
         } catch (PulsarAdminException e) {
             log.error("Could not fetch subscriptions of topic %s. E: %s".formatted(topic, e));
             return topic;
