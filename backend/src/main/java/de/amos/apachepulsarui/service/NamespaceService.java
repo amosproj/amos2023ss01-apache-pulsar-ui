@@ -5,8 +5,6 @@
 
 package de.amos.apachepulsarui.service;
 
-import java.util.List;
-
 import de.amos.apachepulsarui.dto.NamespaceDto;
 import de.amos.apachepulsarui.dto.TenantDto;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.apache.pulsar.client.admin.PulsarAdminException;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -34,10 +34,23 @@ public class NamespaceService {
             return pulsarAdmin.namespaces()
                     .getNamespaces(tenant.getId()).stream()
                     .map(NamespaceDto::fromString)
+                    .map(this::enrichWithNamespaceData)
                     .toList();
         } catch (PulsarAdminException e) {
             log.error("Could not fetch namespaces of tenant %s. E: %s".formatted(tenant.getId(), e));
             return List.of();
+        }
+    }
+
+    private NamespaceDto enrichWithNamespaceData(NamespaceDto namespace) {
+        try {
+            namespace.setBundlesData(pulsarAdmin.namespaces().getBundles(namespace.getId()));
+            namespace.setMessagesTTL(pulsarAdmin.namespaces().getNamespaceMessageTTL(namespace.getId()));
+            namespace.setRetentionPolicies(pulsarAdmin.namespaces().getRetention(namespace.getId()));
+            return namespace;
+        } catch (PulsarAdminException e) {
+            log.error("Could not fetch namespace data of namespace %s. E: %s".formatted(namespace.getId(), e));
+            return namespace;
         }
     }
 

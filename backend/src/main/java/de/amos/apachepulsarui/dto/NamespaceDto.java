@@ -9,6 +9,8 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.pulsar.common.policies.data.BundlesData;
+import org.apache.pulsar.common.policies.data.RetentionPolicies;
 
 import java.util.List;
 
@@ -22,6 +24,12 @@ public class NamespaceDto {
 
 	@Setter(AccessLevel.PRIVATE)
 	private int amountOfTopics = 0;
+
+	private BundlesData bundlesData;
+
+	private Integer messagesTTL;
+
+	private RetentionPolicies retentionPolicies;
 
 	public static NamespaceDto fromString(String namespaceId) {
 		NamespaceDto namespaceDto = new NamespaceDto();
