@@ -15,7 +15,7 @@ import java.util.List;
 @Data
 public class MessagesDto {
 
-    private List<MessageDto> messageDtos;
+    private List<MessageDto> messages;
 
     public static MessagesDto fromMessages(List<MessageDto> messages) {
         var messageDtos = messages.stream()
