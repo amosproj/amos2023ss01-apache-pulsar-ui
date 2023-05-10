@@ -20,6 +20,8 @@ public class ClusterDto {
 
     private List<TenantDto> tenants;
 
+	private List<String> brokers;
+
 	@Setter(AccessLevel.PRIVATE)
 	private int amountOfTenants = 0;
 
@@ -29,6 +31,14 @@ public class ClusterDto {
 	@Setter(AccessLevel.PRIVATE)
 	private int amountOfTopics = 0;
 
+	@Setter(AccessLevel.PRIVATE)
+	private int amountOfBrokers = 0;
+
+	private String brokerServiceUrl;
+
+	private String serviceUrl;
+
+
 	public static ClusterDto fromString(String clusterId) {
 		ClusterDto clusterDto = new ClusterDto();
 		clusterDto.id = clusterId;
@@ -37,6 +47,7 @@ public class ClusterDto {
 
 	/**
 	 * Set's the list of tenants, and it's size (amountOfTenants) for this cluster.
+	 * Additionally, it computes the amountOfNamespaces and amountOfTopics for this cluster.
 	 */
 	public void setTenants(List<TenantDto> tenants) {
 		this.tenants = tenants;
@@ -48,10 +59,25 @@ public class ClusterDto {
 	}
 
 	/**
+	 * Set's the list of brokers, and it's size (amountOfBrokers) for this cluster.
+	 */
+	public void setBrokers(List<String> brokers) {
+		this.brokers = brokers;
+		this.amountOfBrokers = brokers.size();
+	}
+
+	/**
 	 * @return An unmodifiable copy of the tenants of this cluster.
 	 */
 	public List<TenantDto> getTenants() {
 		return List.copyOf(tenants);
+	}
+
+	/**
+	 * @return An unmodifiable copy of the brokers of this cluster.
+	 */
+	public List<String> getBrokers() {
+		return List.copyOf(brokers);
 	}
 
 }
