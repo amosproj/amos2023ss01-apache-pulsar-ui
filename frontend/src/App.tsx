@@ -13,7 +13,7 @@ import {
 	setData,
 	updateData,
 } from './store/globalSlice'
-import ResponsiveNavBar from './components/responsiveNavBar'
+import NavBar from './components/NavBar'
 
 type SampleViewData = {
 	tag: string
@@ -77,7 +77,7 @@ function App() {
 	return (
 		<div className="bg-blue w-full h-full">
 			<div className="w-full h-full">
-				<ResponsiveNavBar></ResponsiveNavBar>
+				<NavBar />
 				<ul>
 					{filteredData.map((item, index) => (
 						<li key={index}>{item.content}</li>

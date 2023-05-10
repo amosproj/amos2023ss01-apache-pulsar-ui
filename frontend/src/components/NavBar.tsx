@@ -1,3 +1,7 @@
+// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: 2010-2021 Dirk Riehle <dirk@riehle.org
+// SPDX-FileCopyrightText: 2019 Georg Schwarz <georg. schwarz@fau.de>
+
 import * as React from 'react'
 import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
@@ -9,15 +13,14 @@ import MenuIcon from '@mui/icons-material/Menu'
 import Container from '@mui/material/Container'
 import Button from '@mui/material/Button'
 import MenuItem from '@mui/material/MenuItem'
-import AdbIcon from '@mui/icons-material/Adb'
 import { useAppDispatch } from '../store/hooks'
 import { setNav } from '../store/globalSlice'
 import logo from '../assets/images/team-logo-light.png'
-import { Input, TextField, colors } from '@mui/material'
+import { Input } from '@mui/material'
 
 const pages = ['Cluster', 'Namespace', 'Topic', 'Message']
 
-function ResponsiveAppBar() {
+function NavBar() {
 	const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null)
 
 	const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -134,4 +137,4 @@ function ResponsiveAppBar() {
 		</AppBar>
 	)
 }
-export default ResponsiveAppBar
+export default NavBar
