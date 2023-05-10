@@ -7,6 +7,7 @@ package de.amos.apachepulsarui.controller;
 
 import de.amos.apachepulsarui.dto.TopicDto;
 import de.amos.apachepulsarui.service.TopicService;
+import org.apache.pulsar.common.policies.data.TopicStats;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,9 @@ public class TopicControllerTest {
     @MockBean
     TopicService topicService;
 
+    @MockBean
+    TopicStats topicStats;
+
     @Test
     void getAllTopics_returnsAllTopics() throws Exception {
 
@@ -39,7 +43,7 @@ public class TopicControllerTest {
                 "persistent://public/default/tatooine",
                 "non-persistent://fizz/foo/naboo",
                 "persistent://buzz/bar/coruscant"
-        ).map(TopicDto::fromString).toList();
+        ).map( values -> TopicDto.createTopicDto(values, topicStats)).toList();
 
         Mockito.when(topicService.getAllTopics()).thenReturn(topics);
 
