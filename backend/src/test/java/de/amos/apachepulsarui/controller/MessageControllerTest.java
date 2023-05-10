@@ -14,7 +14,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.List;
 
 import de.amos.apachepulsarui.dto.MessageDto;
+import de.amos.apachepulsarui.dto.MessagesDto;
 import de.amos.apachepulsarui.service.MessageService;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +37,8 @@ public class MessageControllerTest {
     @Test
     void getMessages_returnsMessages() throws Exception {
         List<MessageDto> messageDtos = List.of(
-                MessageDto.fromExistingMessage("key-1", "topic-1", "Nebuchadnezzar"),
-                MessageDto.fromExistingMessage("key-2", "topic-2", "Serenity")
+                aMessage("topic-1", "Nebuchadnezzar"),
+                aMessage("topic-2", "Serenity")
         );
         Mockito.when(messageService.peekMessages("spaceships", "nasa-subscription")).thenReturn(messageDtos);
 
@@ -46,6 +48,11 @@ public class MessageControllerTest {
                 .andExpect(jsonPath("$.messages", hasSize(2)))
                 .andExpect(jsonPath("$.messages[0].payload", equalTo("Nebuchadnezzar")))
                 .andExpect(jsonPath("$.messages[1].payload", equalTo("Serenity")));
+    }
+
+    @NotNull
+    private static MessageDto aMessage(String topic, String payload) {
+        return MessageDto.create(topic, payload);
     }
 
     @Test

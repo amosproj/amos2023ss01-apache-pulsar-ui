@@ -26,6 +26,12 @@ public class MessageDto {
 	@NotEmpty
 	String payload;
 
+	String cluster;
+
+	String namespace;
+
+	Long publishTime;
+
 	/**
 	 * Static factory for messages already existing in Pulsar.
 	 */
@@ -34,20 +40,15 @@ public class MessageDto {
 		messageDto.messageId = message.getMessageId().toString();
 		messageDto.topic = message.getTopicName();
 		messageDto.payload = new String(message.getData(), StandardCharsets.UTF_8);
+		// TODO
+		messageDto.cluster = "";
+		messageDto.namespace = "";
+		messageDto.publishTime = message.getPublishTime();
+
 		return messageDto;
 	}
 
-	/**
-	 * Static factory for messages already existing in Pulsar.
-	 * @apiNote For testing purposes.
-	 */
-	public static MessageDto fromExistingMessage(String messageId, String topic, String payload) {
-		MessageDto messageDto = new MessageDto();
-		messageDto.messageId = messageId;
-		messageDto.topic = topic;
-		messageDto.payload = payload;
-		return messageDto;
-	}
+
 
 	/**
 	 * Static factory for messages meant to be sent to Pulsar.
