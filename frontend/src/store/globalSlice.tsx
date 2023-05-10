@@ -6,11 +6,21 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { RootState } from '.'
 
+export type View = {
+	selectedNav: string | null
+	filteredId: number | string | null
+}
+
 export type globalState = {
+	view: View
 	data: Array<MessageList>
 }
 
 const initialState: globalState = {
+	view: {
+		selectedNav: null,
+		filteredId: null,
+	},
 	data: [],
 }
 
@@ -37,6 +47,12 @@ const globalSlice = createSlice({
 	name: 'globalControl',
 	initialState,
 	reducers: {
+		setNav: (state, action: PayloadAction<string>) => {
+			state.view.selectedNav = action.payload
+		},
+		setView: (state, action: PayloadAction<View>) => {
+			state.view = action.payload
+		},
 		setData: (
 			state: globalState,
 			action: PayloadAction<Array<MessageList>>
@@ -65,8 +81,10 @@ const { actions, reducer } = globalSlice
 const selectData = (state: RootState): Array<MessageList> =>
 	state.globalControl.data
 
-export const { updateData, setData } = actions
+const selectView = (state: RootState): View => state.globalControl.view
 
-export { selectData, fetchDataThunk }
+export const { setNav, setView, updateData, setData } = actions
+
+export { selectData, selectView, fetchDataThunk }
 
 export default reducer
