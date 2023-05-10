@@ -6,7 +6,7 @@
 
 package de.amos.apachepulsarui.service;
 
-import de.amos.apachepulsarui.domain.Message;
+import de.amos.apachepulsarui.dto.MessageDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pulsar.client.admin.PulsarAdmin;
@@ -32,7 +32,7 @@ public class MessageService {
 
 
     // TODO get all messages for all topics, instead of just the first one
-    public List<Message> peekMessages(String topic) {
+    public List<MessageDto> peekMessages(String topic) {
         try {
             List<String> subscriptions = pulsarAdmin.topics().getSubscriptions(topic);
             return peekMessages(topic, subscriptions.get(0));
@@ -41,11 +41,11 @@ public class MessageService {
         }
     }
 
-    public List<Message> peekMessages(String topic, String subscription) {
+    public List<MessageDto> peekMessages(String topic, String subscription) {
         try {
             var messages = pulsarAdmin.topics().peekMessages(topic, subscription, MAX_NUM_MESSAGES);
             return messages.stream()
-                    .map(message -> Message.builder()
+                    .map(message -> MessageDto.builder()
                             .messageId(message.getMessageId().toString())
                             .payload(new String(message.getData(), StandardCharsets.UTF_8))
                             .topic(message.getTopicName())
@@ -56,36 +56,36 @@ public class MessageService {
         }
     }
 
-    public boolean sendMessage(Message message) {
+    public boolean sendMessage(MessageDto messageDto) {
         try {
-            Producer<byte[]> producer = this.createProducerFor(message.getTopic());
-            producer.send(message.getPayload().getBytes(StandardCharsets.UTF_8));
+            Producer<byte[]> producer = this.createProducerFor(messageDto.getTopic());
+            producer.send(messageDto.getPayload().getBytes(StandardCharsets.UTF_8));
             producer.close();
             return true;
         } catch (PulsarClientException e) {
-            log.error("Could not send message to topic %s.".formatted(message.getTopic()));
+            log.error("Could not send messageDto to topic %s.".formatted(messageDto.getTopic()));
             return false;
         }
     }
 
-    public boolean sendMessages(List<Message> messages) {
+    public boolean sendMessages(List<MessageDto> messageDtos) {
         try {
-            Producer<byte[]> producer = this.createProducerFor(messages.iterator().next().getTopic());
-            for (Message message : messages) {
-                producer.send(message.getPayload().getBytes(StandardCharsets.UTF_8));
+            Producer<byte[]> producer = this.createProducerFor(messageDtos.iterator().next().getTopic());
+            for (MessageDto messageDto : messageDtos) {
+                producer.send(messageDto.getPayload().getBytes(StandardCharsets.UTF_8));
             }
             producer.close();
             return true;
         } catch (PulsarClientException e) {
-            log.error("Could not list of %s messages to topic %s."
-                    .formatted(messages.size(), messages.iterator().next().getTopic())
+            log.error("Could not list of %s messageDtos to topic %s."
+                    .formatted(messageDtos.size(), messageDtos.iterator().next().getTopic())
             );
             return false;
         }
     }
 
-    public boolean isValidMessage(Message message) {
-        return TopicName.isValid(message.getTopic());
+    public boolean isValidMessage(MessageDto messageDto) {
+        return TopicName.isValid(messageDto.getTopic());
     }
 
     private Producer<byte []> createProducerFor(String topicName) throws PulsarClientException {

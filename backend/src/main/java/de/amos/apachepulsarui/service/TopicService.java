@@ -6,9 +6,8 @@
 
 package de.amos.apachepulsarui.service;
 
-import de.amos.apachepulsarui.domain.Namespace;
-import de.amos.apachepulsarui.domain.Topic;
-import de.amos.apachepulsarui.parser.TopicParser;
+import de.amos.apachepulsarui.dto.NamespaceDto;
+import de.amos.apachepulsarui.dto.TopicDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pulsar.client.admin.PulsarAdmin;
@@ -26,14 +25,14 @@ public class TopicService {
     private final PulsarAdmin pulsarAdmin;
     private final NamespaceService namespaceService;
 
-    public List<Topic> getAllTopics() {
-        List<Namespace> namespaces = namespaceService.getAll();
+    public List<TopicDto> getAllTopics() {
+        List<NamespaceDto> namespaces = namespaceService.getAll();
         return namespaces.stream()
                 .flatMap(namespace -> this.getByNamespace(namespace).stream())
                 .toList();
     }
 
-    public List<Topic> getByNamespace(Namespace namespace, int maxCount) {
+    public List<TopicDto> getByNamespace(NamespaceDto namespace, int maxCount) {
         return this.sublistOfMaxSize(this.getByNamespace(namespace), maxCount);
     }
 
@@ -51,11 +50,11 @@ public class TopicService {
         return TopicName.isValid(topic);
     }
 
-    private List<Topic> getByNamespace(Namespace namespace) {
+    private List<TopicDto> getByNamespace(NamespaceDto namespace) {
         try {
             return pulsarAdmin.topics()
                     .getList(namespace.getId()).stream()
-                    .map(TopicParser::fromString)
+                    .map(TopicDto::fromString)
                     .map(this::enrichWithSubscriptions)
                     .toList();
         } catch (PulsarAdminException e) {
@@ -64,7 +63,7 @@ public class TopicService {
         }
     }
 
-    private Topic enrichWithSubscriptions(Topic topic) {
+    private TopicDto enrichWithSubscriptions(TopicDto topic) {
         try {
             return topic.toBuilder()
                     .subscriptions(pulsarAdmin.topics().getSubscriptions(topic.getName()))
@@ -75,7 +74,7 @@ public class TopicService {
         }
     }
 
-    private List<Topic> sublistOfMaxSize(List<Topic> list, int maxCount) {
+    private List<TopicDto> sublistOfMaxSize(List<TopicDto> list, int maxCount) {
         return list.subList(0, Math.min(list.size(), maxCount));
     }
 

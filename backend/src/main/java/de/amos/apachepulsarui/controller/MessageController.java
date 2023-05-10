@@ -6,7 +6,7 @@
 
 package de.amos.apachepulsarui.controller;
 
-import de.amos.apachepulsarui.domain.Message;
+import de.amos.apachepulsarui.dto.MessageDto;
 import de.amos.apachepulsarui.dto.MessagesDto;
 import de.amos.apachepulsarui.service.MessageService;
 import lombok.RequiredArgsConstructor;
@@ -32,19 +32,19 @@ public class MessageController {
 
     @GetMapping
     public ResponseEntity<MessagesDto> getMessages(@RequestParam String topic, @RequestParam String subscription) {
-        List<Message> messages = messageService.peekMessages(topic, subscription);
-        return new ResponseEntity<>(MessagesDto.fromMessages(messages), HttpStatus.OK);
+        List<MessageDto> messageDtos = messageService.peekMessages(topic, subscription);
+        return new ResponseEntity<>(MessagesDto.fromMessages(messageDtos), HttpStatus.OK);
     }
 
     @PostMapping(
             value = "/send",
             consumes = {MediaType.APPLICATION_JSON_VALUE}
     )
-    public ResponseEntity<Void> sendMessage(@RequestBody @Valid Message message) {
-        if (!messageService.isValidMessage(message)) {
+    public ResponseEntity<Void> sendMessage(@RequestBody @Valid MessageDto messageDto) {
+        if (!messageService.isValidMessage(messageDto)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        if (messageService.sendMessage(message)) {
+        if (messageService.sendMessage(messageDto)) {
             return new ResponseEntity<>(HttpStatus.CREATED);
         }
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

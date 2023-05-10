@@ -5,14 +5,23 @@
 
 package de.amos.apachepulsarui.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import javax.validation.constraints.NotEmpty;
+
 @Data
 @Builder
+@AllArgsConstructor
 public class MessageDto {
 
-    private String messageId;
-    private String payload;
+    String messageId;
+
+    @NotEmpty
+    String payload;
+
+    @NotEmpty
+    String topic;
 
 }

@@ -5,7 +5,7 @@
 
 package de.amos.apachepulsarui.service;
 
-import de.amos.apachepulsarui.domain.Message;
+import de.amos.apachepulsarui.dto.MessageDto;
 import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.apache.pulsar.client.admin.PulsarAdminException;
 import org.apache.pulsar.client.api.MessageId;
@@ -27,16 +27,16 @@ public class MessageServiceIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     void peekMessages_returnsSentMessages() throws PulsarAdminException {
-        topicService.createNewTopic("message-service-integration-test");
-        String topicName = "persistent://public/default/message-service-integration-test";
+        topicService.createNewTopic("messageDto-service-integration-test");
+        String topicName = "persistent://public/default/messageDto-service-integration-test";
         pulsarAdmin.topics().createSubscription(topicName, "getGreatMessages", MessageId.latest);
-        Message message = Message.builder()
+        MessageDto messageDto = MessageDto.builder()
                 .messageId("1:0:-1") // pulsar will auto-generate this!
                 .payload("Hello World")
                 .topic(topicName)
                 .build();
-        messageService.sendMessage(message);
+        messageService.sendMessage(messageDto);
         var messages = messageService.peekMessages(topicName);
-        Assertions.assertThat(messages).containsExactly(message);
+        Assertions.assertThat(messages).containsExactly(messageDto);
     }
 }

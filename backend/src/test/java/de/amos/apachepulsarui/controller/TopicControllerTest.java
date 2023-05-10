@@ -5,7 +5,7 @@
 
 package de.amos.apachepulsarui.controller;
 
-import de.amos.apachepulsarui.domain.Topic;
+import de.amos.apachepulsarui.dto.TopicDto;
 import de.amos.apachepulsarui.parser.TopicParser;
 import de.amos.apachepulsarui.service.TopicService;
 import org.junit.jupiter.api.Test;
@@ -36,7 +36,7 @@ public class TopicControllerTest {
     @Test
     void getAllTopics_returnsAllTopics() throws Exception {
 
-        List<Topic> topics = Stream.of(
+        List<TopicDto> topics = Stream.of(
                 "persistent://public/default/tatooine",
                 "non-persistent://fizz/foo/naboo",
                 "persistent://buzz/bar/coruscant"

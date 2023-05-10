@@ -80,7 +80,7 @@ public class ApplicationStartupListener {
                     .key("key " + index)
                     .value(RandomString.make(10).getBytes())
                     .send();
-            log.info("New Message with Key " + index + "on Topic " + topicName);
+            log.info("New MessageDto with Key " + index + "on TopicDto " + topicName);
             index++;
         }
     }
