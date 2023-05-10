@@ -37,6 +37,7 @@ public class TenantDto {
 
 	/**
 	 * Set's the list of namespaces, and it's size (amountOfNamespaces) for this tenant.
+	 * Additionally, it computes the amountOfTopics for this tenant.
 	 */
 	public void setNamespaces(List<NamespaceDto> namespaces) {
 		this.namespaces = namespaces;
