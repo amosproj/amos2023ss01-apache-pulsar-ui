@@ -12,30 +12,88 @@ import {
 	selectView,
 	setData,
 	updateData,
+	setNav,
 } from './store/globalSlice'
 import NavBar from './components/NavBar'
 
-type SampleViewData = {
+type SampleCluster = {
+	tag: string
+	id: number
+	content: string
+	namespaces: Array<SampleNamespace>
+}
+
+type SampleNamespace = {
+	tag: string
+	id: number
+	content: string
+	topics: Array<SampleTopic>
+}
+
+type SampleTopic = {
+	tag: string
+	id: number
+	content: string
+	messages: Array<SampleMessage>
+}
+
+type SampleMessage = {
 	tag: string
 	id: number
 	content: string
 }
-let allData: Array<SampleViewData> = []
+
+let allData: Array<SampleCluster> = []
 
 function App() {
 	const dispatch = useAppDispatch()
 	const dummyData = useAppSelector(selectData)
 	const triggerUpdate = (msg: string, tpc: string) => {
 		dispatch(updateData({ message: msg, topic: tpc }))
-		console.log(dummyData)
 	}
 
 	const view = useAppSelector(selectView)
 
-	const filteredData = allData.filter(
-		//TODO add cases with item.id
-		(item) => !view || item.tag === view.selectedNav
-	)
+	const allNamespaces = allData
+		.map((item) => item.namespaces)
+		.filter((el) => el.length > 0)
+		.flat()
+
+	const allTopics = allData
+		.flatMap((item) => item.namespaces)
+		.map((namespace) => namespace.topics)
+		.filter((el) => el.length > 0)
+		.flat()
+
+	const allMessages = allData
+		.flatMap((item) => item.namespaces)
+		.flatMap((namespace) => namespace.topics)
+		.map((topic) => topic.messages)
+		.filter((el) => el.length > 0)
+		.flat()
+
+	let filteredData: any = allData
+
+	if (view.selectedNav === 'namespace') {
+		filteredData = allNamespaces
+	} else if (view.selectedNav === 'topic') {
+		filteredData = allTopics
+	} else if (view.selectedNav === 'message') {
+		filteredData = allMessages
+	}
+
+	const getNewElementTag = (tag: string) => {
+		if (tag === 'cluster') {
+			return 'namespace'
+		} else if (tag === 'namespace') {
+			return 'topic'
+		} else return 'message'
+	}
+
+	const selectNewElement = (tag: string, id: number) => {
+		tag = getNewElementTag(tag).toLowerCase()
+		dispatch(setNav(tag))
+	}
 
 	//can later on be replaced by the fetchDataThunk
 	const getData = () => {
@@ -46,11 +104,9 @@ function App() {
 			},
 		})
 			.then(function (response) {
-				console.log(response)
 				return response.json()
 			})
 			.then(function (json) {
-				console.log(json)
 				dispatch(setData(json))
 			})
 		//part for dummy NavBar
@@ -61,11 +117,9 @@ function App() {
 			},
 		})
 			.then(function (response) {
-				console.log(response)
 				return response.json()
 			})
 			.then(function (json) {
-				console.log(json)
 				allData = json
 			})
 	}
@@ -79,11 +133,12 @@ function App() {
 			<div className="w-full h-full">
 				<NavBar />
 				<ul>
-					{filteredData.map((item, index) => (
-						<li key={index}>{item.content}</li>
+					{filteredData.map((item: any, index: any) => (
+						<li key={index}>
+							<a href="#">{item?.content}</a>
+						</li>
 					))}
 				</ul>
-				<Form data={dummyData} triggerUpdate={triggerUpdate}></Form>
 			</div>
 		</div>
 	)
