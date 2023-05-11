@@ -1,0 +1,50 @@
+@import './variables.scss';
+
+.semi-circle {
+	position: absolute;
+	left: 0;
+	right: 0;
+	margin: 0 auto;
+	background-color: $primary-blue;
+	transform: translateY(-55%);
+	height: $screen-sm-min;
+	width: $screen-sm-min;
+	border-radius: $screen-sm-min;
+	transition: all 0.3s ease-in-out;
+}
+
+@media screen and (min-width: $screen-xl-min) {
+	.semi-circle {
+		height: 65rem;
+		width: 65rem;
+		transform: translateY(-65%);
+	}
+}
+
+@media screen and (min-width: $screen-lg-min) and (max-width: $screen-xl-min) {
+	.semi-circle {
+		height: 50rem;
+		width: 50rem;
+	}
+}
+
+@media screen and (min-width: $screen-md-min) and (max-width: $screen-lg-min) {
+	.semi-circle {
+		height: 45rem;
+		width: 45rem;
+	}
+}
+
+@media screen and (min-width: $screen-lg-min) and (max-width: $screen-sm-min) {
+	.semi-circle {
+		height: 40rem;
+		width: 40rem;
+	}
+}
+
+@media screen and (max-width: $screen-sm-min) {
+	.semi-circle {
+		height: 30rem;
+		width: 30rem;
+	}
+}
