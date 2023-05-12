@@ -6,9 +6,6 @@
 
 package de.amos.apachepulsarui.service;
 
-import java.nio.charset.StandardCharsets;
-import java.util.List;
-
 import de.amos.apachepulsarui.dto.MessageDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +16,9 @@ import org.apache.pulsar.client.api.PulsarClient;
 import org.apache.pulsar.client.api.PulsarClientException;
 import org.apache.pulsar.common.naming.TopicName;
 import org.springframework.stereotype.Service;
+
+import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -42,13 +42,22 @@ public class MessageService {
     }
 
     public List<MessageDto> peekMessages(String topic, String subscription) {
+        var schema = getSchemaIfExists(topic);
         try {
             var messages = pulsarAdmin.topics().peekMessages(topic, subscription, MAX_NUM_MESSAGES);
             return messages.stream()
-                    .map(MessageDto::fromExistingMessage)
+                    .map(message -> MessageDto.fromExistingMessage(message, schema))
                     .toList();
         } catch (PulsarAdminException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private String getSchemaIfExists(String topic) {
+        try {
+            return pulsarAdmin.schemas().getSchemaInfo(topic).getSchemaDefinition();
+        } catch (PulsarAdminException e) {
+            return "";
         }
     }
 
