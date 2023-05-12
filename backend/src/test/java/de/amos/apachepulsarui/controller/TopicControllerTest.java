@@ -50,8 +50,8 @@ public class TopicControllerTest {
         mockMvc.perform(get("/topic")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.[0].name", equalTo(topics.get(0).getName())))
-                .andExpect(jsonPath("$.[1].name", equalTo(topics.get(1).getName())))
-                .andExpect(jsonPath("$.[2].name", equalTo(topics.get(2).getName())));
+                .andExpect(jsonPath("$.topics[0].name", equalTo(topics.get(0).getName())))
+                .andExpect(jsonPath("$.topics[1].name", equalTo(topics.get(1).getName())))
+                .andExpect(jsonPath("$.topics[2].name", equalTo(topics.get(2).getName())));
     }
 }
