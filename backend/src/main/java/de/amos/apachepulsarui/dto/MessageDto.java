@@ -1,6 +1,7 @@
 /*
  * SPDX-License-Identifier: MIT
  * SPDX-FileCopyrightText: 2023 Niklas Teschner <niklas.teschner@web.de>
+ * SPDX-FileCopyrightText: 2023 Anna Haverkamp <anna.lucia.haverkamp@gmail.com>
  */
 
 package de.amos.apachepulsarui.dto;
@@ -9,6 +10,7 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.pulsar.client.api.Message;
+import org.apache.pulsar.common.naming.TopicName;
 
 import javax.validation.constraints.NotEmpty;
 import java.nio.charset.StandardCharsets;
@@ -22,42 +24,43 @@ public class MessageDto {
     @NotEmpty
     String topic;
 
-	@NotEmpty
-	String payload;
+    @NotEmpty
+    String payload;
 
-	String cluster;
+    String schema;
 
-	String namespace;
+    String namespace;
 
-	Long publishTime;
+    String tenant;
 
-	/**
-	 * Static factory for messages already existing in Pulsar.
-	 */
-	public static MessageDto fromExistingMessage(Message<byte []> message) {
-		MessageDto messageDto = new MessageDto();
-		messageDto.messageId = message.getMessageId().toString();
-		messageDto.topic = message.getTopicName();
-		messageDto.payload = new String(message.getData(), StandardCharsets.UTF_8);
-		// TODO => can be obtained from TopicName() class
-		messageDto.cluster = "";
-		messageDto.namespace = "";
-		messageDto.publishTime = message.getPublishTime();
+    Long publishTime;
 
-		return messageDto;
-	}
+    /**
+     * Static factory for messages already existing in Pulsar.
+     */
+    public static MessageDto fromExistingMessage(Message<byte[]> message, String schemaDefinition) {
+        MessageDto messageDto = new MessageDto();
+        messageDto.messageId = message.getMessageId().toString();
+        messageDto.topic = message.getTopicName();
+        messageDto.payload = new String(message.getData(), StandardCharsets.UTF_8);
+        messageDto.schema = schemaDefinition;
+        messageDto.namespace = TopicName.get(message.getTopicName()).getNamespacePortion();
+        messageDto.tenant = TopicName.get(message.getTopicName()).getTenant();
+        messageDto.publishTime = message.getPublishTime();
+
+        return messageDto;
+    }
 
 
-
-	/**
-	 * Static factory for messages meant to be sent to Pulsar.
-	 * They won't have a messageId (and further information yet).
-	 */
-	public static MessageDto create(String topic, String payload) {
-		MessageDto messageDto = new MessageDto();
-		messageDto.topic = topic;
-		messageDto.payload = payload;
-		return messageDto;
-	}
+    /**
+     * Static factory for messages meant to be sent to Pulsar.
+     * They won't have a messageId (and further information yet).
+     */
+    public static MessageDto create(String topic, String payload) {
+        MessageDto messageDto = new MessageDto();
+        messageDto.topic = topic;
+        messageDto.payload = payload;
+        return messageDto;
+    }
 
 }
