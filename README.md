@@ -1,5 +1,11 @@
 # Apache Pulsar Ui (AMOS SS 2023)
 
+## Porject Mission
+
+The mission of our project is well aligned with our product [vision](https://docs.google.com/spreadsheets/d/1I5EbfJtnI81RnwBSzQUbqHXc9BeGBDle5ZD8TFL68DY/). Because the goal mission is to build a Web-UI that can easily be used by users that have some experience with managing and maintaining Apache Pulsar installations to understand and work on their infrastructure.
+
+We want to achieve this by structuring our UI according to the topology of Apache Pulsar, so that it can be navigated intuitively for targeted exploration of issues. With our Apache Pulsar UI issues can be located, and potential optimizations can easily be searched for, identified, and implemented.
+
 ## Requirements 
 
 * Java Version **17.0.1** or higher 
