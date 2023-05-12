@@ -5,15 +5,8 @@
 import React, { useEffect } from 'react'
 import './App.css'
 import './assets/styles/styles.scss'
-import Form from './components/form/Form'
 import { useAppDispatch, useAppSelector } from './store/hooks'
-import {
-	selectData,
-	selectView,
-	setData,
-	updateData,
-	setNav,
-} from './store/globalSlice'
+import { selectView, setNav } from './store/globalSlice'
 import NavBar from './components/NavBar'
 
 type SampleCluster = {
@@ -47,10 +40,6 @@ let allData: Array<SampleCluster> = []
 
 function App() {
 	const dispatch = useAppDispatch()
-	const dummyData = useAppSelector(selectData)
-	const triggerUpdate = (msg: string, tpc: string) => {
-		dispatch(updateData({ message: msg, topic: tpc }))
-	}
 
 	const view = useAppSelector(selectView)
 
@@ -72,7 +61,11 @@ function App() {
 		.filter((el) => el.length > 0)
 		.flat()
 
-	let filteredData: any = allData
+	let filteredData:
+		| Array<SampleCluster>
+		| Array<SampleNamespace>
+		| Array<SampleTopic>
+		| Array<SampleMessage> = allData
 
 	if (view.selectedNav === 'namespace') {
 		filteredData = allNamespaces
@@ -83,6 +76,7 @@ function App() {
 	}
 
 	const getNewElementTag = (tag: string) => {
+		tag = tag.toLowerCase()
 		if (tag === 'cluster') {
 			return 'namespace'
 		} else if (tag === 'namespace') {
@@ -91,24 +85,12 @@ function App() {
 	}
 
 	const selectNewElement = (tag: string, id: number) => {
-		tag = getNewElementTag(tag).toLowerCase()
+		tag = getNewElementTag(tag)
 		dispatch(setNav(tag))
 	}
 
 	//can later on be replaced by the fetchDataThunk
 	const getData = () => {
-		fetch('dummy/dummy.json', {
-			headers: {
-				'Content-Type': 'application/json',
-				Accept: 'application/json',
-			},
-		})
-			.then(function (response) {
-				return response.json()
-			})
-			.then(function (json) {
-				dispatch(setData(json))
-			})
 		//part for dummy NavBar
 		fetch('dummy/dummyViewData.json', {
 			headers: {
@@ -133,11 +115,20 @@ function App() {
 			<div className="w-full h-full">
 				<NavBar />
 				<ul>
-					{filteredData.map((item: any, index: any) => (
-						<li key={index}>
-							<a href="#">{item?.content}</a>
-						</li>
-					))}
+					{filteredData.map(
+						(
+							item:
+								| SampleCluster
+								| SampleNamespace
+								| SampleTopic
+								| SampleMessage,
+							index: number
+						) => (
+							<li key={index}>
+								<a href="#">{item?.content}</a>
+							</li>
+						)
+					)}
 				</ul>
 			</div>
 		</div>
