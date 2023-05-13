@@ -1,6 +1,6 @@
 /*
  * SPDX-License-Identifier: MIT
- * SPDX-FileCopyrightText: 2023 Niklas Teschner <niklas.teschner@web.de>
+ * SPDX-FileCopyrightText: 2023 Anna Haverkamp <anna.lucia.haverkamp@gmail.com>
  */
 
 package de.amos.apachepulsarui.dto;
