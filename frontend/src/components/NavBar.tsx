@@ -18,7 +18,8 @@ import { setNav } from '../store/globalSlice'
 import logo from '../assets/images/team-logo-light.png'
 import { Input } from '@mui/material'
 
-const pages = ['Cluster', 'Namespace', 'Topic', 'Message']
+//Removed 'Message' from this array for now
+const pages = ['Cluster', 'Namespace', 'Topic']
 
 function NavBar() {
 	const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null)

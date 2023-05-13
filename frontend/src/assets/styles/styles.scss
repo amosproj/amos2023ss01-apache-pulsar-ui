@@ -2,7 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
 @import './variables.scss';
 @import './globals.scss';
 @import './home.scss';
 @import './form.scss';
+@import './dashboard.scss';
+@import './card.scss';

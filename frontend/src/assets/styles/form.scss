@@ -1,6 +1,18 @@
-.MuiInputBase-root.primary-textfield {
-    color: $primary-blue;
+
+.MuiFormControl-root.MuiTextField-root.primary-textfield {
+    width: 100%;
+    .MuiInputBase-root {
+        height: 61px;
+        font-size: $font-medium;
+        padding: 15px 21px;
+        border-radius: $primary-radius;
+        background: #E5E5E5;
+        input {
+            padding: 0px;
+        }
+    }
 }
+
 .MuiButton-root.primary-button {
     background-color: $primary-blue;
     color: $primary-white;
@@ -10,4 +22,8 @@
         background-color: $primary-white;
         border: 1px solid $primary-blue;
     }
+}
+
+.MuiButtonBase-root.MuiIconButton-root.icon-wrapper {
+    padding: 0px;
 }

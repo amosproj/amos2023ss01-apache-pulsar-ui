@@ -37,11 +37,6 @@ const fetchDataThunk = createAsyncThunk(
 	}
 )
 
-interface UpdateForData {
-	message: string
-	topic: string
-}
-
 // eslint-disable-next-line
 const globalSlice = createSlice({
 	name: 'globalControl',

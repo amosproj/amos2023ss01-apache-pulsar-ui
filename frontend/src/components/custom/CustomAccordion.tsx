@@ -5,10 +5,6 @@ import AccordionDetails from '@mui/material/AccordionDetails'
 import Typography from '@mui/material/Typography'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
-interface CustomAccordionProps {
-	data: Array<MessageList>
-}
-
 const CustomAccordion: React.FC<CustomAccordionProps> = ({ data }) => {
 	return (
 		<div data-testid="demo-accordion">
