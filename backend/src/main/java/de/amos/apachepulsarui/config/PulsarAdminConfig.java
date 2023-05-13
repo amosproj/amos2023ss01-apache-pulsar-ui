@@ -5,8 +5,8 @@
 
 package de.amos.apachepulsarui.config;
 
+import lombok.SneakyThrows;
 import org.apache.pulsar.client.admin.PulsarAdmin;
-import org.apache.pulsar.client.api.PulsarClientException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,7 +18,8 @@ public class PulsarAdminConfig {
     private String adminUrl;
 
     @Bean
-    public PulsarAdmin createPulsarAdmin() throws PulsarClientException {
+    @SneakyThrows
+    public PulsarAdmin createPulsarAdmin() {
         boolean tlsAllowInsecureConnection = false;
         String tlsTrustCertsFilePath = null;
         return PulsarAdmin.builder()
