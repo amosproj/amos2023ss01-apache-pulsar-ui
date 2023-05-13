@@ -2,12 +2,13 @@
 // SPDX-FileCopyrightText: 2010-2021 Dirk Riehle <dirk@riehle.org>
 // SPDX-FileCopyrightText: 2019 Georg Schwarz <georg.schwarz@fau.de>
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import './App.css'
 import './assets/styles/styles.scss'
 import { useAppDispatch, useAppSelector } from './store/hooks'
 import { selectView, setNav } from './store/globalSlice'
 import NavBar from './components/NavBar'
+import LandingPage from './components/landing/LandingPage'
 
 type SampleCluster = {
 	tag: string
@@ -42,6 +43,14 @@ function App() {
 	const dispatch = useAppDispatch()
 
 	const view = useAppSelector(selectView)
+
+	/** Landing Page Logic */
+	let isLanding = true
+	const { isEndpointError } = useAppSelector((store) => store.endpoint)
+	if (!isEndpointError) {
+		isLanding = false
+	}
+	/** End of Landing Page Logic */
 
 	const allNamespaces = allData
 		.map((item) => item.namespaces)
@@ -111,27 +120,30 @@ function App() {
 	}, [])
 
 	return (
-		<div className="bg-blue w-full h-full">
-			<div className="w-full h-full">
-				<NavBar />
-				<ul>
-					{filteredData.map(
-						(
-							item:
-								| SampleCluster
-								| SampleNamespace
-								| SampleTopic
-								| SampleMessage,
-							index: number
-						) => (
-							<li key={index}>
-								<a href="#">{item?.content}</a>
-							</li>
-						)
-					)}
-				</ul>
+		<>
+			{isLanding && <LandingPage />}
+			<div className="bg-blue w-full h-full">
+				<div className="w-full h-full">
+					<NavBar />
+					<ul>
+						{filteredData.map(
+							(
+								item:
+									| SampleCluster
+									| SampleNamespace
+									| SampleTopic
+									| SampleMessage,
+								index: number
+							) => (
+								<li key={index}>
+									<a href="#">{item?.content}</a>
+								</li>
+							)
+						)}
+					</ul>
+				</div>
 			</div>
-		</div>
+		</>
 	)
 }
 

@@ -6,9 +6,11 @@ import { combineReducers } from '@reduxjs/toolkit'
 import formControllerSlice from '../components/form/formControllerSlice'
 import counterReducer from '../components/sampleCounter/counterSlice'
 import globalSlice from './globalSlice'
+import endpointSlice from '../components/landing/endpointSlice'
 
 export default combineReducers({
 	globalControl: globalSlice,
 	formControl: formControllerSlice,
 	counter: counterReducer,
+	endpoint: endpointSlice,
 })
