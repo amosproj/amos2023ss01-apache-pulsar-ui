@@ -11,6 +11,7 @@ import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.apache.pulsar.client.api.PulsarClient;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -25,9 +26,11 @@ public class MessageServiceTest {
     @Mock
     private PulsarClient pulsarClient;
 
+    @InjectMocks
+    private MessageService messageService;
+
     @Test
     void isValidMessage_forMessageWithValidTopic_returnsTrue() {
-        MessageService messageService = new MessageService(pulsarClient, pulsarAdmin);
         String validTopicName = "persistent://public/default/test-topic";
         MessageDto message = MessageDto.create(validTopicName, "hello");
 
@@ -36,7 +39,6 @@ public class MessageServiceTest {
 
     @Test
     void isValidMessage_forMessageWithInvalidTopic_returnsFalse() {
-        MessageService messageService = new MessageService(pulsarClient, pulsarAdmin);
         String invalidTopicName = "bla//blub";
         MessageDto message = MessageDto.create(invalidTopicName, "hello");
 
@@ -45,7 +47,6 @@ public class MessageServiceTest {
 
     @Test
     void isValidMessage_forMessageWithEmptyTopic_returnsFalse() {
-        MessageService messageService = new MessageService(pulsarClient, pulsarAdmin);
         String emptyTopicName = "";
         MessageDto message = MessageDto.create(emptyTopicName, "hello");
 
