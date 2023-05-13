@@ -7,10 +7,10 @@
 .landing-container {
 	min-height: 100vh;
 	max-height: 100vh;
-	// min-width: $screen-sm-min;
 	position: relative;
 	overflow: hidden;
-	background-color: $primary-white;
+	background-image: url('../images/landing-background.jpg');
+	background-size: cover;
 }
 
 .semi-circle {
@@ -22,6 +22,19 @@
 }
 
 .header-container {
+	.logo-container {
+		z-index: 1;
+		position: absolute;
+		margin: 0 auto;
+		left: 0;
+		right: 0;
+		top: 2rem;
+		img {
+			margin: 0 auto;
+			object-fit: cover;
+			height: 14rem;
+		}
+	}
 	.semi-circle {
 		background-color: $primary-blue;
 		transform: translateY(-55%);
@@ -32,11 +45,34 @@
 
 .footer-container {
 	overflow: hidden;
-	.semi-circle {
-		background-color: $primary-blue;
-		border-radius: 30rem 30rem 0 0;
+	transition: all 0.3 ease-in-out;
+	p {
+		display: none;
+		z-index: 1;
+		position: absolute;
+		bottom: 4rem;
+		text-align: center;
+		left: 0;
+		right: 0;
+		font-weight: 300;
+	}
+	.rbi-logo {
+		display: none;
+		position: absolute;
+		z-index: 1;
 		bottom: 0;
-		transform: translateY(50%);
+		width: 10rem;
+		height: 4rem;
+		left: 0;
+		right: 0;
+		margin: 0 auto;
+	}
+	.semi-circle {
+		background-color: $primary-white;
+		// border-radius: 30rem 30rem 0 0;
+		border-radius: 100%;
+		bottom: 0;
+		transform: translateY(80%);
 	}
 }
 
@@ -83,9 +119,15 @@
 		}
 	}
 	.footer-container {
+		p {
+			display: block;
+		}
+		.rbi-logo {
+			display: block;
+		}
 		.semi-circle {
-			height: 20rem;
-			width: 40rem;
+			height: 60rem;
+			width: 60rem;
 		}
 	}
 }
@@ -96,14 +138,12 @@
 		.semi-circle {
 			height: 60rem;
 			width: 60rem;
-			// transform: translateY(-65%);
 		}
 	}
 	.footer-container {
 		.semi-circle {
-			height: 20rem;
+			height: 40rem;
 			width: 40rem;
-			// transform: translateY(75%);
 		}
 	}
 }
@@ -114,14 +154,12 @@
 		.semi-circle {
 			height: 45rem;
 			width: 45rem;
-			// transform: translateY(-65%);
 		}
 	}
 	.footer-container {
 		.semi-circle {
-			height: 20rem;
+			height: 40rem;
 			width: 40rem;
-			// transform: translateY(80%);
 		}
 	}
 }
@@ -136,9 +174,8 @@
 	}
 	.footer-container {
 		.semi-circle {
-			height: 20rem;
+			height: 30rem;
 			width: 30rem;
-			// transform: translateY(120%);
 		}
 	}
 }
@@ -147,15 +184,12 @@
 @media screen and (max-width: $screen-sm-min) {
 	.header-container {
 		.semi-circle {
+			display: none;
 			height: 25rem;
 			width: 25rem;
 		}
 	}
 	.footer-container {
-		.semi-circle {
-			height: 10rem;
-			width: 20rem;
-			// transform: translateY(150%);
-		}
+		display: none;
 	}
 }

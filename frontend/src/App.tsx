@@ -121,28 +121,31 @@ function App() {
 
 	return (
 		<>
-			{isLanding && <LandingPage />}
-			<div className="bg-blue w-full h-full">
-				<div className="w-full h-full">
-					<NavBar />
-					<ul>
-						{filteredData.map(
-							(
-								item:
-									| SampleCluster
-									| SampleNamespace
-									| SampleTopic
-									| SampleMessage,
-								index: number
-							) => (
-								<li key={index}>
-									<a href="#">{item?.content}</a>
-								</li>
-							)
-						)}
-					</ul>
+			{isLanding ? (
+				<LandingPage />
+			) : (
+				<div className="bg-blue w-full h-full">
+					<div className="w-full h-full">
+						<NavBar />
+						<ul>
+							{filteredData.map(
+								(
+									item:
+										| SampleCluster
+										| SampleNamespace
+										| SampleTopic
+										| SampleMessage,
+									index: number
+								) => (
+									<li key={index}>
+										<a href="#">{item?.content}</a>
+									</li>
+								)
+							)}
+						</ul>
+					</div>
 				</div>
-			</div>
+			)}
 		</>
 	)
 }
