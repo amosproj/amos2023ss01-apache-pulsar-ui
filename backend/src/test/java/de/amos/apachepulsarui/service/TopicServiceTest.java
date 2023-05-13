@@ -42,14 +42,19 @@ class TopicServiceTest {
     private TopicService topicService;
     MockedStatic <TopicDto> topicDtoMockedStatic;
 
+    MockedStatic <TopicName> topicNameMockedStatic;
+
+
     @BeforeEach
     public void beforeEach() {
         topicDtoMockedStatic = Mockito.mockStatic(TopicDto.class);
+        topicNameMockedStatic = Mockito.mockStatic(TopicName.class);
     }
 
     @AfterEach
     public void afterEach() {
         topicDtoMockedStatic.close();
+        topicNameMockedStatic.close();
     }
 
     @Test
@@ -104,7 +109,6 @@ class TopicServiceTest {
     @Test
     void isValidTopic() {
         String topic = "Topic";
-        MockedStatic <TopicName> topicNameMockedStatic = Mockito.mockStatic(TopicName.class);
 
         topicService.isValidTopic(topic);
 
