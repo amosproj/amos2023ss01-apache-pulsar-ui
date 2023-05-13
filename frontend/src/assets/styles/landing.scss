@@ -1,50 +1,122 @@
 @import './variables.scss';
 
+.landing-container {
+	min-height: 100vh;
+	max-height: 100vh;
+	// min-width: $screen-sm-min;
+	position: relative;
+	overflow: hidden;
+}
+
 .semi-circle {
 	position: absolute;
 	left: 0;
 	right: 0;
 	margin: 0 auto;
-	background-color: $primary-blue;
-	transform: translateY(-55%);
-	height: $screen-sm-min;
-	width: $screen-sm-min;
-	border-radius: $screen-sm-min;
 	transition: all 0.3s ease-in-out;
 }
 
+.header-container {
+	.semi-circle {
+		background-color: $primary-blue;
+		transform: translateY(-55%);
+		border-radius: 100%;
+		top: 0;
+	}
+}
+
+.footer-container {
+	overflow: hidden;
+	.semi-circle {
+		background-color: $primary-blue;
+		border-radius: 30rem 30rem 0 0;
+		bottom: 0;
+		transform: translateY(50%);
+	}
+}
+
+// Large Screen
 @media screen and (min-width: $screen-xl-min) {
-	.semi-circle {
-		height: 65rem;
-		width: 65rem;
-		transform: translateY(-65%);
+	.header-container {
+		.semi-circle {
+			height: 70rem;
+			width: 70rem;
+		}
+	}
+	.footer-container {
+		.semi-circle {
+			height: 20rem;
+			width: 40rem;
+		}
 	}
 }
 
+//Medium Large Screen
 @media screen and (min-width: $screen-lg-min) and (max-width: $screen-xl-min) {
-	.semi-circle {
-		height: 50rem;
-		width: 50rem;
+	.header-container {
+		.semi-circle {
+			height: 60rem;
+			width: 60rem;
+			// transform: translateY(-65%);
+		}
+	}
+	.footer-container {
+		.semi-circle {
+			height: 20rem;
+			width: 40rem;
+			// transform: translateY(75%);
+		}
 	}
 }
 
+// Medium Screen
 @media screen and (min-width: $screen-md-min) and (max-width: $screen-lg-min) {
-	.semi-circle {
-		height: 45rem;
-		width: 45rem;
+	.header-container {
+		.semi-circle {
+			height: 50rem;
+			width: 50rem;
+			// transform: translateY(-65%);
+		}
+	}
+	.footer-container {
+		.semi-circle {
+			height: 20rem;
+			width: 40rem;
+			// transform: translateY(80%);
+		}
 	}
 }
 
-@media screen and (min-width: $screen-lg-min) and (max-width: $screen-sm-min) {
-	.semi-circle {
-		height: 40rem;
-		width: 40rem;
+// Medium Small Screen
+@media screen and (min-width: $screen-sm-min) and (max-width: $screen-md-min) {
+	.header-container {
+		.semi-circle {
+			height: 35rem;
+			width: 35rem;
+		}
+	}
+	.footer-container {
+		.semi-circle {
+			height: 20rem;
+			width: 30rem;
+			// transform: translateY(120%);
+		}
 	}
 }
 
+// Small screen
 @media screen and (max-width: $screen-sm-min) {
-	.semi-circle {
-		height: 30rem;
-		width: 30rem;
+	.header-container {
+		.semi-circle {
+			height: 25rem;
+			width: 25rem;
+		}
+	}
+	.footer-container {
+		.semi-circle {
+			height: 10rem;
+			width: 20rem;
+			// transform: translateY(150%);
+		}
 	}
 }

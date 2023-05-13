@@ -7,15 +7,21 @@ interface LandingPageProps {
 
 const LandingBackground: React.FC<LandingPageProps> = ({ children }) => {
 	return (
-		<>
+		<div className="landing-container">
 			<header>
 				<div className="header-container">
-					<div className="semi-circle">hello</div>
+					<div className="semi-circle"></div>
 				</div>
 			</header>
-			<main>{children}</main>
-			<footer>footer</footer>
-		</>
+			<main>
+				<div>{children}</div>
+			</main>
+			<footer>
+				<div className="footer-container">
+					<div className="semi-circle"></div>
+				</div>
+			</footer>
+		</div>
 	)
 }
 
