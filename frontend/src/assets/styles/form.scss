@@ -27,3 +27,26 @@
 .MuiButtonBase-root.MuiIconButton-root.icon-wrapper {
     padding: 0px;
 }
+
+.custom-checkbox-wrapper {
+    gap: 16px;
+    align-items: center;
+    margin-bottom: 16px;
+    .custom-checkbox {
+        border: 1px solid $dark-grey;
+        border-radius: 3px;
+        background-color: transparent;
+        width: 16px;
+        height: 16px;
+        cursor: pointer;
+        &.active {
+            background-color: $primary-blue;
+            border: 1px solid $primary-blue;
+        }
+    }
+    p {
+        font-weight: 400;
+        font-size: $font-small;
+        line-height: 19px;
+    }
+}

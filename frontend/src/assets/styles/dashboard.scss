@@ -11,6 +11,26 @@
     gap: 64px;
 }
 
+.secondary-dashboard {
+    .MuiCollapse-wrapper.MuiCollapse-vertical .MuiAccordionDetails-root {
+        padding: 0px;
+        padding-bottom: 4px;
+    }
+    .reset-all-filter-button {
+        width: 100%;
+        cursor: pointer;
+        background-color: $primary-blue;
+        border-radius: $primary-radius;
+        color: $primary-white;
+        font-size: $font-small;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 30px;
+        margin: 38px 0px;
+    }
+}
+
 .dashboard-title {
     font-family: $primary-font;
     font-weight: 700;
@@ -20,9 +40,8 @@
 
 .filters-wrapper {
     justify-content: space-between;
-    margin-top: 64px;
     align-items: center;
-    margin-bottom: 24px;
+    margin: 38px 0px;
     svg {
         margin-right: 21px;
     }

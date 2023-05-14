@@ -80,9 +80,7 @@ function App() {
 		<div className="bg-blue w-full h-full">
 			<div className="w-full h-full">
 				<NavBar />
-				<ul>
-					<Dashboard completeData={allData} view={view.selectedNav} />
-				</ul>
+				<Dashboard completeData={allData} view={view.selectedNav} />
 			</div>
 		</div>
 	)

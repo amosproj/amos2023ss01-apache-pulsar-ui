@@ -52,13 +52,7 @@ const ClusterView: React.FC<ClusterViewProps> = ({ data }) => {
 						<p className="text-black">
 							Broker Service URL:{' '}
 							<span className="text-blue">
-								{data?.brokerServiceUrl ? (
-									<a target="blank" href={data.brokerServiceUrl}>
-										{data.brokerServiceUrl}
-									</a>
-								) : (
-									'N/A'
-								)}
+								{data?.brokerServiceUrl ? data.brokerServiceUrl : 'N/A'}
 							</span>
 						</p>
 					</div>

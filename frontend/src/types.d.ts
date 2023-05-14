@@ -21,7 +21,7 @@ interface CardProps {
 
 interface DashboardProps {
 	completeData: Array<SampleCluster>
-	view?: string | null
+	view?: 'cluster' | 'namespace' | 'topic' | null | any
 }
 
 interface CustomAccordionProps {
@@ -34,6 +34,13 @@ interface CustomSelectProps<T> {
 	value: T
 	label: string
 	error: boolean
+}
+
+interface CustomCheckboxProps {
+	text: string
+	typology: string
+	changeFunc: any
+	selected: boolean
 }
 
 interface formProps {
@@ -54,8 +61,12 @@ interface TopicViewProps {
 }
 
 interface CustomFilterProps {
+	selectedClusters: string[]
+	selectedNamespaces: string[]
+	selectedTopics: string[]
 	data: Array<SampleCluster>
 	handleChange: any
+	currentView: 'cluster' | 'namespace' | 'topic'
 }
 
 interface CustomSearchProps {

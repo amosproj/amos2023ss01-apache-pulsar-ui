@@ -1,13 +1,18 @@
 import React from 'react'
-import FormGroup from '@mui/material/FormGroup'
-import FormControlLabel from '@mui/material/FormControlLabel'
-import Checkbox from '@mui/material/Checkbox'
 import Accordion from '@mui/material/Accordion'
 import AccordionSummary from '@mui/material/AccordionSummary'
 import AccordionDetails from '@mui/material/AccordionDetails'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import CustomCheckbox from './CustomCheckbox'
 
-const CustomFilter: React.FC<CustomFilterProps> = ({ data, handleChange }) => {
+const CustomFilter: React.FC<CustomFilterProps> = ({
+	data,
+	handleChange,
+	selectedClusters,
+	selectedNamespaces,
+	selectedTopics,
+	currentView,
+}) => {
 	const allTenants = data
 		.map((item) => item.tenants)
 		.filter((el) => el.length > 0)
@@ -22,42 +27,36 @@ const CustomFilter: React.FC<CustomFilterProps> = ({ data, handleChange }) => {
 		.map((namespace) => namespace.topics)
 		.filter((el) => el.length > 0)
 		.flat()
+
+	const viewLevelTwo = currentView === 'namespace' || currentView === 'topic'
+
 	return (
 		<div className="flex flex-col">
-			<FormGroup>
-				<Accordion>
-					<AccordionSummary
-						expandIcon={<ExpandMoreIcon />}
-						aria-controls="panel1a-content"
-						id="panel1a-header"
-					>
-						<h3 className="filter-title">Clusters</h3>
-					</AccordionSummary>
-					<AccordionDetails>
+			<Accordion>
+				<AccordionSummary
+					expandIcon={<ExpandMoreIcon />}
+					aria-controls="panel1a-content"
+					id="panel1a-header"
+				>
+					<h3 className="filter-title">Clusters</h3>
+				</AccordionSummary>
+				<AccordionDetails>
+					<div className="flex flex-col">
 						{data &&
 							data.length > 0 &&
-							data.map(
-								(
-									item:
-										| SampleCluster
-										| SampleTenant
-										| SampleNamespace
-										| SampleTopic
-								) => (
-									<FormControlLabel
-										key={item.id + Math.floor(Math.random() * 999999)}
-										control={
-											<Checkbox
-												onChange={() => handleChange(item.id, 'cluster')}
-												inputProps={{ 'aria-label': 'controlled' }}
-											/>
-										}
-										label={item.id}
-									/>
-								)
-							)}
-					</AccordionDetails>
-				</Accordion>
+							data.map((item: SampleCluster) => (
+								<CustomCheckbox
+									key={item.id + Math.floor(Math.random() * 999999)}
+									text={item.id}
+									typology={'cluster'}
+									changeFunc={handleChange}
+									selected={selectedClusters.includes(item.id) ? true : false}
+								></CustomCheckbox>
+							))}
+					</div>
+				</AccordionDetails>
+			</Accordion>
+			{viewLevelTwo && (
 				<Accordion>
 					<AccordionSummary
 						expandIcon={<ExpandMoreIcon />}
@@ -67,30 +66,25 @@ const CustomFilter: React.FC<CustomFilterProps> = ({ data, handleChange }) => {
 						<h3 className="filter-title">Namespaces</h3>
 					</AccordionSummary>
 					<AccordionDetails>
-						{allNamespaces &&
-							allNamespaces.length > 0 &&
-							allNamespaces.map(
-								(
-									item:
-										| SampleCluster
-										| SampleTenant
-										| SampleNamespace
-										| SampleTopic
-								) => (
-									<FormControlLabel
-										key={item.id + +Math.floor(Math.random() * 999999)}
-										control={
-											<Checkbox
-												onChange={() => handleChange(item.id, 'namespace')}
-												inputProps={{ 'aria-label': 'controlled' }}
-											/>
+						<div className="flex flex-col">
+							{allNamespaces &&
+								allNamespaces.length > 0 &&
+								allNamespaces.map((item: SampleNamespace) => (
+									<CustomCheckbox
+										key={item.id + Math.floor(Math.random() * 999999)}
+										text={item.id}
+										typology={'namespace'}
+										changeFunc={handleChange}
+										selected={
+											selectedNamespaces.includes(item.id) ? true : false
 										}
-										label={item.id}
-									/>
-								)
-							)}
+									></CustomCheckbox>
+								))}
+						</div>
 					</AccordionDetails>
 				</Accordion>
+			)}
+			{currentView === 'topic' && (
 				<Accordion>
 					<AccordionSummary
 						expandIcon={<ExpandMoreIcon />}
@@ -100,31 +94,22 @@ const CustomFilter: React.FC<CustomFilterProps> = ({ data, handleChange }) => {
 						<h3 className="filter-title">Topics</h3>
 					</AccordionSummary>
 					<AccordionDetails>
-						{allTopics &&
-							allTopics.length > 0 &&
-							allTopics.map(
-								(
-									item:
-										| SampleCluster
-										| SampleTenant
-										| SampleNamespace
-										| SampleTopic
-								) => (
-									<FormControlLabel
+						<div className="flex flex-col">
+							{allTopics &&
+								allTopics.length > 0 &&
+								allTopics.map((item: SampleTopic) => (
+									<CustomCheckbox
 										key={item.id + Math.floor(Math.random() * 999999)}
-										control={
-											<Checkbox
-												onChange={() => handleChange(item.id, 'topic')}
-												inputProps={{ 'aria-label': 'controlled' }}
-											/>
-										}
-										label={item.id}
-									/>
-								)
-							)}
+										text={item.id}
+										typology={'topic'}
+										changeFunc={handleChange}
+										selected={selectedTopics.includes(item.id) ? true : false}
+									></CustomCheckbox>
+								))}
+						</div>
 					</AccordionDetails>
 				</Accordion>
-			</FormGroup>
+			)}
 		</div>
 	)
 }

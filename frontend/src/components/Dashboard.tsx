@@ -3,12 +3,15 @@ import React, { useState } from 'react'
 import CustomSearchbar from './custom/CustomSearchbar'
 import FilterListIcon from '@mui/icons-material/FilterList'
 import CustomFilter from './custom/CustomFilter'
+import { useAppDispatch } from '../store/hooks'
+import { setNav } from '../store/globalSlice'
 
 const Dashboard: React.FC<DashboardProps> = ({ completeData, view }) => {
 	const [searchQuery, setSearchQuery] = useState('')
 	const [clusterQuery, setClusterQuery] = useState<string[]>([])
 	const [namespaceQuery, setNamespaceQuery] = useState<string[]>([])
 	const [topicQuery, setTopicQuery] = useState<string[]>([])
+	const dispatch = useAppDispatch()
 
 	const filterData = (query: string, sampleData: Array<SampleCluster>) => {
 		const allTenants = sampleData
@@ -98,6 +101,27 @@ const Dashboard: React.FC<DashboardProps> = ({ completeData, view }) => {
 		| Array<SampleNamespace>
 		| Array<SampleTopic> = filterData(searchQuery, completeData)
 
+	const handleClick = (
+		e: any,
+		currentEl: SampleCluster | SampleTenant | SampleNamespace | SampleTopic,
+		currentView: 'cluster' | 'namespace' | 'topic'
+	) => {
+		e.preventDefault()
+		if (currentView === 'cluster') {
+			const clusterId = currentEl.id
+			handleChange(clusterId, currentView)
+			dispatch(setNav('namespace'))
+		} else if (currentView === 'namespace') {
+			const namespaceId = currentEl.id
+			handleChange(namespaceId, currentView)
+			dispatch(setNav('topic'))
+		} else if (currentView === 'topic') {
+			const topicId = currentEl.id
+			handleChange(topicId, currentView)
+			dispatch(setNav(currentView))
+		} else return
+	}
+
 	const handleChange = (
 		id: string,
 		element: 'cluster' | 'namespace' | 'topic'
@@ -130,40 +154,101 @@ const Dashboard: React.FC<DashboardProps> = ({ completeData, view }) => {
 		}
 	}
 
-	const dashboardTitle = view + 's'
+	const resetAllFilters = () => {
+		setClusterQuery([])
+		setNamespaceQuery([])
+		setTopicQuery([])
+	}
 
-	return (
-		<div className="flex main-card main-dashboard">
-			<div className="primary-dashboard">
-				<h2 className="text-black dashboard-title">
-					Available {dashboardTitle}
-				</h2>
-				{dataFiltered &&
-					dataFiltered.length > 0 &&
-					dataFiltered.map(
-						(
-							item: SampleCluster | SampleTenant | SampleNamespace | SampleTopic
-						) => (
-							<a
-								key={item.id + Math.floor(Math.random() * 999999)}
-								href="#"
-								//onClick={(e) => updateFilter(e, item)}
-							>
-								<Card data={item}></Card>
-							</a>
-						)
-					)}
-			</div>
-			<div className="secondary-dashboard w-full">
-				<CustomSearchbar setSearchQuery={setSearchQuery} />
-				<div className="flex filters-wrapper">
-					<h2 className="text-black dashboard-title">Filters</h2>
-					<FilterListIcon style={{ fill: '#A4A4A4' }} />
+	/*const resetClusterFilters = (e: any) => {
+		e.preventDefault()
+		setClusterQuery([])
+	}
+
+	const resetNamespaceFilters = (e: any) => {
+		e.preventDefault()
+		setNamespaceQuery([])
+	}
+
+	const resetTopicFilters = (e: any) => {
+		e.preventDefault()
+		setTopicQuery([])
+	}*/
+
+	const checkQueryLength = (currentView: 'cluster' | 'namespace' | 'topic') => {
+		if (currentView === 'cluster' && clusterQuery.length > 0) {
+			return true
+		} else if (currentView === 'namespace' && namespaceQuery.length > 0) {
+			return true
+		} else if (currentView === 'topic' && topicQuery.length > 0) {
+			return true
+		} else return false
+	}
+
+	const dashboardTitle = view + 's'
+	if (view) {
+		return (
+			<div className="flex main-card main-dashboard">
+				<div className="primary-dashboard">
+					<h2 className="text-black dashboard-title">
+						Available {dashboardTitle}
+					</h2>
+					{dataFiltered &&
+						dataFiltered.length > 0 &&
+						dataFiltered.map(
+							(
+								item:
+									| SampleCluster
+									| SampleTenant
+									| SampleNamespace
+									| SampleTopic
+							) => (
+								<a
+									key={item.id + Math.floor(Math.random() * 999999)}
+									href="#"
+									onClick={(e) => handleClick(e, item, view)}
+								>
+									<Card data={item}></Card>
+								</a>
+							)
+						)}
 				</div>
-				<CustomFilter data={completeData} handleChange={handleChange} />
+				<div className="secondary-dashboard w-full">
+					<CustomSearchbar setSearchQuery={setSearchQuery} />
+					{checkQueryLength(view) && (
+						<span
+							className="reset-all-filter-button"
+							onClick={() => resetAllFilters()}
+						>
+							Reset all filters
+						</span>
+					)}
+					<div className="flex filters-wrapper">
+						<h2 className="text-black dashboard-title">Filters</h2>
+						<FilterListIcon style={{ fill: '#A4A4A4' }} />
+					</div>
+					<CustomFilter
+						selectedClusters={clusterQuery}
+						selectedNamespaces={namespaceQuery}
+						selectedTopics={topicQuery}
+						data={completeData}
+						handleChange={handleChange}
+						currentView={view}
+					/>
+				</div>
 			</div>
-		</div>
-	)
+		)
+	} else {
+		return (
+			<div className="flex main-card main-dashboard">
+				<div className="primary-dashboard">
+					<h2 className="text-black dashboard-title">
+						Welcome to Apache Pulsar UI
+					</h2>
+				</div>
+			</div>
+		)
+	}
 }
 
 export default Dashboard
