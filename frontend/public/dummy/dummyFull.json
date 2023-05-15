@@ -1,1011 +1,997 @@
 [
-    {
-      "id": "amos-demo",
-      "tenants": [
-        {
-          "id": "eu-tenant",
-          "cluster": "amos-demo",
-          "namespaces": [
-            {
-              "id": "eu-tenant/hr/3",
-              "cluster": "amos-demo",
-              "topics": [
-                {
-                  "id": "persistent://eu-tenant/hr/foo",
-                  "localName": "foo",
-                  "namespace": "hr",
-                  "tenant": "eu-tenant",
-                  "cluster": "amos-demo",
-                  "topicStatsDto": {
-                    "subscriptions": [
-                      {
-                        "name": "foo-sub",
-                        "consumers": ["Consumer1", "Consumer2"],
-                        "numberConsumers": 2
-                      },
-                      {
-                        "name": "bar-sub",
-                        "consumers": ["Consumer45", "Consumer25"],
-                        "numberConsumers": 2
-                      }
-                    ],
-                    "producers": ["Producer1", "Producer2"],
-                    "numberSubscriptions": 1,
-                    "numberProducers": 0,
-                    "producedMesages": 11,
-                    "consumedMessages": 0,
-                    "averageMessageSize": 0,
-                    "storageSize": 495
-                  },
-                  "persistent": true
-                },
-                {
-                  "id": "persistent://eu-tenant/hr/bar",
-                  "localName": "bar",
-                  "namespace": "hr",
-                  "tenant": "eu-tenant",
-                  "cluster": "amos-demo",
-                  "topicStatsDto": {
-                    "subscriptions": [
-                      {
-                        "name": "bar-sub",
-                        "consumers": ["Consumer4", "Consumer5"],
-                        "numberConsumers": 0
-                      }
-                    ],
-                    "producers": [],
-                    "numberSubscriptions": 1,
-                    "numberProducers": 0,
-                    "producedMesages": 11,
-                    "consumedMessages": 0,
-                    "averageMessageSize": 0,
-                    "storageSize": 495
-                  },
-                  "persistent": true
-                },
-                {
-                  "id": "persistent://eu-tenant/hr/foobar",
-                  "localName": "foobar",
-                  "namespace": "hr",
-                  "tenant": "eu-tenant",
-                  "cluster": "amos-demo",
-                  "topicStatsDto": {
-                    "subscriptions": [
-                      {
-                        "name": "foobar-sub",
-                        "consumers": [],
-                        "numberConsumers": 0
-                      }
-                    ],
-                    "producers": [],
-                    "numberSubscriptions": 1,
-                    "numberProducers": 0,
-                    "producedMesages": 11,
-                    "consumedMessages": 0,
-                    "averageMessageSize": 0,
-                    "storageSize": 495
-                  },
-                  "persistent": true
-                }
-              ],
-              "amountOfTopics": 3,
-              "bundlesData": {
-                "boundaries": [
-                  "0x00000000",
-                  "0x40000000",
-                  "0x80000000",
-                  "0xc0000000",
-                  "0xffffffff"
-                ],
-                "numBundles": 4
-              },
-              "messagesTTL": 6000,
-              "retentionPolicies": {
-                "retentionTimeInMinutes": 60,
-                "retentionSizeInMB": 1
-              }
-            },
-            {
-              "id": "eu-tenant/marketing",
-              "cluster": "amos-demo",
-              "topics": [
-                {
-                  "id": "persistent://eu-tenant/marketing/bar",
-                  "localName": "bar",
-                  "namespace": "marketing",
-                  "tenant": "eu-tenant",
-                  "cluster": "amos-demo",
-                  "topicStatsDto": {
-                    "subscriptions": [
-                      {
-                        "name": "bar-sub",
-                        "consumers": [],
-                        "numberConsumers": 0
-                      }
-                    ],
-                    "producers": [],
-                    "numberSubscriptions": 1,
-                    "numberProducers": 0,
-                    "producedMesages": 11,
-                    "consumedMessages": 0,
-                    "averageMessageSize": 0,
-                    "storageSize": 495
-                  },
-                  "persistent": true
-                },
-                {
-                  "id": "persistent://eu-tenant/marketing/foo",
-                  "localName": "foo",
-                  "namespace": "marketing",
-                  "tenant": "eu-tenant",
-                  "cluster": "amos-demo",
-                  "topicStatsDto": {
-                    "subscriptions": [
-                      {
-                        "name": "foo-sub",
-                        "consumers": [],
-                        "numberConsumers": 0
-                      }
-                    ],
-                    "producers": [],
-                    "numberSubscriptions": 1,
-                    "numberProducers": 0,
-                    "producedMesages": 11,
-                    "consumedMessages": 0,
-                    "averageMessageSize": 0,
-                    "storageSize": 495
-                  },
-                  "persistent": true
-                },
-                {
-                  "id": "persistent://eu-tenant/marketing/foobar",
-                  "localName": "foobar",
-                  "namespace": "marketing",
-                  "tenant": "eu-tenant",
-                  "cluster": "amos-demo",
-                  "topicStatsDto": {
-                    "subscriptions": [
-                      {
-                        "name": "foobar-sub",
-                        "consumers": [],
-                        "numberConsumers": 0
-                      }
-                    ],
-                    "producers": [],
-                    "numberSubscriptions": 1,
-                    "numberProducers": 0,
-                    "producedMesages": 11,
-                    "consumedMessages": 0,
-                    "averageMessageSize": 0,
-                    "storageSize": 495
-                  },
-                  "persistent": true
-                }
-              ],
-              "amountOfTopics": 3,
-              "bundlesData": {
-                "boundaries": [
-                  "0x00000000",
-                  "0x40000000",
-                  "0x80000000",
-                  "0xc0000000",
-                  "0xffffffff"
-                ],
-                "numBundles": 4
-              },
-              "messagesTTL": 6000,
-              "retentionPolicies": {
-                "retentionTimeInMinutes": 60,
-                "retentionSizeInMB": 1
-              }
-            },
-            {
-              "id": "eu-tenant/sales",
-              "cluster": "amos-demo",
-              "topics": [
-                {
-                  "id": "persistent://eu-tenant/sales/foo",
-                  "localName": "foo",
-                  "namespace": "sales",
-                  "tenant": "eu-tenant",
-                  "cluster": "amos-demo",
-                  "topicStatsDto": {
-                    "subscriptions": [
-                      {
-                        "name": "foo-sub",
-                        "consumers": [],
-                        "numberConsumers": 0
-                      }
-                    ],
-                    "producers": [],
-                    "numberSubscriptions": 1,
-                    "numberProducers": 0,
-                    "producedMesages": 11,
-                    "consumedMessages": 0,
-                    "averageMessageSize": 0,
-                    "storageSize": 495
-                  },
-                  "persistent": true
-                },
-                {
-                  "id": "persistent://eu-tenant/sales/foobar",
-                  "localName": "foobar",
-                  "namespace": "sales",
-                  "tenant": "eu-tenant",
-                  "cluster": "amos-demo",
-                  "topicStatsDto": {
-                    "subscriptions": [
-                      {
-                        "name": "foobar-sub",
-                        "consumers": [],
-                        "numberConsumers": 0
-                      }
-                    ],
-                    "producers": [],
-                    "numberSubscriptions": 1,
-                    "numberProducers": 0,
-                    "producedMesages": 11,
-                    "consumedMessages": 0,
-                    "averageMessageSize": 0,
-                    "storageSize": 495
-                  },
-                  "persistent": true
-                },
-                {
-                  "id": "persistent://eu-tenant/sales/bar",
-                  "localName": "bar",
-                  "namespace": "sales",
-                  "tenant": "eu-tenant",
-                  "cluster": "amos-demo",
-                  "topicStatsDto": {
-                    "subscriptions": [
-                      {
-                        "name": "bar-sub",
-                        "consumers": [],
-                        "numberConsumers": 0
-                      }
-                    ],
-                    "producers": [],
-                    "numberSubscriptions": 1,
-                    "numberProducers": 0,
-                    "producedMesages": 11,
-                    "consumedMessages": 0,
-                    "averageMessageSize": 0,
-                    "storageSize": 495
-                  },
-                  "persistent": true
-                }
-              ],
-              "amountOfTopics": 3,
-              "bundlesData": {
-                "boundaries": [
-                  "0x00000000",
-                  "0x40000000",
-                  "0x80000000",
-                  "0xc0000000",
-                  "0xffffffff"
-                ],
-                "numBundles": 4
-              },
-              "messagesTTL": 6000,
-              "retentionPolicies": {
-                "retentionTimeInMinutes": 60,
-                "retentionSizeInMB": 1
-              }
-            }
-          ],
-          "amountOfNamespaces": 3,
-          "amountOfTopics": 9,
-          "tenantInfo": {
-            "adminRoles": [],
-            "allowedClusters": [
-              "amos-demo"
-            ]
-          }
-        },
-        {
-          "id": "public",
-          "cluster": "amos-demo",
-          "namespaces": [
-            {
-              "id": "public/default/1",
-              "topics": [],
-              "cluster": "amos-demo",
-              "amountOfTopics": 0,
-              "bundlesData": {
-                "boundaries": [
-                  "0x00000000",
-                  "0x10000000",
-                  "0x20000000",
-                  "0x30000000",
-                  "0x40000000",
-                  "0x50000000",
-                  "0x60000000",
-                  "0x70000000",
-                  "0x80000000",
-                  "0x90000000",
-                  "0xa0000000",
-                  "0xb0000000",
-                  "0xc0000000",
-                  "0xd0000000",
-                  "0xe0000000",
-                  "0xf0000000",
-                  "0xffffffff"
-                ],
-                "numBundles": 16
-              },
-              "messagesTTL": null,
-              "retentionPolicies": null
-            }
-          ],
-          "amountOfNamespaces": 1,
-          "amountOfTopics": 0,
-          "tenantInfo": {
-            "adminRoles": [],
-            "allowedClusters": [
-              "amos-demo"
-            ]
-          }
-        },
-        {
-          "id": "pulsar",
-          "cluster": "amos-demo",
-          "namespaces": [
-            {
-              "id": "pulsar/system/1",
-              "topics": [],
-              "cluster": "amos-demo",
-              "amountOfTopics": 0,
-              "bundlesData": {
-                "boundaries": [
-                  "0x00000000",
-                  "0x10000000",
-                  "0x20000000",
-                  "0x30000000",
-                  "0x40000000",
-                  "0x50000000",
-                  "0x60000000",
-                  "0x70000000",
-                  "0x80000000",
-                  "0x90000000",
-                  "0xa0000000",
-                  "0xb0000000",
-                  "0xc0000000",
-                  "0xd0000000",
-                  "0xe0000000",
-                  "0xf0000000",
-                  "0xffffffff"
-                ],
-                "numBundles": 16
-              },
-              "messagesTTL": null,
-              "retentionPolicies": null
-            }
-          ],
-          "amountOfNamespaces": 1,
-          "amountOfTopics": 0,
-          "tenantInfo": {
-            "adminRoles": [],
-            "allowedClusters": [
-              "amos-demo"
-            ]
-          }
-        },
-        {
-          "id": "us-tenant",
-          "cluster": "amos-demo",
-          "namespaces": [
-            {
-              "id": "us-tenant/hr/1",
-              "cluster": "amos-demo",
-              "topics": [
-                {
-                  "id": "persistent://us-tenant/hr/bar",
-                  "localName": "bar",
-                  "namespace": "hr",
-                  "tenant": "us-tenant",
-                  "cluster": "amos-demo",
-                  "topicStatsDto": {
-                    "subscriptions": [
-                      {
-                        "name": "bar-sub",
-                        "consumers": [],
-                        "numberConsumers": 0
-                      }
-                    ],
-                    "producers": [],
-                    "numberSubscriptions": 1,
-                    "numberProducers": 0,
-                    "producedMesages": 11,
-                    "consumedMessages": 0,
-                    "averageMessageSize": 0,
-                    "storageSize": 495
-                  },
-                  "persistent": true
-                },
-                {
-                  "id": "persistent://us-tenant/hr/foobar",
-                  "localName": "foobar",
-                  "namespace": "hr",
-                  "tenant": "us-tenant",
-                  "cluster": "amos-demo",
-                  "topicStatsDto": {
-                    "subscriptions": [
-                      {
-                        "name": "foobar-sub",
-                        "consumers": [],
-                        "numberConsumers": 0
-                      }
-                    ],
-                    "producers": [],
-                    "numberSubscriptions": 1,
-                    "numberProducers": 0,
-                    "producedMesages": 11,
-                    "consumedMessages": 0,
-                    "averageMessageSize": 0,
-                    "storageSize": 495
-                  },
-                  "persistent": true
-                },
-                {
-                  "id": "persistent://us-tenant/hr/foo",
-                  "localName": "foo",
-                  "namespace": "hr",
-                  "tenant": "us-tenant",
-                  "cluster": "amos-demo",
-                  "topicStatsDto": {
-                    "subscriptions": [
-                      {
-                        "name": "foo-sub",
-                        "consumers": [],
-                        "numberConsumers": 0
-                      }
-                    ],
-                    "producers": [],
-                    "numberSubscriptions": 1,
-                    "numberProducers": 0,
-                    "producedMesages": 11,
-                    "consumedMessages": 0,
-                    "averageMessageSize": 0,
-                    "storageSize": 495
-                  },
-                  "persistent": true
-                }
-              ],
-              "amountOfTopics": 3,
-              "bundlesData": {
-                "boundaries": [
-                  "0x00000000",
-                  "0x40000000",
-                  "0x80000000",
-                  "0xc0000000",
-                  "0xffffffff"
-                ],
-                "numBundles": 4
-              },
-              "messagesTTL": 6000,
-              "retentionPolicies": {
-                "retentionTimeInMinutes": 60,
-                "retentionSizeInMB": 1
-              }
-            },
-            {
-              "id": "us-tenant/marketing/1",
-              "cluster": "amos-demo",
-              "topics": [
-                {
-                  "id": "persistent://us-tenant/marketing/bar",
-                  "localName": "bar",
-                  "namespace": "marketing",
-                  "tenant": "us-tenant",
-                  "cluster": "amos-demo",
-                  "topicStatsDto": {
-                    "subscriptions": [
-                      {
-                        "name": "bar-sub",
-                        "consumers": [],
-                        "numberConsumers": 0
-                      }
-                    ],
-                    "producers": [],
-                    "numberSubscriptions": 1,
-                    "numberProducers": 0,
-                    "producedMesages": 11,
-                    "consumedMessages": 0,
-                    "averageMessageSize": 0,
-                    "storageSize": 495
-                  },
-                  "persistent": true
-                },
-                {
-                  "id": "persistent://us-tenant/marketing/foo",
-                  "localName": "foo",
-                  "namespace": "marketing",
-                  "tenant": "us-tenant",
-                  "cluster": "amos-demo",
-                  "topicStatsDto": {
-                    "subscriptions": [
-                      {
-                        "name": "foo-sub",
-                        "consumers": [],
-                        "numberConsumers": 0
-                      }
-                    ],
-                    "producers": [],
-                    "numberSubscriptions": 1,
-                    "numberProducers": 0,
-                    "producedMesages": 11,
-                    "consumedMessages": 0,
-                    "averageMessageSize": 0,
-                    "storageSize": 495
-                  },
-                  "persistent": true
-                },
-                {
-                  "id": "persistent://us-tenant/marketing/foobar",
-                  "localName": "foobar",
-                  "namespace": "marketing",
-                  "tenant": "us-tenant",
-                  "cluster": "amos-demo",
-                  "topicStatsDto": {
-                    "subscriptions": [
-                      {
-                        "name": "foobar-sub",
-                        "consumers": [],
-                        "numberConsumers": 0
-                      }
-                    ],
-                    "producers": [],
-                    "numberSubscriptions": 1,
-                    "numberProducers": 0,
-                    "producedMesages": 11,
-                    "consumedMessages": 0,
-                    "averageMessageSize": 0,
-                    "storageSize": 495
-                  },
-                  "persistent": true
-                }
-              ],
-              "amountOfTopics": 3,
-              "bundlesData": {
-                "boundaries": [
-                  "0x00000000",
-                  "0x40000000",
-                  "0x80000000",
-                  "0xc0000000",
-                  "0xffffffff"
-                ],
-                "numBundles": 4
-              },
-              "messagesTTL": 6000,
-              "retentionPolicies": {
-                "retentionTimeInMinutes": 60,
-                "retentionSizeInMB": 1
-              }
-            },
-            {
-              "id": "us-tenant/sales/1",
-              "cluster": "amos-demo",
-              "topics": [
-                {
-                  "id": "persistent://us-tenant/sales/foo",
-                  "localName": "foo",
-                  "namespace": "sales",
-                  "tenant": "us-tenant",
-                  "cluster": "amos-demo",
-                  "topicStatsDto": {
-                    "subscriptions": [
-                      {
-                        "name": "foo-sub",
-                        "consumers": [],
-                        "numberConsumers": 0
-                      }
-                    ],
-                    "producers": [],
-                    "numberSubscriptions": 1,
-                    "numberProducers": 0,
-                    "producedMesages": 11,
-                    "consumedMessages": 0,
-                    "averageMessageSize": 0,
-                    "storageSize": 495
-                  },
-                  "persistent": true
-                },
-                {
-                  "id": "persistent://us-tenant/sales/bar",
-                  "localName": "bar",
-                  "namespace": "sales",
-                  "tenant": "us-tenant",
-                  "cluster": "amos-demo",
-                  "topicStatsDto": {
-                    "subscriptions": [
-                      {
-                        "name": "bar-sub",
-                        "consumers": [],
-                        "numberConsumers": 0
-                      }
-                    ],
-                    "producers": [],
-                    "numberSubscriptions": 1,
-                    "numberProducers": 0,
-                    "producedMesages": 11,
-                    "consumedMessages": 0,
-                    "averageMessageSize": 0,
-                    "storageSize": 495
-                  },
-                  "persistent": true
-                },
-                {
-                  "id": "persistent://us-tenant/sales/foobar",
-                  "localName": "foobar",
-                  "namespace": "sales",
-                  "tenant": "us-tenant",
-                  "cluster": "amos-demo",
-                  "topicStatsDto": {
-                    "subscriptions": [
-                      {
-                        "name": "foobar-sub",
-                        "consumers": [],
-                        "numberConsumers": 0
-                      }
-                    ],
-                    "producers": [],
-                    "numberSubscriptions": 1,
-                    "numberProducers": 0,
-                    "producedMesages": 11,
-                    "consumedMessages": 0,
-                    "averageMessageSize": 0,
-                    "storageSize": 495
-                  },
-                  "persistent": true
-                }
-              ],
-              "amountOfTopics": 3,
-              "bundlesData": {
-                "boundaries": [
-                  "0x00000000",
-                  "0x40000000",
-                  "0x80000000",
-                  "0xc0000000",
-                  "0xffffffff"
-                ],
-                "numBundles": 4
-              },
-              "messagesTTL": 6000,
-              "retentionPolicies": {
-                "retentionTimeInMinutes": 60,
-                "retentionSizeInMB": 1
-              }
-            }
-          ],
-          "amountOfNamespaces": 3,
-          "amountOfTopics": 9,
-          "tenantInfo": {
-            "adminRoles": [],
-            "allowedClusters": [
-              "amos-demo"
-            ]
-          }
-        }
-      ],
-      "brokers": [
-        "broker:8080"
-      ],
-      "amountOfTenants": 4,
-      "amountOfNamespaces": 8,
-      "amountOfTopics": 18,
-      "amountOfBrokers": 1,
-      "brokerServiceUrl": "pulsar://broker:6650",
-      "serviceUrl": "http://broker:8080"
-    },
-    {
-      "id": "amos-demo-2",
-      "tenants": [
-        {
-          "id": "eu-tenant",
-          "cluster": "amos-demo-2",
-          "namespaces": [
-            {
-              "id": "eu-tenant/hr",
-              "cluster": "amos-demo-2",
-              "topics": [
-                {
-                  "id": "persistent://eu-tenant/hr/foo",
-                  "localName": "foo",
-                  "namespace": "hr",
-                  "tenant": "eu-tenant",
-                  "cluster": "amos-demo-2",
-                  "topicStatsDto": {
-                    "subscriptions": [
-                      {
-                        "name": "foo-sub",
-                        "consumers": [],
-                        "numberConsumers": 0
-                      }
-                    ],
-                    "producers": [],
-                    "numberSubscriptions": 1,
-                    "numberProducers": 0,
-                    "producedMesages": 11,
-                    "consumedMessages": 0,
-                    "averageMessageSize": 0,
-                    "storageSize": 495
-                  },
-                  "persistent": true
-                },
-                {
-                  "id": "persistent://eu-tenant/hr/bar",
-                  "localName": "bar",
-                  "namespace": "hr",
-                  "tenant": "eu-tenant",
-                  "cluster": "amos-demo-2",
-                  "topicStatsDto": {
-                    "subscriptions": [
-                      {
-                        "name": "bar-sub",
-                        "consumers": [],
-                        "numberConsumers": 0
-                      }
-                    ],
-                    "producers": [],
-                    "numberSubscriptions": 1,
-                    "numberProducers": 0,
-                    "producedMesages": 11,
-                    "consumedMessages": 0,
-                    "averageMessageSize": 0,
-                    "storageSize": 495
-                  },
-                  "persistent": true
-                },
-                {
-                  "id": "persistent://eu-tenant/hr/foobar",
-                  "localName": "foobar",
-                  "namespace": "hr",
-                  "tenant": "eu-tenant",
-                  "cluster": "amos-demo-2",
-                  "topicStatsDto": {
-                    "subscriptions": [
-                      {
-                        "name": "foobar-sub",
-                        "consumers": [],
-                        "numberConsumers": 0
-                      }
-                    ],
-                    "producers": [],
-                    "numberSubscriptions": 1,
-                    "numberProducers": 0,
-                    "producedMesages": 11,
-                    "consumedMessages": 0,
-                    "averageMessageSize": 0,
-                    "storageSize": 495
-                  },
-                  "persistent": true
-                }
-              ],
-              "amountOfTopics": 3,
-              "bundlesData": {
-                "boundaries": [
-                  "0x00000000",
-                  "0x40000000",
-                  "0x80000000",
-                  "0xc0000000",
-                  "0xffffffff"
-                ],
-                "numBundles": 4
-              },
-              "messagesTTL": 6000,
-              "retentionPolicies": {
-                "retentionTimeInMinutes": 60,
-                "retentionSizeInMB": 1
-              }
-            },
-            {
-              "id": "eu-tenant/marketing",
-              "cluster": "amos-demo-2",
-              "topics": [
-                {
-                  "id": "persistent://eu-tenant/marketing/bar",
-                  "localName": "bar",
-                  "namespace": "marketing",
-                  "tenant": "eu-tenant",
-                  "cluster": "amos-demo-2",
-                  "topicStatsDto": {
-                    "subscriptions": [
-                      {
-                        "name": "bar-sub",
-                        "consumers": [],
-                        "numberConsumers": 0
-                      }
-                    ],
-                    "producers": [],
-                    "numberSubscriptions": 1,
-                    "numberProducers": 0,
-                    "producedMesages": 11,
-                    "consumedMessages": 0,
-                    "averageMessageSize": 0,
-                    "storageSize": 495
-                  },
-                  "persistent": true
-                },
-                {
-                  "id": "persistent://eu-tenant/marketing/foo",
-                  "localName": "foo",
-                  "namespace": "marketing",
-                  "tenant": "eu-tenant",
-                  "cluster": "amos-demo-2",
-                  "topicStatsDto": {
-                    "subscriptions": [
-                      {
-                        "name": "foo-sub",
-                        "consumers": [],
-                        "numberConsumers": 0
-                      }
-                    ],
-                    "producers": [],
-                    "numberSubscriptions": 1,
-                    "numberProducers": 0,
-                    "producedMesages": 11,
-                    "consumedMessages": 0,
-                    "averageMessageSize": 0,
-                    "storageSize": 495
-                  },
-                  "persistent": true
-                },
-                {
-                  "id": "persistent://eu-tenant/marketing/foobar",
-                  "localName": "foobar",
-                  "namespace": "marketing",
-                  "tenant": "eu-tenant",
-                  "cluster": "amos-demo-2",
-                  "topicStatsDto": {
-                    "subscriptions": [
-                      {
-                        "name": "foobar-sub",
-                        "consumers": [],
-                        "numberConsumers": 0
-                      }
-                    ],
-                    "producers": [],
-                    "numberSubscriptions": 1,
-                    "numberProducers": 0,
-                    "producedMesages": 11,
-                    "consumedMessages": 0,
-                    "averageMessageSize": 0,
-                    "storageSize": 495
-                  },
-                  "persistent": true
-                }
-              ],
-              "amountOfTopics": 3,
-              "bundlesData": {
-                "boundaries": [
-                  "0x00000000",
-                  "0x40000000",
-                  "0x80000000",
-                  "0xc0000000",
-                  "0xffffffff"
-                ],
-                "numBundles": 4
-              },
-              "messagesTTL": 6000,
-              "retentionPolicies": {
-                "retentionTimeInMinutes": 60,
-                "retentionSizeInMB": 1
-              }
-            },
-            {
-              "id": "eu-tenant/sales",
-              "cluster": "amos-demo-2",
-              "topics": [
-                {
-                  "id": "persistent://eu-tenant/sales/foo",
-                  "localName": "foo",
-                  "namespace": "sales",
-                  "tenant": "eu-tenant",
-                  "cluster": "amos-demo-2",
-                  "topicStatsDto": {
-                    "subscriptions": [
-                      {
-                        "name": "foo-sub",
-                        "consumers": [],
-                        "numberConsumers": 0
-                      }
-                    ],
-                    "producers": [],
-                    "numberSubscriptions": 1,
-                    "numberProducers": 0,
-                    "producedMesages": 11,
-                    "consumedMessages": 0,
-                    "averageMessageSize": 0,
-                    "storageSize": 495
-                  },
-                  "persistent": true
-                },
-                {
-                  "id": "persistent://eu-tenant/sales/foobar",
-                  "localName": "foobar",
-                  "namespace": "sales",
-                  "tenant": "eu-tenant",
-                  "cluster": "amos-demo-2",
-                  "topicStatsDto": {
-                    "subscriptions": [
-                      {
-                        "name": "foobar-sub",
-                        "consumers": [],
-                        "numberConsumers": 0
-                      }
-                    ],
-                    "producers": [],
-                    "numberSubscriptions": 1,
-                    "numberProducers": 0,
-                    "producedMesages": 11,
-                    "consumedMessages": 0,
-                    "averageMessageSize": 0,
-                    "storageSize": 495
-                  },
-                  "persistent": true
-                },
-                {
-                  "id": "persistent://eu-tenant/sales/bar",
-                  "localName": "bar",
-                  "namespace": "sales",
-                  "tenant": "eu-tenant",
-                  "cluster": "amos-demo-2",
-                  "topicStatsDto": {
-                    "subscriptions": [
-                      {
-                        "name": "bar-sub",
-                        "consumers": [],
-                        "numberConsumers": 0
-                      }
-                    ],
-                    "producers": [],
-                    "numberSubscriptions": 1,
-                    "numberProducers": 0,
-                    "producedMesages": 11,
-                    "consumedMessages": 0,
-                    "averageMessageSize": 0,
-                    "storageSize": 495
-                  },
-                  "persistent": true
-                }
-              ],
-              "amountOfTopics": 3,
-              "bundlesData": {
-                "boundaries": [
-                  "0x00000000",
-                  "0x40000000",
-                  "0x80000000",
-                  "0xc0000000",
-                  "0xffffffff"
-                ],
-                "numBundles": 4
-              },
-              "messagesTTL": 6000,
-              "retentionPolicies": {
-                "retentionTimeInMinutes": 60,
-                "retentionSizeInMB": 1
-              }
-            }
-          ],
-          "amountOfNamespaces": 3,
-          "amountOfTopics": 9,
-          "tenantInfo": {
-            "adminRoles": [],
-            "allowedClusters": [
-              "amos-demo"
-            ]
-          }
-        }
-      ],
-      "brokers": [
-        "broker:8082"
-      ],
-      "amountOfTenants": 1,
-      "amountOfNamespaces": 3,
-      "amountOfTopics": 9,
-      "amountOfBrokers": 1,
-      "brokerServiceUrl": "pulsar://broker:8082",
-      "serviceUrl": "http://broker:8082"
-    }
+	{
+		"id": "amos-demo",
+		"tenants": [
+			{
+				"id": "eu-tenant",
+				"cluster": "amos-demo",
+				"namespaces": [
+					{
+						"id": "eu-tenant/hr/3",
+						"cluster": "amos-demo",
+						"topics": [
+							{
+								"id": "persistent://eu-tenant/hr/foo",
+								"localName": "foo",
+								"namespace": "hr",
+								"tenant": "eu-tenant",
+								"cluster": "amos-demo",
+								"topicStatsDto": {
+									"subscriptions": [
+										{
+											"name": "foo-sub",
+											"consumers": ["Consumer1", "Consumer2"],
+											"numberConsumers": 2
+										},
+										{
+											"name": "bar-sub",
+											"consumers": ["Consumer45", "Consumer25"],
+											"numberConsumers": 2
+										}
+									],
+									"producers": ["Producer1", "Producer2"],
+									"numberSubscriptions": 1,
+									"numberProducers": 0,
+									"producedMesages": 11,
+									"consumedMessages": 0,
+									"averageMessageSize": 0,
+									"storageSize": 495
+								},
+								"persistent": true
+							},
+							{
+								"id": "persistent://eu-tenant/hr/bar",
+								"localName": "bar",
+								"namespace": "hr",
+								"tenant": "eu-tenant",
+								"cluster": "amos-demo",
+								"topicStatsDto": {
+									"subscriptions": [
+										{
+											"name": "bar-sub",
+											"consumers": ["Consumer4", "Consumer5"],
+											"numberConsumers": 0
+										}
+									],
+									"producers": [],
+									"numberSubscriptions": 1,
+									"numberProducers": 0,
+									"producedMesages": 11,
+									"consumedMessages": 0,
+									"averageMessageSize": 0,
+									"storageSize": 495
+								},
+								"persistent": true
+							},
+							{
+								"id": "persistent://eu-tenant/hr/foobar",
+								"localName": "foobar",
+								"namespace": "hr",
+								"tenant": "eu-tenant",
+								"cluster": "amos-demo",
+								"topicStatsDto": {
+									"subscriptions": [
+										{
+											"name": "foobar-sub",
+											"consumers": [],
+											"numberConsumers": 0
+										}
+									],
+									"producers": [],
+									"numberSubscriptions": 1,
+									"numberProducers": 0,
+									"producedMesages": 11,
+									"consumedMessages": 0,
+									"averageMessageSize": 0,
+									"storageSize": 495
+								},
+								"persistent": true
+							}
+						],
+						"amountOfTopics": 3,
+						"bundlesData": {
+							"boundaries": [
+								"0x00000000",
+								"0x40000000",
+								"0x80000000",
+								"0xc0000000",
+								"0xffffffff"
+							],
+							"numBundles": 4
+						},
+						"messagesTTL": 6000,
+						"retentionPolicies": {
+							"retentionTimeInMinutes": 60,
+							"retentionSizeInMB": 1
+						}
+					},
+					{
+						"id": "eu-tenant/marketing",
+						"cluster": "amos-demo",
+						"topics": [
+							{
+								"id": "persistent://eu-tenant/marketing/bar",
+								"localName": "bar",
+								"namespace": "marketing",
+								"tenant": "eu-tenant",
+								"cluster": "amos-demo",
+								"topicStatsDto": {
+									"subscriptions": [
+										{
+											"name": "bar-sub",
+											"consumers": [],
+											"numberConsumers": 0
+										}
+									],
+									"producers": [],
+									"numberSubscriptions": 1,
+									"numberProducers": 0,
+									"producedMesages": 11,
+									"consumedMessages": 0,
+									"averageMessageSize": 0,
+									"storageSize": 495
+								},
+								"persistent": true
+							},
+							{
+								"id": "persistent://eu-tenant/marketing/foo",
+								"localName": "foo",
+								"namespace": "marketing",
+								"tenant": "eu-tenant",
+								"cluster": "amos-demo",
+								"topicStatsDto": {
+									"subscriptions": [
+										{
+											"name": "foo-sub",
+											"consumers": [],
+											"numberConsumers": 0
+										}
+									],
+									"producers": [],
+									"numberSubscriptions": 1,
+									"numberProducers": 0,
+									"producedMesages": 11,
+									"consumedMessages": 0,
+									"averageMessageSize": 0,
+									"storageSize": 495
+								},
+								"persistent": true
+							},
+							{
+								"id": "persistent://eu-tenant/marketing/foobar",
+								"localName": "foobar",
+								"namespace": "marketing",
+								"tenant": "eu-tenant",
+								"cluster": "amos-demo",
+								"topicStatsDto": {
+									"subscriptions": [
+										{
+											"name": "foobar-sub",
+											"consumers": [],
+											"numberConsumers": 0
+										}
+									],
+									"producers": [],
+									"numberSubscriptions": 1,
+									"numberProducers": 0,
+									"producedMesages": 11,
+									"consumedMessages": 0,
+									"averageMessageSize": 0,
+									"storageSize": 495
+								},
+								"persistent": true
+							}
+						],
+						"amountOfTopics": 3,
+						"bundlesData": {
+							"boundaries": [
+								"0x00000000",
+								"0x40000000",
+								"0x80000000",
+								"0xc0000000",
+								"0xffffffff"
+							],
+							"numBundles": 4
+						},
+						"messagesTTL": 6000,
+						"retentionPolicies": {
+							"retentionTimeInMinutes": 60,
+							"retentionSizeInMB": 1
+						}
+					},
+					{
+						"id": "eu-tenant/sales",
+						"cluster": "amos-demo",
+						"topics": [
+							{
+								"id": "persistent://eu-tenant/sales/foo",
+								"localName": "foo",
+								"namespace": "sales",
+								"tenant": "eu-tenant",
+								"cluster": "amos-demo",
+								"topicStatsDto": {
+									"subscriptions": [
+										{
+											"name": "foo-sub",
+											"consumers": [],
+											"numberConsumers": 0
+										}
+									],
+									"producers": [],
+									"numberSubscriptions": 1,
+									"numberProducers": 0,
+									"producedMesages": 11,
+									"consumedMessages": 0,
+									"averageMessageSize": 0,
+									"storageSize": 495
+								},
+								"persistent": true
+							},
+							{
+								"id": "persistent://eu-tenant/sales/foobar",
+								"localName": "foobar",
+								"namespace": "sales",
+								"tenant": "eu-tenant",
+								"cluster": "amos-demo",
+								"topicStatsDto": {
+									"subscriptions": [
+										{
+											"name": "foobar-sub",
+											"consumers": [],
+											"numberConsumers": 0
+										}
+									],
+									"producers": [],
+									"numberSubscriptions": 1,
+									"numberProducers": 0,
+									"producedMesages": 11,
+									"consumedMessages": 0,
+									"averageMessageSize": 0,
+									"storageSize": 495
+								},
+								"persistent": true
+							},
+							{
+								"id": "persistent://eu-tenant/sales/bar",
+								"localName": "bar",
+								"namespace": "sales",
+								"tenant": "eu-tenant",
+								"cluster": "amos-demo",
+								"topicStatsDto": {
+									"subscriptions": [
+										{
+											"name": "bar-sub",
+											"consumers": [],
+											"numberConsumers": 0
+										}
+									],
+									"producers": [],
+									"numberSubscriptions": 1,
+									"numberProducers": 0,
+									"producedMesages": 11,
+									"consumedMessages": 0,
+									"averageMessageSize": 0,
+									"storageSize": 495
+								},
+								"persistent": true
+							}
+						],
+						"amountOfTopics": 3,
+						"bundlesData": {
+							"boundaries": [
+								"0x00000000",
+								"0x40000000",
+								"0x80000000",
+								"0xc0000000",
+								"0xffffffff"
+							],
+							"numBundles": 4
+						},
+						"messagesTTL": 6000,
+						"retentionPolicies": {
+							"retentionTimeInMinutes": 60,
+							"retentionSizeInMB": 1
+						}
+					}
+				],
+				"amountOfNamespaces": 3,
+				"amountOfTopics": 9,
+				"tenantInfo": {
+					"adminRoles": [],
+					"allowedClusters": ["amos-demo"]
+				}
+			},
+			{
+				"id": "public",
+				"cluster": "amos-demo",
+				"namespaces": [
+					{
+						"id": "public/default/1",
+						"topics": [],
+						"cluster": "amos-demo",
+						"amountOfTopics": 0,
+						"bundlesData": {
+							"boundaries": [
+								"0x00000000",
+								"0x10000000",
+								"0x20000000",
+								"0x30000000",
+								"0x40000000",
+								"0x50000000",
+								"0x60000000",
+								"0x70000000",
+								"0x80000000",
+								"0x90000000",
+								"0xa0000000",
+								"0xb0000000",
+								"0xc0000000",
+								"0xd0000000",
+								"0xe0000000",
+								"0xf0000000",
+								"0xffffffff"
+							],
+							"numBundles": 16
+						},
+						"messagesTTL": null,
+						"retentionPolicies": null
+					}
+				],
+				"amountOfNamespaces": 1,
+				"amountOfTopics": 0,
+				"tenantInfo": {
+					"adminRoles": [],
+					"allowedClusters": ["amos-demo"]
+				}
+			},
+			{
+				"id": "pulsar",
+				"cluster": "amos-demo",
+				"namespaces": [
+					{
+						"id": "pulsar/system/1",
+						"topics": [],
+						"cluster": "amos-demo",
+						"amountOfTopics": 0,
+						"bundlesData": {
+							"boundaries": [
+								"0x00000000",
+								"0x10000000",
+								"0x20000000",
+								"0x30000000",
+								"0x40000000",
+								"0x50000000",
+								"0x60000000",
+								"0x70000000",
+								"0x80000000",
+								"0x90000000",
+								"0xa0000000",
+								"0xb0000000",
+								"0xc0000000",
+								"0xd0000000",
+								"0xe0000000",
+								"0xf0000000",
+								"0xffffffff"
+							],
+							"numBundles": 16
+						},
+						"messagesTTL": null,
+						"retentionPolicies": null
+					}
+				],
+				"amountOfNamespaces": 1,
+				"amountOfTopics": 0,
+				"tenantInfo": {
+					"adminRoles": [],
+					"allowedClusters": ["amos-demo"]
+				}
+			},
+			{
+				"id": "us-tenant",
+				"cluster": "amos-demo",
+				"namespaces": [
+					{
+						"id": "us-tenant/hr/1",
+						"cluster": "amos-demo",
+						"topics": [
+							{
+								"id": "persistent://us-tenant/hr/bar",
+								"localName": "bar",
+								"namespace": "hr",
+								"tenant": "us-tenant",
+								"cluster": "amos-demo",
+								"topicStatsDto": {
+									"subscriptions": [
+										{
+											"name": "bar-sub",
+											"consumers": [],
+											"numberConsumers": 0
+										}
+									],
+									"producers": [],
+									"numberSubscriptions": 1,
+									"numberProducers": 0,
+									"producedMesages": 11,
+									"consumedMessages": 0,
+									"averageMessageSize": 0,
+									"storageSize": 495
+								},
+								"persistent": true
+							},
+							{
+								"id": "persistent://us-tenant/hr/foobar",
+								"localName": "foobar",
+								"namespace": "hr",
+								"tenant": "us-tenant",
+								"cluster": "amos-demo",
+								"topicStatsDto": {
+									"subscriptions": [
+										{
+											"name": "foobar-sub",
+											"consumers": [],
+											"numberConsumers": 0
+										}
+									],
+									"producers": [],
+									"numberSubscriptions": 1,
+									"numberProducers": 0,
+									"producedMesages": 11,
+									"consumedMessages": 0,
+									"averageMessageSize": 0,
+									"storageSize": 495
+								},
+								"persistent": true
+							},
+							{
+								"id": "persistent://us-tenant/hr/foo",
+								"localName": "foo",
+								"namespace": "hr",
+								"tenant": "us-tenant",
+								"cluster": "amos-demo",
+								"topicStatsDto": {
+									"subscriptions": [
+										{
+											"name": "foo-sub",
+											"consumers": [],
+											"numberConsumers": 0
+										}
+									],
+									"producers": [],
+									"numberSubscriptions": 1,
+									"numberProducers": 0,
+									"producedMesages": 11,
+									"consumedMessages": 0,
+									"averageMessageSize": 0,
+									"storageSize": 495
+								},
+								"persistent": true
+							}
+						],
+						"amountOfTopics": 3,
+						"bundlesData": {
+							"boundaries": [
+								"0x00000000",
+								"0x40000000",
+								"0x80000000",
+								"0xc0000000",
+								"0xffffffff"
+							],
+							"numBundles": 4
+						},
+						"messagesTTL": 6000,
+						"retentionPolicies": {
+							"retentionTimeInMinutes": 60,
+							"retentionSizeInMB": 1
+						}
+					},
+					{
+						"id": "us-tenant/marketing/1",
+						"cluster": "amos-demo",
+						"topics": [
+							{
+								"id": "persistent://us-tenant/marketing/bar",
+								"localName": "bar",
+								"namespace": "marketing",
+								"tenant": "us-tenant",
+								"cluster": "amos-demo",
+								"topicStatsDto": {
+									"subscriptions": [
+										{
+											"name": "bar-sub",
+											"consumers": [],
+											"numberConsumers": 0
+										}
+									],
+									"producers": [],
+									"numberSubscriptions": 1,
+									"numberProducers": 0,
+									"producedMesages": 11,
+									"consumedMessages": 0,
+									"averageMessageSize": 0,
+									"storageSize": 495
+								},
+								"persistent": true
+							},
+							{
+								"id": "persistent://us-tenant/marketing/foo",
+								"localName": "foo",
+								"namespace": "marketing",
+								"tenant": "us-tenant",
+								"cluster": "amos-demo",
+								"topicStatsDto": {
+									"subscriptions": [
+										{
+											"name": "foo-sub",
+											"consumers": [],
+											"numberConsumers": 0
+										}
+									],
+									"producers": [],
+									"numberSubscriptions": 1,
+									"numberProducers": 0,
+									"producedMesages": 11,
+									"consumedMessages": 0,
+									"averageMessageSize": 0,
+									"storageSize": 495
+								},
+								"persistent": true
+							},
+							{
+								"id": "persistent://us-tenant/marketing/foobar",
+								"localName": "foobar",
+								"namespace": "marketing",
+								"tenant": "us-tenant",
+								"cluster": "amos-demo",
+								"topicStatsDto": {
+									"subscriptions": [
+										{
+											"name": "foobar-sub",
+											"consumers": [],
+											"numberConsumers": 0
+										}
+									],
+									"producers": [],
+									"numberSubscriptions": 1,
+									"numberProducers": 0,
+									"producedMesages": 11,
+									"consumedMessages": 0,
+									"averageMessageSize": 0,
+									"storageSize": 495
+								},
+								"persistent": true
+							}
+						],
+						"amountOfTopics": 3,
+						"bundlesData": {
+							"boundaries": [
+								"0x00000000",
+								"0x40000000",
+								"0x80000000",
+								"0xc0000000",
+								"0xffffffff"
+							],
+							"numBundles": 4
+						},
+						"messagesTTL": 6000,
+						"retentionPolicies": {
+							"retentionTimeInMinutes": 60,
+							"retentionSizeInMB": 1
+						}
+					},
+					{
+						"id": "us-tenant/sales/1",
+						"cluster": "amos-demo",
+						"topics": [
+							{
+								"id": "persistent://us-tenant/sales/foo",
+								"localName": "foo",
+								"namespace": "sales",
+								"tenant": "us-tenant",
+								"cluster": "amos-demo",
+								"topicStatsDto": {
+									"subscriptions": [
+										{
+											"name": "foo-sub",
+											"consumers": [],
+											"numberConsumers": 0
+										}
+									],
+									"producers": [],
+									"numberSubscriptions": 1,
+									"numberProducers": 0,
+									"producedMesages": 11,
+									"consumedMessages": 0,
+									"averageMessageSize": 0,
+									"storageSize": 495
+								},
+								"persistent": true
+							},
+							{
+								"id": "persistent://us-tenant/sales/bar",
+								"localName": "bar",
+								"namespace": "sales",
+								"tenant": "us-tenant",
+								"cluster": "amos-demo",
+								"topicStatsDto": {
+									"subscriptions": [
+										{
+											"name": "bar-sub",
+											"consumers": [],
+											"numberConsumers": 0
+										}
+									],
+									"producers": [],
+									"numberSubscriptions": 1,
+									"numberProducers": 0,
+									"producedMesages": 11,
+									"consumedMessages": 0,
+									"averageMessageSize": 0,
+									"storageSize": 495
+								},
+								"persistent": true
+							},
+							{
+								"id": "persistent://us-tenant/sales/foobar",
+								"localName": "foobar",
+								"namespace": "sales",
+								"tenant": "us-tenant",
+								"cluster": "amos-demo",
+								"topicStatsDto": {
+									"subscriptions": [
+										{
+											"name": "foobar-sub",
+											"consumers": [],
+											"numberConsumers": 0
+										}
+									],
+									"producers": [],
+									"numberSubscriptions": 1,
+									"numberProducers": 0,
+									"producedMesages": 11,
+									"consumedMessages": 0,
+									"averageMessageSize": 0,
+									"storageSize": 495
+								},
+								"persistent": true
+							}
+						],
+						"amountOfTopics": 3,
+						"bundlesData": {
+							"boundaries": [
+								"0x00000000",
+								"0x40000000",
+								"0x80000000",
+								"0xc0000000",
+								"0xffffffff"
+							],
+							"numBundles": 4
+						},
+						"messagesTTL": 6000,
+						"retentionPolicies": {
+							"retentionTimeInMinutes": 60,
+							"retentionSizeInMB": 1
+						}
+					}
+				],
+				"amountOfNamespaces": 3,
+				"amountOfTopics": 9,
+				"tenantInfo": {
+					"adminRoles": [],
+					"allowedClusters": ["amos-demo"]
+				}
+			}
+		],
+		"brokers": ["broker:8080"],
+		"amountOfTenants": 4,
+		"amountOfNamespaces": 8,
+		"amountOfTopics": 18,
+		"amountOfBrokers": 1,
+		"brokerServiceUrl": "pulsar://broker:6650",
+		"serviceUrl": "http://broker:8080"
+	},
+	{
+		"id": "amos-demo-2",
+		"tenants": [
+			{
+				"id": "eu-tenant",
+				"cluster": "amos-demo-2",
+				"namespaces": [
+					{
+						"id": "eu-tenant/hr",
+						"cluster": "amos-demo-2",
+						"topics": [
+							{
+								"id": "persistent://eu-tenant/hr/foo",
+								"localName": "foo",
+								"namespace": "hr",
+								"tenant": "eu-tenant",
+								"cluster": "amos-demo-2",
+								"topicStatsDto": {
+									"subscriptions": [
+										{
+											"name": "foo-sub",
+											"consumers": [],
+											"numberConsumers": 0
+										}
+									],
+									"producers": [],
+									"numberSubscriptions": 1,
+									"numberProducers": 0,
+									"producedMesages": 11,
+									"consumedMessages": 0,
+									"averageMessageSize": 0,
+									"storageSize": 495
+								},
+								"persistent": true
+							},
+							{
+								"id": "persistent://eu-tenant/hr/bar",
+								"localName": "bar",
+								"namespace": "hr",
+								"tenant": "eu-tenant",
+								"cluster": "amos-demo-2",
+								"topicStatsDto": {
+									"subscriptions": [
+										{
+											"name": "bar-sub",
+											"consumers": [],
+											"numberConsumers": 0
+										}
+									],
+									"producers": [],
+									"numberSubscriptions": 1,
+									"numberProducers": 0,
+									"producedMesages": 11,
+									"consumedMessages": 0,
+									"averageMessageSize": 0,
+									"storageSize": 495
+								},
+								"persistent": true
+							},
+							{
+								"id": "persistent://eu-tenant/hr/foobar",
+								"localName": "foobar",
+								"namespace": "hr",
+								"tenant": "eu-tenant",
+								"cluster": "amos-demo-2",
+								"topicStatsDto": {
+									"subscriptions": [
+										{
+											"name": "foobar-sub",
+											"consumers": [],
+											"numberConsumers": 0
+										}
+									],
+									"producers": [],
+									"numberSubscriptions": 1,
+									"numberProducers": 0,
+									"producedMesages": 11,
+									"consumedMessages": 0,
+									"averageMessageSize": 0,
+									"storageSize": 495
+								},
+								"persistent": true
+							}
+						],
+						"amountOfTopics": 3,
+						"bundlesData": {
+							"boundaries": [
+								"0x00000000",
+								"0x40000000",
+								"0x80000000",
+								"0xc0000000",
+								"0xffffffff"
+							],
+							"numBundles": 4
+						},
+						"messagesTTL": 6000,
+						"retentionPolicies": {
+							"retentionTimeInMinutes": 60,
+							"retentionSizeInMB": 1
+						}
+					},
+					{
+						"id": "eu-tenant/marketing",
+						"cluster": "amos-demo-2",
+						"topics": [
+							{
+								"id": "persistent://eu-tenant/marketing/bar",
+								"localName": "bar",
+								"namespace": "marketing",
+								"tenant": "eu-tenant",
+								"cluster": "amos-demo-2",
+								"topicStatsDto": {
+									"subscriptions": [
+										{
+											"name": "bar-sub",
+											"consumers": [],
+											"numberConsumers": 0
+										}
+									],
+									"producers": [],
+									"numberSubscriptions": 1,
+									"numberProducers": 0,
+									"producedMesages": 11,
+									"consumedMessages": 0,
+									"averageMessageSize": 0,
+									"storageSize": 495
+								},
+								"persistent": true
+							},
+							{
+								"id": "persistent://eu-tenant/marketing/foo",
+								"localName": "foo",
+								"namespace": "marketing",
+								"tenant": "eu-tenant",
+								"cluster": "amos-demo-2",
+								"topicStatsDto": {
+									"subscriptions": [
+										{
+											"name": "foo-sub",
+											"consumers": [],
+											"numberConsumers": 0
+										}
+									],
+									"producers": [],
+									"numberSubscriptions": 1,
+									"numberProducers": 0,
+									"producedMesages": 11,
+									"consumedMessages": 0,
+									"averageMessageSize": 0,
+									"storageSize": 495
+								},
+								"persistent": true
+							},
+							{
+								"id": "persistent://eu-tenant/marketing/foobar",
+								"localName": "foobar",
+								"namespace": "marketing",
+								"tenant": "eu-tenant",
+								"cluster": "amos-demo-2",
+								"topicStatsDto": {
+									"subscriptions": [
+										{
+											"name": "foobar-sub",
+											"consumers": [],
+											"numberConsumers": 0
+										}
+									],
+									"producers": [],
+									"numberSubscriptions": 1,
+									"numberProducers": 0,
+									"producedMesages": 11,
+									"consumedMessages": 0,
+									"averageMessageSize": 0,
+									"storageSize": 495
+								},
+								"persistent": true
+							}
+						],
+						"amountOfTopics": 3,
+						"bundlesData": {
+							"boundaries": [
+								"0x00000000",
+								"0x40000000",
+								"0x80000000",
+								"0xc0000000",
+								"0xffffffff"
+							],
+							"numBundles": 4
+						},
+						"messagesTTL": 6000,
+						"retentionPolicies": {
+							"retentionTimeInMinutes": 60,
+							"retentionSizeInMB": 1
+						}
+					},
+					{
+						"id": "eu-tenant/sales",
+						"cluster": "amos-demo-2",
+						"topics": [
+							{
+								"id": "persistent://eu-tenant/sales/foo",
+								"localName": "foo",
+								"namespace": "sales",
+								"tenant": "eu-tenant",
+								"cluster": "amos-demo-2",
+								"topicStatsDto": {
+									"subscriptions": [
+										{
+											"name": "foo-sub",
+											"consumers": [],
+											"numberConsumers": 0
+										}
+									],
+									"producers": [],
+									"numberSubscriptions": 1,
+									"numberProducers": 0,
+									"producedMesages": 11,
+									"consumedMessages": 0,
+									"averageMessageSize": 0,
+									"storageSize": 495
+								},
+								"persistent": true
+							},
+							{
+								"id": "persistent://eu-tenant/sales/foobar",
+								"localName": "foobar",
+								"namespace": "sales",
+								"tenant": "eu-tenant",
+								"cluster": "amos-demo-2",
+								"topicStatsDto": {
+									"subscriptions": [
+										{
+											"name": "foobar-sub",
+											"consumers": [],
+											"numberConsumers": 0
+										}
+									],
+									"producers": [],
+									"numberSubscriptions": 1,
+									"numberProducers": 0,
+									"producedMesages": 11,
+									"consumedMessages": 0,
+									"averageMessageSize": 0,
+									"storageSize": 495
+								},
+								"persistent": true
+							},
+							{
+								"id": "persistent://eu-tenant/sales/bar",
+								"localName": "bar",
+								"namespace": "sales",
+								"tenant": "eu-tenant",
+								"cluster": "amos-demo-2",
+								"topicStatsDto": {
+									"subscriptions": [
+										{
+											"name": "bar-sub",
+											"consumers": [],
+											"numberConsumers": 0
+										}
+									],
+									"producers": [],
+									"numberSubscriptions": 1,
+									"numberProducers": 0,
+									"producedMesages": 11,
+									"consumedMessages": 0,
+									"averageMessageSize": 0,
+									"storageSize": 495
+								},
+								"persistent": true
+							}
+						],
+						"amountOfTopics": 3,
+						"bundlesData": {
+							"boundaries": [
+								"0x00000000",
+								"0x40000000",
+								"0x80000000",
+								"0xc0000000",
+								"0xffffffff"
+							],
+							"numBundles": 4
+						},
+						"messagesTTL": 6000,
+						"retentionPolicies": {
+							"retentionTimeInMinutes": 60,
+							"retentionSizeInMB": 1
+						}
+					}
+				],
+				"amountOfNamespaces": 3,
+				"amountOfTopics": 9,
+				"tenantInfo": {
+					"adminRoles": [],
+					"allowedClusters": ["amos-demo"]
+				}
+			}
+		],
+		"brokers": ["broker:8082"],
+		"amountOfTenants": 1,
+		"amountOfNamespaces": 3,
+		"amountOfTopics": 9,
+		"amountOfBrokers": 1,
+		"brokerServiceUrl": "pulsar://broker:8082",
+		"serviceUrl": "http://broker:8082"
+	}
 ]
