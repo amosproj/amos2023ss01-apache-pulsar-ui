@@ -14,11 +14,13 @@ import Container from '@mui/material/Container'
 import Button from '@mui/material/Button'
 import MenuItem from '@mui/material/MenuItem'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
-import { backToLP, selectEndpoint, setNav } from '../store/globalSlice'
+import { backToLP, selectEndpoint, selectView, setNav } from '../store/globalSlice'
 import logo from '../assets/images/team-logo-light.png'
 import { Input } from '@mui/material'
+import { InfoModal } from './InfoModal'
 
-const pages = ['Cluster', 'Namespace', 'Topic', 'Message']
+//Removed 'Message' from this array for now
+const pages = ['Cluster', 'Namespace', 'Topic']
 
 function NavBar() {
 	const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null)
@@ -27,6 +29,7 @@ function NavBar() {
 		setAnchorElNav(event.currentTarget)
 	}
 	const dispatch = useAppDispatch()
+	const selectedNav = useAppSelector(selectView).selectedNav
 
 	const handleCloseNavMenu = () => {
 		setAnchorElNav(null)
@@ -111,6 +114,7 @@ function NavBar() {
 							{pages.map((page) => (
 								<MenuItem
 									key={page}
+									disabled={page.toLowerCase() == selectedNav}
 									onClick={() => {
 										handleClickOnNav(page)
 									}}
@@ -124,6 +128,7 @@ function NavBar() {
 						{pages.map((page) => (
 							<Button
 								key={page}
+								disabled={page.toLowerCase() == selectedNav}
 								onClick={() => {
 									handleClickOnNav(page)
 								}}
@@ -133,6 +138,7 @@ function NavBar() {
 							</Button>
 						))}
 					</Box>
+					<InfoModal />
 				</Toolbar>
 			</Container>
 		</AppBar>

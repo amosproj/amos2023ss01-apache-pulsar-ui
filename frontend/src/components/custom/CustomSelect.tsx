@@ -3,15 +3,7 @@ import Box from '@mui/material/Box'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
-import Select, { SelectChangeEvent } from '@mui/material/Select'
-
-interface CustomSelectProps<T> {
-	data: Array<MessageList>
-	onChange: (event: SelectChangeEvent<T>) => void
-	value: T
-	label: string
-	error: boolean
-}
+import Select from '@mui/material/Select'
 
 const CustomSelect = <T extends string>({
 	data,

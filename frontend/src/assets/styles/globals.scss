@@ -1,6 +1,8 @@
 body {
   @apply h-full overflow-x-hidden;
-  background-color: $primary-blue; 
+  background: $gradient-blue; 
+  margin: 64px;
+  font-family: $primary-font;
 }
 
 #root {
@@ -9,4 +11,11 @@ body {
 
 html {
   @apply h-full;
+}
+
+.grey-line {
+  height: 1px;
+  background-color: $primary-grey;
+  border-radius: 100%;
+  width: 100%;
 }

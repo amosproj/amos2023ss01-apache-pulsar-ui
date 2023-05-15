@@ -1,6 +1,18 @@
-.MuiInputBase-root.primary-textfield {
-    color: $primary-blue;
+
+.MuiFormControl-root.MuiTextField-root.primary-textfield {
+    width: 100%;
+    .MuiInputBase-root {
+        height: 61px;
+        font-size: $font-medium;
+        padding: 15px 21px;
+        border-radius: $primary-radius;
+        background: #E5E5E5;
+        input {
+            padding: 0px;
+        }
+    }
 }
+
 .MuiButton-root.primary-button {
     background-color: $primary-blue;
     color: $primary-white;
@@ -9,5 +21,32 @@
         color: $primary-blue;
         background-color: $primary-white;
         border: 1px solid $primary-blue;
+    }
+}
+
+.MuiButtonBase-root.MuiIconButton-root.icon-wrapper {
+    padding: 0px;
+}
+
+.custom-checkbox-wrapper {
+    gap: 16px;
+    align-items: center;
+    margin-bottom: 16px;
+    .custom-checkbox {
+        border: 1px solid $dark-grey;
+        border-radius: 3px;
+        background-color: transparent;
+        width: 16px;
+        height: 16px;
+        cursor: pointer;
+        &.active {
+            background-color: $primary-blue;
+            border: 1px solid $primary-blue;
+        }
+    }
+    p {
+        font-weight: 400;
+        font-size: $font-small;
+        line-height: 19px;
     }
 }
