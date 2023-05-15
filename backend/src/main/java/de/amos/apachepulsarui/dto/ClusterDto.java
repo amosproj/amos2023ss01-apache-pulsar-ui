@@ -23,16 +23,20 @@ public class ClusterDto {
 	private List<String> brokers;
 
 	@Setter(AccessLevel.PRIVATE)
-	private int amountOfTenants = 0;
+	private int amountOfTenants;
 
 	@Setter(AccessLevel.PRIVATE)
-	private int amountOfNamespaces = 0;
+	private int amountOfNamespaces;
 
 	@Setter(AccessLevel.PRIVATE)
-	private int amountOfTopics = 0;
+	private int amountOfTopics;
 
 	@Setter(AccessLevel.PRIVATE)
-	private int amountOfBrokers = 0;
+	private int amountOfBrokers;
+
+	private long producedMessages;
+
+	private long consumedMessages;
 
 	private String brokerServiceUrl;
 
@@ -55,6 +59,8 @@ public class ClusterDto {
 		tenants.forEach(tenant -> {
 			this.amountOfNamespaces += tenant.getAmountOfNamespaces();
 			this.amountOfTopics += tenant.getAmountOfTopics();
+			this.producedMessages += tenant.getProducedMessages();
+			this.consumedMessages += tenant.getConsumedMessages();
 		});
 	}
 

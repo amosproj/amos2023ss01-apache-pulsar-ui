@@ -29,6 +29,12 @@ public class NamespaceDto {
 
 	private Integer messagesTTL;
 
+	@Setter(AccessLevel.PRIVATE)
+	private long producedMessages;
+
+	@Setter(AccessLevel.PRIVATE)
+	private long consumedMessages;
+
 	private RetentionPolicies retentionPolicies;
 
 	public static NamespaceDto fromString(String namespaceId) {
@@ -37,12 +43,13 @@ public class NamespaceDto {
 		return namespaceDto;
 	}
 
-	/**
-	 * Set's the list of topics, and it's size (amountOfTopics) for this namespace.
-	 */
 	public void setTopics(List<TopicDto> topics) {
 		this.topics = topics;
 		this.amountOfTopics = topics.size();
+		topics.forEach(topic -> {
+			this.producedMessages += topic.getProducedMessages();
+			this.consumedMessages += topic.getConsumedMessages();
+		});
 	}
 
 	/**

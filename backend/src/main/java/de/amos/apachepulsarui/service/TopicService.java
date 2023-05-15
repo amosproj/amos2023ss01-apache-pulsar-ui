@@ -66,7 +66,7 @@ public class TopicService {
     }
 
     private TopicDto createTopicDto(String completeTopicName) {
-        return TopicDto.createTopicDto(completeTopicName, getTopicStats(completeTopicName) );
+        return TopicDto.createTopicDto(completeTopicName, this.getTopicStats(completeTopicName) );
     }
 
     private TopicStats getTopicStats(String fullTopicName) {
