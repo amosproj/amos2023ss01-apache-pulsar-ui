@@ -16,11 +16,10 @@ let allData: Array<SampleCluster> = []
 function App() {
 	const view = useAppSelector(selectView)
 
-
-  /** Landing Page Logic */
+	/** Landing Page Logic */
 	const showLP = useAppSelector(selectShowLP)
 	/** End of Landing Page Logic */
-    
+
 	/*const allTenants = allData
 		.map((item) => item.tenants)
 		.filter((el) => el.length > 0)
@@ -83,17 +82,15 @@ function App() {
 	}, [])
 
 	return (
-    <>
-      {showLP ? (
-	      <LandingPage />
+		<>
+			{showLP ? (
+				<LandingPage />
 			) : (
-		    <div className="bg-blue w-full h-full">
-			    <div className="w-full h-full">
-				    <NavBar />
-				    <Dashboard completeData={allData} view={view.selectedNav} />
-			    </div>
-		    </div>
-      )}
+				<div className="dashboard-container">
+					<NavBar />
+					<Dashboard completeData={allData} view={view.selectedNav} />
+				</div>
+			)}
 		</>
 	)
 }
