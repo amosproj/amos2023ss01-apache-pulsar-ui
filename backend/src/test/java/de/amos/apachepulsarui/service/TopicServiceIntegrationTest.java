@@ -6,6 +6,7 @@
 package de.amos.apachepulsarui.service;
 
 import de.amos.apachepulsarui.dto.TopicDto;
+import net.bytebuddy.utility.RandomString;
 import org.apache.pulsar.common.policies.data.TopicStats;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -27,7 +28,7 @@ public class TopicServiceIntegrationTest extends AbstractIntegrationTest {
         topicService.createNewTopic("topic-service-integration-test");
         List<TopicDto> topics = topicService.getAllTopics();
         Assertions.assertThat(topics)
-                .contains(TopicDto.createTopicDto("persistent://public/default/topic-service-integration-test", topicStats));
+                .contains(TopicDto.createTopicDto("persistent://public/default/topic-service-integration-test", topicStats, RandomString.make(1)));
     }
 
 }

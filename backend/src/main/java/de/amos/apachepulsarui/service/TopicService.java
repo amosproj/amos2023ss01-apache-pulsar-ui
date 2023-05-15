@@ -66,12 +66,20 @@ public class TopicService {
     }
 
     private TopicDto createTopicDto(String completeTopicName) {
-        return TopicDto.createTopicDto(completeTopicName, this.getTopicStats(completeTopicName) );
+        return TopicDto.createTopicDto(completeTopicName, this.getTopicStats(completeTopicName), this.getOwnerBroker(completeTopicName));
     }
 
     private TopicStats getTopicStats(String fullTopicName) {
         try {
             return pulsarAdmin.topics().getStats(fullTopicName);
+        } catch (PulsarAdminException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private String getOwnerBroker(String fullTopicName) {
+        try {
+            return pulsarAdmin.lookups().lookupTopic(fullTopicName);
         } catch (PulsarAdminException e) {
             throw new RuntimeException(e);
         }
