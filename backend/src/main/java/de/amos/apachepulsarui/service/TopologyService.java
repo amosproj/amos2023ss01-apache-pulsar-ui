@@ -1,7 +1,5 @@
 package de.amos.apachepulsarui.service;
 
-import java.util.List;
-
 import de.amos.apachepulsarui.dto.ClusterDto;
 import de.amos.apachepulsarui.dto.NamespaceDto;
 import de.amos.apachepulsarui.dto.TenantDto;
@@ -10,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor

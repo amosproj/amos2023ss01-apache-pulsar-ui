@@ -27,8 +27,12 @@ public class TopicDto {
 
 	private TopicStatsDto topicStatsDto;
 
+	private long producedMessages;
 
-    /**
+	private long consumedMessages;
+
+
+	/**
      * Converts a valid complete topic name (like "persistent://eu-tenant/hr/fizzbuzz" into a {@link TopicDto}.
      */
     public static TopicDto createTopicDto(String completeTopicName, TopicStats topicStats) {
@@ -40,6 +44,8 @@ public class TopicDto {
 		topicDto.tenant = topicName.getTenant();
 		topicDto.isPersistent = topicName.isPersistent();
 		topicDto.setTopicStatsDto(TopicStatsDto.createTopicStatsDto(topicStats));
+		topicDto.producedMessages = topicDto.topicStatsDto.getProducedMesages();
+		topicDto.consumedMessages = topicDto.topicStatsDto.getConsumedMessages();
 
 		return topicDto;
     }

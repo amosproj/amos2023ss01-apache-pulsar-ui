@@ -27,6 +27,12 @@ public class TenantDto {
 	@Setter(AccessLevel.PRIVATE)
 	private int amountOfTopics;
 
+	@Setter(AccessLevel.PRIVATE)
+	private long producedMessages;
+
+	@Setter(AccessLevel.PRIVATE)
+	private long consumedMessages;
+
     private TenantInfo tenantInfo;
 
 	public static TenantDto fromString(String tenantId) {
@@ -35,14 +41,14 @@ public class TenantDto {
 		return tenantDto;
 	}
 
-	/**
-	 * Set's the list of namespaces, and it's size (amountOfNamespaces) for this tenant.
-	 * Additionally, it computes the amountOfTopics for this tenant.
-	 */
 	public void setNamespaces(List<NamespaceDto> namespaces) {
 		this.namespaces = namespaces;
 		this.amountOfNamespaces = namespaces.size();
-		namespaces.forEach(namespace -> this.amountOfTopics += namespace.getAmountOfTopics());
+		namespaces.forEach(namespace -> {
+			this.amountOfTopics += namespace.getAmountOfTopics();
+			this.producedMessages += namespace.getProducedMessages();
+			this.consumedMessages += namespace.getConsumedMessages();
+		});
 	}
 
 	/**
