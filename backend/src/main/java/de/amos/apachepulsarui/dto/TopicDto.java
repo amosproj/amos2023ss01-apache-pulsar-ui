@@ -25,6 +25,8 @@ public class TopicDto {
 
 	private boolean isPersistent;
 
+	private String ownerBroker;
+
 	private TopicStatsDto topicStatsDto;
 
 	private long producedMessages;
@@ -35,7 +37,7 @@ public class TopicDto {
 	/**
      * Converts a valid complete topic name (like "persistent://eu-tenant/hr/fizzbuzz" into a {@link TopicDto}.
      */
-    public static TopicDto createTopicDto(String completeTopicName, TopicStats topicStats) {
+    public static TopicDto createTopicDto(String completeTopicName, TopicStats topicStats, String ownerBroker) {
         TopicName topicName = TopicName.get(completeTopicName);
 		TopicDto topicDto = new TopicDto();
 		topicDto.name = topicName.toString();
@@ -43,6 +45,7 @@ public class TopicDto {
 		topicDto.namespace = topicName.getNamespacePortion();
 		topicDto.tenant = topicName.getTenant();
 		topicDto.isPersistent = topicName.isPersistent();
+		topicDto.ownerBroker = ownerBroker;
 		topicDto.setTopicStatsDto(TopicStatsDto.createTopicStatsDto(topicStats));
 		topicDto.producedMessages = topicDto.topicStatsDto.getProducedMesages();
 		topicDto.consumedMessages = topicDto.topicStatsDto.getConsumedMessages();

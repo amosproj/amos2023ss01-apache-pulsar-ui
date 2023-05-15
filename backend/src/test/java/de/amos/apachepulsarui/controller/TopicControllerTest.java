@@ -7,6 +7,7 @@ package de.amos.apachepulsarui.controller;
 
 import de.amos.apachepulsarui.dto.TopicDto;
 import de.amos.apachepulsarui.service.TopicService;
+import net.bytebuddy.utility.RandomString;
 import org.apache.pulsar.common.policies.data.TopicStats;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -43,7 +44,7 @@ public class TopicControllerTest {
                 "persistent://public/default/tatooine",
                 "non-persistent://fizz/foo/naboo",
                 "persistent://buzz/bar/coruscant"
-        ).map( values -> TopicDto.createTopicDto(values, topicStats)).toList();
+        ).map( values -> TopicDto.createTopicDto(values, topicStats, RandomString.make(1))).toList();
 
         Mockito.when(topicService.getAllTopics()).thenReturn(topics);
 

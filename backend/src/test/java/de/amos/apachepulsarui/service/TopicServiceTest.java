@@ -7,6 +7,7 @@ package de.amos.apachepulsarui.service;
 
 import de.amos.apachepulsarui.dto.NamespaceDto;
 import de.amos.apachepulsarui.dto.TopicDto;
+import org.apache.pulsar.client.admin.Lookup;
 import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.apache.pulsar.client.admin.PulsarAdminException;
 import org.apache.pulsar.client.admin.Topics;
@@ -38,6 +39,9 @@ class TopicServiceTest {
     private PulsarAdmin pulsarAdmin;
     @Mock
     private TopicStats topicStats;
+
+    @Mock
+    private Lookup lookup;
     @InjectMocks
     private TopicService topicService;
     MockedStatic <TopicDto> topicDtoMockedStatic;
@@ -62,24 +66,32 @@ class TopicServiceTest {
         when(namespaceService.getAll()).thenReturn(List.of(NamespaceDto.fromString("abc")));
         whenAdminTopics();
         whenTopicStats();
+        whenOwnerBroker();
+
 
         topicService.getAllTopics();
 
         topicDtoMockedStatic.verify(
-                () -> TopicDto.createTopicDto("Topic", topicStats),
+                () -> TopicDto.createTopicDto("Topic", topicStats, "zyx"),
                 times(1)
         );
     }
 
-    void whenTopicStats() throws PulsarAdminException {
+    private void whenTopicStats() throws PulsarAdminException {
         when(pulsarAdmin.topics()).thenReturn(topics);
         when(pulsarAdmin.topics().getStats("Topic")).thenReturn(topicStats);
     }
 
 
-    void whenAdminTopics() throws PulsarAdminException {
+    private void whenAdminTopics() throws PulsarAdminException {
         when(pulsarAdmin.topics()).thenReturn(topics);
         when(pulsarAdmin.topics().getList("abc")).thenReturn(List.of("Topic"));
+    }
+
+    private void whenOwnerBroker() throws PulsarAdminException {
+        when(pulsarAdmin.lookups()).thenReturn(lookup);
+        when(pulsarAdmin.lookups().lookupTopic("abc")).thenReturn("zyx");
+
     }
 
     @Test
@@ -87,11 +99,12 @@ class TopicServiceTest {
         NamespaceDto namespaceDto = NamespaceDto.fromString("abc");
         whenAdminTopics();
         whenTopicStats();
+        whenOwnerBroker();
 
         topicService.getByNamespace(namespaceDto, 1);
 
         topicDtoMockedStatic.verify(
-                () -> TopicDto.createTopicDto("Topic", topicStats),
+                () -> TopicDto.createTopicDto("Topic", topicStats, "zyx"),
                 times(1)
         );
     }
