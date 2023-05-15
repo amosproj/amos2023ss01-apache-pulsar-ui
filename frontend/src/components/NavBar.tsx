@@ -17,6 +17,7 @@ import { useAppDispatch } from '../store/hooks'
 import { setNav } from '../store/globalSlice'
 import logo from '../assets/images/team-logo-light.png'
 import { Input } from '@mui/material'
+import { InfoModal } from './InfoModal'
 
 //Removed 'Message' from this array for now
 const pages = ['Cluster', 'Namespace', 'Topic']
@@ -133,6 +134,7 @@ function NavBar() {
 							</Button>
 						))}
 					</Box>
+					<InfoModal />
 				</Toolbar>
 			</Container>
 		</AppBar>
