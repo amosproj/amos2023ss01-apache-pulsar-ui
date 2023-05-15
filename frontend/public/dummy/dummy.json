@@ -1,36 +1,39 @@
-[{
-  "id": "100",
-  "name": "Topic 1",
-  "messages": [
-    {
-      "id": "1001",
-      "value": "Test value 1",
-      "topic": "100"
-    },
-    {
-      "id": "1002",
-      "value": "Test value 2",
-      "topic": "100"
-    },
-    {
-      "id": "1003",
-      "value": "Test value 3",
-      "topic": "100"
-    }
-  ]
-},{
-  "id": "200",
-  "name": "Topic 2",
-  "messages": [
-    {
-      "id": "2001",
-      "value": "Test value 1",
-      "topic": "200"
-    },
-    {
-      "id": "2002",
-      "value": "Test value 2",
-      "topic": "200"
-    }
-  ]
-}]
+[
+	{
+		"id": "100",
+		"name": "Topic 1",
+		"messages": [
+			{
+				"id": "1001",
+				"value": "Test value 1",
+				"topic": "100"
+			},
+			{
+				"id": "1002",
+				"value": "Test value 2",
+				"topic": "100"
+			},
+			{
+				"id": "1003",
+				"value": "Test value 3",
+				"topic": "100"
+			}
+		]
+	},
+	{
+		"id": "200",
+		"name": "Topic 2",
+		"messages": [
+			{
+				"id": "2001",
+				"value": "Test value 1",
+				"topic": "200"
+			},
+			{
+				"id": "2002",
+				"value": "Test value 2",
+				"topic": "200"
+			}
+		]
+	}
+]

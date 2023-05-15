@@ -39,14 +39,13 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-
 ### `yarn lint`
 
 Executes ESLint and shows you the linting errors.
 
 ### `yarn lint:fix`
 
-Executes the `eslint --fix` command which should handle all fixable linting errors 
+Executes the `eslint --fix` command which should handle all fixable linting errors
 
 ### `yarn format`
 
@@ -60,7 +59,7 @@ Builds the docker image of the frontend.
 
 ### `docker run -p 8082:8082 pui-frontend`
 
-Starts the frontend docker container on port 8080. 
+Starts the frontend docker container on port 8080.
 
 The port on the host machine can still be adjusted if necessary by changing the first of the two ports.
 Recommend changing the app/container port in the `.env` file as well.
