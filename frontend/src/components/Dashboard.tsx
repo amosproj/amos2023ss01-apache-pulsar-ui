@@ -188,7 +188,10 @@ const Dashboard: React.FC<DashboardProps> = ({ completeData, view }) => {
 	const dashboardTitle = view + 's'
 	if (view) {
 		return (
-			<div className="flex main-card main-dashboard">
+			<div
+				data-testid="main-dashboard"
+				className="flex main-card main-dashboard"
+			>
 				<div className="primary-dashboard">
 					<h2 className="text-black dashboard-title">
 						Available {dashboardTitle}

@@ -113,7 +113,7 @@ type SampleNamespace = {
 	tenant: string
 	amountOfTopics: number
 	bundlesData: { boundaries: Array<string>; numBundles: number }
-	messagesTTL: string
+	messagesTTL: number | null
 	retentionPolicies: {
 		retentionTimeInMinutes: number
 		retentionSizeInMB: number
