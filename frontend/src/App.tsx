@@ -6,7 +6,8 @@ import React, { useEffect } from 'react'
 import './App.css'
 import './assets/styles/styles.scss'
 import { useAppSelector } from './store/hooks'
-import { selectView } from './store/globalSlice'
+import { selectShowLP, selectView, setNav } from './store/globalSlice'
+import LandingPage from './components/landing/LandingPage'
 import NavBar from './components/NavBar'
 import Dashboard from './components/Dashboard'
 
@@ -15,6 +16,11 @@ let allData: Array<SampleCluster> = []
 function App() {
 	const view = useAppSelector(selectView)
 
+
+  /** Landing Page Logic */
+	const showLP = useAppSelector(selectShowLP)
+	/** End of Landing Page Logic */
+    
 	/*const allTenants = allData
 		.map((item) => item.tenants)
 		.filter((el) => el.length > 0)
@@ -77,12 +83,18 @@ function App() {
 	}, [])
 
 	return (
-		<div className="bg-blue w-full h-full">
-			<div className="w-full h-full">
-				<NavBar />
-				<Dashboard completeData={allData} view={view.selectedNav} />
-			</div>
-		</div>
+    <>
+      {showLP ? (
+	      <LandingPage />
+			) : (
+		    <div className="bg-blue w-full h-full">
+			    <div className="w-full h-full">
+				    <NavBar />
+				    <Dashboard completeData={allData} view={view.selectedNav} />
+			    </div>
+		    </div>
+      )}
+		</>
 	)
 }
 

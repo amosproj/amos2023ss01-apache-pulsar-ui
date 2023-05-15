@@ -14,7 +14,7 @@ import Container from '@mui/material/Container'
 import Button from '@mui/material/Button'
 import MenuItem from '@mui/material/MenuItem'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
-import { selectView, setNav } from '../store/globalSlice'
+import { backToLP, selectEndpoint, selectView, setNav } from '../store/globalSlice'
 import logo from '../assets/images/team-logo-light.png'
 import { Input } from '@mui/material'
 import { InfoModal } from './InfoModal'
@@ -42,9 +42,10 @@ function NavBar() {
 
 	const handleClickOnDisconnect = () => {
 		//TODO add disconnect functionality
+		dispatch(backToLP())
 	}
 
-	const sampleIP = 'localhost:8080'
+	const endpoint = useAppSelector(selectEndpoint)
 
 	return (
 		<AppBar position="static">
@@ -62,7 +63,7 @@ function NavBar() {
 					/>
 					<Input
 						disabled
-						defaultValue={sampleIP}
+						defaultValue={endpoint}
 						inputProps={{ style: { textAlign: 'center' } }}
 						size="small"
 						style={{

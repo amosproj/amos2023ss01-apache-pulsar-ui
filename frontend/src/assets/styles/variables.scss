@@ -1,4 +1,4 @@
-$primary-white: #F9F9F9;
+$primary-white: #f9f9f9;
 $primary-black: #242424;
 $secondary-black: #8B8B8B;
 $primary-blue: #3A90FF;
@@ -13,3 +13,13 @@ $font-small: 16px;
 $font-medium: 20px;
 $font-large: 33px;
 $font-xlarge: 39px;
+
+// Small tablets and large smartphones (landscape view)
+$screen-sm-min: 576px;
+// Small tablets (portrait view)
+$screen-md-min: 768px;
+// Tablets and small desktops
+$screen-lg-min: 992px;
+// Large tablets and desktops
+$screen-xl-min: 1200px;
+
