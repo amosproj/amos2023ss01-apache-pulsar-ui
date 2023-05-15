@@ -14,6 +14,7 @@ export type View = {
 export type globalState = {
 	view: View
 	data: Array<MessageList>
+	endpoint: string
 }
 
 const initialState: globalState = {
@@ -22,6 +23,7 @@ const initialState: globalState = {
 		filteredId: null,
 	},
 	data: [],
+	endpoint: '',
 }
 
 const backendInstance = axios.create({
@@ -73,6 +75,9 @@ const globalSlice = createSlice({
 				return single
 			})
 		},
+		setEndpoint: (state: globalState, action: PayloadAction<string>) => {
+			state.endpoint = action.payload
+		},
 	},
 })
 
@@ -83,7 +88,7 @@ const selectData = (state: RootState): Array<MessageList> =>
 
 const selectView = (state: RootState): View => state.globalControl.view
 
-export const { setNav, setView, updateData, setData } = actions
+export const { setNav, setView, updateData, setData, setEndpoint } = actions
 
 export { selectData, selectView, fetchDataThunk }
 

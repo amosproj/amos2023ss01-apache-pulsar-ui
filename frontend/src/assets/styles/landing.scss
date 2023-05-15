@@ -87,14 +87,14 @@
 		flex-direction: column;
 		z-index: 999;
 		width: 25rem;
-		box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+		box-shadow: $primary-shadow;
 		min-height: 10rem;
 		padding: 3rem 4rem;
 		border-radius: 1rem;
 		h3 {
 			margin-top: 0;
 			margin-bottom: 1rem;
-			font-size: 2rem;
+			font-size: $font-large;
 			text-align: center;
 			font-weight: bold;
 		}

@@ -45,11 +45,7 @@ function App() {
 	const view = useAppSelector(selectView)
 
 	/** Landing Page Logic */
-	let isLanding = true
-	const { isEndpointError } = useAppSelector((store) => store.endpoint)
-	if (!isEndpointError) {
-		isLanding = false
-	}
+	const [isLanding, setIsLanding] = useState(true)
 	/** End of Landing Page Logic */
 
 	const allNamespaces = allData
@@ -122,7 +118,7 @@ function App() {
 	return (
 		<>
 			{isLanding ? (
-				<LandingPage />
+				<LandingPage setIsLanding={setIsLanding} />
 			) : (
 				<div className="bg-blue w-full h-full">
 					<div className="w-full h-full">
