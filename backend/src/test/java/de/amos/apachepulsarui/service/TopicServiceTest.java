@@ -90,7 +90,7 @@ class TopicServiceTest {
 
     private void whenOwnerBroker() throws PulsarAdminException {
         when(pulsarAdmin.lookups()).thenReturn(lookup);
-        when(pulsarAdmin.lookups().lookupTopic("abc")).thenReturn("zyx");
+        when(pulsarAdmin.lookups().lookupTopic("Topic")).thenReturn("zyx");
 
     }
 
