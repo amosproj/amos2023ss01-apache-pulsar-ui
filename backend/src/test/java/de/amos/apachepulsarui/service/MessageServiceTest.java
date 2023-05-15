@@ -31,7 +31,7 @@ public class MessageServiceTest {
         String validTopicName = "persistent://public/default/test-topic";
         MessageDto message = MessageDto.create(validTopicName, "hello");
 
-        assertThat(messageService.isValidMessage(message)).isTrue();
+        assertThat(messageService.inValidTopicName(message)).isFalse();
     }
 
     @Test
@@ -40,7 +40,7 @@ public class MessageServiceTest {
         String invalidTopicName = "bla//blub";
         MessageDto message = MessageDto.create(invalidTopicName, "hello");
 
-        assertThat(messageService.isValidMessage(message)).isFalse();
+        assertThat(messageService.inValidTopicName(message)).isTrue();
     }
 
     @Test
@@ -49,6 +49,6 @@ public class MessageServiceTest {
         String emptyTopicName = "";
         MessageDto message = MessageDto.create(emptyTopicName, "hello");
 
-        assertThat(messageService.isValidMessage(message)).isFalse();
+        assertThat(messageService.inValidTopicName(message)).isTrue();
     }
 }

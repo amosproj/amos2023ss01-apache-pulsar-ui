@@ -41,7 +41,7 @@ public class MessageController {
             consumes = {MediaType.APPLICATION_JSON_VALUE}
     )
     public ResponseEntity<Void> sendMessage(@RequestBody @Valid MessageDto messageDto) {
-        if (!messageService.isValidMessage(messageDto)) {
+        if (messageService.inValidTopicName(messageDto)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         if (messageService.sendMessage(messageDto)) {

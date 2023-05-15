@@ -89,8 +89,8 @@ public class MessageService {
         }
     }
 
-    public boolean isValidMessage(MessageDto messageDto) {
-        return TopicName.isValid(messageDto.getTopic());
+    public boolean inValidTopicName(MessageDto messageDto) {
+        return !TopicName.isValid(messageDto.getTopic());
     }
 
     private Producer<byte []> createProducerFor(String topicName) throws PulsarClientException {
