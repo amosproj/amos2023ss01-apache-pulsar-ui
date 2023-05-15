@@ -2,25 +2,17 @@
 // SPDX-FileCopyrightText: 2010-2021 Dirk Riehle <dirk@riehle.org>
 // SPDX-FileCopyrightText: 2019 Georg Schwarz <georg.schwarz@fau.de>
 
-import React, { useEffect } from 'react'
+import React from 'react'
 import { TextField, Button } from '@mui/material'
 import '../../assets/styles/landing.scss'
 import team_logo from '../../assets/images/team-logo-light.png'
 import RbiLogo from './RbiLogo'
 import { useAppDispatch } from '../../store/hooks'
-import { setEndpoint } from '../../store/globalSlice'
+import { moveToApp, setEndpoint } from '../../store/globalSlice'
 
-interface landingPageProps {
-	setIsLanding: (isLanding: boolean) => void
-}
-
-const LandingPage: React.FC<landingPageProps> = ({ setIsLanding }) => {
+const LandingPage: React.FC = () => {
 	// Endpoint string of pulsar
 	let endpoint = ''
-
-	useEffect(() => {
-		setIsLanding(true)
-	}, [])
 
 	const dispatch = useAppDispatch()
 
@@ -44,13 +36,12 @@ const LandingPage: React.FC<landingPageProps> = ({ setIsLanding }) => {
 
 		// If the endpoint is not valid
 		if (!validateEndpoint(endpoint)) {
-			setIsLanding(true)
 			return
 		}
 
 		// If the endpoint is valid
-		setIsLanding(false)
 		dispatch(setEndpoint(endpoint))
+		dispatch(moveToApp())
 	}
 
 	return (

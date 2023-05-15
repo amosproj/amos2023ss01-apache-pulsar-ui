@@ -2,11 +2,11 @@
 // SPDX-FileCopyrightText: 2010-2021 Dirk Riehle <dirk@riehle.org>
 // SPDX-FileCopyrightText: 2019 Georg Schwarz <georg.schwarz@fau.de>
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import './App.css'
 import './assets/styles/styles.scss'
 import { useAppDispatch, useAppSelector } from './store/hooks'
-import { selectView, setNav } from './store/globalSlice'
+import { selectShowLP, selectView, setNav } from './store/globalSlice'
 import NavBar from './components/NavBar'
 import LandingPage from './components/landing/LandingPage'
 
@@ -45,7 +45,7 @@ function App() {
 	const view = useAppSelector(selectView)
 
 	/** Landing Page Logic */
-	const [isLanding, setIsLanding] = useState(true)
+	const showLP = useAppSelector(selectShowLP)
 	/** End of Landing Page Logic */
 
 	const allNamespaces = allData
@@ -117,8 +117,8 @@ function App() {
 
 	return (
 		<>
-			{isLanding ? (
-				<LandingPage setIsLanding={setIsLanding} />
+			{showLP ? (
+				<LandingPage />
 			) : (
 				<div className="bg-blue w-full h-full">
 					<div className="w-full h-full">

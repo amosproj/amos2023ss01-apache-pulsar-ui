@@ -12,12 +12,14 @@ export type View = {
 }
 
 export type globalState = {
+	showLP: boolean
 	view: View
 	data: Array<MessageList>
 	endpoint: string
 }
 
 const initialState: globalState = {
+	showLP: true,
 	view: {
 		selectedNav: null,
 		filteredId: null,
@@ -49,6 +51,11 @@ const globalSlice = createSlice({
 	name: 'globalControl',
 	initialState,
 	reducers: {
+		moveToApp: (state) => {
+			state.showLP = false
+			console.log('sdsd')
+		},
+		backToLP: () => initialState,
 		setNav: (state, action: PayloadAction<string>) => {
 			state.view.selectedNav = action.payload
 		},
@@ -88,8 +95,21 @@ const selectData = (state: RootState): Array<MessageList> =>
 
 const selectView = (state: RootState): View => state.globalControl.view
 
-export const { setNav, setView, updateData, setData, setEndpoint } = actions
+const selectShowLP = (state: RootState): boolean => state.globalControl.showLP
 
-export { selectData, selectView, fetchDataThunk }
+const selectEndpoint = (state: RootState): string =>
+	state.globalControl.endpoint
+
+export const {
+	moveToApp,
+	backToLP,
+	setNav,
+	setView,
+	updateData,
+	setData,
+	setEndpoint,
+} = actions
+
+export { selectShowLP, selectEndpoint, selectData, selectView, fetchDataThunk }
 
 export default reducer
