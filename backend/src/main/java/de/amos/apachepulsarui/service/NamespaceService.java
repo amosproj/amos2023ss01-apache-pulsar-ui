@@ -24,6 +24,8 @@ public class NamespaceService {
     private final PulsarAdmin pulsarAdmin;
     private final TenantService tenantService;
 
+    private final TopicService topicService;
+
     public List<NamespaceDto> getAll() {
         return tenantService.getAllTenants().stream()
                 .flatMap(tenant -> this.getAllOfTenant(tenant).stream())
@@ -50,6 +52,7 @@ public class NamespaceService {
             namespace.setBundlesData(namespaces.getBundles(namespace.getId()));
             namespace.setMessagesTTL(namespaces.getNamespaceMessageTTL(namespace.getId()));
             namespace.setRetentionPolicies(namespaces.getRetention(namespace.getId()));
+            namespace.setTopics(topicService.getByNamespace(namespace, 10)); //ToDo set max count in topicservice? or somewhere else than here
 
             return namespace;
         } catch (PulsarAdminException e) {

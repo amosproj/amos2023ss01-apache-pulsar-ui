@@ -24,14 +24,6 @@ import java.util.List;
 public class TopicService {
 
     private final PulsarAdmin pulsarAdmin;
-    private final NamespaceService namespaceService;
-
-    public List<TopicDto> getAllTopics() {
-        List<NamespaceDto> namespaces = namespaceService.getAll();
-        return namespaces.stream()
-                .flatMap(namespace -> this.getByNamespace(namespace).stream())
-                .toList();
-    }
 
     public List<TopicDto> getByNamespace(NamespaceDto namespace, int maxCount) {
         return this.sublistOfMaxSize(this.getByNamespace(namespace), maxCount);
@@ -51,7 +43,7 @@ public class TopicService {
         return TopicName.isValid(topic);
     }
 
-    private List<TopicDto> getByNamespace(NamespaceDto namespace) {
+    public List<TopicDto> getByNamespace(NamespaceDto namespace) {
         try {
 
             return pulsarAdmin.topics()

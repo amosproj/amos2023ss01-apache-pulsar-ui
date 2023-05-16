@@ -5,7 +5,9 @@
 
 package de.amos.apachepulsarui.controller;
 
+import de.amos.apachepulsarui.dto.NamespaceDto;
 import de.amos.apachepulsarui.dto.TopicDto;
+import de.amos.apachepulsarui.service.NamespaceService;
 import de.amos.apachepulsarui.service.TopicService;
 import net.bytebuddy.utility.RandomString;
 import org.apache.pulsar.common.policies.data.TopicStats;
@@ -35,6 +37,9 @@ public class TopicControllerTest {
     TopicService topicService;
 
     @MockBean
+    NamespaceService namespaceService;
+
+    @MockBean
     TopicStats topicStats;
 
     @Test
@@ -46,7 +51,10 @@ public class TopicControllerTest {
                 "persistent://buzz/bar/coruscant"
         ).map( values -> TopicDto.createTopicDto(values, topicStats, RandomString.make(1))).toList();
 
-        Mockito.when(topicService.getAllTopics()).thenReturn(topics);
+        NamespaceDto namespace = NamespaceDto.fromString("public/default");
+        Mockito.when(namespaceService.getAll()).thenReturn(List.of(namespace));
+        Mockito.when(topicService.getByNamespace(namespace)).thenReturn(topics);
+
 
         mockMvc.perform(get("/topic")
                 .contentType(MediaType.APPLICATION_JSON))
