@@ -1,12 +1,25 @@
 body {
-  @apply h-full overflow-x-hidden;
-  background-color: $primary-blue; 
+	@apply h-full overflow-x-hidden;
+	background: $gradient-blue;
+	// margin: 64px;
+	font-family: $primary-font;
 }
 
 #root {
-  @apply h-full;
+	@apply h-full;
 }
 
 html {
-  @apply h-full;
+	@apply h-full;
+}
+
+.grey-line {
+	height: 1px;
+	background-color: $primary-grey;
+	border-radius: 100%;
+	width: 100%;
+}
+
+.dashboard-container {
+	margin: 64px;
 }

@@ -6,12 +6,26 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { RootState } from '.'
 
+export type View = {
+	selectedNav: string | null
+	filteredId: number | string | null
+}
+
 export type globalState = {
+	showLP: boolean
+	view: View
 	data: Array<MessageList>
+	endpoint: string
 }
 
 const initialState: globalState = {
+	showLP: true,
+	view: {
+		selectedNav: null,
+		filteredId: null,
+	},
 	data: [],
+	endpoint: '',
 }
 
 const backendInstance = axios.create({
@@ -27,16 +41,22 @@ const fetchDataThunk = createAsyncThunk(
 	}
 )
 
-interface UpdateForData {
-	message: string
-	topic: string
-}
-
 // eslint-disable-next-line
 const globalSlice = createSlice({
 	name: 'globalControl',
 	initialState,
 	reducers: {
+		moveToApp: (state) => {
+			state.showLP = false
+			console.log('sdsd')
+		},
+		backToLP: () => initialState,
+		setNav: (state, action: PayloadAction<string>) => {
+			state.view.selectedNav = action.payload
+		},
+		setView: (state, action: PayloadAction<View>) => {
+			state.view = action.payload
+		},
 		setData: (
 			state: globalState,
 			action: PayloadAction<Array<MessageList>>
@@ -57,6 +77,9 @@ const globalSlice = createSlice({
 				return single
 			})
 		},
+		setEndpoint: (state: globalState, action: PayloadAction<string>) => {
+			state.endpoint = action.payload
+		},
 	},
 })
 
@@ -65,8 +88,23 @@ const { actions, reducer } = globalSlice
 const selectData = (state: RootState): Array<MessageList> =>
 	state.globalControl.data
 
-export const { updateData, setData } = actions
+const selectView = (state: RootState): View => state.globalControl.view
 
-export { selectData, fetchDataThunk }
+const selectShowLP = (state: RootState): boolean => state.globalControl.showLP
+
+const selectEndpoint = (state: RootState): string =>
+	state.globalControl.endpoint
+
+export const {
+	moveToApp,
+	backToLP,
+	setNav,
+	setView,
+	updateData,
+	setData,
+	setEndpoint,
+} = actions
+
+export { selectShowLP, selectEndpoint, selectData, selectView, fetchDataThunk }
 
 export default reducer

@@ -5,35 +5,75 @@
 import React, { useEffect } from 'react'
 import './App.css'
 import './assets/styles/styles.scss'
-import logo from './assets/images/team-logo-light.png'
-import Form from './components/form/Form'
-import { useAppDispatch, useAppSelector } from './store/hooks'
-import { selectData, setData, updateData } from './store/globalSlice'
+import { useAppSelector } from './store/hooks'
+import { selectShowLP, selectView } from './store/globalSlice'
+import LandingPage from './components/landing/LandingPage'
+import NavBar from './components/NavBar'
+import Dashboard from './components/Dashboard'
+
+let allData: Array<SampleCluster> = []
 
 function App() {
-	const dispatch = useAppDispatch()
-	const dummyData = useAppSelector(selectData)
+	const view = useAppSelector(selectView)
 
-	const triggerUpdate = (msg: string, tpc: string) => {
-		dispatch(updateData({ message: msg, topic: tpc }))
-		console.log(dummyData)
-	}
+	/** Landing Page Logic */
+	const showLP = useAppSelector(selectShowLP)
+	/** End of Landing Page Logic */
+
+	/*const allTenants = allData
+		.map((item) => item.tenants)
+		.filter((el) => el.length > 0)
+		.flat()
+
+	const allNamespaces = allTenants
+		.map((tenant) => tenant.namespaces)
+		.filter((el) => el.length > 0)
+		.flat()
+
+	const allTopics = allNamespaces
+		.map((namespace) => namespace.topics)
+		.filter((el) => el.length > 0)
+		.flat()*/
+
+	/*const allMessages = allData
+		.flatMap((item) => item.namespaces)
+		.flatMap((namespace) => namespace.topics)
+		.map((topic) => topic.messages)
+		.filter((el) => el.length > 0)
+		.flat()*/
+
+	/*let filteredData:
+		| Array<SampleCluster>
+		| Array<SampleNamespace>
+		| Array<SampleTopic> = allData
+
+	if (view.selectedNav === 'namespace') {
+		filteredData = allNamespaces
+	} else if (view.selectedNav === 'topic') {
+		filteredData = allTopics
+	}*/
+
+	/*const selectNewElement = (
+		item: SampleCluster | SampleNamespace | SampleTopic
+	) => {
+		const selEl = getNewElementTag(item.tag, item.id)
+		console.log(selEl)
+		//dispatch(setNav(selEl[0]))
+	}*/
 
 	//can later on be replaced by the fetchDataThunk
 	const getData = () => {
-		fetch('dummy/dummy.json', {
+		fetch('dummy/dummyFull.json', {
 			headers: {
 				'Content-Type': 'application/json',
 				Accept: 'application/json',
 			},
 		})
 			.then(function (response) {
-				console.log(response)
 				return response.json()
 			})
 			.then(function (json) {
-				console.log(json)
-				dispatch(setData(json))
+				allData = json
 			})
 	}
 
@@ -42,14 +82,16 @@ function App() {
 	}, [])
 
 	return (
-		<div className="bg-blue w-full h-full">
-			<div className="w-full h-full">
-				<nav className="px-12 py-5">
-					<img className="home-logo" src={logo} alt="logo" />
-				</nav>
-				<Form data={dummyData} triggerUpdate={triggerUpdate}></Form>
-			</div>
-		</div>
+		<>
+			{showLP ? (
+				<LandingPage />
+			) : (
+				<div className="dashboard-container">
+					<NavBar />
+					<Dashboard completeData={allData} view={view.selectedNav} />
+				</div>
+			)}
+		</>
 	)
 }
 

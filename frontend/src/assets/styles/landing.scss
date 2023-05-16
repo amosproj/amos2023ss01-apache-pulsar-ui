@@ -1,0 +1,211 @@
+// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: 2010-2021 Dirk Riehle <dirk@riehle.org>
+// SPDX-FileCopyrightText: 2019 Georg Schwarz <georg.schwarz@fau.de>
+
+@import './variables.scss';
+
+.landing-container {
+	min-height: 100vh;
+	max-height: 100vh;
+	position: relative;
+	overflow: hidden;
+	background-image: url('../images/landing-background.jpg');
+	background-size: cover;
+}
+
+.semi-circle {
+	position: absolute;
+	left: 0;
+	right: 0;
+	margin: 0 auto;
+	transition: all 0.3s ease-in-out;
+}
+
+.header-container {
+	.logo-container {
+		z-index: 1;
+		position: absolute;
+		margin: 0 auto;
+		left: 0;
+		right: 0;
+		top: 2rem;
+
+		img {
+			margin: 0 auto;
+			object-fit: cover;
+			height: 14rem;
+		}
+	}
+
+	.semi-circle {
+		background-color: $primary-blue;
+		transform: translateY(-55%);
+		border-radius: 100%;
+		top: 0;
+	}
+}
+
+.footer-container {
+	overflow: hidden;
+	transition: all 0.3 ease-in-out;
+
+	p {
+		display: none;
+		z-index: 1;
+		position: absolute;
+		bottom: 4rem;
+		text-align: center;
+		left: 0;
+		right: 0;
+		font-weight: 300;
+	}
+
+	.rbi-logo {
+		display: none;
+		position: absolute;
+		z-index: 1;
+		bottom: 0;
+		width: 10rem;
+		height: 4rem;
+		left: 0;
+		right: 0;
+		margin: 0 auto;
+	}
+
+	.semi-circle {
+		background-color: $primary-white;
+		// border-radius: 30rem 30rem 0 0;
+		border-radius: 100%;
+		bottom: 0;
+		transform: translateY(80%);
+	}
+}
+
+.endpoint-form-container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 100vh;
+
+	form {
+		background-color: $primary-white;
+		display: flex;
+		flex-direction: column;
+		z-index: 999;
+		width: 25rem;
+		box-shadow: $primary-shadow;
+		min-height: 10rem;
+		padding: 3rem 4rem;
+		border-radius: 1rem;
+
+		h3 {
+			margin-top: 0;
+			margin-bottom: 1rem;
+			font-size: $font-large;
+			text-align: center;
+			font-weight: bold;
+		}
+
+		#endpoint {
+			border-radius: 1rem;
+		}
+
+		.connect-button {
+			margin-top: 2rem;
+			padding: 0.5rem;
+			border-radius: 1rem;
+			font-weight: bold;
+		}
+	}
+}
+
+// Large Screen
+@media screen and (min-width: $screen-xl-min) {
+	.header-container {
+		.semi-circle {
+			height: 70rem;
+			width: 70rem;
+		}
+	}
+
+	.footer-container {
+		p {
+			display: block;
+		}
+
+		.rbi-logo {
+			display: block;
+		}
+
+		.semi-circle {
+			height: 60rem;
+			width: 60rem;
+		}
+	}
+}
+
+//Medium Large Screen
+@media screen and (min-width: $screen-lg-min) and (max-width: $screen-xl-min) {
+	.header-container {
+		.semi-circle {
+			height: 60rem;
+			width: 60rem;
+		}
+	}
+
+	.footer-container {
+		.semi-circle {
+			height: 40rem;
+			width: 40rem;
+		}
+	}
+}
+
+// Medium Screen
+@media screen and (min-width: $screen-md-min) and (max-width: $screen-lg-min) {
+	.header-container {
+		.semi-circle {
+			height: 45rem;
+			width: 45rem;
+		}
+	}
+
+	.footer-container {
+		.semi-circle {
+			height: 40rem;
+			width: 40rem;
+		}
+	}
+}
+
+// Medium Small Screen
+@media screen and (min-width: $screen-sm-min) and (max-width: $screen-md-min) {
+	.header-container {
+		.semi-circle {
+			height: 35rem;
+			width: 35rem;
+		}
+	}
+
+	.footer-container {
+		.semi-circle {
+			height: 30rem;
+			width: 30rem;
+		}
+	}
+}
+
+// Small screen
+@media screen and (max-width: $screen-sm-min) {
+	.header-container {
+		.semi-circle {
+			display: none;
+			height: 25rem;
+			width: 25rem;
+		}
+	}
+
+	.footer-container {
+		display: none;
+	}
+}

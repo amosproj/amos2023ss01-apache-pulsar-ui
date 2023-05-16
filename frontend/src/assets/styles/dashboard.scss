@@ -1,0 +1,75 @@
+.main-dashboard {
+	gap: 38px;
+	margin: 64px 0px;
+}
+
+.primary-dashboard {
+	flex: 0 0 75%;
+	max-width: 75%;
+	display: flex;
+	flex-direction: column;
+	gap: 64px;
+}
+
+.secondary-dashboard {
+	.MuiCollapse-wrapper.MuiCollapse-vertical .MuiAccordionDetails-root {
+		padding: 0px;
+		padding-bottom: 4px;
+	}
+
+	.reset-all-filter-button {
+		width: 100%;
+		cursor: pointer;
+		background-color: $primary-blue;
+		border-radius: $primary-radius;
+		color: $primary-white;
+		font-size: $font-small;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 30px;
+		margin: 38px 0px;
+	}
+}
+
+.dashboard-title {
+	font-family: $primary-font;
+	font-weight: 700;
+	font-size: $font-large;
+	line-height: 39px;
+}
+
+.filters-wrapper {
+	justify-content: space-between;
+	align-items: center;
+	margin: 38px 0px;
+
+	svg {
+		margin-right: 21px;
+	}
+}
+
+.filter-title {
+	font-weight: 500;
+	font-size: $font-medium;
+	line-height: 23px;
+	padding: 20px 0px;
+}
+
+.MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded {
+	box-shadow: none;
+	border-top: 1px solid $primary-grey;
+	border-bottom: 1px solid $primary-grey;
+	background-color: transparent;
+	margin: 10px 0px;
+
+	.MuiButtonBase-root.MuiAccordionSummary-root.MuiAccordionSummary-gutters {
+		padding: 0px;
+		padding-right: 21px;
+		background-color: transparent;
+
+		.MuiAccordionSummary-content.MuiAccordionSummary-contentGutters {
+			margin: 0px;
+		}
+	}
+}

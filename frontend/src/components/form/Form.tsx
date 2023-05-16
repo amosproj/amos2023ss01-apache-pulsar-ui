@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { TextField, Button } from '@mui/material'
-import TopicSelect from './CustomSelect'
-import CustomAccordion from './CustomAccordion'
+import TopicSelect from '../custom/CustomSelect'
+import CustomAccordion from '../custom/CustomAccordion'
 import { SelectChangeEvent } from '@mui/material/Select'
 import {
 	selectMessage,
@@ -10,11 +10,6 @@ import {
 	setTopic,
 } from './formControllerSlice'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
-
-interface formProps {
-	data: Array<MessageList>
-	triggerUpdate(message: string, topic: string): void
-}
 
 const Form = (props: formProps) => {
 	const { data, triggerUpdate }: formProps = props

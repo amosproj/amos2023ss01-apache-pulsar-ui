@@ -1,0 +1,41 @@
+.main-card {
+	position: relative;
+	background-color: $primary-white;
+	box-shadow: $primary-shadow;
+	border-radius: $primary-radius;
+	height: 100%;
+	width: 100%;
+	min-height: 380px;
+	padding: 38px;
+
+	.card-content {
+		h2 {
+			font-weight: 700;
+			font-size: $font-large;
+			line-height: 39px;
+			color: $primary-blue;
+		}
+
+		.card-inner {
+			.card-col {
+				flex: 0 0 33%;
+				max-width: 33%;
+
+				.card-info {
+					margin: 18px 0px;
+					font-size: $font-small;
+				}
+
+				&.card-col-2,
+				&.card-col-3 {
+					padding: 18px 0px;
+				}
+
+				&.card-col-2 {
+					padding-left: 38px;
+					padding-right: 38px;
+				}
+			}
+		}
+	}
+}
