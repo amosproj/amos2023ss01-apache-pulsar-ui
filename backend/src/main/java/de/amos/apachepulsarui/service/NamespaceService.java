@@ -9,6 +9,7 @@ import de.amos.apachepulsarui.dto.NamespaceDto;
 import de.amos.apachepulsarui.dto.TenantDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.pulsar.client.admin.Namespaces;
 import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.apache.pulsar.client.admin.PulsarAdminException;
 import org.springframework.stereotype.Service;
@@ -44,9 +45,12 @@ public class NamespaceService {
 
     private NamespaceDto enrichWithNamespaceData(NamespaceDto namespace) {
         try {
-            namespace.setBundlesData(pulsarAdmin.namespaces().getBundles(namespace.getId()));
-            namespace.setMessagesTTL(pulsarAdmin.namespaces().getNamespaceMessageTTL(namespace.getId()));
-            namespace.setRetentionPolicies(pulsarAdmin.namespaces().getRetention(namespace.getId()));
+            Namespaces namespaces = pulsarAdmin.namespaces();
+
+            namespace.setBundlesData(namespaces.getBundles(namespace.getId()));
+            namespace.setMessagesTTL(namespaces.getNamespaceMessageTTL(namespace.getId()));
+            namespace.setRetentionPolicies(namespaces.getRetention(namespace.getId()));
+
             return namespace;
         } catch (PulsarAdminException e) {
             log.error("Could not fetch namespace data of namespace %s. E: %s".formatted(namespace.getId(), e));
