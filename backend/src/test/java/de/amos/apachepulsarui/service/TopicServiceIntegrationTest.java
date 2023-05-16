@@ -5,6 +5,7 @@
 
 package de.amos.apachepulsarui.service;
 
+import de.amos.apachepulsarui.dto.NamespaceDto;
 import de.amos.apachepulsarui.dto.TopicDto;
 import org.apache.pulsar.common.policies.data.TopicStats;
 import org.assertj.core.api.Assertions;
@@ -23,9 +24,9 @@ public class TopicServiceIntegrationTest extends AbstractIntegrationTest {
     private TopicStats topicStats;
 
     @Test
-    void getAllTopics_returnsCreatedTopics() {
+    void getByNamespace_returnsCreatedTopics() {
         topicService.createNewTopic("topic-service-integration-test");
-        List<TopicDto> topics = topicService.getAllTopics();
+        List<TopicDto> topics = topicService.getByNamespace(NamespaceDto.fromString("public/default"));
         Assertions.assertThat(topics)
                 .contains(TopicDto.createTopicDto("persistent://public/default/topic-service-integration-test", topicStats, "pulsar://localhost:6650"));
     }

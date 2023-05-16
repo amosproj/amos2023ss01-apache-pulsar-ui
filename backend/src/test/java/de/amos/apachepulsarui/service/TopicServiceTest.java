@@ -1,6 +1,7 @@
 /*
  * SPDX-License-Identifier: MIT
  * SPDX-FileCopyrightText: 2023 Niklas Teschner <niklas.teschner@web.de>
+ * SPDX-FileCopyrightText: 2023 Anna Haverkamp <anna.lucia.haverkamp@gmail.com>
  */
 
 package de.amos.apachepulsarui.service;
@@ -32,8 +33,6 @@ import static org.mockito.Mockito.*;
 class TopicServiceTest {
 
     @Mock
-    private NamespaceService namespaceService;
-    @Mock
     private Topics topics;
     @Mock
     private PulsarAdmin pulsarAdmin;
@@ -63,13 +62,13 @@ class TopicServiceTest {
 
     @Test
     void getAllTopics() throws PulsarAdminException {
-        when(namespaceService.getAll()).thenReturn(List.of(NamespaceDto.fromString("abc")));
+        NamespaceDto namespace = NamespaceDto.fromString("abc");
         whenAdminTopics();
         whenTopicStats();
         whenOwnerBroker();
 
 
-        topicService.getAllTopics();
+        topicService.getByNamespace(namespace);
 
         topicDtoMockedStatic.verify(
                 () -> TopicDto.createTopicDto("Topic", topicStats, "zyx"),
