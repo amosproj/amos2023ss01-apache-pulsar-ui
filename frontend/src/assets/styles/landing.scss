@@ -29,12 +29,14 @@
 		left: 0;
 		right: 0;
 		top: 2rem;
+
 		img {
 			margin: 0 auto;
 			object-fit: cover;
 			height: 14rem;
 		}
 	}
+
 	.semi-circle {
 		background-color: $primary-blue;
 		transform: translateY(-55%);
@@ -46,6 +48,7 @@
 .footer-container {
 	overflow: hidden;
 	transition: all 0.3 ease-in-out;
+
 	p {
 		display: none;
 		z-index: 1;
@@ -56,6 +59,7 @@
 		right: 0;
 		font-weight: 300;
 	}
+
 	.rbi-logo {
 		display: none;
 		position: absolute;
@@ -67,6 +71,7 @@
 		right: 0;
 		margin: 0 auto;
 	}
+
 	.semi-circle {
 		background-color: $primary-white;
 		// border-radius: 30rem 30rem 0 0;
@@ -81,6 +86,7 @@
 	align-items: center;
 	justify-content: center;
 	min-height: 100vh;
+
 	form {
 		background-color: $primary-white;
 		display: flex;
@@ -91,6 +97,7 @@
 		min-height: 10rem;
 		padding: 3rem 4rem;
 		border-radius: 1rem;
+
 		h3 {
 			margin-top: 0;
 			margin-bottom: 1rem;
@@ -98,9 +105,11 @@
 			text-align: center;
 			font-weight: bold;
 		}
+
 		#endpoint {
 			border-radius: 1rem;
 		}
+
 		.connect-button {
 			margin-top: 2rem;
 			padding: 0.5rem;
@@ -118,13 +127,16 @@
 			width: 70rem;
 		}
 	}
+
 	.footer-container {
 		p {
 			display: block;
 		}
+
 		.rbi-logo {
 			display: block;
 		}
+
 		.semi-circle {
 			height: 60rem;
 			width: 60rem;
@@ -140,6 +152,7 @@
 			width: 60rem;
 		}
 	}
+
 	.footer-container {
 		.semi-circle {
 			height: 40rem;
@@ -156,6 +169,7 @@
 			width: 45rem;
 		}
 	}
+
 	.footer-container {
 		.semi-circle {
 			height: 40rem;
@@ -172,6 +186,7 @@
 			width: 35rem;
 		}
 	}
+
 	.footer-container {
 		.semi-circle {
 			height: 30rem;
@@ -189,6 +204,7 @@
 			width: 25rem;
 		}
 	}
+
 	.footer-container {
 		display: none;
 	}
