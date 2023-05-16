@@ -52,7 +52,7 @@ public class NamespaceService {
             namespace.setBundlesData(namespaces.getBundles(namespace.getId()));
             namespace.setMessagesTTL(namespaces.getNamespaceMessageTTL(namespace.getId()));
             namespace.setRetentionPolicies(namespaces.getRetention(namespace.getId()));
-            namespace.setTopics(topicService.getByNamespace(namespace, 10)); //ToDo set max count in topicservice? or somewhere else than here
+            namespace.setTopics(topicService.getByNamespace(namespace));
 
             return namespace;
         } catch (PulsarAdminException e) {
