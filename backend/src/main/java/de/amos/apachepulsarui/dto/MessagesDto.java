@@ -5,20 +5,16 @@
 
 package de.amos.apachepulsarui.dto;
 
-import java.util.List;
-
+import lombok.AllArgsConstructor;
 import lombok.Data;
+
+import java.util.List;
 
 
 @Data
+@AllArgsConstructor
 public class MessagesDto {
 
     private List<MessageDto> messages;
-
-    public static MessagesDto fromMessages(List<MessageDto> messages) {
-		MessagesDto messagesDto = new MessagesDto();
-		messagesDto.setMessages(messages);
-		return messagesDto;
-	}
 
 }
