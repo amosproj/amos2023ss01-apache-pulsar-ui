@@ -40,12 +40,13 @@ public class MessageDto {
      */
     public static MessageDto fromExistingMessage(Message<byte[]> message, String schemaDefinition) {
         MessageDto messageDto = new MessageDto();
+        String topicName = message.getTopicName();
         messageDto.messageId = message.getMessageId().toString();
-        messageDto.topic = message.getTopicName();
+        messageDto.topic = topicName;
         messageDto.payload = new String(message.getData(), StandardCharsets.UTF_8);
         messageDto.schema = schemaDefinition;
-        messageDto.namespace = TopicName.get(message.getTopicName()).getNamespacePortion();
-        messageDto.tenant = TopicName.get(message.getTopicName()).getTenant();
+        messageDto.namespace = TopicName.get(topicName).getNamespacePortion();
+        messageDto.tenant = TopicName.get(topicName).getTenant();
         messageDto.publishTime = message.getPublishTime();
 
         return messageDto;
