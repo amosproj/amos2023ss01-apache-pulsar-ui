@@ -25,7 +25,7 @@ import { Input } from '@mui/material'
 import { InfoModal } from './InfoModal'
 
 //Removed 'Message' from this array for now
-const pages = ['Cluster', 'Namespace', 'Topic']
+const pages = ['Cluster', 'Tenant', 'Namespace', 'Topic']
 
 function NavBar() {
 	const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null)

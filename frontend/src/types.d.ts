@@ -21,7 +21,7 @@ interface CardProps {
 
 interface DashboardProps {
 	completeData: Array<SampleCluster>
-	view?: 'cluster' | 'namespace' | 'topic' | null | any
+	view?: 'cluster' | 'tenant' | 'namespace' | 'topic' | null | any
 }
 
 interface CustomAccordionProps {
@@ -60,13 +60,18 @@ interface TopicViewProps {
 	data: SampleTopic
 }
 
+interface TenantViewProps {
+	data: SampleTenant
+}
+
 interface CustomFilterProps {
 	selectedClusters: string[]
+	selectedTenants: string[]
 	selectedNamespaces: string[]
 	selectedTopics: string[]
 	data: Array<SampleCluster>
 	handleChange: any
-	currentView: 'cluster' | 'namespace' | 'topic'
+	currentView: 'cluster' | 'tenant' | 'namespace' | 'topic'
 }
 
 interface CustomSearchProps {
