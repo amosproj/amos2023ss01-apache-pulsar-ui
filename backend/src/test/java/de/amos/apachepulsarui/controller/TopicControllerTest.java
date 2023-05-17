@@ -56,7 +56,7 @@ public class TopicControllerTest {
         Mockito.when(topicService.getByNamespace(namespace)).thenReturn(topics);
 
 
-        mockMvc.perform(get("/topic")
+        mockMvc.perform(get("/topic/public/default")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.topics[0].name", equalTo(topics.get(0).getName())))
