@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.apache.pulsar.client.admin.PulsarAdminException;
-import org.apache.pulsar.common.naming.TopicName;
 import org.apache.pulsar.common.policies.data.TopicStats;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +23,20 @@ import java.util.List;
 public class TopicService {
 
     private final PulsarAdmin pulsarAdmin;
+
+    public List<TopicDto> getTopicsByNamespace(String namespaceName) {
+        try {
+            return pulsarAdmin.topics()
+                    .getList(namespaceName).stream()
+                    .map(this::createTopicDto)
+                    .toList();
+
+        } catch (PulsarAdminException e) {
+            log.error("Could not fetch topics of namespace %s. E: %s".formatted(namespaceName, e));
+            return List.of();
+        }
+    }
+
 
     public List<TopicDto> getByNamespace(NamespaceDto namespace, int maxCount) {
         return this.sublistOfMaxSize(this.getByNamespace(namespace), maxCount);
@@ -39,9 +52,6 @@ public class TopicService {
         return false;
     }
 
-    public boolean isValidTopic(String topic) {
-        return TopicName.isValid(topic);
-    }
 
     public List<TopicDto> getByNamespace(NamespaceDto namespace) {
         try {
@@ -81,5 +91,6 @@ public class TopicService {
     private List<TopicDto> sublistOfMaxSize(List<TopicDto> list, int maxCount) {
         return list.subList(0, Math.min(list.size(), maxCount));
     }
+
 
 }

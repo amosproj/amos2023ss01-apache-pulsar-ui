@@ -118,14 +118,4 @@ class TopicServiceTest {
         verify(pulsarAdmin.topics()).createNonPartitionedTopic(topic);
     }
 
-    @Test
-    void isValidTopic() {
-        String topic = "Topic";
-
-        topicService.isValidTopic(topic);
-
-        topicNameMockedStatic.verify(
-                () -> TopicName.isValid(topic),
-                times(1)
-        );    }
 }
