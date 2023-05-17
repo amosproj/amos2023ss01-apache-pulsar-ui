@@ -9,6 +9,7 @@ const CustomFilter: React.FC<CustomFilterProps> = ({
 	data,
 	handleChange,
 	selectedClusters,
+	selectedTenants,
 	selectedNamespaces,
 	selectedTopics,
 	currentView,
@@ -28,7 +29,12 @@ const CustomFilter: React.FC<CustomFilterProps> = ({
 		.filter((el) => el.length > 0)
 		.flat()
 
-	const viewLevelTwo = currentView === 'namespace' || currentView === 'topic'
+	const viewLevelThree = currentView === 'namespace' || currentView === 'topic'
+	const viewLevelTwo =
+		currentView === 'tenant' ||
+		currentView === 'namespace' ||
+		currentView === 'topic'
+	//const viewLevelFour = currentView === 'tenant' || currentView === 'namespace' || currentView === 'topic' || currentView === 'message'
 
 	return (
 		<div className="flex flex-col">
@@ -36,7 +42,6 @@ const CustomFilter: React.FC<CustomFilterProps> = ({
 				<AccordionSummary
 					expandIcon={<ExpandMoreIcon />}
 					aria-controls="panel1a-content"
-					id="panel1a-header"
 				>
 					<h3 className="filter-title">Clusters</h3>
 				</AccordionSummary>
@@ -61,7 +66,31 @@ const CustomFilter: React.FC<CustomFilterProps> = ({
 					<AccordionSummary
 						expandIcon={<ExpandMoreIcon />}
 						aria-controls="panel1a-content"
-						id="panel1a-header"
+					>
+						<h3 className="filter-title">Tenants</h3>
+					</AccordionSummary>
+					<AccordionDetails>
+						<div className="flex flex-col">
+							{allTenants &&
+								allTenants.length > 0 &&
+								allTenants.map((item: SampleTenant) => (
+									<CustomCheckbox
+										key={item.id + Math.floor(Math.random() * 999999)}
+										text={item.id}
+										typology={'tenant'}
+										changeFunc={handleChange}
+										selected={selectedTenants.includes(item.id) ? true : false}
+									></CustomCheckbox>
+								))}
+						</div>
+					</AccordionDetails>
+				</Accordion>
+			)}
+			{viewLevelThree && (
+				<Accordion>
+					<AccordionSummary
+						expandIcon={<ExpandMoreIcon />}
+						aria-controls="panel1a-content"
 					>
 						<h3 className="filter-title">Namespaces</h3>
 					</AccordionSummary>
@@ -89,7 +118,6 @@ const CustomFilter: React.FC<CustomFilterProps> = ({
 					<AccordionSummary
 						expandIcon={<ExpandMoreIcon />}
 						aria-controls="panel1a-content"
-						id="panel1a-header"
 					>
 						<h3 className="filter-title">Topics</h3>
 					</AccordionSummary>

@@ -9,6 +9,7 @@ import { setNav } from '../store/globalSlice'
 const Dashboard: React.FC<DashboardProps> = ({ completeData, view }) => {
 	const [searchQuery, setSearchQuery] = useState('')
 	const [clusterQuery, setClusterQuery] = useState<string[]>([])
+	const [tenantQuery, setTenantQuery] = useState<string[]>([])
 	const [namespaceQuery, setNamespaceQuery] = useState<string[]>([])
 	const [topicQuery, setTopicQuery] = useState<string[]>([])
 	const dispatch = useAppDispatch()
@@ -30,13 +31,20 @@ const Dashboard: React.FC<DashboardProps> = ({ completeData, view }) => {
 			.flat()
 		if (
 			clusterQuery.length <= 0 &&
+			tenantQuery.length <= 0 &&
 			namespaceQuery.length <= 0 &&
 			topicQuery.length <= 0 &&
 			!query
 		) {
-			let res: any[] = sampleData
+			let res:
+				| Array<SampleCluster>
+				| Array<SampleTenant>
+				| Array<SampleNamespace>
+				| Array<SampleTopic> = sampleData
 
-			if (view == 'namespace') {
+			if (view == 'tenant') {
+				res = allTenants
+			} else if (view == 'namespace') {
 				res = allNamespaces
 			} else if (view === 'topic') {
 				res = allTopics
@@ -50,10 +58,17 @@ const Dashboard: React.FC<DashboardProps> = ({ completeData, view }) => {
 					clusterQuery.includes(c.id)
 				)
 			}
-			const newTenants = newData
+
+			let newTenants = newData
 				.map((item) => item.tenants)
 				.filter((el) => el.length > 0)
 				.flat()
+
+			if (tenantQuery.length > 0) {
+				newTenants = newTenants.filter((c: SampleTenant) =>
+					tenantQuery.includes(c.id)
+				)
+			}
 
 			let newNameSpaces = newTenants
 				.map((tenant) => tenant.namespaces)
@@ -81,6 +96,10 @@ const Dashboard: React.FC<DashboardProps> = ({ completeData, view }) => {
 				if (query) {
 					return newData.filter((d: SampleCluster) => d.id.includes(query))
 				} else return newData
+			} else if (view === 'tenant') {
+				if (query) {
+					return newTenants.filter((d: SampleTenant) => d.id.includes(query))
+				} else return newTenants
 			} else if (view === 'namespace') {
 				if (query) {
 					return newNameSpaces.filter((d: SampleNamespace) =>
@@ -104,12 +123,16 @@ const Dashboard: React.FC<DashboardProps> = ({ completeData, view }) => {
 	const handleClick = (
 		e: any,
 		currentEl: SampleCluster | SampleTenant | SampleNamespace | SampleTopic,
-		currentView: 'cluster' | 'namespace' | 'topic'
+		currentView: 'cluster' | 'tenant' | 'namespace' | 'topic'
 	) => {
 		e.preventDefault()
 		if (currentView === 'cluster') {
 			const clusterId = currentEl.id
 			handleChange(clusterId, currentView)
+			dispatch(setNav('tenant'))
+		} else if (currentView === 'tenant') {
+			const tenantId = currentEl.id
+			handleChange(tenantId, currentView)
 			dispatch(setNav('namespace'))
 		} else if (currentView === 'namespace') {
 			const namespaceId = currentEl.id
@@ -124,7 +147,7 @@ const Dashboard: React.FC<DashboardProps> = ({ completeData, view }) => {
 
 	const handleChange = (
 		id: string,
-		element: 'cluster' | 'namespace' | 'topic'
+		element: 'cluster' | 'tenant' | 'namespace' | 'topic'
 	) => {
 		let newArr = []
 		if (element === 'cluster') {
@@ -135,6 +158,14 @@ const Dashboard: React.FC<DashboardProps> = ({ completeData, view }) => {
 				newArr = [...clusterQuery, id]
 			}
 			setClusterQuery(newArr)
+		} else if (element === 'tenant') {
+			if (tenantQuery.includes(id)) {
+				newArr = [...tenantQuery]
+				newArr = newArr.filter((e) => e !== id)
+			} else {
+				newArr = [...tenantQuery, id]
+			}
+			setTenantQuery(newArr)
 		} else if (element === 'namespace') {
 			if (namespaceQuery.includes(id)) {
 				newArr = [...namespaceQuery]
@@ -156,6 +187,7 @@ const Dashboard: React.FC<DashboardProps> = ({ completeData, view }) => {
 
 	const resetAllFilters = () => {
 		setClusterQuery([])
+		setTenantQuery([])
 		setNamespaceQuery([])
 		setTopicQuery([])
 	}
@@ -175,8 +207,12 @@ const Dashboard: React.FC<DashboardProps> = ({ completeData, view }) => {
 		setTopicQuery([])
 	}*/
 
-	const checkQueryLength = (currentView: 'cluster' | 'namespace' | 'topic') => {
+	const checkQueryLength = (
+		currentView: 'cluster' | 'tenant' | 'namespace' | 'topic'
+	) => {
 		if (currentView === 'cluster' && clusterQuery.length > 0) {
+			return true
+		} else if (currentView === 'tenant' && tenantQuery.length > 0) {
 			return true
 		} else if (currentView === 'namespace' && namespaceQuery.length > 0) {
 			return true
@@ -232,6 +268,7 @@ const Dashboard: React.FC<DashboardProps> = ({ completeData, view }) => {
 					</div>
 					<CustomFilter
 						selectedClusters={clusterQuery}
+						selectedTenants={tenantQuery}
 						selectedNamespaces={namespaceQuery}
 						selectedTopics={topicQuery}
 						data={completeData}
