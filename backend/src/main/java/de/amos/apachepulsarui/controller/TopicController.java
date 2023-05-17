@@ -25,8 +25,8 @@ public class TopicController {
 
     @GetMapping("/{tenant}/{namespace}")
     public ResponseEntity<TopicsDto> getTopicsByNamespace(@PathVariable String namespace, @PathVariable String tenant) {
-        String namespaceName = NamespaceName.get(tenant,namespace).toString();
-        return new ResponseEntity<>(new TopicsDto(topicService.getTopicsByNamespace(namespaceName)), HttpStatus.OK);
+        String namespaceName = NamespaceName.get(tenant, namespace).toString();
+        return new ResponseEntity<>(new TopicsDto(topicService.getAllByNamespace(namespaceName)), HttpStatus.OK);
     }
 
     @PostMapping("/new")

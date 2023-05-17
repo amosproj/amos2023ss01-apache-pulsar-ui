@@ -6,13 +6,13 @@
 
 package de.amos.apachepulsarui.service;
 
-import de.amos.apachepulsarui.dto.NamespaceDto;
 import de.amos.apachepulsarui.dto.TopicDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.apache.pulsar.client.admin.PulsarAdminException;
 import org.apache.pulsar.common.policies.data.TopicStats;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,24 +24,6 @@ public class TopicService {
 
     private final PulsarAdmin pulsarAdmin;
 
-    public List<TopicDto> getTopicsByNamespace(String namespaceName) {
-        try {
-            return pulsarAdmin.topics()
-                    .getList(namespaceName).stream()
-                    .map(this::createTopicDto)
-                    .toList();
-
-        } catch (PulsarAdminException e) {
-            log.error("Could not fetch topics of namespace %s. E: %s".formatted(namespaceName, e));
-            return List.of();
-        }
-    }
-
-
-    public List<TopicDto> getByNamespace(NamespaceDto namespace, int maxCount) {
-        return this.sublistOfMaxSize(this.getByNamespace(namespace), maxCount);
-    }
-
     public boolean createNewTopic(String topic) {
         try {
             pulsarAdmin.topics().createNonPartitionedTopic(topic);
@@ -52,17 +34,34 @@ public class TopicService {
         return false;
     }
 
+    /**
+     * @param namespace The namespace you want to get a list of all topics for.
+     * @return A list of topics (their fully qualified names).
+     */
+    @Cacheable("topic.allIdsByNamespace")
+    public List<String> getAllIdsByNamespace(String namespace) {
+        return getByNamespace(namespace);
+    }
 
-    public List<TopicDto> getByNamespace(NamespaceDto namespace) {
+    /**
+     * @param namespace The namespace you want to get a list of all topics for.
+     * @return A list of {@link TopicDto}'s including {@link de.amos.apachepulsarui.dto.TopicStatsDto} and
+     * additional metadata.
+     */
+    @Cacheable("topic.allByNamespace")
+    public List<TopicDto> getAllByNamespace(String namespace) {
+        return getByNamespace(namespace).stream()
+                .map(this::createTopicDto)
+                .toList();
+    }
+
+    private List<String> getByNamespace(String namespace) {
         try {
-
             return pulsarAdmin.topics()
-                    .getList(namespace.getId()).stream()
-                    .map(this::createTopicDto)
+                    .getList(namespace).stream()
                     .toList();
-
         } catch (PulsarAdminException e) {
-            log.error("Could not fetch topics of namespace %s. E: %s".formatted(namespace.getId(), e));
+            log.error("Could not fetch topics of namespace %s. E: %s".formatted(namespace, e));
             return List.of();
         }
     }
@@ -86,11 +85,5 @@ public class TopicService {
             throw new RuntimeException(e);
         }
     }
-
-
-    private List<TopicDto> sublistOfMaxSize(List<TopicDto> list, int maxCount) {
-        return list.subList(0, Math.min(list.size(), maxCount));
-    }
-
 
 }

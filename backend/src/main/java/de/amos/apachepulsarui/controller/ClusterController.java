@@ -1,7 +1,7 @@
 package de.amos.apachepulsarui.controller;
 
 import de.amos.apachepulsarui.dto.ClusterDto;
-import de.amos.apachepulsarui.service.TopologyService;
+import de.amos.apachepulsarui.service.ClusterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,14 +13,14 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/topology")
-public class TopologyController {
+@RequestMapping("/cluster")
+public class ClusterController {
 
-    private final TopologyService topologyService;
+    private final ClusterService clusterService;
 
     @GetMapping()
     public ResponseEntity<List<ClusterDto>> getTopology() {
-        return new ResponseEntity<>(topologyService.getTopicLevelTopology(), HttpStatus.OK);
+        return new ResponseEntity<>(clusterService.getAllClusters(), HttpStatus.OK);
     }
 
 }
