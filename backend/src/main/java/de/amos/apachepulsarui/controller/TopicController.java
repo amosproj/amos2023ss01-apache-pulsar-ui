@@ -9,6 +9,7 @@ package de.amos.apachepulsarui.controller;
 import de.amos.apachepulsarui.dto.TopicsDto;
 import de.amos.apachepulsarui.service.TopicService;
 import lombok.RequiredArgsConstructor;
+import org.apache.pulsar.common.naming.NamespaceName;
 import org.apache.pulsar.common.naming.TopicName;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ public class TopicController {
 
     @GetMapping("/{tenant}/{namespace}")
     public ResponseEntity<TopicsDto> getTopicsByNamespace(@PathVariable String namespace, @PathVariable String tenant) {
-        String namespaceName = String.format("%s/%s", tenant, namespace);
+        String namespaceName = NamespaceName.get(tenant,namespace).toString();
         return new ResponseEntity<>(new TopicsDto(topicService.getTopicsByNamespace(namespaceName)), HttpStatus.OK);
     }
 
