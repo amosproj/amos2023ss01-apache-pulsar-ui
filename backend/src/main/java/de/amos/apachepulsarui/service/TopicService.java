@@ -7,13 +7,14 @@
 package de.amos.apachepulsarui.service;
 
 import de.amos.apachepulsarui.dto.MessageDto;
-import de.amos.apachepulsarui.dto.NamespaceDto;
 import de.amos.apachepulsarui.dto.TopicDto;
+import de.amos.apachepulsarui.dto.TopicStatsDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.apache.pulsar.client.admin.PulsarAdminException;
 import org.apache.pulsar.common.policies.data.TopicStats;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,6 +27,12 @@ public class TopicService {
     private final PulsarAdmin pulsarAdmin;
 
     private final MessageService messageService;
+
+    /**
+     * @param name The Name of the Topic you want to get a list of all topics for.
+     * @return A {@link TopicDto}'s including {@link TopicStatsDto}, List of {@link MessageDto} and
+     * additional metadata.
+     */
     public TopicDto getTopicWithMessagesByName(String name) {
         List<MessageDto> messages = messageService.peekMessages(name);
 
@@ -33,24 +40,6 @@ public class TopicService {
                 getTopicStats(name),
                 getOwnerBroker(name),
                 messages);
-    }
-
-    public List<TopicDto> getTopicsByNamespace(String namespaceName) {
-        try {
-            return pulsarAdmin.topics()
-                    .getList(namespaceName).stream()
-                    .map(this::createTopicDto)
-                    .toList();
-
-        } catch (PulsarAdminException e) {
-            log.error("Could not fetch topics of namespace %s. E: %s".formatted(namespaceName, e));
-            return List.of();
-        }
-    }
-
-
-    public List<TopicDto> getByNamespace(NamespaceDto namespace, int maxCount) {
-        return this.sublistOfMaxSize(this.getByNamespace(namespace), maxCount);
     }
 
     public boolean createNewTopic(String topic) {
