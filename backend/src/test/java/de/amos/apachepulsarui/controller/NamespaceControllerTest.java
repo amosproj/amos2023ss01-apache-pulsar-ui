@@ -7,7 +7,9 @@
 package de.amos.apachepulsarui.controller;
 
 import de.amos.apachepulsarui.dto.NamespaceDto;
+import de.amos.apachepulsarui.dto.TenantDto;
 import de.amos.apachepulsarui.service.NamespaceService;
+import de.amos.apachepulsarui.service.TenantService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +19,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -34,22 +34,30 @@ public class NamespaceControllerTest {
     @MockBean
     NamespaceService namespaceService;
 
+    @MockBean
+    TenantService tenantService;
+
     @Test
     void getAllNamespaces_returnsAllNamespaces() throws Exception {
 
-        List<NamespaceDto> namespaces = Stream.of(
-                "tenant1/namespace1",
-                "tenant1/namespace2",
-                "tenant2/namespace1"
-        ).map(NamespaceDto::fromString).collect(Collectors.toList());
-        namespaces.forEach(namespace -> namespace.setTopics(new ArrayList<>()));
+        List<NamespaceDto> tenant1Namespaces = List.of(
+                NamespaceDto.fromString("tenant1/namespace1"),
+                NamespaceDto.fromString("tenant1/namespace2"));
+        List<NamespaceDto> tenant2Namespaces = List.of(
+                NamespaceDto.fromString("tenant2/namespace1"));
+        tenant1Namespaces.forEach(namespace -> namespace.setTopics(new ArrayList<>()));
+        tenant2Namespaces.forEach(namespace -> namespace.setTopics(new ArrayList<>()));
 
-        Mockito.when(namespaceService.getAll()).thenReturn(namespaces);
+        List<TenantDto> tenants = List.of(TenantDto.fromString("tenant1"),
+                TenantDto.fromString("tenant2"));
+        Mockito.when(tenantService.getAllTenants()).thenReturn(tenants);
+        Mockito.when(namespaceService.getAllOfTenant(tenants.get(0))).thenReturn(tenant1Namespaces);
+        Mockito.when(namespaceService.getAllOfTenant(tenants.get(1))).thenReturn(tenant2Namespaces);
 
         mockMvc.perform(get("/namespace"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.namespaces[0].id", equalTo(namespaces.get(0).getId())))
-                .andExpect(jsonPath("$.namespaces[1].id", equalTo(namespaces.get(1).getId())))
-                .andExpect(jsonPath("$.namespaces[2].id", equalTo(namespaces.get(2).getId())));
+                .andExpect(jsonPath("$.namespaces[0].id", equalTo(tenant1Namespaces.get(0).getId())))
+                .andExpect(jsonPath("$.namespaces[1].id", equalTo(tenant1Namespaces.get(1).getId())))
+                .andExpect(jsonPath("$.namespaces[2].id", equalTo(tenant2Namespaces.get(0).getId())));
     }
 }

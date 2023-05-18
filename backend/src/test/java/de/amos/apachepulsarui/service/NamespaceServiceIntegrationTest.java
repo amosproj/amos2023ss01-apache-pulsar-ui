@@ -47,13 +47,6 @@ public class NamespaceServiceIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void getAllNamespaces_returnsNamespaces() {
-        List<NamespaceDto> namespaces = namespaceService.getAll();
-        var namespaceIds = namespaces.stream().map(NamespaceDto::getId).toList();
-        Assertions.assertThat(namespaceIds).contains("tenant1/namespace1", "tenant1/namespace2", "tenant2/namespace3");
-    }
-
-    @Test
     void getAllNamespacesOfTenant_returnsNamespacesOfTenant() {
         List<NamespaceDto> namespaces = namespaceService.getAllOfTenant(TenantDto.fromString("tenant1"));
         var namespaceIds = namespaces.stream().map(NamespaceDto::getId).toList();
@@ -62,7 +55,7 @@ public class NamespaceServiceIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void getAllNamespaces_returnsMessageCount() throws Exception {
+    void getAllNamespacesOfTenant_returnsMessageCount() throws Exception {
         String topicName = "persistent://tenant1/namespace1/namespace-service-integration-test";
         var message = "hello world".getBytes(StandardCharsets.UTF_8);
         try (Producer<byte[]> producer = pulsarClient.newProducer().topic(topicName).create();
@@ -79,7 +72,7 @@ public class NamespaceServiceIntegrationTest extends AbstractIntegrationTest {
 
             producer.send(message);
         }
-        List<NamespaceDto> namespaces = namespaceService.getAll();
+        List<NamespaceDto> namespaces = namespaceService.getAllOfTenant(TenantDto.fromString("tenant1"));
         var namespace = namespaces.stream()
                 .filter(n -> n.getId().equals("tenant1/namespace1"))
                 .findFirst()
