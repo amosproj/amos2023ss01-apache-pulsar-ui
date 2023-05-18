@@ -39,7 +39,8 @@ class TopicServiceTest {
     private PulsarAdmin pulsarAdmin;
     @Mock
     private TopicStats topicStats;
-
+    @Mock
+    private MessageService messageService;
     @Mock
     private Lookup lookup;
     @InjectMocks
@@ -102,4 +103,18 @@ class TopicServiceTest {
         verify(pulsarAdmin.topics()).createNonPartitionedTopic(topic);
     }
 
+    @Test
+    void getTopicWithMessagesByName() throws PulsarAdminException {
+        when(messageService.peekMessages("Topic")).thenReturn(List.of());
+        whenTopicStats();
+        whenOwnerBroker();
+
+        topicService.getTopicWithMessagesByName("Topic");
+
+
+        topicDtoMockedStatic.verify(
+                () -> TopicDto.createTopicDtoWithMessages("Topic", topicStats, "zyx", List.of()),
+                times(1)
+        );
+    }
 }
