@@ -29,18 +29,13 @@ public class ClusterService {
      * level.
      */
     @Cacheable("getAllClusters")
-    public List<ClusterDto> getAllClusters() {
-        try {
-            return pulsarAdmin.clusters().getClusters().stream()
-                    .map(ClusterDto::fromString)
-                    .map(this::enrichWithClusterData)
-                    .map(this::enrichWithBrokerData)
-                    .map(this::enrichWithTopologyElements)
-                    .toList();
-        } catch (PulsarAdminException e) {
-            log.error("Could not get list of all clusters. E: %s".formatted(e));
-            return List.of();
-        }
+    public List<ClusterDto> getAllClusters() throws PulsarAdminException {
+        return pulsarAdmin.clusters().getClusters().stream()
+                .map(ClusterDto::fromString)
+                .map(this::enrichWithClusterData)
+                .map(this::enrichWithBrokerData)
+                .map(this::enrichWithTopologyElements)
+                .toList();
     }
 
     private ClusterDto enrichWithClusterData(ClusterDto cluster) {
@@ -65,13 +60,16 @@ public class ClusterService {
         }
     }
 
+    /**
+     * Aggregates the topology elements by iterating in a breadth-first search manner top-down:
+     * all clusters
+     * -> tenants (all of cluster)
+     * -> namespaces (all of tenant)
+     * -> topics (all of namespace)
+     *
+     * @return A list of nested topology elements from clusters till namespaces.
+     */
     private ClusterDto enrichWithTopologyElements(ClusterDto cluster) {
-
-        // we need to aggregate the topology elements by iterating in a breadth-first search manner top-down
-        // cluster
-        //  ->tenants (all of cluster)
-        //      ->namespaces (all of tenant)
-        //          ->topic (all of namespace)
 
         List<TenantDto> tenantsWithNamespacesAndTopics = tenantService.getAllTenants().stream()
                 // filter all tenants for those that are allowed for our cluster
