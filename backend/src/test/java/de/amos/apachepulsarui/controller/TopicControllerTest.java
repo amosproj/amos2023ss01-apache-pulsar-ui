@@ -52,7 +52,6 @@ public class TopicControllerTest {
 
         Mockito.when(topicService.getAllByNamespace("public/default")).thenReturn(topics);
 
-
         mockMvc.perform(get("/topic/public/default")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
