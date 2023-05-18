@@ -6,13 +6,14 @@
 
 package de.amos.apachepulsarui.service;
 
+import de.amos.apachepulsarui.dto.MessageDto;
+import de.amos.apachepulsarui.dto.NamespaceDto;
 import de.amos.apachepulsarui.dto.TopicDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.apache.pulsar.client.admin.PulsarAdminException;
 import org.apache.pulsar.common.policies.data.TopicStats;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +24,34 @@ import java.util.List;
 public class TopicService {
 
     private final PulsarAdmin pulsarAdmin;
+
+    private final MessageService messageService;
+    public TopicDto getTopicWithMessagesByName(String name) {
+        List<MessageDto> messages = messageService.peekMessages(name);
+
+        return TopicDto.createTopicDtoWithMessages(name,
+                getTopicStats(name),
+                getOwnerBroker(name),
+                messages);
+    }
+
+    public List<TopicDto> getTopicsByNamespace(String namespaceName) {
+        try {
+            return pulsarAdmin.topics()
+                    .getList(namespaceName).stream()
+                    .map(this::createTopicDto)
+                    .toList();
+
+        } catch (PulsarAdminException e) {
+            log.error("Could not fetch topics of namespace %s. E: %s".formatted(namespaceName, e));
+            return List.of();
+        }
+    }
+
+
+    public List<TopicDto> getByNamespace(NamespaceDto namespace, int maxCount) {
+        return this.sublistOfMaxSize(this.getByNamespace(namespace), maxCount);
+    }
 
     public boolean createNewTopic(String topic) {
         try {

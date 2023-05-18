@@ -6,6 +6,7 @@
 
 package de.amos.apachepulsarui.controller;
 
+import de.amos.apachepulsarui.dto.TopicDto;
 import de.amos.apachepulsarui.dto.TopicsDto;
 import de.amos.apachepulsarui.service.TopicService;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,11 @@ public class TopicController {
     public ResponseEntity<TopicsDto> getTopicsByNamespace(@PathVariable String namespace, @PathVariable String tenant) {
         String namespaceName = NamespaceName.get(tenant, namespace).toString();
         return new ResponseEntity<>(new TopicsDto(topicService.getAllByNamespace(namespaceName)), HttpStatus.OK);
+    }
+
+    @GetMapping("/{topic}")
+    public ResponseEntity<TopicDto> getTopicWithMessagesByName(@PathVariable String topic) {
+       return new ResponseEntity<>(topicService.getTopicWithMessagesByName(topic), HttpStatus.OK);
     }
 
     @PostMapping("/new")
