@@ -50,7 +50,7 @@ public class TopicControllerTest {
                 "persistent://public/default/coruscant"
         ).map( values -> TopicDto.createTopicDto(values, topicStats, RandomString.make(1))).toList();
 
-        Mockito.when(topicService.getAllByNamespace("public/default")).thenReturn(topics);
+        when(topicService.getAllByNamespace("public/default")).thenReturn(topics);
 
         mockMvc.perform(get("/topic/public/default")
                 .contentType(MediaType.APPLICATION_JSON))
