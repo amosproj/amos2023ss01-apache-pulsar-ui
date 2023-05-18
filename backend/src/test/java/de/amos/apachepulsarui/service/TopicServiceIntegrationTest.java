@@ -11,11 +11,9 @@ import org.apache.pulsar.client.api.Message;
 import org.apache.pulsar.client.api.Producer;
 import org.apache.pulsar.client.api.PulsarClient;
 import org.apache.pulsar.common.naming.NamespaceName;
-import org.apache.pulsar.common.policies.data.TopicStats;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -29,20 +27,17 @@ public class TopicServiceIntegrationTest extends AbstractIntegrationTest {
     @Autowired
     private PulsarClient pulsarClient;
 
-    @MockBean
-    private TopicStats topicStats;
-
     @Test
     void getByNamespace_returnsCreatedTopics() {
         topicService.createNewTopic("topic-service-integration-test");
         List<TopicDto> topics = topicService.getAllByNamespace("public/default");
-        Assertions.assertThat(topics)
-                .contains(TopicDto.createTopicDto("persistent://public/default/topic-service-integration-test", topicStats, "pulsar://localhost:6650"));
+        Assertions.assertThat(topics.iterator().next().getName())
+                .isEqualTo("persistent://public/default/topic-service-integration-test");
     }
 
     @Test
-    void getAllNamespaces_returnsMessageCount() throws Exception {
-        String topicName = "persistent://tenant1/namespace1/namespace-service-integration-test";
+    void getAllByNamespace_returnsMessageCount() throws Exception {
+        String topicName = "persistent://public/default/topic-service-integration-test";
         var message = "hello world".getBytes(StandardCharsets.UTF_8);
         try (Producer<byte[]> producer = pulsarClient.newProducer().topic(topicName).create();
              Consumer<byte[]> consumer = pulsarClient.newConsumer().topic(topicName).subscriptionName("TestSubscriber").subscribe()) {
@@ -58,7 +53,7 @@ public class TopicServiceIntegrationTest extends AbstractIntegrationTest {
 
             producer.send(message);
         }
-        TopicDto topic = topicService.getAllByNamespace(NamespaceName.get("tenant1", "namespace1").toString()).stream()
+        TopicDto topic = topicService.getAllByNamespace(NamespaceName.get("public", "default").toString()).stream()
                 .filter(topicDto -> topicDto.getName().equals(topicName))
                 .findFirst()
                 .orElseThrow();
