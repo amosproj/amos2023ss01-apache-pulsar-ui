@@ -1,7 +1,6 @@
 package de.amos.apachepulsarui.service;
 
 import de.amos.apachepulsarui.dto.ClusterDto;
-import de.amos.apachepulsarui.dto.NamespaceDto;
 import de.amos.apachepulsarui.dto.TenantDto;
 import de.amos.apachepulsarui.dto.TopicDto;
 import lombok.RequiredArgsConstructor;
@@ -78,14 +77,7 @@ public class ClusterService {
                         .contains(cluster.getId()))
                 // set all the namespaces of a tenant
                 .peek(tenant -> {
-                    List<NamespaceDto> namespacesOfTenant = namespaceService.getAllOfTenant(tenant).stream()
-                            // for each namespace of a tenant, we fetch all topics
-                            .peek(namespace -> {
-                                List<String> topicsOfNamespace = topicService.getAllNamesByNamespace(namespace.getId());
-                                namespace.setTopics(topicsOfNamespace);
-                            })
-                            .toList();
-                    tenant.setNamespaces(namespacesOfTenant);
+                    tenant.setNamespaces(namespaceService.getAllOfTenant(tenant));
                 })
                 .toList();
 
