@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import org.apache.pulsar.common.naming.TopicName;
 import org.apache.pulsar.common.policies.data.TopicStats;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -35,7 +36,7 @@ public class TopicDto {
 
 	private long consumedMessages;
 
-	private MessagesDto messagesDto;
+	private List<MessageDto> messagesDto = new ArrayList<>();
 
 
 	/**
@@ -59,8 +60,7 @@ public class TopicDto {
 
 	public static TopicDto createTopicDtoWithMessages(String completeTopicName, TopicStats topicStats, String ownerBroker, List<MessageDto> messages) {
 		TopicDto topicDto = createTopicDto(completeTopicName, topicStats, ownerBroker);
-		topicDto.setMessagesDto(new MessagesDto(messages));
-
+		topicDto.setMessagesDto(messages);
 		return topicDto;
 	}
 
