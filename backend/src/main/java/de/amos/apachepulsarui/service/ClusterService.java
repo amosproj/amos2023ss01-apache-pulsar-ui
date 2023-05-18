@@ -81,7 +81,7 @@ public class ClusterService {
                     List<NamespaceDto> namespacesOfTenant = namespaceService.getAllOfTenant(tenant).stream()
                             // for each namespace of a tenant, we fetch all topics
                             .peek(namespace -> {
-                                List<String> topicsOfNamespace = topicService.getAllIdsByNamespace(namespace.getId());
+                                List<String> topicsOfNamespace = topicService.getAllNamesByNamespace(namespace.getId());
                                 namespace.setTopics(topicsOfNamespace);
                             })
                             .toList();

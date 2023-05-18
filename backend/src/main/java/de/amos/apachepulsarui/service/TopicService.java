@@ -38,8 +38,8 @@ public class TopicService {
      * @param namespace The namespace you want to get a list of all topics for.
      * @return A list of topics (their fully qualified names).
      */
-    @Cacheable("topic.allIdsByNamespace")
-    public List<String> getAllIdsByNamespace(String namespace) {
+    @Cacheable("topic.allNamesByNamespace")
+    public List<String> getAllNamesByNamespace(String namespace) {
         return getByNamespace(namespace);
     }
 

@@ -52,7 +52,7 @@ public class NamespaceService {
             namespace.setBundlesData(namespaces.getBundles(namespace.getId()));
             namespace.setMessagesTTL(namespaces.getNamespaceMessageTTL(namespace.getId()));
             namespace.setRetentionPolicies(namespaces.getRetention(namespace.getId()));
-            namespace.setTopics(topicService.getAllIdsByNamespace(namespace.getId()));
+            namespace.setTopics(topicService.getAllNamesByNamespace(namespace.getId()));
 
             return namespace;
         } catch (PulsarAdminException e) {
