@@ -1,11 +1,14 @@
 package de.amos.apachepulsarui.service;
 
 import de.amos.apachepulsarui.dto.ClusterDto;
+import de.amos.apachepulsarui.dto.TenantDto;
+import de.amos.apachepulsarui.dto.TopicDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.apache.pulsar.client.admin.PulsarAdminException;
 import org.apache.pulsar.common.policies.data.ClusterData;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,18 +19,22 @@ import java.util.List;
 public class ClusterService {
 
     private final PulsarAdmin pulsarAdmin;
+    private final TenantService tenantService;
+    private final NamespaceService namespaceService;
+    private final TopicService topicService;
 
-    public List<ClusterDto> getAllClusters() {
-        try {
-            return pulsarAdmin.clusters().getClusters().stream()
-                    .map(ClusterDto::fromString)
-                    .map(this::enrichWithClusterData)
-                    .map(this::enrichWithBrokerData)
-                    .toList();
-        } catch (PulsarAdminException e) {
-            log.error("Could not get list of all clusters. E: %s".formatted(e));
-            return List.of();
-        }
+    /**
+     * @return A list of {@link ClusterDto}'s of Pulsar deployment with all topology elements till {@link TopicDto}
+     * level.
+     */
+    @Cacheable("getAllClusters")
+    public List<ClusterDto> getAllClusters() throws PulsarAdminException {
+        return pulsarAdmin.clusters().getClusters().stream()
+                .map(ClusterDto::fromString)
+                .map(this::enrichWithClusterData)
+                .map(this::enrichWithBrokerData)
+                .map(this::enrichWithTopologyElements)
+                .toList();
     }
 
     private ClusterDto enrichWithClusterData(ClusterDto cluster) {
@@ -50,6 +57,32 @@ public class ClusterService {
             log.error("Could not fetch fetch active brokers of cluster %s. E: %s".formatted(cluster.getId(), e));
             return cluster;
         }
+    }
+
+    /**
+     * Aggregates the topology elements by iterating in a breadth-first search manner top-down:
+     * all clusters
+     * -> tenants (all of cluster)
+     * -> namespaces (all of tenant)
+     * -> topics (all of namespace)
+     *
+     * @return A list of nested topology elements from clusters till namespaces.
+     */
+    private ClusterDto enrichWithTopologyElements(ClusterDto cluster) {
+
+        List<TenantDto> tenantsWithNamespacesAndTopics = tenantService.getAllTenants().stream()
+                // filter all tenants for those that are allowed for our cluster
+                .filter(tenant -> tenant.getTenantInfo()
+                        .getAllowedClusters()
+                        .contains(cluster.getId()))
+                // set all the namespaces of a tenant
+                .peek(tenant -> {
+                    tenant.setNamespaces(namespaceService.getAllOfTenant(tenant));
+                })
+                .toList();
+
+        cluster.setTenants(tenantsWithNamespacesAndTopics);
+        return cluster;
     }
 
 }

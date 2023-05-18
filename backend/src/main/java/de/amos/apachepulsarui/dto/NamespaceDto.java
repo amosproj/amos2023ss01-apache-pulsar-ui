@@ -20,7 +20,7 @@ public class NamespaceDto {
 
     private String id;
 
-	private List<TopicDto> topics;
+	private List<String> topics;
 
 	@Setter(AccessLevel.PRIVATE)
 	private int amountOfTopics = 0;
@@ -28,12 +28,6 @@ public class NamespaceDto {
 	private BundlesData bundlesData;
 
 	private Integer messagesTTL;
-
-	@Setter(AccessLevel.PRIVATE)
-	private long producedMessages;
-
-	@Setter(AccessLevel.PRIVATE)
-	private long consumedMessages;
 
 	private RetentionPolicies retentionPolicies;
 
@@ -43,19 +37,15 @@ public class NamespaceDto {
 		return namespaceDto;
 	}
 
-	public void setTopics(List<TopicDto> topics) {
+	public void setTopics(List<String> topics) {
 		this.topics = topics;
 		this.amountOfTopics = topics.size();
-		topics.forEach(topic -> {
-			this.producedMessages += topic.getProducedMessages();
-			this.consumedMessages += topic.getConsumedMessages();
-		});
 	}
 
 	/**
 	 * @return An unmodifiable copy of the topics of this namespace.
 	 */
-	public List<TopicDto> getTopics() {
+	public List<String> getTopics() {
 		return List.copyOf(topics);
 	}
 
