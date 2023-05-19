@@ -2,6 +2,7 @@ import React from 'react'
 import graph1 from '../../assets/images/demo-graph1.png'
 import graph2 from '../../assets/images/demo-graph2.png'
 import ProducerModal from '../modals/ProducerModal'
+import ConsumerModal from '../modals/ConsumerModal'
 
 const TopicView: React.FC<TopicViewProps> = ({ data, handleClick }) => {
 	const topicConsumers = data?.topicStatsDto?.subscriptions
@@ -61,7 +62,14 @@ const TopicView: React.FC<TopicViewProps> = ({ data, handleClick }) => {
 								{topicConsumers &&
 									topicConsumers.length > 0 &&
 									topicConsumers.map((item: string, index: number) => (
-										<span key={index}>{item}, </span>
+										<ConsumerModal
+											key={index}
+											consumer={{
+												consumerName: item,
+												topicList: ['sdasd', 'sdasd'],
+												messageList: ['sdasd', 'sdasd'],
+											}}
+										/>
 									))}
 							</span>
 						</p>
