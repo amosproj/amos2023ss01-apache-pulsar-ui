@@ -1,6 +1,7 @@
 import React from 'react'
 import graph1 from '../../assets/images/demo-graph1.png'
 import graph2 from '../../assets/images/demo-graph2.png'
+import ProducerModal from '../modals/ProducerModal'
 
 const TopicView: React.FC<TopicViewProps> = ({ data, handleClick }) => {
 	const topicConsumers = data?.topicStatsDto?.subscriptions
@@ -43,7 +44,14 @@ const TopicView: React.FC<TopicViewProps> = ({ data, handleClick }) => {
 								{topicProducers &&
 									topicProducers.length > 0 &&
 									topicProducers.map((item: string, index: number) => (
-										<span key={index}>{item}, </span>
+										<ProducerModal
+											key={index}
+											producer={{
+												producerName: item,
+												topicList: ['sdasd', 'sdasd'],
+												messageList: ['sdasd', 'sdasd'],
+											}}
+										/>
 									))}
 							</span>
 						</p>
