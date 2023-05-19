@@ -1,5 +1,6 @@
 package de.amos.apachepulsarui.service;
 
+import de.amos.apachepulsarui.controller.exception.PulsarApiException;
 import de.amos.apachepulsarui.dto.ClusterDto;
 import de.amos.apachepulsarui.dto.TenantDto;
 import de.amos.apachepulsarui.dto.TopicDto;
@@ -11,6 +12,7 @@ import org.apache.pulsar.common.policies.data.ClusterData;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -28,34 +30,43 @@ public class ClusterService {
      * level.
      */
     @Cacheable("getAllClusters")
-    public List<ClusterDto> getAllClusters() throws PulsarAdminException {
-        return pulsarAdmin.clusters().getClusters().stream()
-                .map(ClusterDto::fromString)
-                .map(this::enrichWithClusterData)
-                .map(this::enrichWithBrokerData)
-                .map(this::enrichWithTopologyElements)
-                .toList();
+    public List<ClusterDto> getAllClusters() throws PulsarApiException {
+        List<ClusterDto> list = new ArrayList<>();
+        try {
+            for (String clusterName : pulsarAdmin.clusters().getClusters()) {
+                ClusterDto clusterDto = ClusterDto.fromString(clusterName);
+                ClusterDto enrichedWithClusterData = enrichWithClusterData(clusterDto);
+                ClusterDto enrichedWithBrokerData = enrichWithBrokerData(enrichedWithClusterData);
+                ClusterDto enrichedWithTopologyElements = enrichWithTopologyElements(enrichedWithBrokerData);
+                list.add(enrichedWithTopologyElements);
+            }
+        } catch (PulsarAdminException e) {
+            throw new PulsarApiException("Could not fetch list a list of all clusters.", e);
+        }
+        return list;
     }
 
-    private ClusterDto enrichWithClusterData(ClusterDto cluster) {
+    private ClusterDto enrichWithClusterData(ClusterDto cluster) throws PulsarApiException {
         try {
-            ClusterData clusterData = pulsarAdmin.clusters().getCluster(cluster.getId());
+            ClusterData clusterData = pulsarAdmin.clusters().getCluster("foobar-cluster");
             cluster.setBrokerServiceUrl(clusterData.getBrokerServiceUrl());
             cluster.setServiceUrl(clusterData.getServiceUrl());
             return cluster;
         } catch (PulsarAdminException e) {
-            log.error("Could not fetch fetch cluster data of cluster %s. E: %s".formatted(cluster.getId(), e));
-            return cluster;
+            throw new PulsarApiException(
+                    "Could not fetch fetch cluster data of cluster '%s'".formatted(cluster.getId()), e
+            );
         }
     }
 
-    private ClusterDto enrichWithBrokerData(ClusterDto cluster) {
+    private ClusterDto enrichWithBrokerData(ClusterDto cluster) throws PulsarApiException {
         try {
             cluster.setBrokers(pulsarAdmin.brokers().getActiveBrokers(cluster.getId()));
             return cluster;
         } catch (PulsarAdminException e) {
-            log.error("Could not fetch fetch active brokers of cluster %s. E: %s".formatted(cluster.getId(), e));
-            return cluster;
+            throw new PulsarApiException(
+                    "Could not fetch fetch active brokers of cluster '%s'".formatted(cluster.getId()), e
+            );
         }
     }
 
