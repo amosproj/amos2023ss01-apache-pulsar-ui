@@ -122,26 +122,25 @@ const Dashboard: React.FC<DashboardProps> = ({ completeData, view }) => {
 
 	const handleClick = (
 		e: any,
-		currentEl: SampleCluster | SampleTenant | SampleNamespace | SampleTopic,
-		currentView: 'cluster' | 'tenant' | 'namespace' | 'topic'
+		currentEl: SampleCluster | SampleTenant | SampleNamespace | SampleTopic
 	) => {
 		e.preventDefault()
-		if (currentView === 'cluster') {
+		if (view === 'cluster') {
 			const clusterId = currentEl.id
-			handleChange(clusterId, currentView)
+			handleChange(clusterId, view)
 			dispatch(setNav('tenant'))
-		} else if (currentView === 'tenant') {
+		} else if (view === 'tenant') {
 			const tenantId = currentEl.id
-			handleChange(tenantId, currentView)
+			handleChange(tenantId, view)
 			dispatch(setNav('namespace'))
-		} else if (currentView === 'namespace') {
+		} else if (view === 'namespace') {
 			const namespaceId = currentEl.id
-			handleChange(namespaceId, currentView)
+			handleChange(namespaceId, view)
 			dispatch(setNav('topic'))
-		} else if (currentView === 'topic') {
+		} else if (view === 'topic') {
 			const topicId = currentEl.id
-			handleChange(topicId, currentView)
-			dispatch(setNav(currentView))
+			handleChange(topicId, view)
+			dispatch(setNav(view))
 		} else return
 	}
 
@@ -242,13 +241,11 @@ const Dashboard: React.FC<DashboardProps> = ({ completeData, view }) => {
 									| SampleNamespace
 									| SampleTopic
 							) => (
-								<a
+								<Card
+									handleClick={handleClick}
 									key={item.id + Math.floor(Math.random() * 999999)}
-									href="#"
-									onClick={(e) => handleClick(e, item, view)}
-								>
-									<Card data={item}></Card>
-								</a>
+									data={item}
+								></Card>
 							)
 						)}
 				</div>

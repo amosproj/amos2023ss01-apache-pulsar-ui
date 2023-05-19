@@ -4,7 +4,7 @@ import NamespaceView from './views/NamespaceView'
 import TopicView from './views/TopicView'
 import TenantView from './views/TenantView'
 
-const Card: React.FC<CardProps> = ({ data }) => {
+const Card: React.FC<CardProps> = ({ data, handleClick }) => {
 	function instanceOfSampleCluster(
 		object: SampleCluster | SampleTenant | SampleNamespace | SampleTopic
 	): object is SampleCluster {
@@ -32,13 +32,13 @@ const Card: React.FC<CardProps> = ({ data }) => {
 	return (
 		<div className="main-card">
 			{instanceOfSampleCluster(data) ? (
-				<ClusterView data={data}></ClusterView>
+				<ClusterView handleClick={handleClick} data={data}></ClusterView>
 			) : instanceOfSampleTenant(data) ? (
-				<TenantView data={data}></TenantView>
+				<TenantView handleClick={handleClick} data={data}></TenantView>
 			) : instanceOfSampleNamespace(data) ? (
-				<NamespaceView data={data}></NamespaceView>
+				<NamespaceView handleClick={handleClick} data={data}></NamespaceView>
 			) : instanceOfSampleTopic(data) ? (
-				<TopicView data={data}></TopicView>
+				<TopicView handleClick={handleClick} data={data}></TopicView>
 			) : (
 				<div></div>
 			)}

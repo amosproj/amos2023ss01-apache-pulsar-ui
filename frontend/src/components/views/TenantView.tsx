@@ -2,7 +2,7 @@ import React from 'react'
 import graph1 from '../../assets/images/demo-graph1.png'
 import graph2 from '../../assets/images/demo-graph2.png'
 
-const TenantView: React.FC<TenantViewProps> = ({ data }) => {
+const TenantView: React.FC<TenantViewProps> = ({ data, handleClick }) => {
 	const tenantAdminRoles = data?.tenantInfo?.adminRoles
 
 	return (
@@ -42,6 +42,15 @@ const TenantView: React.FC<TenantViewProps> = ({ data }) => {
 								{data?.amountOfTopics ? data.amountOfTopics : 0}
 							</span>
 						</p>
+					</div>
+					<div>
+						<a
+							href="#"
+							className="primary-button"
+							onClick={(e) => handleClick(e, data)}
+						>
+							More information
+						</a>
 					</div>
 				</div>
 				<div className="flex flex-col card-col card-col-2">

@@ -2,7 +2,7 @@ import React from 'react'
 import graph1 from '../../assets/images/demo-graph1.png'
 import graph2 from '../../assets/images/demo-graph2.png'
 
-const ClusterView: React.FC<ClusterViewProps> = ({ data }) => {
+const ClusterView: React.FC<ClusterViewProps> = ({ data, handleClick }) => {
 	return (
 		<div className="flex flex-col card-content">
 			<h2 className="uppercase">{data.id}</h2>
@@ -55,6 +55,15 @@ const ClusterView: React.FC<ClusterViewProps> = ({ data }) => {
 								{data?.brokerServiceUrl ? data.brokerServiceUrl : 'N/A'}
 							</span>
 						</p>
+					</div>
+					<div>
+						<a
+							href="#"
+							className="primary-button"
+							onClick={(e) => handleClick(e, data)}
+						>
+							More information
+						</a>
 					</div>
 				</div>
 				<div className="flex flex-col card-col card-col-2">

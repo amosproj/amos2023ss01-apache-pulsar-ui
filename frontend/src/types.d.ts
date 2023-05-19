@@ -17,6 +17,7 @@ interface Message {
 // Component Prop Interfaces
 interface CardProps {
 	data: SampleCluster | SampleTenant | SampleNamespace | SampleTopic
+	handleClick: any
 }
 
 interface DashboardProps {
@@ -50,18 +51,22 @@ interface formProps {
 
 interface ClusterViewProps {
 	data: SampleCluster
+	handleClick: any
 }
 
 interface NamespaceViewProps {
 	data: SampleNamespace
+	handleClick: any
 }
 
 interface TopicViewProps {
 	data: SampleTopic
+	handleClick: any
 }
 
 interface TenantViewProps {
 	data: SampleTenant
+	handleClick: any
 }
 
 interface CustomFilterProps {
