@@ -22,15 +22,8 @@ import java.util.List;
 public class NamespaceService {
 
     private final PulsarAdmin pulsarAdmin;
-    private final TenantService tenantService;
 
     private final TopicService topicService;
-
-    public List<NamespaceDto> getAll() {
-        return tenantService.getAllTenants().stream()
-                .flatMap(tenant -> this.getAllOfTenant(tenant).stream())
-                .toList();
-    }
 
     public List<NamespaceDto> getAllOfTenant(TenantDto tenant) {
         try {
