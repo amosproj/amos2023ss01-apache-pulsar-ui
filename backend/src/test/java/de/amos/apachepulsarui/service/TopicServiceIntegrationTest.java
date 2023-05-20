@@ -44,11 +44,11 @@ public class TopicServiceIntegrationTest extends AbstractIntegrationTest {
             // receive needs to happen before send, but we don't want to block -> async
             // after the message was sent, we need to ensure it was received -> .get()
             CompletableFuture<Message<byte[]>> consume1 = consumer.receiveAsync();
-            producer.send(message);
+            producer.sendAsync(message);
             consume1.get();
 
             CompletableFuture<Message<byte[]>> consume2 = consumer.receiveAsync();
-            producer.send(message);
+            producer.sendAsync(message);
             consume2.get();
 
             producer.send(message);
