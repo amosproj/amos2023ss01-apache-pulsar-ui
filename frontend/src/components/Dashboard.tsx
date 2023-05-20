@@ -6,15 +6,24 @@ import CustomFilter from './custom/CustomFilter'
 import { useAppDispatch } from '../store/hooks'
 import { setNav } from '../store/globalSlice'
 
-const Dashboard: React.FC<DashboardProps> = ({ completeData, view }) => {
+const Dashboard: React.FC<DashboardProps> = ({
+	completeData,
+	completeMessages,
+	view,
+}) => {
 	const [searchQuery, setSearchQuery] = useState('')
 	const [clusterQuery, setClusterQuery] = useState<string[]>([])
 	const [tenantQuery, setTenantQuery] = useState<string[]>([])
 	const [namespaceQuery, setNamespaceQuery] = useState<string[]>([])
 	const [topicQuery, setTopicQuery] = useState<string[]>([])
+	const [messageQuery, setMessageQuery] = useState<string[]>([])
 	const dispatch = useAppDispatch()
 
-	const filterData = (query: string, sampleData: Array<SampleCluster>) => {
+	const filterData = (
+		query: string,
+		sampleData: Array<SampleCluster>,
+		sampleMessages: Array<SampleMessage>
+	) => {
 		const allTenants = sampleData
 			.map((item) => item.tenants)
 			.filter((el) => el.length > 0)
@@ -34,13 +43,15 @@ const Dashboard: React.FC<DashboardProps> = ({ completeData, view }) => {
 			tenantQuery.length <= 0 &&
 			namespaceQuery.length <= 0 &&
 			topicQuery.length <= 0 &&
+			messageQuery.length <= 0 &&
 			!query
 		) {
 			let res:
 				| Array<SampleCluster>
 				| Array<SampleTenant>
 				| Array<SampleNamespace>
-				| Array<SampleTopic> = sampleData
+				| Array<SampleTopic>
+				| Array<SampleMessage> = sampleData
 
 			if (view == 'tenant') {
 				res = allTenants
@@ -48,6 +59,8 @@ const Dashboard: React.FC<DashboardProps> = ({ completeData, view }) => {
 				res = allNamespaces
 			} else if (view === 'topic') {
 				res = allTopics
+			} else if (view === 'message') {
+				res = sampleMessages
 			}
 
 			return res
@@ -92,6 +105,26 @@ const Dashboard: React.FC<DashboardProps> = ({ completeData, view }) => {
 				)
 			}
 
+			const newDataIds = newData.map((c: SampleCluster) => c.id)
+			const newTenantsIds = newTenants.map((t: SampleTenant) => t.id)
+			const newNamespacesIds = newNameSpaces.map((n: SampleNamespace) => n.id)
+			const newTopicsIds = newTopics.map((t: SampleTopic) => t.id)
+
+			let newMessages = sampleMessages.filter(function (m: SampleMessage) {
+				return (
+					newDataIds.includes(m.cluster) &&
+					newTenantsIds.includes(m.tenant) &&
+					newNamespacesIds.includes(m.namespace) &&
+					newTopicsIds.includes(m.topic)
+				)
+			})
+
+			if (messageQuery.length > 0) {
+				newMessages = newMessages.filter((c: SampleMessage) =>
+					messageQuery.includes(c.id)
+				)
+			}
+
 			if (view === 'cluster') {
 				if (query) {
 					return newData.filter((d: SampleCluster) => d.id.includes(query))
@@ -110,6 +143,12 @@ const Dashboard: React.FC<DashboardProps> = ({ completeData, view }) => {
 				if (query) {
 					return newTopics.filter((d: SampleTopic) => d.id.includes(query))
 				} else return newTopics
+			} else if (view === 'message') {
+				if (query) {
+					return newMessages.filter((d: SampleMessage) =>
+						d.payload.includes(query)
+					)
+				} else return newMessages
 			} else return newData
 		}
 	}
@@ -118,7 +157,9 @@ const Dashboard: React.FC<DashboardProps> = ({ completeData, view }) => {
 		| Array<SampleCluster>
 		| Array<SampleTenant>
 		| Array<SampleNamespace>
-		| Array<SampleTopic> = filterData(searchQuery, completeData)
+		| Array<SampleTopic>
+		| Array<SampleMessage>
+		| any = filterData(searchQuery, completeData, completeMessages)
 
 	const handleClick = (
 		e: any,
@@ -140,13 +181,13 @@ const Dashboard: React.FC<DashboardProps> = ({ completeData, view }) => {
 		} else if (view === 'topic') {
 			const topicId = currentEl.id
 			handleChange(topicId, view)
-			dispatch(setNav(view))
+			dispatch(setNav('message'))
 		} else return
 	}
 
 	const handleChange = (
 		id: string,
-		element: 'cluster' | 'tenant' | 'namespace' | 'topic'
+		element: 'cluster' | 'tenant' | 'namespace' | 'topic' | 'message'
 	) => {
 		let newArr = []
 		if (element === 'cluster') {
@@ -181,6 +222,15 @@ const Dashboard: React.FC<DashboardProps> = ({ completeData, view }) => {
 				newArr = [...topicQuery, id]
 			}
 			setTopicQuery(newArr)
+		} else if (element === 'message') {
+			if (messageQuery.includes(id)) {
+				newArr = [...messageQuery]
+				newArr = newArr.filter((e) => e !== id)
+			} else {
+				newArr = [...messageQuery, id]
+			}
+			console.log(newArr)
+			setMessageQuery(newArr)
 		}
 	}
 
@@ -189,33 +239,42 @@ const Dashboard: React.FC<DashboardProps> = ({ completeData, view }) => {
 		setTenantQuery([])
 		setNamespaceQuery([])
 		setTopicQuery([])
+		setMessageQuery([])
 	}
-
-	/*const resetClusterFilters = (e: any) => {
-		e.preventDefault()
-		setClusterQuery([])
-	}
-
-	const resetNamespaceFilters = (e: any) => {
-		e.preventDefault()
-		setNamespaceQuery([])
-	}
-
-	const resetTopicFilters = (e: any) => {
-		e.preventDefault()
-		setTopicQuery([])
-	}*/
 
 	const checkQueryLength = (
-		currentView: 'cluster' | 'tenant' | 'namespace' | 'topic'
+		currentView: 'cluster' | 'tenant' | 'namespace' | 'topic' | 'message'
 	) => {
 		if (currentView === 'cluster' && clusterQuery.length > 0) {
 			return true
-		} else if (currentView === 'tenant' && tenantQuery.length > 0) {
+		} else if (
+			currentView === 'tenant' &&
+			(tenantQuery.length > 0 || clusterQuery.length > 0)
+		) {
 			return true
-		} else if (currentView === 'namespace' && namespaceQuery.length > 0) {
+		} else if (
+			currentView === 'namespace' &&
+			(namespaceQuery.length > 0 ||
+				tenantQuery.length > 0 ||
+				clusterQuery.length > 0)
+		) {
 			return true
-		} else if (currentView === 'topic' && topicQuery.length > 0) {
+		} else if (
+			currentView === 'topic' &&
+			(topicQuery.length > 0 ||
+				namespaceQuery.length > 0 ||
+				tenantQuery.length > 0 ||
+				clusterQuery.length > 0)
+		) {
+			return true
+		} else if (
+			currentView === 'message' &&
+			(messageQuery.length > 0 ||
+				topicQuery.length > 0 ||
+				namespaceQuery.length > 0 ||
+				tenantQuery.length > 0 ||
+				clusterQuery.length > 0)
+		) {
 			return true
 		} else return false
 	}
@@ -240,6 +299,7 @@ const Dashboard: React.FC<DashboardProps> = ({ completeData, view }) => {
 									| SampleTenant
 									| SampleNamespace
 									| SampleTopic
+									| SampleMessage
 							) => (
 								<Card
 									handleClick={handleClick}
@@ -250,7 +310,10 @@ const Dashboard: React.FC<DashboardProps> = ({ completeData, view }) => {
 						)}
 				</div>
 				<div className="secondary-dashboard w-full">
-					<CustomSearchbar setSearchQuery={setSearchQuery} />
+					<CustomSearchbar
+						placeholder={'Search'}
+						setSearchQuery={setSearchQuery}
+					/>
 					{checkQueryLength(view) && (
 						<span
 							className="reset-all-filter-button"
@@ -268,6 +331,8 @@ const Dashboard: React.FC<DashboardProps> = ({ completeData, view }) => {
 						selectedTenants={tenantQuery}
 						selectedNamespaces={namespaceQuery}
 						selectedTopics={topicQuery}
+						selectedMessages={messageQuery}
+						messages={completeMessages}
 						data={completeData}
 						handleChange={handleChange}
 						currentView={view}

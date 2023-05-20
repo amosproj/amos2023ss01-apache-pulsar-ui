@@ -3,7 +3,10 @@ import IconButton from '@mui/material/IconButton'
 import SearchIcon from '@mui/icons-material/Search'
 import TextField from '@mui/material/TextField'
 
-const CustomSearchbar: React.FC<CustomSearchProps> = ({ setSearchQuery }) => {
+const CustomSearchbar: React.FC<CustomSearchProps> = ({
+	setSearchQuery,
+	placeholder,
+}) => {
 	return (
 		<form>
 			<TextField
@@ -24,7 +27,7 @@ const CustomSearchbar: React.FC<CustomSearchProps> = ({ setSearchQuery }) => {
 					),
 				}}
 				variant="outlined"
-				placeholder="Search..."
+				placeholder={placeholder}
 				size="small"
 			/>
 		</form>

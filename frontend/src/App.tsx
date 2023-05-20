@@ -12,6 +12,7 @@ import NavBar from './components/NavBar'
 import Dashboard from './components/Dashboard'
 
 let allData: Array<SampleCluster> = []
+let allMessages: Array<SampleMessage> = []
 
 function App() {
 	const view = useAppSelector(selectView)
@@ -63,7 +64,7 @@ function App() {
 
 	//can later on be replaced by the fetchDataThunk
 	const getData = () => {
-		fetch('dummy/dummyFull.json', {
+		fetch('dummy/dummyClusters.json', {
 			headers: {
 				'Content-Type': 'application/json',
 				Accept: 'application/json',
@@ -77,8 +78,24 @@ function App() {
 			})
 	}
 
+	const getMessages = () => {
+		fetch('dummy/dummyMessages.json', {
+			headers: {
+				'Content-Type': 'application/json',
+				Accept: 'application/json',
+			},
+		})
+			.then(function (response) {
+				return response.json()
+			})
+			.then(function (json) {
+				allMessages = json
+			})
+	}
+
 	useEffect(() => {
 		getData()
+		getMessages()
 	}, [])
 
 	return (
@@ -88,7 +105,11 @@ function App() {
 			) : (
 				<div className="dashboard-container">
 					<NavBar />
-					<Dashboard completeData={allData} view={view.selectedNav} />
+					<Dashboard
+						completeData={allData}
+						completeMessages={allMessages}
+						view={view.selectedNav}
+					/>
 				</div>
 			)}
 		</>
