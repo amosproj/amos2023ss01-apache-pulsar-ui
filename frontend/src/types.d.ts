@@ -16,13 +16,19 @@ interface Message {
 
 // Component Prop Interfaces
 interface CardProps {
-	data: SampleCluster | SampleTenant | SampleNamespace | SampleTopic
+	data:
+		| SampleCluster
+		| SampleTenant
+		| SampleNamespace
+		| SampleTopic
+		| SampleMessage
 	handleClick: any
 }
 
 interface DashboardProps {
 	completeData: Array<SampleCluster>
-	view?: 'cluster' | 'tenant' | 'namespace' | 'topic' | null | any
+	completeMessages: Array<SampleMessage>
+	view?: 'cluster' | 'tenant' | 'namespace' | 'topic' | 'message' | null | any
 }
 
 interface CustomAccordionProps {
@@ -38,6 +44,7 @@ interface CustomSelectProps<T> {
 }
 
 interface CustomCheckboxProps {
+	id: string
 	text: string
 	typology: string
 	changeFunc: any
@@ -54,6 +61,11 @@ interface ClusterViewProps {
 	handleClick: any
 }
 
+interface TenantViewProps {
+	data: SampleTenant
+	handleClick: any
+}
+
 interface NamespaceViewProps {
 	data: SampleNamespace
 	handleClick: any
@@ -64,9 +76,8 @@ interface TopicViewProps {
 	handleClick: any
 }
 
-interface TenantViewProps {
-	data: SampleTenant
-	handleClick: any
+interface MessageViewProps {
+	data: SampleMessage
 }
 
 interface CustomFilterProps {
@@ -74,13 +85,16 @@ interface CustomFilterProps {
 	selectedTenants: string[]
 	selectedNamespaces: string[]
 	selectedTopics: string[]
+	selectedMessages: string[]
 	data: Array<SampleCluster>
+	messages: Array<SampleMessage>
 	handleChange: any
-	currentView: 'cluster' | 'tenant' | 'namespace' | 'topic'
+	currentView: 'cluster' | 'tenant' | 'namespace' | 'topic' | 'message'
 }
 
 interface CustomSearchProps {
 	setSearchQuery: any
+	placeholder: string
 }
 
 //Slice interfaces
@@ -155,4 +169,15 @@ type SampleSubscription = {
 	name: string
 	consumers: Array<string>
 	numberConsumers: number
+}
+
+type SampleMessage = {
+	id: string
+	payload: string
+	schema: string
+	cluster: string
+	tenant: string
+	namespace: string
+	topic: string
+	publishTime: string
 }
