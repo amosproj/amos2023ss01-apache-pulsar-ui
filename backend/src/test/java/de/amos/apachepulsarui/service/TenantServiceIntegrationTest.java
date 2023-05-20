@@ -30,30 +30,30 @@ public class TenantServiceIntegrationTest extends AbstractIntegrationTest {
 
     @BeforeAll
     void createTenantsAndNamespaces() throws PulsarAdminException {
-        createTenant("tenant1");
-        createTenant("tenant2");
-        pulsarAdmin.namespaces().createNamespace("tenant1/namespace1");
-        pulsarAdmin.namespaces().createNamespace("tenant1/namespace2");
-        pulsarAdmin.namespaces().createNamespace("tenant2/namespace3");
+        createTenant("tenantX");
+        createTenant("tenantY");
+        pulsarAdmin.namespaces().createNamespace("tenantX/namespace1");
+        pulsarAdmin.namespaces().createNamespace("tenantX/namespace2");
+        pulsarAdmin.namespaces().createNamespace("tenantY/namespace1");
     }
 
     @Test
     void getAllTenants_returnsTenants() {
         List<TenantDto> tenants = tenantService.getAllTenants();
-        var tenant1 = tenants.stream()
-                .filter(tenant -> tenant.getId().equals("tenant1"))
+        var tenantX = tenants.stream()
+                .filter(tenant -> tenant.getId().equals("tenantX"))
                 .findFirst().orElseThrow();
-        var tenant2 = tenants.stream()
-                .filter(tenant -> tenant.getId().equals("tenant2"))
+        var tenantY = tenants.stream()
+                .filter(tenant -> tenant.getId().equals("tenantY"))
                 .findFirst().orElseThrow();
-        Assertions.assertThat(tenant1).isNotNull();
-        Assertions.assertThat(tenant2).isNotNull();
-        Assertions.assertThat(tenant1.getNamespaces())
+        Assertions.assertThat(tenantX).isNotNull();
+        Assertions.assertThat(tenantY).isNotNull();
+        Assertions.assertThat(tenantX.getNamespaces())
                 .extracting(NamespaceDto::getId)
-                .containsExactlyInAnyOrder("tenant1/namespace1", "tenant1/namespace2");
-        Assertions.assertThat(tenant2.getNamespaces())
+                .containsExactlyInAnyOrder("tenantX/namespace1", "tenantX/namespace2");
+        Assertions.assertThat(tenantY.getNamespaces())
                 .extracting(NamespaceDto::getId)
-                .containsExactlyInAnyOrder("tenant2/namespace1");
+                .containsExactlyInAnyOrder("tenantY/namespace1");
     }
 
     private void createTenant(String tenant) throws PulsarAdminException {
