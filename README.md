@@ -16,7 +16,7 @@ We want to achieve this by structuring our UI according to the topology of Apach
 
 First start Docker Desktop and create the pulsar setup from the root-directory with:
 
-```docker-compose up -d```
+```bash startup.sh```
 
 Then start the application from the `backend` directory with:
 
