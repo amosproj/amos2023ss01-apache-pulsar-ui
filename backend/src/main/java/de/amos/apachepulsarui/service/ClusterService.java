@@ -23,7 +23,6 @@ public class ClusterService {
     private final PulsarAdmin pulsarAdmin;
     private final TenantService tenantService;
     private final NamespaceService namespaceService;
-    private final TopicService topicService;
 
     /**
      * @return A list of {@link ClusterDto}'s of Pulsar deployment with all topology elements till {@link TopicDto}
@@ -87,9 +86,7 @@ public class ClusterService {
                         .getAllowedClusters()
                         .contains(cluster.getId()))
                 // set all the namespaces of a tenant
-                .peek(tenant -> {
-                    tenant.setNamespaces(namespaceService.getAllOfTenant(tenant));
-                })
+                .peek(tenant -> tenant.setNamespaces(namespaceService.getAllOfTenant(tenant)))
                 .toList();
 
         cluster.setTenants(tenantsWithNamespacesAndTopics);
