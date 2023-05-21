@@ -1,8 +1,3 @@
-pip index versions --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org pulsar-client
-pip3 install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org pulsar-client==2.9.2
-pip3 install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org jwcrypto
-
-
 bin/pulsar-admin tenants create neuron-demo
 bin/pulsar-admin namespaces create neuron-demo/customer
 bin/pulsar-admin topics create neuron-demo/customer/command.create-customer.v1
