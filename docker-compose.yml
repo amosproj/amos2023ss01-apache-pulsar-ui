@@ -26,7 +26,21 @@ services:
       interval: 5s
       timeout: 10s
       retries: 10
-  createcustomer:
+  create-topology:
+    image: pulsarui/createtopology
+    profiles: 
+      - init-demodata
+    networks:
+      - shared-network
+    build:
+      context: demodata
+      dockerfile: Dockerfile
+    environment:
+        - 'PULSAR_URL=pulsar://pulsar:6650'
+    depends_on:
+      pulsar:
+        condition: service_healthy
+  create-customer:
     image: pulsarui/createcustomer
     profiles: 
       - init-demodata
@@ -42,7 +56,7 @@ services:
         source: /tmp
         target: /tmp
     depends_on:
-      pulsar:
-        condition: service_healthy
+      create-topology:
+        condition: service_completed_successfully
     
     
