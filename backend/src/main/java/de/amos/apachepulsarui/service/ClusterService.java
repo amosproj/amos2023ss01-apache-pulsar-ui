@@ -48,7 +48,7 @@ public class ClusterService {
 
     private ClusterDto enrichWithClusterData(ClusterDto cluster) throws PulsarApiException {
         try {
-            ClusterData clusterData = pulsarAdmin.clusters().getCluster("foobar-cluster");
+            ClusterData clusterData = pulsarAdmin.clusters().getCluster(cluster.getId());
             cluster.setBrokerServiceUrl(clusterData.getBrokerServiceUrl());
             cluster.setServiceUrl(clusterData.getServiceUrl());
             return cluster;
