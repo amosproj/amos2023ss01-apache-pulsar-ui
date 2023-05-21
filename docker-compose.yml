@@ -36,7 +36,7 @@ services:
       context: demodata
       dockerfile: Dockerfile
     environment:
-        - 'PULSAR_URL=pulsar://pulsar:6650'
+        - 'PULSAR_ADMIN_URL=http://pulsar:8080'
     depends_on:
       pulsar:
         condition: service_healthy
@@ -50,7 +50,7 @@ services:
       context: demodata
       dockerfile: CreateCustomer/Dockerfile
     environment:
-        - 'PULSAR_URL=pulsar://pulsar:6650'
+        - 'PULSAR_URL=pulsar://host.docker.internal:6650'
     volumes:
       - type: bind
         source: /tmp
