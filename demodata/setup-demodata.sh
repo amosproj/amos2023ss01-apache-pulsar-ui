@@ -1,13 +1,3 @@
-#
-# SPDX-License-Identifier: MIT
-# SPDX-FileCopyrightText: 2023 Niklas Teschner <niklas.teschner@web.de>
-#
-
-docker run -it -p 6650:6650  -p 8080:8080 --rm --user 0:0 --mount source=pulsardata,target=/pulsar/data --mount source=pulsarconf,target=/pulsar/conf apachepulsar/pulsar:2.9.2 sh -c 'sed -i "s|systemTopicEnabled=false|systemTopicEnabled=true|g" conf/standalone.conf && sed -i "s|topicLevelPoliciesEnabled=false|topicLevelPoliciesEnabled=true|g" conf/standalone.conf && bin/pulsar standalone'
-
-docker run --rm -e PULSAR_URL='pulsar://host.docker.internal:6650' -it --mount type=bind,source=/tmp,target=/tmp createcustomer
-
-
 pip index versions --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org pulsar-client
 pip3 install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org pulsar-client==2.9.2
 pip3 install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org jwcrypto
