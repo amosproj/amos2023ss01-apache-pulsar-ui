@@ -21,8 +21,15 @@ services:
     #     source: demodata/pulsarconf
     #     target: /pulsar/conf
     command: sh -c 'bin/pulsar standalone'
+    healthcheck:
+      test: ["CMD", "bin/pulsar-admin", "brokers", "healthcheck"]
+      interval: 5s
+      timeout: 10s
+      retries: 10
   createcustomer:
     image: pulsarui/createcustomer
+    profiles: 
+      - init-demodata
     networks:
       - shared-network
     build:
@@ -34,8 +41,8 @@ services:
       - type: bind
         source: /tmp
         target: /tmp
-    command: sh -c '/app/setup-demodata.sh'
     depends_on:
-      - pulsar
+      pulsar:
+        condition: service_healthy
     
     

@@ -17,9 +17,11 @@ We want to achieve this by structuring our UI according to the topology of Apach
 
 First start Docker Desktop and create the pulsar setup from the root-directory with:
 
-```docker-compose up --build```
+```docker-compose --build --profile init-demodata up```
 
-(`--build` is only needed for the first startup)
+Notes: 
+* `--build` is only needed for the first startup
+* `--profile init-demodata` is only needed when you want to create the demo data 
 
 Then start the application from the `backend` directory with:
 
