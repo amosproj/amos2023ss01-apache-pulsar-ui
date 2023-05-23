@@ -85,7 +85,7 @@ const ProducerModal: React.FC<ProducerModalProps> = ({ producer }) => {
 					</Typography>
 					<Typography variant="body1" gutterBottom>
 						List of Messages:{' '}
-						{producer.topicList.map((item: string, index: number) => (
+						{producer.messageList.map((item: string, index: number) => (
 							<span key={index} className="text-blue">
 								{item},{' '}
 							</span>

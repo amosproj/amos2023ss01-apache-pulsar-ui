@@ -85,7 +85,7 @@ const ConsumerModal: React.FC<ConsumerModalProps> = ({ consumer }) => {
 					</Typography>
 					<Typography variant="body1" gutterBottom>
 						List of Messages:{' '}
-						{consumer.topicList.map((item: string, index: number) => (
+						{consumer.messageList.map((item: string, index: number) => (
 							<span key={index} className="text-blue">
 								{item},{' '}
 							</span>
