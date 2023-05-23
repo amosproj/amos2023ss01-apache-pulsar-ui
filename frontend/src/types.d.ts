@@ -22,7 +22,10 @@ interface CardProps {
 		| SampleNamespace
 		| SampleTopic
 		| SampleMessage
-	handleClick: any
+	handleClick: (
+		e: React.MouseEvent<HTMLElement>,
+		currentEl: SampleCluster | SampleTenant | SampleNamespace | SampleTopic
+	) => void
 }
 
 interface DashboardProps {
@@ -46,8 +49,11 @@ interface CustomSelectProps<T> {
 interface CustomCheckboxProps {
 	id: string
 	text: string
-	typology: string
-	changeFunc: any
+	typology: 'cluster' | 'tenant' | 'namespace' | 'topic' | 'message'
+	changeFunc: (
+		id: string,
+		element: 'cluster' | 'tenant' | 'namespace' | 'topic' | 'message'
+	) => void
 	selected: boolean
 }
 
@@ -58,22 +64,34 @@ interface formProps {
 
 interface ClusterViewProps {
 	data: SampleCluster
-	handleClick: any
+	handleClick: (
+		e: React.MouseEvent<HTMLElement>,
+		currentEl: SampleCluster | SampleTenant | SampleNamespace | SampleTopic
+	) => void
 }
 
 interface TenantViewProps {
 	data: SampleTenant
-	handleClick: any
+	handleClick: (
+		e: React.MouseEvent<HTMLElement>,
+		currentEl: SampleCluster | SampleTenant | SampleNamespace | SampleTopic
+	) => void
 }
 
 interface NamespaceViewProps {
 	data: SampleNamespace
-	handleClick: any
+	handleClick: (
+		e: React.MouseEvent<HTMLElement>,
+		currentEl: SampleCluster | SampleTenant | SampleNamespace | SampleTopic
+	) => void
 }
 
 interface TopicViewProps {
 	data: SampleTopic
-	handleClick: any
+	handleClick: (
+		e: React.MouseEvent<HTMLElement>,
+		currentEl: SampleCluster | SampleTenant | SampleNamespace | SampleTopic
+	) => void
 }
 
 interface MessageViewProps {
@@ -88,12 +106,15 @@ interface CustomFilterProps {
 	selectedMessages: string[]
 	data: Array<SampleCluster>
 	messages: Array<SampleMessage>
-	handleChange: any
+	handleChange: (
+		id: string,
+		element: 'cluster' | 'tenant' | 'namespace' | 'topic' | 'message'
+	) => void
 	currentView: 'cluster' | 'tenant' | 'namespace' | 'topic' | 'message'
 }
 
 interface CustomSearchProps {
-	setSearchQuery: any
+	setSearchQuery: React.Dispatch<React.SetStateAction<string>>
 	placeholder: string
 }
 
