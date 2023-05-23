@@ -19,11 +19,18 @@ const Dashboard: React.FC<DashboardProps> = ({
 	const [messageQuery, setMessageQuery] = useState<string[]>([])
 	const dispatch = useAppDispatch()
 
-	const filterData = (
-		query: string,
-		sampleData: Array<SampleCluster>,
-		sampleMessages: Array<SampleMessage>
-	) => {
+	function instanceOfSampleMessage(
+		object:
+			| SampleCluster
+			| SampleTenant
+			| SampleNamespace
+			| SampleTopic
+			| SampleMessage
+	): object is SampleMessage {
+		return 'payload' in object
+	}
+
+	const divideData = (sampleData: Array<SampleCluster>) => {
 		const allTenants = sampleData
 			.map((item) => item.tenants)
 			.filter((el) => el.length > 0)
@@ -38,6 +45,91 @@ const Dashboard: React.FC<DashboardProps> = ({
 			.map((namespace) => namespace.topics)
 			.filter((el) => el.length > 0)
 			.flat()
+
+		return [allTenants, allNamespaces, allTopics]
+	}
+
+	const includeItemsByIds = (
+		ids: string[],
+		sample:
+			| any
+			| Array<SampleCluster>
+			| Array<SampleTenant>
+			| Array<SampleNamespace>
+			| Array<SampleTopic>
+			| Array<SampleMessage>
+	) => {
+		if (ids.length > 0) {
+			let newSample = []
+			newSample = sample.filter(
+				(
+					c:
+						| SampleCluster
+						| SampleTenant
+						| SampleNamespace
+						| SampleTopic
+						| SampleMessage
+				) => ids.includes(c.id)
+			)
+			return newSample
+		} else return sample
+	}
+
+	const includeItemsByQuery = (
+		query: string,
+		sample:
+			| any
+			| Array<SampleCluster>
+			| Array<SampleTenant>
+			| Array<SampleNamespace>
+			| Array<SampleTopic>
+			| Array<SampleMessage>
+	) => {
+		if (query) {
+			return sample.filter(
+				(
+					d:
+						| SampleCluster
+						| SampleTenant
+						| SampleNamespace
+						| SampleTopic
+						| SampleMessage
+				) =>
+					instanceOfSampleMessage(d)
+						? d.payload.includes(query)
+						: d.id.includes(query)
+			)
+		} else return sample
+	}
+
+	const getMessagesByFilters = (
+		sampleClusters: Array<SampleCluster>,
+		sampleTenants: Array<SampleTenant>,
+		sampleNamespaces: Array<SampleNamespace>,
+		sampleTopics: Array<SampleTopic>,
+		sampleMessages: Array<SampleMessage>
+	) => {
+		const newDataIds = sampleClusters.map((c: SampleCluster) => c.id)
+		const newTenantsIds = sampleTenants.map((t: SampleTenant) => t.id)
+		const newNamespacesIds = sampleNamespaces.map((n: SampleNamespace) => n.id)
+		const newTopicsIds = sampleTopics.map((t: SampleTopic) => t.id)
+		let newMessages = []
+		newMessages = sampleMessages.filter(function (m: SampleMessage) {
+			return (
+				newDataIds.includes(m.cluster) &&
+				newTenantsIds.includes(m.tenant) &&
+				newNamespacesIds.includes(m.namespace) &&
+				newTopicsIds.includes(m.topic)
+			)
+		})
+		return newMessages
+	}
+
+	const filterData = (
+		query: string,
+		sampleData: Array<SampleCluster>,
+		sampleMessages: Array<SampleMessage>
+	) => {
 		if (
 			clusterQuery.length <= 0 &&
 			tenantQuery.length <= 0 &&
@@ -52,6 +144,8 @@ const Dashboard: React.FC<DashboardProps> = ({
 				| Array<SampleNamespace>
 				| Array<SampleTopic>
 				| Array<SampleMessage> = sampleData
+
+			const [allTenants, allNamespaces, allTopics] = divideData(res)
 
 			if (view == 'tenant') {
 				res = allTenants
@@ -77,92 +171,61 @@ const Dashboard: React.FC<DashboardProps> = ({
 				.filter((el) => el.length > 0)
 				.flat()
 
-			if (tenantQuery.length > 0) {
-				newTenants = newTenants.filter((c: SampleTenant) =>
-					tenantQuery.includes(c.id)
-				)
-			}
+			newTenants = includeItemsByIds(tenantQuery, newTenants)
 
-			let newNameSpaces = newTenants
+			let newNamespaces = newTenants
 				.map((tenant) => tenant.namespaces)
 				.filter((el) => el.length > 0)
 				.flat()
 
-			if (namespaceQuery.length > 0) {
-				newNameSpaces = newNameSpaces.filter((c: SampleNamespace) =>
-					namespaceQuery.includes(c.id)
-				)
-			}
+			newNamespaces = includeItemsByIds(namespaceQuery, newNamespaces)
 
-			let newTopics = newNameSpaces
+			let newTopics = newNamespaces
 				.map((n) => n.topics)
 				.filter((el) => el.length > 0)
 				.flat()
 
-			if (topicQuery.length > 0) {
-				newTopics = newTopics.filter((c: SampleTopic) =>
-					topicQuery.includes(c.id)
-				)
-			}
+			newTopics = includeItemsByIds(topicQuery, newTopics)
 
-			const newDataIds = newData.map((c: SampleCluster) => c.id)
-			const newTenantsIds = newTenants.map((t: SampleTenant) => t.id)
-			const newNamespacesIds = newNameSpaces.map((n: SampleNamespace) => n.id)
-			const newTopicsIds = newTopics.map((t: SampleTopic) => t.id)
+			let newMessages = getMessagesByFilters(
+				newData,
+				newTenants,
+				newNamespaces,
+				newTopics,
+				sampleMessages
+			)
 
-			let newMessages = sampleMessages.filter(function (m: SampleMessage) {
-				return (
-					newDataIds.includes(m.cluster) &&
-					newTenantsIds.includes(m.tenant) &&
-					newNamespacesIds.includes(m.namespace) &&
-					newTopicsIds.includes(m.topic)
-				)
-			})
-
-			if (messageQuery.length > 0) {
-				newMessages = newMessages.filter((c: SampleMessage) =>
-					messageQuery.includes(c.id)
-				)
-			}
+			newMessages = includeItemsByIds(messageQuery, newMessages)
 
 			if (view === 'cluster') {
-				if (query) {
-					return newData.filter((d: SampleCluster) => d.id.includes(query))
-				} else return newData
+				return includeItemsByQuery(query, newData)
 			} else if (view === 'tenant') {
-				if (query) {
-					return newTenants.filter((d: SampleTenant) => d.id.includes(query))
-				} else return newTenants
+				return includeItemsByQuery(query, newTenants)
 			} else if (view === 'namespace') {
-				if (query) {
-					return newNameSpaces.filter((d: SampleNamespace) =>
-						d.id.includes(query)
-					)
-				} else return newNameSpaces
+				return includeItemsByQuery(query, newNamespaces)
 			} else if (view === 'topic') {
-				if (query) {
-					return newTopics.filter((d: SampleTopic) => d.id.includes(query))
-				} else return newTopics
+				return includeItemsByQuery(query, newTopics)
 			} else if (view === 'message') {
-				if (query) {
-					return newMessages.filter((d: SampleMessage) =>
-						d.payload.includes(query)
-					)
-				} else return newMessages
-			} else return newData
+				return includeItemsByQuery(query, newMessages)
+			}
+
+			return newData
 		}
 	}
 
-	const dataFiltered:
+	let dataFiltered:
 		| Array<SampleCluster>
 		| Array<SampleTenant>
 		| Array<SampleNamespace>
 		| Array<SampleTopic>
-		| Array<SampleMessage>
-		| any = filterData(searchQuery, completeData, completeMessages)
+		| Array<SampleMessage> = completeData
+
+	if (view) {
+		dataFiltered = filterData(searchQuery, completeData, completeMessages)
+	}
 
 	const handleClick = (
-		e: any,
+		e: React.MouseEvent<HTMLElement>,
 		currentEl: SampleCluster | SampleTenant | SampleNamespace | SampleTopic
 	) => {
 		e.preventDefault()
@@ -182,7 +245,7 @@ const Dashboard: React.FC<DashboardProps> = ({
 			const topicId = currentEl.id
 			handleChange(topicId, view)
 			dispatch(setNav('message'))
-		} else return
+		}
 	}
 
 	const handleChange = (

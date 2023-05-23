@@ -40,7 +40,7 @@ function NavBar() {
 		setAnchorElNav(null)
 	}
 
-	const handleClickOnNav = (tag: string) => {
+	const handleClickOnNav = (tag: 'topic' | 'message' | 'cluster' | 'tenant' | 'namespace') => {
 		tag = tag.toLowerCase()
 		dispatch(setNav(tag))
 	}
