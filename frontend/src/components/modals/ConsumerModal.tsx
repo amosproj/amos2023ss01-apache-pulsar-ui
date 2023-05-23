@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { Modal, Box, Typography } from '@mui/material'
+import { Modal, Box, Typography, IconButton } from '@mui/material'
+import CloseIcon from '@mui/icons-material/Close'
 
 /*
 Nr of Topics used:
@@ -29,6 +30,9 @@ const ConsumerModal: React.FC<ConsumerModalProps> = ({ consumer }) => {
 		setOpen(false)
 	}
 
+	consumer.topicAmount = consumer.topicList.length
+	consumer.messageAmount = consumer.messageList.length
+
 	return (
 		<>
 			<span onClick={handleOpen} style={{ cursor: 'pointer' }}>
@@ -50,6 +54,18 @@ const ConsumerModal: React.FC<ConsumerModalProps> = ({ consumer }) => {
 						overflowY: 'auto',
 					}}
 				>
+					<IconButton
+						sx={{
+							position: 'absolute',
+							right: 0,
+							top: 0,
+							color: 'grey.500',
+							padding: '10px',
+						}}
+						onClick={handleClose}
+					>
+						<CloseIcon />
+					</IconButton>
 					<Typography variant="h5" component="h2" gutterBottom>
 						Consumer Name: {consumer.consumerName}
 					</Typography>
