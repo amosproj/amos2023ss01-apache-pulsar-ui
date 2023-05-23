@@ -18,15 +18,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static de.amos.apachepulsarui.dto.SubscriptionDto.createSubscriptionDto;
-
 @Data
 @Builder(access = AccessLevel.PRIVATE)
 public class TopicStatsDto {
 
-    private List<SubscriptionDto> subscriptions;
+    private List<String> subscriptions;
 
-    private List<ProducerDto> producers;
+    private List<String> producers;
 
     private long numberSubscriptions;
 
@@ -41,14 +39,14 @@ public class TopicStatsDto {
     private long storageSize;
 
     public static TopicStatsDto createTopicStatsDto(TopicStats topicStats) {
-        List<SubscriptionDto> subscriptionDtos = getSubscriptions(topicStats);
-        List<ProducerDto> producerDtos = getProducers(topicStats);
+        List<String> subscriptions = getSubscriptions(topicStats);
+        List<String> producers = getProducers(topicStats);
 
        return TopicStatsDto.builder()
-                .subscriptions(subscriptionDtos)
-                .producers(producerDtos)
-                .numberSubscriptions(subscriptionDtos.size())
-                .numberProducers(producerDtos.size())
+                .subscriptions(subscriptions)
+                .producers(producers)
+                .numberSubscriptions(subscriptions.size())
+                .numberProducers(producers.size())
                 .producedMesages(topicStats.getMsgInCounter())
                 .consumedMessages(topicStats.getMsgOutCounter())
                 .averageMessageSize(topicStats.getAverageMsgSize())
@@ -57,18 +55,18 @@ public class TopicStatsDto {
 
     }
 
-    private static List<ProducerDto> getProducers(TopicStats topicStats) {
+    private static List<String> getProducers(TopicStats topicStats) {
         List<PublisherStats> publisherStats = new ArrayList<>(topicStats.getPublishers());
         return publisherStats.stream()
-                .map(ProducerDto::createProducerDto)
+                .map(PublisherStats::getProducerName)
                 .toList();
     }
 
-    private static List<SubscriptionDto> getSubscriptions(TopicStats topicStats) {
+    private static List<String> getSubscriptions(TopicStats topicStats) {
         Map<String, SubscriptionStats> subscriptionStats = new HashMap<>(topicStats.getSubscriptions());
-        List<SubscriptionDto> subscriptionDtos = new ArrayList<>();
-        subscriptionStats.forEach((k, v) -> subscriptionDtos.add(createSubscriptionDto(k, getConsumers(v))));
-        return subscriptionDtos;
+        List<String> subscriptions = new ArrayList<>();
+        subscriptionStats.forEach((name, producers) -> subscriptions.add(name));
+        return subscriptions;
     }
 
     private static List<ConsumerDto> getConsumers(SubscriptionStats subscriptionStats) {

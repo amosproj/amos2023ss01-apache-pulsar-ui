@@ -11,6 +11,9 @@ import lombok.NoArgsConstructor;
 import org.apache.pulsar.common.naming.TopicName;
 import org.apache.pulsar.common.policies.data.TopicStats;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TopicDto {
@@ -33,6 +36,8 @@ public class TopicDto {
 
 	private long consumedMessages;
 
+	private List<MessageDto> messagesDto = new ArrayList<>();
+
 
 	/**
      * Converts a valid complete topic name (like "persistent://eu-tenant/hr/fizzbuzz" into a {@link TopicDto}.
@@ -52,6 +57,12 @@ public class TopicDto {
 
 		return topicDto;
     }
+
+	public static TopicDto createTopicDtoWithMessages(String completeTopicName, TopicStats topicStats, String ownerBroker, List<MessageDto> messages) {
+		TopicDto topicDto = createTopicDto(completeTopicName, topicStats, ownerBroker);
+		topicDto.setMessagesDto(messages);
+		return topicDto;
+	}
 
 
 

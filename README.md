@@ -11,7 +11,6 @@ We want to achieve this by structuring our UI according to the topology of Apach
 * Java Version **17.0.1** or higher 
 * Node.js Version **20.0.0** or higher
 * Docker Desktop
-* Maven
 
 ## Backend
 
@@ -21,7 +20,7 @@ First start Docker Desktop and create the pulsar setup from the root-directory w
 
 Then start the application from the `backend` directory with:
 
-```mvn spring-boot:run```
+```./mvnw spring-boot:run```
 
 After the start, all old topics are automatically removed from the Pulsar instance and some new topics, messages and
 consumers are added.
@@ -33,7 +32,7 @@ but instead use testcontainers. Therefore, docker needs to be running.
 
 To start the tests use:
 
-```mvn test```
+```./mvnw test```
 
 ### REST API
 

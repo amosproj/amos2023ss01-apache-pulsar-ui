@@ -6,7 +6,6 @@
 
 package de.amos.apachepulsarui.service;
 
-import de.amos.apachepulsarui.dto.NamespaceDto;
 import de.amos.apachepulsarui.dto.TopicDto;
 import org.apache.pulsar.client.admin.Lookup;
 import org.apache.pulsar.client.admin.PulsarAdmin;
@@ -27,7 +26,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class TopicServiceTest {
@@ -38,7 +39,8 @@ class TopicServiceTest {
     private PulsarAdmin pulsarAdmin;
     @Mock
     private TopicStats topicStats;
-
+    @Mock
+    private MessageService messageService;
     @Mock
     private Lookup lookup;
     @InjectMocks
@@ -62,13 +64,11 @@ class TopicServiceTest {
 
     @Test
     void getAllTopics() throws PulsarAdminException {
-        NamespaceDto namespace = NamespaceDto.fromString("abc");
         whenAdminTopics();
         whenTopicStats();
         whenOwnerBroker();
 
-
-        topicService.getByNamespace(namespace);
+        topicService.getAllByNamespace("abc");
 
         topicDtoMockedStatic.verify(
                 () -> TopicDto.createTopicDto("Topic", topicStats, "zyx"),
@@ -94,21 +94,6 @@ class TopicServiceTest {
     }
 
     @Test
-    void getByNamespace() throws PulsarAdminException {
-        NamespaceDto namespaceDto = NamespaceDto.fromString("abc");
-        whenAdminTopics();
-        whenTopicStats();
-        whenOwnerBroker();
-
-        topicService.getByNamespace(namespaceDto, 1);
-
-        topicDtoMockedStatic.verify(
-                () -> TopicDto.createTopicDto("Topic", topicStats, "zyx"),
-                times(1)
-        );
-    }
-
-    @Test
     void createNewTopic() throws PulsarAdminException {
         String topic = "Topic";
         when(pulsarAdmin.topics()).thenReturn(topics);
@@ -119,13 +104,17 @@ class TopicServiceTest {
     }
 
     @Test
-    void isValidTopic() {
-        String topic = "Topic";
+    void getTopicWithMessagesByName() throws PulsarAdminException {
+        when(messageService.peekMessages("Topic")).thenReturn(List.of());
+        whenTopicStats();
+        whenOwnerBroker();
 
-        topicService.isValidTopic(topic);
+        topicService.getTopicWithMessagesByName("Topic");
 
-        topicNameMockedStatic.verify(
-                () -> TopicName.isValid(topic),
+
+        topicDtoMockedStatic.verify(
+                () -> TopicDto.createTopicDtoWithMessages("Topic", topicStats, "zyx", List.of()),
                 times(1)
-        );    }
+        );
+    }
 }

@@ -7,7 +7,7 @@ package de.amos.apachepulsarui.startup;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.bytebuddy.utility.RandomString;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.apache.pulsar.client.admin.PulsarAdminException;
 import org.apache.pulsar.client.api.*;
@@ -42,7 +42,10 @@ public class ApplicationStartupListener {
             try {
                 pulsarAdmin.topics().delete(topic);
             } catch (PulsarAdminException e) {
-                throw new RuntimeException(e);
+                // todo how to delete replicated topics?
+                // logging instead of throwing so that the application still starts
+                // if topics cant be deleted
+                log.warn("Couldn't delete topic '{}'. Continuing...", topic);
             }
         });
     }
@@ -51,7 +54,7 @@ public class ApplicationStartupListener {
         int index = 0;
 
         while (index < 5) {
-            String topicName = "topic-" + RandomString.make(20);
+            String topicName = "topic-" + RandomStringUtils.randomAlphabetic(20);
             pulsarAdmin.topics().createNonPartitionedTopic(topicName);
             log.info(topicName + "is created");
             createMessages(topicName);
@@ -61,7 +64,7 @@ public class ApplicationStartupListener {
     }
 
     private void createConsumer(String topicName) throws PulsarClientException {
-        String consumerName = topicName + "Consumer" + RandomString.make(3);
+        String consumerName = topicName + "Consumer" + RandomStringUtils.randomAlphabetic(3);
         pulsarClient.newConsumer()
                 .topic(topicName)
                 .consumerName(consumerName)
@@ -78,7 +81,7 @@ public class ApplicationStartupListener {
         while (index < 10) {
             producer.newMessage()
                     .key("key " + index)
-                    .value(RandomString.make(10).getBytes())
+                    .value(RandomStringUtils.randomAlphabetic(10).getBytes())
                     .send();
             log.info("New MessageDto with Key " + index + "on TopicDto " + topicName);
             index++;

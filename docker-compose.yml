@@ -96,11 +96,3 @@ services:
       - "6650:6650"
       - "8080:8080"
     command: bash -c "bin/apply-config-from-env.py conf/broker.conf && exec bin/pulsar broker"
-  database:
-      image: 'postgres:latest'
-      ports:
-        - "5432:5432"
-      environment:
-        POSTGRES_USER: username
-        POSTGRES_PASSWORD: password
-        POSTGRES_DB: apache_pulsar

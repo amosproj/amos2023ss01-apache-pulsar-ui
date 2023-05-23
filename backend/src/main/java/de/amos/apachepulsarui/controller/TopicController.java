@@ -6,17 +6,16 @@
 
 package de.amos.apachepulsarui.controller;
 
-import de.amos.apachepulsarui.dto.NamespaceDto;
 import de.amos.apachepulsarui.dto.TopicDto;
 import de.amos.apachepulsarui.dto.TopicsDto;
-import de.amos.apachepulsarui.service.NamespaceService;
 import de.amos.apachepulsarui.service.TopicService;
 import lombok.RequiredArgsConstructor;
+import org.apache.pulsar.common.naming.NamespaceName;
+import org.apache.pulsar.common.naming.TopicName;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,20 +24,20 @@ public class TopicController {
 
     private final TopicService topicService;
 
-    private final NamespaceService namespaceService;
+    @GetMapping("/{tenant}/{namespace}")
+    public ResponseEntity<TopicsDto> getTopicsByNamespace(@PathVariable String namespace, @PathVariable String tenant) {
+        String namespaceName = NamespaceName.get(tenant, namespace).toString();
+        return new ResponseEntity<>(new TopicsDto(topicService.getAllByNamespace(namespaceName)), HttpStatus.OK);
+    }
 
-    @GetMapping
-    public ResponseEntity<TopicsDto> getAllTopics() {
-        List<NamespaceDto> namespaces = namespaceService.getAll();
-        List<TopicDto> topics = namespaces.stream()
-                .flatMap(namespace -> topicService.getByNamespace(namespace).stream())
-                .toList();
-        return new ResponseEntity<>(new TopicsDto(topics), HttpStatus.OK);
+    @GetMapping("/{topic}")
+    public ResponseEntity<TopicDto> getTopicWithMessagesByName(@PathVariable String topic) {
+       return new ResponseEntity<>(topicService.getTopicWithMessagesByName(topic), HttpStatus.OK);
     }
 
     @PostMapping("/new")
     public ResponseEntity<Void> newTopic(@RequestParam String topic) {
-        if (!topicService.isValidTopic(topic)) {
+        if (!TopicName.isValid(topic)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         if (topicService.createNewTopic(topic)) {
