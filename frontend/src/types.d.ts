@@ -31,7 +31,7 @@ interface CardProps {
 interface DashboardProps {
 	completeData: Array<SampleCluster>
 	completeMessages: Array<SampleMessage>
-	view?: 'cluster' | 'tenant' | 'namespace' | 'topic' | 'message' | null
+	view?: 'cluster' | 'tenant' | 'namespace' | 'topic' | 'message' | null | any
 }
 
 interface CustomAccordionProps {
