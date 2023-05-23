@@ -7,7 +7,7 @@ import axios from 'axios'
 import { RootState } from '.'
 
 export type View = {
-	selectedNav: 'topic' | 'message' | 'cluster' | 'tenant' | 'namespace' | null
+	selectedNav: string | null
 	filteredId: number | string | null
 }
 
@@ -51,7 +51,7 @@ const globalSlice = createSlice({
 			console.log('sdsd')
 		},
 		backToLP: () => initialState,
-		setNav: (state, action: PayloadAction<'topic' | 'message' | 'cluster' | 'tenant' | 'namespace'>) => {
+		setNav: (state, action: PayloadAction<string>) => {
 			state.view.selectedNav = action.payload
 		},
 		setView: (state, action: PayloadAction<View>) => {
