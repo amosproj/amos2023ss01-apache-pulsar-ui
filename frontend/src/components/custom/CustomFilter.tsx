@@ -52,11 +52,12 @@ const CustomFilter: React.FC<CustomFilterProps> = ({
 	const filteredCheckboxes = (
 		searchQuery: string,
 		completeArray:
-			| any
+			| Array<SampleMessage>
 			| Array<SampleCluster>
 			| Array<SampleTenant>
 			| Array<SampleNamespace>
 			| Array<SampleTopic>
+			| any
 	) => {
 		if (searchQuery === '') {
 			return completeArray
@@ -88,7 +89,6 @@ const CustomFilter: React.FC<CustomFilterProps> = ({
 	)
 	const filteredTopics = filteredCheckboxes(topicSearchQuery, allTopics)
 	const filteredMessages = filteredCheckboxes(messageSearchQuery, messages)
-	console.log(filteredMessages)
 
 	const viewLevelOne = currentView === 'topic' || currentView === 'message'
 	const viewLevelTwo =
