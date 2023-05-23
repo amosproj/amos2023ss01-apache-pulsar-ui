@@ -49,8 +49,8 @@ const TopicView: React.FC<TopicViewProps> = ({ data, handleClick }) => {
 											key={index}
 											producer={{
 												producerName: item,
-												topicList: ['sdasd', 'sdasd'],
-												messageList: ['sdasd', 'sdasd'],
+												topicList: ['SampleTopic1', 'SampleTopic2'],
+												messageList: ['SampleMessage1', 'SampleMessage2'],
 											}}
 										/>
 									))}
@@ -66,8 +66,8 @@ const TopicView: React.FC<TopicViewProps> = ({ data, handleClick }) => {
 											key={index}
 											consumer={{
 												consumerName: item,
-												topicList: ['sdasd', 'sdasd'],
-												messageList: ['sdasd', 'sdasd'],
+												topicList: ['SampleTopic1', 'SampleTopic2'],
+												messageList: ['SampleMessage1', 'SampleMessage2'],
 											}}
 										/>
 									))}

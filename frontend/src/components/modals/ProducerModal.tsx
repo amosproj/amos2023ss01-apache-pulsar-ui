@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { Modal, Box, Typography } from '@mui/material'
+import { Modal, Box, Typography, IconButton } from '@mui/material'
+import CloseIcon from '@mui/icons-material/Close'
 
 /*
 Nr of Topics used:
@@ -29,6 +30,9 @@ const ProducerModal: React.FC<ProducerModalProps> = ({ producer }) => {
 		setOpen(false)
 	}
 
+	producer.topicAmount = producer.topicList.length
+	producer.messageAmount = producer.messageList.length
+
 	return (
 		<>
 			<span onClick={handleOpen} style={{ cursor: 'pointer' }}>
@@ -50,6 +54,18 @@ const ProducerModal: React.FC<ProducerModalProps> = ({ producer }) => {
 						overflowY: 'auto',
 					}}
 				>
+					<IconButton
+						sx={{
+							position: 'absolute',
+							right: 0,
+							top: 0,
+							color: 'grey.500',
+							padding: '10px',
+						}}
+						onClick={handleClose}
+					>
+						<CloseIcon />
+					</IconButton>
 					<Typography variant="h5" component="h2" gutterBottom>
 						Producer Name: {producer.producerName}
 					</Typography>
