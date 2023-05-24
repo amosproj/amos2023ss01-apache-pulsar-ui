@@ -6,18 +6,26 @@
 
 package de.amos.apachepulsarui.service;
 
-import de.amos.apachepulsarui.dto.MessageDto;
-import de.amos.apachepulsarui.dto.TopicDto;
-import de.amos.apachepulsarui.dto.TopicStatsDto;
+import de.amos.apachepulsarui.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.apache.pulsar.client.admin.PulsarAdminException;
+import org.apache.pulsar.client.api.Message;
+import org.apache.pulsar.client.api.MessageId;
+import org.apache.pulsar.client.api.PulsarClient;
+import org.apache.pulsar.client.api.Reader;
+import org.apache.pulsar.common.policies.data.PublisherStats;
 import org.apache.pulsar.common.policies.data.TopicStats;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import static de.amos.apachepulsarui.dto.ProducerDto.createProducerDto;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +35,8 @@ public class TopicService {
     private final PulsarAdmin pulsarAdmin;
 
     private final MessageService messageService;
+
+    private final PulsarClient pulsarClient;
 
     /**
      * @param name The Name of the Topic you want to get a list of all topics for.
@@ -102,6 +112,46 @@ public class TopicService {
         } catch (PulsarAdminException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public ProducerDto getProducerByTopic(String topic, String producer) {
+        TopicStats topicStats = getTopicStats(topic);
+        PublisherStats publisherStats = topicStats.getPublishers().stream()
+                .filter(ps -> Objects.equals(ps.getProducerName(), producer))
+                .findFirst().orElseThrow();
+        return createProducerDto(publisherStats, getMessagesByProducer(topic, producer));
+    }
+
+
+    private List<Message<byte[]>> peekAllMessagesByTopic(String topic) {
+        try {
+            Reader<byte[]> reader = pulsarClient.newReader()
+                    .topic(topic)
+                    .startMessageId(MessageId.latest)
+                    .create();
+
+            List<Message<byte[]>> messages = new ArrayList<>();
+            while (reader.hasMessageAvailable()) {
+                messages.add(reader.readNext());
+            }
+            reader.close();
+            return messages;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    private List<MessageDto> getMessagesByProducer(String topic, String producer) {
+        return peekAllMessagesByTopic(topic).stream()
+                .filter(message -> Objects.equals(message.getProducerName(), producer))
+                .map(message -> MessageDto.fromExistingMessage(message, null))
+                .toList();
+
+    }
+
+    public SubscriptionDto getSubscriptionByTopic(String topic, String subscription) {
+        return SubscriptionDto.createSubscriptionDto(getTopicStats(topic).getSubscriptions().get(subscription), subscription);
     }
 
 }

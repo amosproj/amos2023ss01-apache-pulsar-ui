@@ -6,12 +6,15 @@
 
 package de.amos.apachepulsarui.service;
 
+import de.amos.apachepulsarui.dto.ProducerDto;
+import de.amos.apachepulsarui.dto.SubscriptionDto;
 import de.amos.apachepulsarui.dto.TopicDto;
 import org.apache.pulsar.client.admin.Lookup;
 import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.apache.pulsar.client.admin.PulsarAdminException;
 import org.apache.pulsar.client.admin.Topics;
 import org.apache.pulsar.common.naming.TopicName;
+import org.apache.pulsar.common.policies.data.SubscriptionStats;
 import org.apache.pulsar.common.policies.data.TopicStats;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,9 +29,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class TopicServiceTest {
@@ -40,26 +41,38 @@ class TopicServiceTest {
     @Mock
     private TopicStats topicStats;
     @Mock
+    private SubscriptionStats subscriptionStats;
+    @Mock
     private MessageService messageService;
     @Mock
     private Lookup lookup;
     @InjectMocks
     private TopicService topicService;
-    MockedStatic <TopicDto> topicDtoMockedStatic;
 
-    MockedStatic <TopicName> topicNameMockedStatic;
+    MockedStatic<TopicDto> topicDtoMockedStatic;
+
+    MockedStatic<TopicName> topicNameMockedStatic;
+
+    MockedStatic<ProducerDto> producerDtoMockedStatic;
+
+    MockedStatic<SubscriptionDto> subscriptionDtoMockedStatic;
 
 
     @BeforeEach
     public void beforeEach() {
         topicDtoMockedStatic = Mockito.mockStatic(TopicDto.class);
         topicNameMockedStatic = Mockito.mockStatic(TopicName.class);
+        subscriptionDtoMockedStatic = Mockito.mockStatic(SubscriptionDto.class);
+        producerDtoMockedStatic = Mockito.mockStatic(ProducerDto.class);
+
     }
 
     @AfterEach
     public void afterEach() {
         topicDtoMockedStatic.close();
         topicNameMockedStatic.close();
+        producerDtoMockedStatic.close();
+        subscriptionDtoMockedStatic.close();
     }
 
     @Test
