@@ -6,6 +6,7 @@
 package de.amos.apachepulsarui.service;
 
 import de.amos.apachepulsarui.dto.TopicDto;
+import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.apache.pulsar.client.api.*;
 import org.apache.pulsar.common.naming.NamespaceName;
 import org.assertj.core.api.Assertions;
@@ -23,6 +24,9 @@ public class TopicServiceIntegrationTest extends AbstractIntegrationTest {
 
     @Autowired
     private PulsarClient pulsarClient;
+
+    @Autowired
+    private PulsarAdmin pulsarAdmin;
 
     @Test
     void getByNamespace_returnsCreatedTopics() {
@@ -49,6 +53,8 @@ public class TopicServiceIntegrationTest extends AbstractIntegrationTest {
             consume2.get();
 
             producer.send(message);
+            consumer.close();
+            producer.close();
         }
         TopicDto topic = topicService.getAllByNamespace(NamespaceName.get("public", "default").toString()).stream()
                 .filter(topicDto -> topicDto.getName().equals(topicName))
@@ -64,9 +70,21 @@ public class TopicServiceIntegrationTest extends AbstractIntegrationTest {
         String topicName = "persistent://public/default/topic-service-integration-test";
         Consumer<byte[]> consumer = pulsarClient.newConsumer().topic(topicName).subscriptionName("TestSubscriber").subscribe();
 
+        consumer.close();
         Assertions.assertThat(topicService.getSubscriptionByTopic(topicName, "TestSubscriber")
                 .getName()).isEqualTo("TestSubscriber");
+    }
 
+    @Test
+    void getProducerByTopic () throws Exception {
+        String topicName = "persistent://public/default/topic-service-integration-test";
+        var message = "hello world".getBytes(StandardCharsets.UTF_8);
+        try (Producer<byte[]> producer = pulsarClient.newProducer().producerName("Producer").topic(topicName).create()) {
+
+            producer.send(message);
+            Assertions.assertThat(topicService.getProducerByTopic(topicName,"Producer").getName()).isEqualTo("Producer");
+            producer.close();
+        }
 
     }
 
