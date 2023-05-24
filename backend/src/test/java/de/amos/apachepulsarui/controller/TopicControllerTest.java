@@ -97,7 +97,7 @@ public class TopicControllerTest {
         mockMvc.perform(get("/topic/" + topic + "/subscription/" + subscription)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name", equalTo(subscriptionDto)));
+                .andExpect(jsonPath("$.name", equalTo(subscription)));
     }
 
     @Test

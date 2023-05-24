@@ -37,7 +37,7 @@ public class SubscriptionDto {
                 .stream()
                 .filter(c -> Objects.equals(c.getName(), subscriptionStats.getActiveConsumerName()))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("No active Consumer"));
+                .orElse(null);
 
         return SubscriptionDto.builder()
                 .name(name)
