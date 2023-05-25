@@ -16,6 +16,8 @@ export type globalState = {
 	view: View
 	data: Array<MessageList>
 	endpoint: string
+	clusterData: any
+	topicData: any
 }
 
 const initialState: globalState = {
@@ -26,6 +28,8 @@ const initialState: globalState = {
 	},
 	data: [],
 	endpoint: '',
+	clusterData: [],
+	topicData: {},
 }
 
 const backendInstance = axios.create({
@@ -33,10 +37,19 @@ const backendInstance = axios.create({
 	timeout: 1000,
 })
 
-const fetchDataThunk = createAsyncThunk(
-	'formController/fetchData',
+const fetchClusterDataThunk = createAsyncThunk(
+	'globalController/fetchData',
 	async () => {
 		const response = await backendInstance.get('/cluster')
+		console.log(response)
+		return response.data
+	}
+)
+
+const fetchTopicDataThunk = createAsyncThunk(
+	'globalController/fetchTopic',
+	async () => {
+		const response = await backendInstance.get('/topic')
 		console.log(response)
 		return response.data
 	}
@@ -83,11 +96,16 @@ const globalSlice = createSlice({
 		},
 	},
 	extraReducers: (builder) => {
-		builder.addCase(fetchDataThunk.fulfilled, (state, action) => {
+		builder.addCase(fetchClusterDataThunk.fulfilled, (state, action) => {
 			console.log(JSON.parse(JSON.stringify(action.payload)))
+			state.clusterData = JSON.parse(JSON.stringify(action.payload))
 		})
-		builder.addCase(fetchDataThunk.rejected, (state) => {
-			console.log('läuft nicht')
+		builder.addCase(fetchClusterDataThunk.rejected, (state) => {
+			console.log('fetch')
+		})
+		builder.addCase(fetchTopicDataThunk.fulfilled, (state, action) => {
+			console.log(JSON.parse(JSON.stringify(action.payload)))
+			state.topicData = JSON.parse(JSON.stringify(action.payload))
 		})
 	},
 })
@@ -104,6 +122,10 @@ const selectShowLP = (state: RootState): boolean => state.globalControl.showLP
 const selectEndpoint = (state: RootState): string =>
 	state.globalControl.endpoint
 
+const selectCluster = (state: RootState): any => state.globalControl.clusterData
+
+const selectTopic = (state: RootState): any => state.globalControl.topicData
+
 export const {
 	moveToApp,
 	backToLP,
@@ -114,6 +136,15 @@ export const {
 	setEndpoint,
 } = actions
 
-export { selectShowLP, selectEndpoint, selectData, selectView, fetchDataThunk }
+export {
+	selectShowLP,
+	selectEndpoint,
+	selectData,
+	selectView,
+	selectCluster,
+	selectTopic,
+	fetchClusterDataThunk,
+	fetchTopicDataThunk,
+}
 
 export default reducer
