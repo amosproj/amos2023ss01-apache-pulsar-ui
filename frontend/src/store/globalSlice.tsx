@@ -29,14 +29,15 @@ const initialState: globalState = {
 }
 
 const backendInstance = axios.create({
-	baseURL: 'https://127.0.0.1/8081',
+	baseURL: 'http://localhost:8081/api',
 	timeout: 1000,
 })
 
 const fetchDataThunk = createAsyncThunk(
 	'formController/fetchData',
 	async () => {
-		const response = await backendInstance.get('/data')
+		const response = await backendInstance.get('/cluster')
+		console.log(response)
 		return response.data
 	}
 )
@@ -80,6 +81,14 @@ const globalSlice = createSlice({
 		setEndpoint: (state: globalState, action: PayloadAction<string>) => {
 			state.endpoint = action.payload
 		},
+	},
+	extraReducers: (builder) => {
+		builder.addCase(fetchDataThunk.fulfilled, (state, action) => {
+			console.log(JSON.parse(JSON.stringify(action.payload)))
+		})
+		builder.addCase(fetchDataThunk.rejected, (state) => {
+			console.log('läuft nicht')
+		})
 	},
 })
 
