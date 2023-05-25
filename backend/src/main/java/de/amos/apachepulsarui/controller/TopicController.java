@@ -41,7 +41,7 @@ public class TopicController {
     public ResponseEntity<TopicsDto> getAll() {
         List<TopicDto> allTopics = tenantService.getAllTenants().stream()
                 .flatMap(tenantDto -> namespaceService.getAllOfTenant(tenantDto).stream())
-                .flatMap(namespaceDto -> topicService.getAllByNamespace(namespaceDto.toString()).stream())
+                .flatMap(namespaceDto -> topicService.getAllByNamespace(namespaceDto.getId()).stream())
                 .toList();
         return new ResponseEntity<>(new TopicsDto(allTopics), HttpStatus.OK);
     }
