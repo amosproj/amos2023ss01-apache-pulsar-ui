@@ -7,6 +7,7 @@ package de.amos.apachepulsarui.controller;
 
 import de.amos.apachepulsarui.dto.TopicDto;
 import de.amos.apachepulsarui.service.NamespaceService;
+import de.amos.apachepulsarui.service.TenantService;
 import de.amos.apachepulsarui.service.TopicService;
 import net.bytebuddy.utility.RandomString;
 import org.apache.pulsar.common.policies.data.TopicStats;
@@ -34,6 +35,9 @@ public class TopicControllerTest {
 
     @MockBean
     TopicService topicService;
+
+    @MockBean
+    TenantService tenantService;
 
     @MockBean
     NamespaceService namespaceService;
