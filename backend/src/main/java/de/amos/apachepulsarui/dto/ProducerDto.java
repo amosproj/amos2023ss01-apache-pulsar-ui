@@ -21,7 +21,7 @@ public class ProducerDto {
 
     private long amountOfMessages;
 
-    public static ProducerDto createProducerDto(PublisherStats publisherStats, List<MessageDto> messages) {
+    public static ProducerDto create(PublisherStats publisherStats, List<MessageDto> messages) {
         return ProducerDto.builder()
                 .name(publisherStats.getProducerName())
                 .messagesDto(messages)
