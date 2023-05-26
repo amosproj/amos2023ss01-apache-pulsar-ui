@@ -6,8 +6,7 @@ import React, { useEffect } from 'react'
 import './App.css'
 import './assets/styles/styles.scss'
 import { useAppSelector } from './store/hooks'
-import { selectShowLP, selectView } from './store/globalSlice'
-import LandingPage from './components/landing/LandingPage'
+import { selectView } from './store/globalSlice'
 import NavBar from './components/NavBar'
 import Dashboard from './components/Dashboard'
 
@@ -18,7 +17,7 @@ function App() {
 	const view = useAppSelector(selectView)
 
 	/** Landing Page Logic */
-	const showLP = useAppSelector(selectShowLP)
+	// const showLP = useAppSelector(selectShowLP)
 	/** End of Landing Page Logic */
 
 	/*const allTenants = allData
@@ -100,18 +99,14 @@ function App() {
 
 	return (
 		<>
-			{showLP ? (
-				<LandingPage />
-			) : (
-				<div className="dashboard-container">
-					<NavBar />
-					<Dashboard
-						completeData={allData}
-						completeMessages={allMessages}
-						view={view.selectedNav}
-					/>
-				</div>
-			)}
+			<div className="dashboard-container">
+				<NavBar />
+				<Dashboard
+					completeData={allData}
+					completeMessages={allMessages}
+					view={view.selectedNav}
+				/>
+			</div>
 		</>
 	)
 }

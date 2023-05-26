@@ -46,11 +46,14 @@ const globalSlice = createSlice({
 	name: 'globalControl',
 	initialState,
 	reducers: {
-		moveToApp: (state) => {
-			state.showLP = false
-			console.log('sdsd')
-		},
-		backToLP: () => initialState,
+		/** Old landing page logic */
+		// moveToApp: (state) => {
+		// 	state.showLP = false
+		// 	console.log('sdsd')
+		// },
+		// backToLP: () => initialState,
+		/** End of landing page logic */
+
 		setNav: (state, action: PayloadAction<string>) => {
 			state.view.selectedNav = action.payload
 		},
@@ -95,15 +98,7 @@ const selectShowLP = (state: RootState): boolean => state.globalControl.showLP
 const selectEndpoint = (state: RootState): string =>
 	state.globalControl.endpoint
 
-export const {
-	moveToApp,
-	backToLP,
-	setNav,
-	setView,
-	updateData,
-	setData,
-	setEndpoint,
-} = actions
+export const { setNav, setView, updateData, setData, setEndpoint } = actions
 
 export { selectShowLP, selectEndpoint, selectData, selectView, fetchDataThunk }
 
