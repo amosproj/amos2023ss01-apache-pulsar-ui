@@ -12,22 +12,28 @@ We want to achieve this by structuring our UI according to the topology of Apach
 * Node.js Version **20.0.0** or higher
 * Docker Desktop
 
-## Backend
+## Backend and Pulsar instance
 
-First start Docker Desktop and create the pulsar setup from the root-directory with:
+First, build the application JAR from the `backend` directory with:
 
-```docker-compose --profile demodata up --build```
+```./mvnw package -DskipTests```
+
+
+Then, start Docker Desktop and create the pulsar setup from the root-directory with:
+
+```docker-compose --profile demodata --profile backend up --build```
 
 Notes: 
-* `--build` is only needed for the first startup, or when the demodata docker images are changed
-* `--profile demodata` is only needed when you want to create the demo topology and start the demo producers & consumers
+* `--build` is needed for the first startup, or when the demodata docker images are changed
+* `--profile demodata` is needed when you want to create the demo topology and start the demo producers & consumers, that will continuously send and receive messages
+* `--profile backend` is needed when you want to start the backend via the docker-compose setup. See below for starting it manually.
 
-Then start the application from the `backend` directory with:
+### Starting the backend separately
+
+If you want to start the backend individually (e.g. during development), simply omit the `--profile backend` from the docker-compose command.
+Instead, start the application from the `backend` directory with:
 
 ```./mvnw spring-boot:run```
-
-After the start, all old topics are automatically removed from the Pulsar instance and some new topics, messages and
-consumers are added.
 
 ### Tests
 
