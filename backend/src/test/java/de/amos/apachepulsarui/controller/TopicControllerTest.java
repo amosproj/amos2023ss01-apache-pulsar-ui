@@ -89,7 +89,7 @@ public class TopicControllerTest {
         String subscription = "R2D2";
         String topic = "Droide";
 
-        SubscriptionDto subscriptionDto = SubscriptionDto.createSubscriptionDto(subscriptionStats, subscription);
+        SubscriptionDto subscriptionDto = SubscriptionDto.create(subscriptionStats, subscription);
 
 
         when(topicService.getSubscriptionByTopic(topic, subscription)).thenReturn(subscriptionDto);
