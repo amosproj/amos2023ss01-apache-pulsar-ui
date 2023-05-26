@@ -24,7 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import static de.amos.apachepulsarui.dto.ProducerDto.createProducerDto;
+import static de.amos.apachepulsarui.dto.ProducerDto.create;
 
 @Service
 @RequiredArgsConstructor
@@ -117,7 +117,7 @@ public class TopicService {
         PublisherStats publisherStats = topicStats.getPublishers().stream()
                 .filter(ps -> Objects.equals(ps.getProducerName(), producer))
                 .findFirst().orElseThrow();
-        return createProducerDto(publisherStats, getMessagesByProducer(topic, topicStats.getSubscriptions().keySet(), producer));
+        return create(publisherStats, getMessagesByProducer(topic, topicStats.getSubscriptions().keySet(), producer));
     }
 
 
