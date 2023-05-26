@@ -31,7 +31,7 @@ public class SubscriptionDto {
 
     private long msgOutCounter;
 
-    public static SubscriptionDto createSubscriptionDto(SubscriptionStats subscriptionStats, String name) {
+    public static SubscriptionDto create(SubscriptionStats subscriptionStats, String name) {
         List<ConsumerDto> consumers = getConsumers(subscriptionStats);
         ConsumerDto active = consumers
                 .stream()
@@ -52,7 +52,7 @@ public class SubscriptionDto {
     private static List<ConsumerDto> getConsumers(SubscriptionStats subscriptionStats) {
         return subscriptionStats.getConsumers()
                 .stream()
-                .map(ConsumerDto::createConsumerDto)
+                .map(ConsumerDto::create)
                 .toList();
 
     }

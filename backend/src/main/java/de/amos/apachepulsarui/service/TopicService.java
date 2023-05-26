@@ -11,19 +11,18 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.apache.pulsar.client.admin.PulsarAdminException;
-import org.apache.pulsar.client.api.Message;
-import org.apache.pulsar.client.api.MessageId;
-import org.apache.pulsar.client.api.PulsarClient;
-import org.apache.pulsar.client.api.Reader;
 import org.apache.pulsar.common.policies.data.PublisherStats;
 import org.apache.pulsar.common.policies.data.TopicStats;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 import static de.amos.apachepulsarui.dto.ProducerDto.createProducerDto;
 
@@ -36,7 +35,6 @@ public class TopicService {
 
     private final MessageService messageService;
 
-    private final PulsarClient pulsarClient;
 
     /**
      * @param name The Name of the Topic you want to get a list of all topics for.
@@ -119,39 +117,27 @@ public class TopicService {
         PublisherStats publisherStats = topicStats.getPublishers().stream()
                 .filter(ps -> Objects.equals(ps.getProducerName(), producer))
                 .findFirst().orElseThrow();
-        return createProducerDto(publisherStats, getMessagesByProducer(topic, producer));
+        return createProducerDto(publisherStats, getMessagesByProducer(topic, topicStats.getSubscriptions().keySet(), producer));
     }
 
 
-    private List<Message<byte[]>> peekAllMessagesByTopic(String topic) {
-        try {
-            Reader<byte[]> reader = pulsarClient.newReader()
-                    .topic(topic)
-                    .startMessageId(MessageId.latest)
-                    .create();
-
-            List<Message<byte[]>> messages = new ArrayList<>();
-            while (reader.hasMessageAvailable()) {
-                messages.add(reader.readNext());
-            }
-            reader.close();
-            return messages;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-    }
-
-    private List<MessageDto> getMessagesByProducer(String topic, String producer) {
-        return peekAllMessagesByTopic(topic).stream()
-                .filter(message -> Objects.equals(message.getProducerName(), producer))
-                .map(message -> MessageDto.fromExistingMessage(message, null))
+    private List<MessageDto> getMessagesByProducer(String topic, Set<String> subscriptions, String producer) {
+        return subscriptions.stream()
+                .flatMap(s -> messageService.peekMessages(topic, s).stream())
+                .filter(distinctByKey(MessageDto::getMessageId))
+                .filter(message -> Objects.equals(message.getProducer(), producer))
                 .toList();
-
     }
 
     public SubscriptionDto getSubscriptionByTopic(String topic, String subscription) {
-        return SubscriptionDto.createSubscriptionDto(getTopicStats(topic).getSubscriptions().get(subscription), subscription);
+        return SubscriptionDto.create(getTopicStats(topic).getSubscriptions().get(subscription), subscription);
     }
 
+    //source: https://www.baeldung.com/java-streams-distinct-by
+    public static <T> Predicate<T> distinctByKey(
+            Function<? super T, ?> keyExtractor) {
+
+        Map<Object, Boolean> seen = new ConcurrentHashMap<>();
+        return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
+    }
 }
