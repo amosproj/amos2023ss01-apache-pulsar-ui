@@ -16,12 +16,7 @@ import org.apache.pulsar.common.naming.NamespaceName;
 import org.apache.pulsar.common.naming.TopicName;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -37,7 +32,7 @@ public class TopicController {
 
     // Talked about this with Julian - probably we won't use it this way later, but at first it's easier for them
     // to just get all topics at once.
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<TopicsDto> getAll() {
         List<TopicDto> allTopics = tenantService.getAllTenants().stream()
                 .flatMap(tenantDto -> namespaceService.getAllOfTenant(tenantDto).stream())
@@ -52,9 +47,9 @@ public class TopicController {
         return new ResponseEntity<>(new TopicsDto(topicService.getAllByNamespace(namespaceName)), HttpStatus.OK);
     }
 
-    @GetMapping("/{topic}")
-    public ResponseEntity<TopicDto> getTopicWithMessagesByName(@PathVariable String topic) {
-       return new ResponseEntity<>(topicService.getTopicWithMessagesByName(topic), HttpStatus.OK);
+    @GetMapping
+    public ResponseEntity<TopicDto> getTopicWithMessagesByName(@RequestParam String name) {
+       return new ResponseEntity<>(topicService.getTopicWithMessagesByName(name), HttpStatus.OK);
     }
 
     @PostMapping("/new")

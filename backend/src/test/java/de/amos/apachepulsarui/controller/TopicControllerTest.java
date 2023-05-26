@@ -70,9 +70,9 @@ public class TopicControllerTest {
         String fullTopic = "persistent://public/default/grogu";
         TopicDto topic = TopicDto.createTopicDto(name, topicStats, RandomString.make(1));
 
-        when(topicService.getTopicWithMessagesByName(name)).thenReturn(topic);
+        when(topicService.getTopicWithMessagesByName(fullTopic)).thenReturn(topic);
 
-        mockMvc.perform(get("/topic/"+name)
+        mockMvc.perform(get("/topic").queryParam("name", fullTopic)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", equalTo(fullTopic)));
