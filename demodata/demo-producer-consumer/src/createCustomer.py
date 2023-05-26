@@ -19,9 +19,6 @@ if PULSAR_URL is None:
     print('$PULSAR_URL missing')
     exit(1)
 
-# State file
-STATE_FILE_PATH = os.getenv('STATE_FILE_PATH', default='/tmp/customer.state')
-
 # Topics
 CREATE_CUSTOMER_TOPIC_PRODUCE = os.getenv('CREATE_CUSTOMER_TOPIC_PRODUCE', default='persistent://neuron-demo/customer/command.create-customer.v1')
 CREATE_CUSTOMER_TOPIC_CONSUME = os.getenv('CREATE_CUSTOMER_TOPIC_CONSUME', default=CREATE_CUSTOMER_TOPIC_PRODUCE)
@@ -56,6 +53,7 @@ def fake_customer ():
 
 def publish_command_createcustomer (content):
     # Hint: Have a look at class MessageProperties and "deliver_after" functionality
+    print("############ About to send CreateCustomer message #################")
     producer_create_customer.send(content=content, properties=vars(MessageProperties(message_name='CreateCustomer')), deliver_after=timedelta(seconds=content.publishIntervalSeconds))
 
 def publish_event_customercreated (create_customer, correlation_id, causation_id):
@@ -77,9 +75,11 @@ def consume_command_createcustomer ():
   consumer_create_customer = client.subscribe(topic=CREATE_CUSTOMER_TOPIC_CONSUME, schema=AvroSchema(CreateCustomer), properties=vars(PulsarClientProperties(name='Max Mustermann', email='neuron@rbinternational.com', url='https://code.rbi.tech/raiffeisen/neuron')), subscription_name=PULSAR_CLIENT_NAME, consumer_name=PULSAR_CLIENT_NAME, consumer_type=ConsumerType.Shared)
 
   while True:
+    print("Waiting for CreateCustomer message...")
     message = consumer_create_customer.receive()
     properties = message.properties()
     if properties['messageName'] == 'CreateCustomer':
+        print("Received CreateCustomer message!")
         publish_event_customercreated(create_customer=message.value(), correlation_id=properties['correlationId'], causation_id=properties['causationId'])
         publish_command_createcustomer(message.value())
     consumer_create_customer.acknowledge(message)
@@ -100,9 +100,6 @@ def consume_event_customer ():
     elif properties['messageName'] == 'CustomerOpened':
         numberOfCustomers += 1
         print (f'Info: "{properties["messageName"]}" increased number of customer to: {numberOfCustomers}')
-    file = open ( STATE_FILE_PATH,'w')
-    file.write(str(numberOfCustomers))
-    file.close()
     consumer_customer.acknowledge(message)
 
 ### main ###
@@ -119,28 +116,7 @@ client_properties=vars(PulsarClientProperties(name='Max Mustermann', email='neur
 producer_create_customer = client.create_producer(topic=CREATE_CUSTOMER_TOPIC_PRODUCE, schema=AvroSchema(CreateCustomer), producer_name=PULSAR_CLIENT_NAME, properties= client_properties, batching_type=pulsar.BatchingType.KeyBased)
 producer_customer_created = client.create_producer(topic=CUSTOMER_TOPIC, schema=AvroSchema(CustomerEvent), producer_name=PULSAR_CLIENT_NAME, properties= client_properties)
 
-# Init and customer creation
-random.seed()
-path = Path(STATE_FILE_PATH)
-path.touch(exist_ok=True)
-file = open (path,'r+')
-state_from_file = file.readline()
-if state_from_file == '':
-    numberOfCustomers=0
-    file.write(str(numberOfCustomers))
-    # Init by publishing first CreateCustomer command message!
-    command_createcustomer_content = CreateCustomer(customerBaseMin = int(CUSTOMER_BASE_MIN)
-                                                , customerBaseMax = int(CUSTOMER_BASE_MAX)
-                                                , publishIntervalSeconds = int(PUBLISH_INTERVAL_SECONDS)
-                                                , maxPublishCountPerRun = int(MAX_PUBLISH_COUNT_PER_RUN)
-                                                , publishRandomizeMin = float(PUBLISH_RANDOMIZE_MIN)
-                                                , publishRandomizeMax = float(PUBLISH_RANDOMIZE_MAX))    
-    publish_command_createcustomer(command_createcustomer_content)
-    print ('Info: Starting init with numberOfCustomers=0 and sended CreateCustomer command message')
-else:    
-    numberOfCustomers=int(state_from_file)
-    print (f'Info: Starting state from file numberOfCustomers: {numberOfCustomers}')
-file.close()
+numberOfCustomers = 0
 
 # Created threaded consumers
 consume_create_customer = threading.Thread(target=consume_command_createcustomer)
@@ -149,6 +125,21 @@ consume_create_customer.start()
 consume_customer = threading.Thread(target=consume_event_customer)
 consume_customer.daemon = True
 consume_customer.start()
+
+print("Waiting for consumers to start...")
+time.sleep(10)
+
+# Init and customer creation
+random.seed()
+# Init by publishing first CreateCustomer command message!
+command_createcustomer_content = CreateCustomer(customerBaseMin = int(CUSTOMER_BASE_MIN)
+                                            , customerBaseMax = int(CUSTOMER_BASE_MAX)
+                                            , publishIntervalSeconds = int(PUBLISH_INTERVAL_SECONDS)
+                                            , maxPublishCountPerRun = int(MAX_PUBLISH_COUNT_PER_RUN)
+                                            , publishRandomizeMin = float(PUBLISH_RANDOMIZE_MIN)
+                                            , publishRandomizeMax = float(PUBLISH_RANDOMIZE_MAX))    
+publish_command_createcustomer(command_createcustomer_content)
+print('Info: Starting init with numberOfCustomers=0 and sent CreateCustomer command message')
 
 while True:
     time.sleep(1)

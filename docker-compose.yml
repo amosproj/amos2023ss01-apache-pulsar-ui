@@ -4,59 +4,50 @@ networks:
     driver: bridge
 services:
   pulsar:
-    image: 'apachepulsar/pulsar:2.9.2'
+    image: 'apachepulsar/pulsar:2.11.1'
     networks: 
       - shared-network
     ports:
       - '6650:6650'
       - '8080:8080'
     user: '0:0'
-    # TODO: need pulsarconf from customer for that to work  (missing config files)
-    # they are setting topicLevelPoliciesEnabled=true and systemTopicEnabled=true
-    # volumes:
-    #   - type: bind
-    #     source: demodata/pulsardata
-    #     target: /pulsar/data
-    #   - type: bind
-    #     source: demodata/pulsarconf
-    #     target: /pulsar/conf
-    command: sh -c 'bin/pulsar standalone'
+    command: sh -c 'bin/apply-config-from-env.py conf/standalone.conf && bin/pulsar standalone'
+    environment:
+      - 'PULSAR_PREFIX_topicLevelPoliciesEnabled=true'
+      - 'PULSAR_PREFIX_systemTopicEnabled=true'
     healthcheck:
       test: ["CMD", "bin/pulsar-admin", "brokers", "healthcheck"]
       interval: 5s
       timeout: 10s
       retries: 10
-  create-topology:
-    image: pulsarui/createtopology
+  setup-topology:
+    image: pulsarui/setuptopology
     profiles: 
-      - init-demodata
+      - demodata
     networks:
       - shared-network
     build:
-      context: demodata
+      context: demodata/setup-topology
       dockerfile: Dockerfile
     environment:
         - 'PULSAR_ADMIN_URL=http://pulsar:8080'
     depends_on:
       pulsar:
         condition: service_healthy
-  create-customer:
-    image: pulsarui/createcustomer
+  demo-producer-consumer:
+    image: pulsarui/demoproducerconsumer
     profiles: 
-      - init-demodata
+      - demodata
     networks:
       - shared-network
     build:
-      context: demodata
-      dockerfile: CreateCustomer/Dockerfile
+      context: demodata/demo-producer-consumer
+      dockerfile: Dockerfile
     environment:
         - 'PULSAR_URL=pulsar://host.docker.internal:6650'
-    volumes:
-      - type: bind
-        source: /tmp
-        target: /tmp
+        - 'PUBLISH_INTERVAL_SECONDS=30'
     depends_on:
-      create-topology:
+      setup-topology:
         condition: service_completed_successfully
     
     
