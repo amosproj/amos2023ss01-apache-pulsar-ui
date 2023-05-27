@@ -7,7 +7,7 @@ import ConsumerModal from '../modals/ConsumerModal'
 const TopicView: React.FC<TopicViewProps> = ({ data, handleClick }) => {
 	const topicConsumers = data?.topicStatsDto?.subscriptions
 		.map((item: SampleSubscription) => item.consumers)
-		.filter((el: Array<string>) => el.length > 0)
+		.filter((el: Array<string>) => el && el.length > 0)
 		.flat()
 
 	const topicProducers = data?.topicStatsDto?.producers
