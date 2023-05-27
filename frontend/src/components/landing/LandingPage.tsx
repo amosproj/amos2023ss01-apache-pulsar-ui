@@ -8,7 +8,7 @@ import '../../assets/styles/landing.scss'
 import team_logo from '../../assets/images/team-logo-light.png'
 import RbiLogo from './RbiLogo'
 import { useAppDispatch } from '../../store/hooks'
-import { fetchDataThunk, moveToApp, setEndpoint } from '../../store/globalSlice'
+import { moveToApp, setEndpoint } from '../../store/globalSlice'
 
 const LandingPage: React.FC = () => {
 	// Endpoint string of pulsar
@@ -44,10 +44,6 @@ const LandingPage: React.FC = () => {
 		dispatch(moveToApp())
 	}
 
-	const handleOnClick = () => {
-		dispatch(fetchDataThunk())
-	}
-
 	return (
 		<div className="landing-container">
 			<header>
@@ -73,9 +69,6 @@ const LandingPage: React.FC = () => {
 							className="connect-button"
 						>
 							connect
-						</Button>
-						<Button variant="contained" onClick={handleOnClick}>
-							TEST REQUEST
 						</Button>
 					</form>
 				</div>
