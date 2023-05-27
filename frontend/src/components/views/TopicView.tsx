@@ -14,7 +14,7 @@ const TopicView: React.FC<TopicViewProps> = ({ data, handleClick }) => {
 
 	return (
 		<div className="flex flex-col card-content">
-			<h2 className="uppercase">{data?.localName}</h2>
+			<h2>{data?.localName}</h2>
 			<div className="flex card-inner">
 				<div className="flex flex-col card-col card-col-1">
 					<div className="flex flex-col card-info">
@@ -46,7 +46,7 @@ const TopicView: React.FC<TopicViewProps> = ({ data, handleClick }) => {
 									topicProducers.length > 0 &&
 									topicProducers.map((item: string, index: number) => (
 										<ProducerModal
-											key={index}
+											key={'producer-' + Math.floor(Math.random() * 999999)}
 											producer={{
 												producerName: item,
 												topicList: ['SampleTopic1', 'SampleTopic2'],
@@ -63,7 +63,7 @@ const TopicView: React.FC<TopicViewProps> = ({ data, handleClick }) => {
 									topicConsumers.length > 0 &&
 									topicConsumers.map((item: string, index: number) => (
 										<ConsumerModal
-											key={index}
+											key={'consumer-' + Math.floor(Math.random() * 999999)}
 											consumer={{
 												consumerName: item,
 												topicList: ['SampleTopic1', 'SampleTopic2'],

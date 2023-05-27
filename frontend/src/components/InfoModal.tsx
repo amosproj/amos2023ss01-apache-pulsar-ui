@@ -33,11 +33,7 @@ export function InfoModal() {
 
 	return (
 		<div>
-			<Button
-				onClick={handleClickOpen}
-				style={{ color: 'white', background: '#F4C430' }}
-				size="small"
-			>
+			<Button onClick={handleClickOpen} style={{ color: 'white' }}>
 				info
 			</Button>
 			<Modal

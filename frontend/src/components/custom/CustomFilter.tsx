@@ -34,6 +34,17 @@ const CustomFilter: React.FC<CustomFilterProps> = ({
 		return 'payload' in object
 	}
 
+	function instanceOfSampleTopic(
+		object:
+			| SampleCluster
+			| SampleTenant
+			| SampleNamespace
+			| SampleTopic
+			| SampleMessage
+	): object is SampleTopic {
+		return 'topicStatsDto' in object
+	}
+
 	const allTenants = data
 		.map((item) => item.tenants)
 		.filter((el) => el.length > 0)
@@ -71,12 +82,14 @@ const CustomFilter: React.FC<CustomFilterProps> = ({
 						| SampleNamespace
 						| SampleTopic
 						| SampleMessage
-				) =>
-					instanceOfSampleMessage(d)
-						? d.payload.includes(searchQuery)
-						: d.id.includes(searchQuery)
+				) => {
+					if (instanceOfSampleMessage(d)) {
+						return d.payload.includes(searchQuery)
+					} else if (instanceOfSampleTopic(d)) {
+						return d.localName.includes(searchQuery)
+					} else return d.id.includes(searchQuery)
+				}
 			)
-			console.log(filteredArr)
 			return filteredArr
 		}
 	}
@@ -120,7 +133,7 @@ const CustomFilter: React.FC<CustomFilterProps> = ({
 							filteredClusters.length > 0 &&
 							filteredClusters.map((item: SampleCluster) => (
 								<CustomCheckbox
-									key={item.id + Math.floor(Math.random() * 999999)}
+									key={'checkbox-cluster' + Math.floor(Math.random() * 999999)}
 									text={item.id}
 									id={item.id}
 									typology={'cluster'}
@@ -149,7 +162,7 @@ const CustomFilter: React.FC<CustomFilterProps> = ({
 								filteredTenants.length > 0 &&
 								filteredTenants.map((item: SampleTenant) => (
 									<CustomCheckbox
-										key={item.id + Math.floor(Math.random() * 999999)}
+										key={'checkbox-tenant' + Math.floor(Math.random() * 999999)}
 										text={item.id}
 										id={item.id}
 										typology={'tenant'}
@@ -179,7 +192,9 @@ const CustomFilter: React.FC<CustomFilterProps> = ({
 								filteredNamespaces.length > 0 &&
 								filteredNamespaces.map((item: SampleNamespace) => (
 									<CustomCheckbox
-										key={item.id + Math.floor(Math.random() * 999999)}
+										key={
+											'checkbox-namespace' + Math.floor(Math.random() * 999999)
+										}
 										text={item.id}
 										id={item.id}
 										typology={'namespace'}
@@ -211,12 +226,14 @@ const CustomFilter: React.FC<CustomFilterProps> = ({
 								filteredTopics.length > 0 &&
 								filteredTopics.map((item: SampleTopic) => (
 									<CustomCheckbox
-										key={item.id + Math.floor(Math.random() * 999999)}
-										text={item.id}
-										id={item.id}
+										key={'checkbox-topic' + Math.floor(Math.random() * 999999)}
+										text={item.localName}
+										id={item.localName}
 										typology={'topic'}
 										changeFunc={handleChange}
-										selected={selectedTopics.includes(item.id) ? true : false}
+										selected={
+											selectedTopics.includes(item.localName) ? true : false
+										}
 									></CustomCheckbox>
 								))}
 						</div>
@@ -241,9 +258,11 @@ const CustomFilter: React.FC<CustomFilterProps> = ({
 								filteredMessages.length > 0 &&
 								filteredMessages.map((item: SampleMessage) => (
 									<CustomCheckbox
-										key={item.id + Math.floor(Math.random() * 999999)}
+										key={
+											'checkbox-message' + Math.floor(Math.random() * 999999)
+										}
 										text={item.payload}
-										id={item.id}
+										id={item.payload}
 										typology={'message'}
 										changeFunc={handleChange}
 										selected={selectedMessages.includes(item.id) ? true : false}

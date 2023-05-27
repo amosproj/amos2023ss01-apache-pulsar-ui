@@ -11,7 +11,7 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ data }) => {
 			{data &&
 				data.length > 0 &&
 				data.map((item) => (
-					<Accordion key={item.id}>
+					<Accordion key={'accordion-' + Math.floor(Math.random() * 999999)}>
 						<AccordionSummary
 							expandIcon={<ExpandMoreIcon />}
 							aria-controls="panel1a-content"
@@ -23,7 +23,11 @@ const CustomAccordion: React.FC<CustomAccordionProps> = ({ data }) => {
 							<p className="text-blue">Topic Messages:</p>
 							{item.messages.length > 0 &&
 								item.messages.map((message: Message) => (
-									<Typography key={message.id}>{message.value}</Typography>
+									<Typography
+										key={'typography-' + Math.floor(Math.random() * 999999)}
+									>
+										{message.value}
+									</Typography>
 								))}
 						</AccordionDetails>
 					</Accordion>
