@@ -51,7 +51,7 @@ const fetchRawClusterDataThunk = createAsyncThunk(
 const fetchRawTopicDataThunk = createAsyncThunk(
 	'globalController/fetchTopic',
 	async () => {
-		const response = await backendInstance.get('/topic')
+		const response = await backendInstance.get('/topic/all')
 		return response.data
 	}
 )
