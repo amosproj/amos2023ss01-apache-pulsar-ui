@@ -5,17 +5,24 @@
 import React, { useEffect } from 'react'
 import './App.css'
 import './assets/styles/styles.scss'
-import { useAppSelector } from './store/hooks'
-import { selectShowLP, selectView } from './store/globalSlice'
+import { useAppDispatch, useAppSelector } from './store/hooks'
+import {
+	selectClusterData,
+	selectShowLP,
+	selectView,
+} from './store/globalSlice'
 import LandingPage from './components/landing/LandingPage'
 import NavBar from './components/NavBar'
 import Dashboard from './components/Dashboard'
+import { combineAsyncThunk } from './store/globalSlice'
 
 let allData: Array<SampleCluster> = []
 let allMessages: Array<SampleMessage> = []
 
 function App() {
 	const view = useAppSelector(selectView)
+	const dispatch = useAppDispatch()
+	allData = useAppSelector(selectClusterData)
 
 	/** Landing Page Logic */
 	const showLP = useAppSelector(selectShowLP)
@@ -94,7 +101,7 @@ function App() {
 	}
 
 	useEffect(() => {
-		getData()
+		dispatch(combineAsyncThunk())
 		getMessages()
 	}, [])
 

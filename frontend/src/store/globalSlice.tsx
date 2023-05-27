@@ -5,6 +5,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { RootState } from '.'
+import { modifyData } from './modifyData-temp'
 
 export type View = {
 	selectedNav: string | null
@@ -16,8 +17,9 @@ export type globalState = {
 	view: View
 	data: Array<MessageList>
 	endpoint: string
+	rawClusterData: any
+	rawTopicData: any
 	clusterData: any
-	topicData: any
 }
 
 const initialState: globalState = {
@@ -28,8 +30,9 @@ const initialState: globalState = {
 	},
 	data: [],
 	endpoint: '',
+	rawClusterData: [],
+	rawTopicData: {},
 	clusterData: [],
-	topicData: {},
 }
 
 const backendInstance = axios.create({
@@ -37,21 +40,32 @@ const backendInstance = axios.create({
 	timeout: 1000,
 })
 
-const fetchClusterDataThunk = createAsyncThunk(
+const fetchRawClusterDataThunk = createAsyncThunk(
 	'globalController/fetchData',
 	async () => {
 		const response = await backendInstance.get('/cluster')
-		console.log(response)
 		return response.data
 	}
 )
 
-const fetchTopicDataThunk = createAsyncThunk(
+const fetchRawTopicDataThunk = createAsyncThunk(
 	'globalController/fetchTopic',
 	async () => {
 		const response = await backendInstance.get('/topic')
-		console.log(response)
 		return response.data
+	}
+)
+
+const combineAsyncThunk = createAsyncThunk(
+	'globalController/combineData',
+	async (_, thunkAPI) => {
+		const { dispatch } = thunkAPI
+		// dispatch both thunks and wait for them to complete
+		console.log('dasdasd')
+		await Promise.all([
+			dispatch(fetchRawClusterDataThunk()),
+			dispatch(fetchRawTopicDataThunk()),
+		])
 	}
 )
 
@@ -62,7 +76,6 @@ const globalSlice = createSlice({
 	reducers: {
 		moveToApp: (state) => {
 			state.showLP = false
-			console.log('sdsd')
 		},
 		backToLP: () => initialState,
 		setNav: (state, action: PayloadAction<string>) => {
@@ -96,16 +109,29 @@ const globalSlice = createSlice({
 		},
 	},
 	extraReducers: (builder) => {
-		builder.addCase(fetchClusterDataThunk.fulfilled, (state, action) => {
-			console.log(JSON.parse(JSON.stringify(action.payload)))
-			state.clusterData = JSON.parse(JSON.stringify(action.payload))
+		builder.addCase(fetchRawClusterDataThunk.fulfilled, (state, action) => {
+			state.rawClusterData = JSON.parse(JSON.stringify(action.payload))
 		})
-		builder.addCase(fetchClusterDataThunk.rejected, (state) => {
-			console.log('fetch')
+		builder.addCase(fetchRawClusterDataThunk.rejected, (state) => {
+			console.log('fetch raw cluster data failed')
 		})
-		builder.addCase(fetchTopicDataThunk.fulfilled, (state, action) => {
-			console.log(JSON.parse(JSON.stringify(action.payload)))
-			state.topicData = JSON.parse(JSON.stringify(action.payload))
+		builder.addCase(fetchRawTopicDataThunk.fulfilled, (state, action) => {
+			state.rawTopicData = JSON.parse(JSON.stringify(action.payload))
+		})
+		builder.addCase(fetchRawTopicDataThunk.rejected, (state) => {
+			console.log('fetch raw topic data failed')
+		})
+		builder.addCase(combineAsyncThunk.fulfilled, (state, action) => {
+			//combine raw data to meet dummy data structure and save it in clusterData
+			state.clusterData = modifyData(state.rawClusterData, state.rawTopicData)
+			console.log('clusterData now:')
+			console.log(state.clusterData)
+		})
+		builder.addCase(combineAsyncThunk.rejected, (state, action) => {
+			console.log('combine Async thunk failed')
+			state.clusterData = []
+			state.rawClusterData = []
+			state.rawTopicData = {}
 		})
 	},
 })
@@ -122,9 +148,8 @@ const selectShowLP = (state: RootState): boolean => state.globalControl.showLP
 const selectEndpoint = (state: RootState): string =>
 	state.globalControl.endpoint
 
-const selectCluster = (state: RootState): any => state.globalControl.clusterData
-
-const selectTopic = (state: RootState): any => state.globalControl.topicData
+const selectClusterData = (state: RootState): any =>
+	state.globalControl.clusterData
 
 export const {
 	moveToApp,
@@ -141,10 +166,8 @@ export {
 	selectEndpoint,
 	selectData,
 	selectView,
-	selectCluster,
-	selectTopic,
-	fetchClusterDataThunk,
-	fetchTopicDataThunk,
+	selectClusterData,
+	combineAsyncThunk,
 }
 
 export default reducer

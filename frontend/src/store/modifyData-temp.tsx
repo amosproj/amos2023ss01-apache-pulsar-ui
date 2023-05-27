@@ -93,7 +93,7 @@ const addClusterAndTenant = (cluster: Cluster): Cluster => {
 		// Add 'cluster' property to tenant
 		const tenantWithCluster = { ...tenant, cluster: cluster.id }
 
-		// Add 'tenant' property to namespaces
+		// Add 'cluster' and 'tenant' property to namespaces
 		tenantWithCluster.namespaces = tenant.namespaces.map((namespace) => ({
 			...namespace,
 			cluster: cluster.id,
@@ -118,9 +118,15 @@ const replaceTopicStrings = (cluster: Cluster, topics: TopicData): Cluster => {
 				if (topic) return topic
 				else return topicName
 			})
-			namespace.topics = namespace.topics.filter(
-				(topic) => typeof topic !== 'string'
-			)
+			const filteredTopics: string[] = []
+			namespace.topics = namespace.topics.filter((topic) => {
+				const pass = typeof topic !== 'string'
+				if (!pass) {
+					filteredTopics.push(topic)
+				}
+				return pass
+			})
+			if (!filteredTopics) console.log('Filtered out topics: ', filteredTopics)
 		})
 	})
 
