@@ -87,14 +87,15 @@ public class TopicControllerTest {
     @Test
     void getSubscriptionByNameAndTopic() throws Exception {
         String subscription = "R2D2";
-        String topic = "Droide";
+        String topic = "persistent://public/default/droide";
 
         SubscriptionDto subscriptionDto = SubscriptionDto.create(subscriptionStats, subscription);
 
 
         when(topicService.getSubscriptionByTopic(topic, subscription)).thenReturn(subscriptionDto);
 
-        mockMvc.perform(get("/topic/" + topic + "/subscription/" + subscription)
+        mockMvc.perform(get("/topic/subscription/" + subscription)
+                        .queryParam("topic", topic)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", equalTo(subscription)));
@@ -103,12 +104,13 @@ public class TopicControllerTest {
     @Test
     void getProducerByNameAndTopic() throws Exception {
         String producer = "C3PO";
-        String topic = "Droide";
+        String topic = "persistent://public/default/droide";
         ProducerDto dto = new ProducerDto(producer, null, 0);
 
         when(topicService.getProducerByTopic(topic, producer)).thenReturn(dto);
 
-        mockMvc.perform(get("/topic/" + topic + "/producer/" + producer)
+        mockMvc.perform(get("/topic/producer/" + producer)
+                        .queryParam("topic", topic)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", equalTo(producer)));
