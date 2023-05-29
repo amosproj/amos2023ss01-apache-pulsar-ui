@@ -4,7 +4,7 @@ networks:
     driver: bridge
 services:
   pulsar:
-    image: 'apachepulsar/pulsar:2.11.1'
+    image: 'apachepulsar/pulsar:3.0.0'
     networks: 
       - shared-network
     ports:
@@ -64,5 +64,3 @@ services:
     depends_on:
       pulsar:
         condition: service_healthy
-    
-    
