@@ -130,7 +130,8 @@ public class TopicService {
     }
 
     public SubscriptionDto getSubscriptionByTopic(String topic, String subscription) {
-        return SubscriptionDto.create(getTopicStats(topic).getSubscriptions().get(subscription), subscription);
+        List<MessageDto> messages = messageService.peekMessages(topic, subscription);
+        return SubscriptionDto.create(getTopicStats(topic).getSubscriptions().get(subscription), messages, subscription);
     }
 
     //source: https://www.baeldung.com/java-streams-distinct-by
