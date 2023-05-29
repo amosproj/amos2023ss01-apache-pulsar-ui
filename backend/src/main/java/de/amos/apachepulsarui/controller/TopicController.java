@@ -6,7 +6,10 @@
 
 package de.amos.apachepulsarui.controller;
 
-import de.amos.apachepulsarui.dto.*;
+import de.amos.apachepulsarui.dto.ProducerDto;
+import de.amos.apachepulsarui.dto.SubscriptionDto;
+import de.amos.apachepulsarui.dto.TopicDto;
+import de.amos.apachepulsarui.dto.TopicsDto;
 import de.amos.apachepulsarui.service.NamespaceService;
 import de.amos.apachepulsarui.service.TenantService;
 import de.amos.apachepulsarui.service.TopicService;
@@ -51,13 +54,13 @@ public class TopicController {
        return new ResponseEntity<>(topicService.getTopicWithMessagesByName(name), HttpStatus.OK);
     }
 
-    @GetMapping("/{topic}/subscription/{subscription}")
-    public ResponseEntity<SubscriptionDto> getSubyscriptionByNameAndTopic(@PathVariable String topic, @PathVariable String subscription) {
+    @GetMapping("subscription/{subscription}")
+    public ResponseEntity<SubscriptionDto> getSubyscriptionByNameAndTopic(@RequestParam String topic, @PathVariable String subscription) {
         return new ResponseEntity<>(topicService.getSubscriptionByTopic(topic, subscription), HttpStatus.OK);
     }
 
-    @GetMapping("{topic}/producer/{producer}")
-    public ResponseEntity<ProducerDto> getProducerByNameAndTopic(@PathVariable String topic, @PathVariable String producer) {
+    @GetMapping("producer/{producer}")
+    public ResponseEntity<ProducerDto> getProducerByNameAndTopic(@RequestParam String topic, @PathVariable String producer) {
         return new ResponseEntity<>(topicService.getProducerByTopic(topic, producer), HttpStatus.OK);
     }
 
