@@ -6,6 +6,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { RootState } from '.'
 import { modifyData } from './modifyData-temp'
+import { Cluster } from 'cluster'
 
 export type View = {
 	selectedNav: string | null
@@ -20,6 +21,7 @@ export type globalState = {
 	rawClusterData: any
 	rawTopicData: any
 	clusterData: any
+	messageList: any[]
 }
 
 const initialState: globalState = {
@@ -33,6 +35,7 @@ const initialState: globalState = {
 	rawClusterData: [],
 	rawTopicData: {},
 	clusterData: [],
+	messageList: [],
 }
 
 const backendInstance = axios.create({
@@ -53,6 +56,58 @@ const fetchRawTopicDataThunk = createAsyncThunk(
 	async () => {
 		const response = await backendInstance.get('/topic/all')
 		return response.data
+	}
+)
+
+const fetchMessageDataThunk = createAsyncThunk(
+	'globalController/fetchMessage',
+	async ({ topic, subscription }: { topic: string; subscription: string }) => {
+		const response = await backendInstance.get('/messages', {
+			params: { topic: topic, subscription: subscription },
+		})
+		return response.data.messages
+	}
+)
+
+const fetchAllMessagesThunk = createAsyncThunk(
+	'globalController/fetchAllMessages',
+	async (_, thunkAPI) => {
+		const { dispatch } = thunkAPI
+		const state = thunkAPI.getState() as RootState
+		const promises: Promise<any>[] = []
+		const { clusterData } = state.globalControl
+		console.log('hello')
+		//TODO Needs adaption in type SampleTopicStats
+		/*
+		clusterData.forEach((cluster: SampleCluster) => {
+			cluster.tenants.forEach((tenant: SampleTenant) => {
+				tenant.namespaces.forEach((namespace: SampleNamespace) => {
+					namespace.topics.forEach((topic: SampleTopic) => {
+						topic.topicStatsDto.subscriptions.forEach((sub: string) => {
+							if (sub)
+								promises.push(
+									dispatch(
+										fetchMessageDataThunk({
+											topic: topic.localName,
+											subscription: sub,
+										})
+									)
+								)
+						})
+					})
+				})
+			})
+		})
+		const messagesResults = await Promise.all(promises)
+
+		console.log('res', messagesResults)
+		const messages = [].concat(
+			...messagesResults.map((result) => result.payload)
+		)
+		console.log('merger', messages)
+		return messages
+		*/
+		return []
 	}
 )
 
@@ -133,6 +188,9 @@ const globalSlice = createSlice({
 			state.rawClusterData = []
 			state.rawTopicData = {}
 		})
+		builder.addCase(fetchAllMessagesThunk.fulfilled, (state, action) => {
+			state.messageList = action.payload
+		})
 	},
 })
 
@@ -151,6 +209,9 @@ const selectEndpoint = (state: RootState): string =>
 const selectClusterData = (state: RootState): any =>
 	state.globalControl.clusterData
 
+const selectMessages = (state: RootState): any =>
+	state.globalControl.messageList
+
 export const {
 	moveToApp,
 	backToLP,
@@ -168,6 +229,8 @@ export {
 	selectView,
 	selectClusterData,
 	combineAsyncThunk,
+	selectMessages,
+	fetchAllMessagesThunk,
 }
 
 export default reducer
