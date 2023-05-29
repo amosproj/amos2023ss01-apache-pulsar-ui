@@ -25,7 +25,7 @@ public class AbstractIntegrationTest {
     @Autowired
     private PulsarAdmin pulsarAdmin;
 
-    private static final PulsarContainer pulsar = new PulsarContainer(DockerImageName.parse("apachepulsar/pulsar:latest"));
+    private static final PulsarContainer pulsar = new PulsarContainer(DockerImageName.parse("apachepulsar/pulsar:3.0.0"));
 
     static {
         // singleton containers that are re-used across sub-classes
