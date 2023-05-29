@@ -54,12 +54,12 @@ public class TopicController {
        return new ResponseEntity<>(topicService.getTopicWithMessagesByName(name), HttpStatus.OK);
     }
 
-    @GetMapping("subscription/{subscription}")
+    @GetMapping("/subscription/{subscription}")
     public ResponseEntity<SubscriptionDto> getSubyscriptionByNameAndTopic(@RequestParam String topic, @PathVariable String subscription) {
         return new ResponseEntity<>(topicService.getSubscriptionByTopic(topic, subscription), HttpStatus.OK);
     }
 
-    @GetMapping("producer/{producer}")
+    @GetMapping("/producer/{producer}")
     public ResponseEntity<ProducerDto> getProducerByNameAndTopic(@RequestParam String topic, @PathVariable String producer) {
         return new ResponseEntity<>(topicService.getProducerByTopic(topic, producer), HttpStatus.OK);
     }
