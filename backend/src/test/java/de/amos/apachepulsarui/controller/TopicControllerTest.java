@@ -5,6 +5,7 @@
 
 package de.amos.apachepulsarui.controller;
 
+import de.amos.apachepulsarui.dto.MessageDto;
 import de.amos.apachepulsarui.dto.ProducerDto;
 import de.amos.apachepulsarui.dto.SubscriptionDto;
 import de.amos.apachepulsarui.dto.TopicDto;
@@ -88,8 +89,9 @@ public class TopicControllerTest {
     void getSubscriptionByNameAndTopic() throws Exception {
         String subscription = "R2D2";
         String topic = "persistent://public/default/droide";
+        List<MessageDto> messages = List.of();
 
-        SubscriptionDto subscriptionDto = SubscriptionDto.create(subscriptionStats, subscription);
+        SubscriptionDto subscriptionDto = SubscriptionDto.create(subscriptionStats, messages ,subscription);
 
 
         when(topicService.getSubscriptionByTopic(topic, subscription)).thenReturn(subscriptionDto);

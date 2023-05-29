@@ -23,6 +23,8 @@ public class SubscriptionDto {
 
     private List<ConsumerDto> allConsumers;
 
+    private List<MessageDto> messages;
+
     private long numberConsumers;
 
     private double msgAckRate;
@@ -31,7 +33,7 @@ public class SubscriptionDto {
 
     private long msgOutCounter;
 
-    public static SubscriptionDto create(SubscriptionStats subscriptionStats, String name) {
+    public static SubscriptionDto create(SubscriptionStats subscriptionStats, List<MessageDto> messages, String name) {
         List<ConsumerDto> consumers = getConsumers(subscriptionStats);
         ConsumerDto active = consumers
                 .stream()
@@ -41,6 +43,7 @@ public class SubscriptionDto {
 
         return SubscriptionDto.builder()
                 .name(name)
+                .messages(messages)
                 .activeConsumer(active)
                 .allConsumers(consumers)
                 .msgAckRate(subscriptionStats.getMessageAckRate())
