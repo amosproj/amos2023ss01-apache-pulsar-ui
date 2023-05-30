@@ -7,7 +7,9 @@ import './App.css'
 import './assets/styles/styles.scss'
 import { useAppDispatch, useAppSelector } from './store/hooks'
 import {
+	fetchAllMessagesThunk,
 	selectClusterData,
+	selectMessages,
 	selectShowLP,
 	selectView,
 } from './store/globalSlice'
@@ -23,7 +25,7 @@ function App() {
 	const view = useAppSelector(selectView)
 	const dispatch = useAppDispatch()
 	allData = useAppSelector(selectClusterData)
-
+	allMessages = useAppSelector(selectMessages)
 	/** Landing Page Logic */
 	const showLP = useAppSelector(selectShowLP)
 	/** End of Landing Page Logic */
@@ -102,8 +104,13 @@ function App() {
 
 	useEffect(() => {
 		dispatch(combineAsyncThunk())
-		getMessages()
+		//getMessages()
 	}, [])
+
+	//dispatch fetch all messages on clusterData change / when combineAsyncThunk is done
+	useEffect(() => {
+		dispatch(fetchAllMessagesThunk())
+	}, [allData])
 
 	return (
 		<>

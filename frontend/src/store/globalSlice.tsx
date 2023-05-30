@@ -76,9 +76,7 @@ const fetchAllMessagesThunk = createAsyncThunk(
 		const state = thunkAPI.getState() as RootState
 		const promises: Promise<any>[] = []
 		const { clusterData } = state.globalControl
-		console.log('hello')
-		//TODO Needs adaption in type SampleTopicStats
-		/*
+		// iterates through every topic-subscription pair and dispatches a request for it
 		clusterData.forEach((cluster: SampleCluster) => {
 			cluster.tenants.forEach((tenant: SampleTenant) => {
 				tenant.namespaces.forEach((namespace: SampleNamespace) => {
@@ -88,7 +86,7 @@ const fetchAllMessagesThunk = createAsyncThunk(
 								promises.push(
 									dispatch(
 										fetchMessageDataThunk({
-											topic: topic.localName,
+											topic: topic.name,
 											subscription: sub,
 										})
 									)
@@ -98,16 +96,14 @@ const fetchAllMessagesThunk = createAsyncThunk(
 				})
 			})
 		})
+		//awaits all requests
 		const messagesResults = await Promise.all(promises)
 
-		console.log('res', messagesResults)
+		//combines all messages in an array
 		const messages = [].concat(
 			...messagesResults.map((result) => result.payload)
 		)
-		console.log('merger', messages)
 		return messages
-		*/
-		return []
 	}
 )
 
@@ -116,7 +112,6 @@ const combineAsyncThunk = createAsyncThunk(
 	async (_, thunkAPI) => {
 		const { dispatch } = thunkAPI
 		// dispatch both thunks and wait for them to complete
-		console.log('dasdasd')
 		await Promise.all([
 			dispatch(fetchRawClusterDataThunk()),
 			dispatch(fetchRawTopicDataThunk()),
@@ -179,8 +174,6 @@ const globalSlice = createSlice({
 		builder.addCase(combineAsyncThunk.fulfilled, (state, action) => {
 			//combine raw data to meet dummy data structure and save it in clusterData
 			state.clusterData = modifyData(state.rawClusterData, state.rawTopicData)
-			console.log('clusterData now:')
-			console.log(state.clusterData)
 		})
 		builder.addCase(combineAsyncThunk.rejected, (state, action) => {
 			console.log('combine Async thunk failed')
@@ -190,6 +183,9 @@ const globalSlice = createSlice({
 		})
 		builder.addCase(fetchAllMessagesThunk.fulfilled, (state, action) => {
 			state.messageList = action.payload
+		})
+		builder.addCase(fetchAllMessagesThunk.rejected, (state) => {
+			console.log('fetch all messages thunk failed')
 		})
 	},
 })
