@@ -10,10 +10,8 @@ import {
 	fetchAllMessagesThunk,
 	selectClusterData,
 	selectMessages,
-	selectShowLP,
 	selectView,
 } from './store/globalSlice'
-import LandingPage from './components/landing/LandingPage'
 import NavBar from './components/NavBar'
 import Dashboard from './components/Dashboard'
 import { combineAsyncThunk } from './store/globalSlice'
