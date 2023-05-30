@@ -5,17 +5,28 @@
 import React, { useEffect } from 'react'
 import './App.css'
 import './assets/styles/styles.scss'
-import { useAppSelector } from './store/hooks'
-import { selectView } from './store/globalSlice'
+import { useAppDispatch, useAppSelector } from './store/hooks'
+import {
+	fetchAllMessagesThunk,
+	selectClusterData,
+	selectMessages,
+	selectShowLP,
+	selectView,
+} from './store/globalSlice'
+import LandingPage from './components/landing/LandingPage'
 import NavBar from './components/NavBar'
 import Dashboard from './components/Dashboard'
+import { combineAsyncThunk } from './store/globalSlice'
+import { useInterval } from './components/custom/hooks'
 
 let allData: Array<SampleCluster> = []
 let allMessages: Array<SampleMessage> = []
 
 function App() {
 	const view = useAppSelector(selectView)
-
+	const dispatch = useAppDispatch()
+	allData = useAppSelector(selectClusterData)
+	allMessages = useAppSelector(selectMessages)
 	/** Landing Page Logic */
 	// const showLP = useAppSelector(selectShowLP)
 	/** End of Landing Page Logic */
@@ -93,9 +104,19 @@ function App() {
 	}
 
 	useEffect(() => {
-		getData()
-		getMessages()
+		dispatch(combineAsyncThunk())
+		//getMessages()
 	}, [])
+
+	//dispatch fetch all messages on clusterData change / when combineAsyncThunk is done
+	useEffect(() => {
+		dispatch(fetchAllMessagesThunk())
+	}, [allData])
+
+	//fetch messages every 30 seconds
+	useInterval(() => {
+		dispatch(fetchAllMessagesThunk())
+	}, 30000)
 
 	return (
 		<>

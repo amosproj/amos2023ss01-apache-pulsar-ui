@@ -5,10 +5,15 @@
 
 package de.amos.apachepulsarui.controller;
 
+import de.amos.apachepulsarui.dto.MessageDto;
+import de.amos.apachepulsarui.dto.ProducerDto;
+import de.amos.apachepulsarui.dto.SubscriptionDto;
 import de.amos.apachepulsarui.dto.TopicDto;
 import de.amos.apachepulsarui.service.NamespaceService;
+import de.amos.apachepulsarui.service.TenantService;
 import de.amos.apachepulsarui.service.TopicService;
 import net.bytebuddy.utility.RandomString;
+import org.apache.pulsar.common.policies.data.SubscriptionStats;
 import org.apache.pulsar.common.policies.data.TopicStats;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,16 +35,22 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class TopicControllerTest {
 
     @Autowired
-    MockMvc mockMvc;
+    private MockMvc mockMvc;
 
     @MockBean
-    TopicService topicService;
+    private TopicService topicService;
 
     @MockBean
-    NamespaceService namespaceService;
+    private NamespaceService namespaceService;
 
     @MockBean
-    TopicStats topicStats;
+    TenantService tenantService;
+
+    @MockBean
+    private TopicStats topicStats;
+
+    @MockBean
+    private SubscriptionStats subscriptionStats;
 
     @Test
     void returnAllTopicsByNamespace() throws Exception {
@@ -48,12 +59,12 @@ public class TopicControllerTest {
                 "persistent://public/default/tatooine",
                 "non-persistent://public/default/naboo",
                 "persistent://public/default/coruscant"
-        ).map( values -> TopicDto.createTopicDto(values, topicStats, RandomString.make(1))).toList();
+        ).map(values -> TopicDto.createTopicDto(values, topicStats, RandomString.make(1))).toList();
 
         when(topicService.getAllByNamespace("public/default")).thenReturn(topics);
 
         mockMvc.perform(get("/topic/public/default")
-                .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.topics[0].name", equalTo(topics.get(0).getName())))
                 .andExpect(jsonPath("$.topics[1].name", equalTo(topics.get(1).getName())))
@@ -66,11 +77,45 @@ public class TopicControllerTest {
         String fullTopic = "persistent://public/default/grogu";
         TopicDto topic = TopicDto.createTopicDto(name, topicStats, RandomString.make(1));
 
-        when(topicService.getTopicWithMessagesByName(name)).thenReturn(topic);
+        when(topicService.getTopicWithMessagesByName(fullTopic)).thenReturn(topic);
 
-        mockMvc.perform(get("/topic/"+name)
+        mockMvc.perform(get("/topic").queryParam("name", fullTopic)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", equalTo(fullTopic)));
     }
+
+    @Test
+    void getSubscriptionByNameAndTopic() throws Exception {
+        String subscription = "R2D2";
+        String topic = "persistent://public/default/droide";
+        List<MessageDto> messages = List.of();
+
+        SubscriptionDto subscriptionDto = SubscriptionDto.create(subscriptionStats, messages ,subscription);
+
+
+        when(topicService.getSubscriptionByTopic(topic, subscription)).thenReturn(subscriptionDto);
+
+        mockMvc.perform(get("/topic/subscription/" + subscription)
+                        .queryParam("topic", topic)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name", equalTo(subscription)));
+    }
+
+    @Test
+    void getProducerByNameAndTopic() throws Exception {
+        String producer = "C3PO";
+        String topic = "persistent://public/default/droide";
+        ProducerDto dto = new ProducerDto(producer, null, 0);
+
+        when(topicService.getProducerByTopic(topic, producer)).thenReturn(dto);
+
+        mockMvc.perform(get("/topic/producer/" + producer)
+                        .queryParam("topic", topic)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name", equalTo(producer)));
+    }
+
 }

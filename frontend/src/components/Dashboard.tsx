@@ -30,6 +30,17 @@ const Dashboard: React.FC<DashboardProps> = ({
 		return 'payload' in object
 	}
 
+	function instanceOfSampleTopic(
+		object:
+			| SampleCluster
+			| SampleTenant
+			| SampleNamespace
+			| SampleTopic
+			| SampleMessage
+	): object is SampleTopic {
+		return 'topicStatsDto' in object
+	}
+
 	const divideData = (sampleData: Array<SampleCluster>) => {
 		const allTenants = sampleData
 			.map((item) => item.tenants)
@@ -49,7 +60,7 @@ const Dashboard: React.FC<DashboardProps> = ({
 		return [allTenants, allNamespaces, allTopics]
 	}
 
-	const includeItemsByIds = (
+	const includeItemsByFilterQuery = (
 		ids: string[],
 		sample:
 			| any
@@ -69,13 +80,16 @@ const Dashboard: React.FC<DashboardProps> = ({
 						| SampleNamespace
 						| SampleTopic
 						| SampleMessage
-				) => ids.includes(c.id)
+				) =>
+					instanceOfSampleTopic(c)
+						? ids.includes(c.localName)
+						: ids.includes(c.id)
 			)
 			return newSample
 		} else return sample
 	}
 
-	const includeItemsByQuery = (
+	const includeItemsBySearchQuery = (
 		query: string,
 		sample:
 			| any
@@ -94,10 +108,13 @@ const Dashboard: React.FC<DashboardProps> = ({
 						| SampleNamespace
 						| SampleTopic
 						| SampleMessage
-				) =>
-					instanceOfSampleMessage(d)
-						? d.payload.includes(query)
-						: d.id.includes(query)
+				) => {
+					if (instanceOfSampleMessage(d)) {
+						return d.payload.includes(query)
+					} else if (instanceOfSampleTopic(d)) {
+						return d.localName.includes(query)
+					} else return d.id.includes(query)
+				}
 			)
 		} else return sample
 	}
@@ -171,21 +188,21 @@ const Dashboard: React.FC<DashboardProps> = ({
 				.filter((el) => el.length > 0)
 				.flat()
 
-			newTenants = includeItemsByIds(tenantQuery, newTenants)
+			newTenants = includeItemsByFilterQuery(tenantQuery, newTenants)
 
 			let newNamespaces = newTenants
 				.map((tenant) => tenant.namespaces)
 				.filter((el) => el.length > 0)
 				.flat()
 
-			newNamespaces = includeItemsByIds(namespaceQuery, newNamespaces)
+			newNamespaces = includeItemsByFilterQuery(namespaceQuery, newNamespaces)
 
 			let newTopics = newNamespaces
 				.map((n) => n.topics)
 				.filter((el) => el.length > 0)
 				.flat()
 
-			newTopics = includeItemsByIds(topicQuery, newTopics)
+			newTopics = includeItemsByFilterQuery(topicQuery, newTopics)
 
 			let newMessages = getMessagesByFilters(
 				newData,
@@ -195,18 +212,18 @@ const Dashboard: React.FC<DashboardProps> = ({
 				sampleMessages
 			)
 
-			newMessages = includeItemsByIds(messageQuery, newMessages)
+			newMessages = includeItemsByFilterQuery(messageQuery, newMessages)
 
 			if (view === 'cluster') {
-				return includeItemsByQuery(query, newData)
+				return includeItemsBySearchQuery(query, newData)
 			} else if (view === 'tenant') {
-				return includeItemsByQuery(query, newTenants)
+				return includeItemsBySearchQuery(query, newTenants)
 			} else if (view === 'namespace') {
-				return includeItemsByQuery(query, newNamespaces)
+				return includeItemsBySearchQuery(query, newNamespaces)
 			} else if (view === 'topic') {
-				return includeItemsByQuery(query, newTopics)
+				return includeItemsBySearchQuery(query, newTopics)
 			} else if (view === 'message') {
-				return includeItemsByQuery(query, newMessages)
+				return includeItemsBySearchQuery(query, newMessages)
 			}
 
 			return newData
@@ -253,6 +270,7 @@ const Dashboard: React.FC<DashboardProps> = ({
 		element: 'cluster' | 'tenant' | 'namespace' | 'topic' | 'message'
 	) => {
 		let newArr = []
+		console.log(element)
 		if (element === 'cluster') {
 			if (clusterQuery.includes(id)) {
 				newArr = [...clusterQuery]
@@ -292,7 +310,6 @@ const Dashboard: React.FC<DashboardProps> = ({
 			} else {
 				newArr = [...messageQuery, id]
 			}
-			console.log(newArr)
 			setMessageQuery(newArr)
 		}
 	}
@@ -366,7 +383,7 @@ const Dashboard: React.FC<DashboardProps> = ({
 							) => (
 								<Card
 									handleClick={handleClick}
-									key={item.id + Math.floor(Math.random() * 999999)}
+									key={'card-' + Math.floor(Math.random() * 999999)}
 									data={item}
 								></Card>
 							)

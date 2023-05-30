@@ -16,7 +16,7 @@ public class ConsumerDto {
 
     private String name;
 
-    public static ConsumerDto createConsumerDto(ConsumerStats consumerStats) {
+    public static ConsumerDto create(ConsumerStats consumerStats) {
         return ConsumerDto.builder().name(consumerStats.getConsumerName()).build();
     }
 

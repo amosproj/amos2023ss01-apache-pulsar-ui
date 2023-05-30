@@ -5,18 +5,27 @@
 
 package de.amos.apachepulsarui.dto;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 import org.apache.pulsar.common.policies.data.PublisherStats;
 
+import java.util.List;
+
 @Data
+@AllArgsConstructor
 @Builder(access = AccessLevel.PRIVATE)
 public class ProducerDto {
 
     private String name;
 
-    public static ProducerDto createProducerDto(PublisherStats publisherStats) {
-        return ProducerDto.builder().name(publisherStats.getProducerName()).build();
+    private List<MessageDto> messagesDto;
+
+    private long amountOfMessages;
+
+    public static ProducerDto create(PublisherStats publisherStats, List<MessageDto> messages) {
+        return ProducerDto.builder()
+                .name(publisherStats.getProducerName())
+                .messagesDto(messages)
+                .amountOfMessages(messages.size())
+                .build();
     }
 }
