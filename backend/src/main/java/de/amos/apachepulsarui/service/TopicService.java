@@ -6,18 +6,25 @@
 
 package de.amos.apachepulsarui.service;
 
-import de.amos.apachepulsarui.dto.MessageDto;
-import de.amos.apachepulsarui.dto.TopicDto;
-import de.amos.apachepulsarui.dto.TopicStatsDto;
+import de.amos.apachepulsarui.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.apache.pulsar.client.admin.PulsarAdminException;
+import org.apache.pulsar.common.policies.data.PublisherStats;
 import org.apache.pulsar.common.policies.data.TopicStats;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
+
+import static de.amos.apachepulsarui.dto.ProducerDto.create;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +34,7 @@ public class TopicService {
     private final PulsarAdmin pulsarAdmin;
 
     private final MessageService messageService;
+
 
     /**
      * @param name The Name of the Topic you want to get a list of all topics for.
@@ -104,4 +112,33 @@ public class TopicService {
         }
     }
 
+    public ProducerDto getProducerByTopic(String topic, String producer) {
+        TopicStats topicStats = getTopicStats(topic);
+        PublisherStats publisherStats = topicStats.getPublishers().stream()
+                .filter(ps -> Objects.equals(ps.getProducerName(), producer))
+                .findFirst().orElseThrow();
+        return create(publisherStats, getMessagesByProducer(topic, topicStats.getSubscriptions().keySet(), producer));
+    }
+
+
+    private List<MessageDto> getMessagesByProducer(String topic, Set<String> subscriptions, String producer) {
+        return subscriptions.stream()
+                .flatMap(s -> messageService.peekMessages(topic, s).stream())
+                .filter(distinctByKey(MessageDto::getMessageId))
+                .filter(message -> Objects.equals(message.getProducer(), producer))
+                .toList();
+    }
+
+    public SubscriptionDto getSubscriptionByTopic(String topic, String subscription) {
+        List<MessageDto> messages = messageService.peekMessages(topic, subscription);
+        return SubscriptionDto.create(getTopicStats(topic).getSubscriptions().get(subscription), messages, subscription);
+    }
+
+    //source: https://www.baeldung.com/java-streams-distinct-by
+    public static <T> Predicate<T> distinctByKey(
+            Function<? super T, ?> keyExtractor) {
+
+        Map<Object, Boolean> seen = new ConcurrentHashMap<>();
+        return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
+    }
 }

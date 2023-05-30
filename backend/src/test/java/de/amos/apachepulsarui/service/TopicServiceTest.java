@@ -26,9 +26,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class TopicServiceTest {
@@ -45,9 +43,8 @@ class TopicServiceTest {
     private Lookup lookup;
     @InjectMocks
     private TopicService topicService;
-    MockedStatic <TopicDto> topicDtoMockedStatic;
-
-    MockedStatic <TopicName> topicNameMockedStatic;
+    MockedStatic<TopicDto> topicDtoMockedStatic;
+    MockedStatic<TopicName> topicNameMockedStatic;
 
 
     @BeforeEach

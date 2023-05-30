@@ -35,6 +35,8 @@ public class MessageDto {
 
     Long publishTime;
 
+    String producer;
+
     /**
      * Static factory for messages already existing in Pulsar.
      */
@@ -48,6 +50,7 @@ public class MessageDto {
         messageDto.namespace = TopicName.get(topicName).getNamespacePortion();
         messageDto.tenant = TopicName.get(topicName).getTenant();
         messageDto.publishTime = message.getPublishTime();
+        messageDto.producer = message.getProducerName();
 
         return messageDto;
     }

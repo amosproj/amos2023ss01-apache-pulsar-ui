@@ -12,8 +12,8 @@ import org.apache.pulsar.common.policies.data.ClusterData;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -30,19 +30,16 @@ public class ClusterService {
      */
     @Cacheable("getAllClusters")
     public List<ClusterDto> getAllClusters() throws PulsarApiException {
-        List<ClusterDto> list = new ArrayList<>();
         try {
-            for (String clusterName : pulsarAdmin.clusters().getClusters()) {
-                ClusterDto clusterDto = ClusterDto.fromString(clusterName);
-                ClusterDto enrichedWithClusterData = enrichWithClusterData(clusterDto);
-                ClusterDto enrichedWithBrokerData = enrichWithBrokerData(enrichedWithClusterData);
-                ClusterDto enrichedWithTopologyElements = enrichWithTopologyElements(enrichedWithBrokerData);
-                list.add(enrichedWithTopologyElements);
-            }
+            return pulsarAdmin.clusters().getClusters().stream()
+                    .map(ClusterDto::fromString)
+                    .map(this::enrichWithClusterData)
+                    .map(this::enrichWithBrokerData)
+                    .map(this::enrichWithTopologyElements)
+                    .collect(Collectors.toList());
         } catch (PulsarAdminException e) {
             throw new PulsarApiException("Could not fetch list a list of all clusters.", e);
         }
-        return list;
     }
 
     private ClusterDto enrichWithClusterData(ClusterDto cluster) throws PulsarApiException {

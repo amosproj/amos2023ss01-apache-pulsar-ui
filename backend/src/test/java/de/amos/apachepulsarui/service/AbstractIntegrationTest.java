@@ -5,13 +5,11 @@
 
 package de.amos.apachepulsarui.service;
 
-import de.amos.apachepulsarui.startup.ApplicationStartupListener;
 import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.apache.pulsar.client.admin.PulsarAdminException;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.util.TestPropertyValues;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -24,14 +22,10 @@ import org.testcontainers.utility.DockerImageName;
 @ContextConfiguration(initializers = {AbstractIntegrationTest.Initializer.class})
 public class AbstractIntegrationTest {
 
-    // mocking this to avoid dummy data creation on startup
-    @MockBean
-    private ApplicationStartupListener applicationStartupListener;
-
     @Autowired
     private PulsarAdmin pulsarAdmin;
 
-    private static final PulsarContainer pulsar = new PulsarContainer(DockerImageName.parse("apachepulsar/pulsar:latest"));
+    private static final PulsarContainer pulsar = new PulsarContainer(DockerImageName.parse("apachepulsar/pulsar:3.0.0"));
 
     static {
         // singleton containers that are re-used across sub-classes
