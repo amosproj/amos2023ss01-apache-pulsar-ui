@@ -31,7 +31,12 @@ public class ClusterService {
     @Cacheable("getAllClusters")
     public List<ClusterDto> getAllClusters() throws PulsarApiException {
         try {
-            return pulsarAdmin.clusters().getClusters().stream().map(ClusterDto::fromString).map(this::enrichWithClusterData).map(this::enrichWithBrokerData).map(this::enrichWithTopologyElements).collect(Collectors.toList());
+            return pulsarAdmin.clusters().getClusters().stream()
+                    .map(ClusterDto::fromString)
+                    .map(this::enrichWithClusterData)
+                    .map(this::enrichWithBrokerData)
+                    .map(this::enrichWithTopologyElements)
+                    .collect(Collectors.toList());
         } catch (PulsarAdminException e) {
             throw new PulsarApiException("Could not fetch list a list of all clusters.", e);
         }
