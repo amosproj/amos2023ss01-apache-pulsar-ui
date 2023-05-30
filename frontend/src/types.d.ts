@@ -167,6 +167,7 @@ type SampleNamespace = {
 
 type SampleTopic = {
 	id: string
+	name: string
 	localName: string
 	namespace: string
 	tenant: string
@@ -176,7 +177,7 @@ type SampleTopic = {
 }
 
 type SampleTopicStats = {
-	subscriptions: Array<SampleSubscription>
+	subscriptions: Array<string>
 	producers: Array<string>
 	numberSubscriptions: number
 	numberProducers: number

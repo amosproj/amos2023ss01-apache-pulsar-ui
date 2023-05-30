@@ -5,10 +5,12 @@ import ProducerModal from '../modals/ProducerModal'
 import ConsumerModal from '../modals/ConsumerModal'
 
 const TopicView: React.FC<TopicViewProps> = ({ data, handleClick }) => {
+	/*
 	const topicConsumers = data?.topicStatsDto?.subscriptions
 		.map((item: SampleSubscription) => item.consumers)
 		.filter((el: Array<string>) => el && el.length > 0)
 		.flat()
+	*/
 
 	const topicProducers = data?.topicStatsDto?.producers
 
@@ -59,7 +61,7 @@ const TopicView: React.FC<TopicViewProps> = ({ data, handleClick }) => {
 						<p className="text-black">
 							Consumers:{' '}
 							<span className="text-blue">
-								{topicConsumers &&
+								{/*topicConsumers &&
 									topicConsumers.length > 0 &&
 									topicConsumers.map((item: string, index: number) => (
 										<ConsumerModal
@@ -70,7 +72,7 @@ const TopicView: React.FC<TopicViewProps> = ({ data, handleClick }) => {
 												messageList: ['SampleMessage1', 'SampleMessage2'],
 											}}
 										/>
-									))}
+										))*/}
 							</span>
 						</p>
 					</div>
