@@ -10,10 +10,8 @@ import {
 	fetchAllMessagesThunk,
 	selectClusterData,
 	selectMessages,
-	selectShowLP,
 	selectView,
 } from './store/globalSlice'
-import LandingPage from './components/landing/LandingPage'
 import NavBar from './components/NavBar'
 import Dashboard from './components/Dashboard'
 import { combineAsyncThunk } from './store/globalSlice'
@@ -28,7 +26,7 @@ function App() {
 	allData = useAppSelector(selectClusterData)
 	allMessages = useAppSelector(selectMessages)
 	/** Landing Page Logic */
-	const showLP = useAppSelector(selectShowLP)
+	// const showLP = useAppSelector(selectShowLP)
 	/** End of Landing Page Logic */
 
 	/*const allTenants = allData
@@ -120,18 +118,14 @@ function App() {
 
 	return (
 		<>
-			{showLP ? (
-				<LandingPage />
-			) : (
-				<div className="dashboard-container">
-					<NavBar />
-					<Dashboard
-						completeData={allData}
-						completeMessages={allMessages}
-						view={view.selectedNav}
-					/>
-				</div>
-			)}
+			<div className="dashboard-container">
+				<NavBar />
+				<Dashboard
+					completeData={allData}
+					completeMessages={allMessages}
+					view={view.selectedNav}
+				/>
+			</div>
 		</>
 	)
 }

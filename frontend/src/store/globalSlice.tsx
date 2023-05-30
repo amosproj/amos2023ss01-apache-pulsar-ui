@@ -31,7 +31,7 @@ const initialState: globalState = {
 		filteredId: null,
 	},
 	data: [],
-	endpoint: '',
+	endpoint: '127.0.0.1:8080',
 	rawClusterData: [],
 	rawTopicData: {},
 	clusterData: [],
@@ -124,10 +124,13 @@ const globalSlice = createSlice({
 	name: 'globalControl',
 	initialState,
 	reducers: {
-		moveToApp: (state) => {
-			state.showLP = false
-		},
-		backToLP: () => initialState,
+		/** Old landing page logic */
+		// moveToApp: (state) => {
+		// 	state.showLP = false
+		// 	console.log('sdsd')
+		// },
+		// backToLP: () => initialState,
+		/** End of landing page logic */
 		setNav: (state, action: PayloadAction<string>) => {
 			state.view.selectedNav = action.payload
 		},
@@ -208,15 +211,7 @@ const selectClusterData = (state: RootState): any =>
 const selectMessages = (state: RootState): any =>
 	state.globalControl.messageList
 
-export const {
-	moveToApp,
-	backToLP,
-	setNav,
-	setView,
-	updateData,
-	setData,
-	setEndpoint,
-} = actions
+export const { setNav, setView, updateData, setData, setEndpoint } = actions
 
 export {
 	selectShowLP,
