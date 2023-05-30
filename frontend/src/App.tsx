@@ -17,6 +17,7 @@ import LandingPage from './components/landing/LandingPage'
 import NavBar from './components/NavBar'
 import Dashboard from './components/Dashboard'
 import { combineAsyncThunk } from './store/globalSlice'
+import { useInterval } from './components/custom/hooks'
 
 let allData: Array<SampleCluster> = []
 let allMessages: Array<SampleMessage> = []
@@ -111,6 +112,11 @@ function App() {
 	useEffect(() => {
 		dispatch(fetchAllMessagesThunk())
 	}, [allData])
+
+	//fetch messages every 30 seconds
+	useInterval(() => {
+		dispatch(fetchAllMessagesThunk())
+	}, 30000)
 
 	return (
 		<>
