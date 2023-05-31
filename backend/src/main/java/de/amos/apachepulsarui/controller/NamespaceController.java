@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -28,13 +29,20 @@ public class NamespaceController {
     private final NamespaceService namespaceService;
     private final TenantService tenantService;
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<NamespacesDto> getAllNamespaces() {
         List<TenantDto> tenants = tenantService.getAllTenants();
-        List<NamespaceDto> namespaceDtos = tenants.stream()
-                .flatMap(tenant -> namespaceService.getAllOfTenant(tenant).stream())
+        List<String> namespaceDtos = tenants.stream()
+                .flatMap(tenant -> namespaceService.getAllOfTenant(tenant).stream().map(
+                        NamespaceDto::getId
+                ))
                 .toList();
         return new ResponseEntity<>(new NamespacesDto(namespaceDtos), HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity<NamespaceDto> getNamespace(@RequestParam String name) {
+        return new ResponseEntity<>(namespaceService.getNamespaceByName(name), HttpStatus.OK);
     }
 
 }

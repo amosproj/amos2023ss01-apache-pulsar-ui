@@ -38,7 +38,7 @@ public class NamespaceControllerTest {
     TenantService tenantService;
 
     @Test
-    void getAllNamespaces_returnsAllNamespaces() throws Exception {
+    void getAllNamespaces_returnsAllNamespacesAsStrings() throws Exception {
 
         List<NamespaceDto> tenant1Namespaces = List.of(
                 NamespaceDto.fromString("tenant1/namespace1"),
@@ -54,10 +54,25 @@ public class NamespaceControllerTest {
         Mockito.when(namespaceService.getAllOfTenant(tenants.get(0))).thenReturn(tenant1Namespaces);
         Mockito.when(namespaceService.getAllOfTenant(tenants.get(1))).thenReturn(tenant2Namespaces);
 
-        mockMvc.perform(get("/namespace"))
+        mockMvc.perform(get("/namespace/all"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.namespaces[0].id", equalTo(tenant1Namespaces.get(0).getId())))
-                .andExpect(jsonPath("$.namespaces[1].id", equalTo(tenant1Namespaces.get(1).getId())))
-                .andExpect(jsonPath("$.namespaces[2].id", equalTo(tenant2Namespaces.get(0).getId())));
+                .andExpect(jsonPath("$.namespaces[0]", equalTo(tenant1Namespaces.get(0).getId())))
+                .andExpect(jsonPath("$.namespaces[1]", equalTo(tenant1Namespaces.get(1).getId())))
+                .andExpect(jsonPath("$.namespaces[2]", equalTo(tenant2Namespaces.get(0).getId())));
+    }
+
+    @Test
+    void getNamespaceByName_returnsNamespace() throws Exception {
+
+        NamespaceDto namespace = NamespaceDto.fromString("tenantX/namespace1");
+        namespace.setTopics(List.of("a", "b"));
+
+        Mockito.when(namespaceService.getNamespaceByName("tenantX/namespace1")).thenReturn(namespace);
+
+        mockMvc.perform(get("/namespace?name=tenantX/namespace1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", equalTo(namespace.getId())))
+                .andExpect(jsonPath("$.amountOfTopics", equalTo(namespace.getAmountOfTopics())))
+                .andExpect(jsonPath("$.topics", equalTo(namespace.getTopics())));
     }
 }

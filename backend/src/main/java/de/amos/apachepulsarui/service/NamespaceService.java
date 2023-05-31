@@ -38,6 +38,10 @@ public class NamespaceService {
         }
     }
 
+    public NamespaceDto getNamespaceByName(String name) {
+        return enrichWithNamespaceData(NamespaceDto.fromString(name));
+    }
+
     private NamespaceDto enrichWithNamespaceData(NamespaceDto namespace) {
         try {
             Namespaces namespaces = pulsarAdmin.namespaces();
@@ -53,5 +57,4 @@ public class NamespaceService {
             return namespace;
         }
     }
-
 }
