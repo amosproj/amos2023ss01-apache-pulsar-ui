@@ -6,6 +6,8 @@
 
 package de.amos.apachepulsarui.service;
 
+import de.amos.apachepulsarui.dto.NamespaceDto;
+import de.amos.apachepulsarui.dto.TenantDto;
 import de.amos.apachepulsarui.dto.TopicDto;
 import org.apache.pulsar.client.admin.Lookup;
 import org.apache.pulsar.client.admin.PulsarAdmin;
@@ -25,6 +27,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
@@ -41,11 +44,23 @@ class TopicServiceTest {
     private MessageService messageService;
     @Mock
     private Lookup lookup;
+    @Mock
+    private NamespaceService namespaceService;
+    @Mock
+    private TenantService tenantService;
     @InjectMocks
     private TopicService topicService;
     MockedStatic<TopicDto> topicDtoMockedStatic;
     MockedStatic<TopicName> topicNameMockedStatic;
-
+    private static final String BROKER = "Broker";
+    private static final String TENANT = "public";
+    private static final String NAMESPACE = "public/default";
+    private static final String TOPIC_NAME = "persistent://public/default/tatooine";
+    List<String> topicNames = List.of(
+            "persistent://public/default/tatooine",
+            "non-persistent://public/default/naboo",
+            "persistent://public/default/coruscant"
+    );
 
     @BeforeEach
     public void beforeEach() {
@@ -60,57 +75,58 @@ class TopicServiceTest {
     }
 
     @Test
-    void getAllTopics() throws PulsarAdminException {
+    void getAllTopicNames() throws PulsarAdminException {
+        TenantDto tenantDto = TenantDto.fromString(TENANT);
+        NamespaceDto namespaceDto = NamespaceDto.fromString(NAMESPACE);
+        when(tenantService.getAllTenants()).thenReturn(List.of(tenantDto));
+        when(namespaceService.getAllOfTenant(tenantDto)).thenReturn(List.of(namespaceDto));
         whenAdminTopics();
-        whenTopicStats();
-        whenOwnerBroker();
+        when(topicService.getAllNamesByNamespace(namespaceDto.getId())).thenReturn(topicNames);
 
-        topicService.getAllByNamespace("abc");
+        assertEquals(topicService.getAll(), topicNames);
+    }
 
-        topicDtoMockedStatic.verify(
-                () -> TopicDto.createTopicDto("Topic", topicStats, "zyx"),
-                times(1)
-        );
+    @Test
+    void getAllTopicsByNamespace() throws PulsarAdminException {
+        whenAdminTopics();
+
+        assertEquals(topicService.getAllNamesByNamespace(NAMESPACE), List.of(TOPIC_NAME));
     }
 
     private void whenTopicStats() throws PulsarAdminException {
         when(pulsarAdmin.topics()).thenReturn(topics);
-        when(pulsarAdmin.topics().getStats("Topic")).thenReturn(topicStats);
+        when(pulsarAdmin.topics().getStats(TOPIC_NAME)).thenReturn(topicStats);
     }
-
 
     private void whenAdminTopics() throws PulsarAdminException {
         when(pulsarAdmin.topics()).thenReturn(topics);
-        when(pulsarAdmin.topics().getList("abc")).thenReturn(List.of("Topic"));
+        when(pulsarAdmin.topics().getList(NAMESPACE)).thenReturn(List.of(TOPIC_NAME));
     }
 
     private void whenOwnerBroker() throws PulsarAdminException {
         when(pulsarAdmin.lookups()).thenReturn(lookup);
-        when(pulsarAdmin.lookups().lookupTopic("Topic")).thenReturn("zyx");
-
+        when(pulsarAdmin.lookups().lookupTopic(TOPIC_NAME)).thenReturn(BROKER);
     }
 
     @Test
     void createNewTopic() throws PulsarAdminException {
-        String topic = "Topic";
         when(pulsarAdmin.topics()).thenReturn(topics);
 
-        assertTrue(topicService.createNewTopic(topic));
+        assertTrue(topicService.createNewTopic(TOPIC_NAME));
 
-        verify(pulsarAdmin.topics()).createNonPartitionedTopic(topic);
+        verify(pulsarAdmin.topics()).createNonPartitionedTopic(TOPIC_NAME);
     }
 
     @Test
     void getTopicWithMessagesByName() throws PulsarAdminException {
-        when(messageService.peekMessages("Topic")).thenReturn(List.of());
+        when(messageService.peekMessages(TOPIC_NAME)).thenReturn(List.of());
         whenTopicStats();
         whenOwnerBroker();
 
-        topicService.getTopicWithMessagesByName("Topic");
-
+        topicService.getTopicWithMessagesByName(TOPIC_NAME);
 
         topicDtoMockedStatic.verify(
-                () -> TopicDto.createTopicDtoWithMessages("Topic", topicStats, "zyx", List.of()),
+                () -> TopicDto.createTopicDtoWithMessages(TOPIC_NAME, topicStats, BROKER, List.of()),
                 times(1)
         );
     }
