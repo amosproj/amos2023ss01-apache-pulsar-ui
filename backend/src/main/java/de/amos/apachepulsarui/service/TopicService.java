@@ -35,17 +35,6 @@ public class TopicService {
 
     private final MessageService messageService;
 
-    private final TenantService tenantService;
-
-    private final NamespaceService namespaceService;
-
-    @Cacheable("topic.getAll")
-    public List<String> getAll() {
-        return tenantService.getAllTenants().stream()
-                .flatMap(tenantDto -> namespaceService.getAllOfTenant(tenantDto).stream())
-                .flatMap(namespaceDto -> getAllNamesByNamespace(namespaceDto.getId()).stream())
-                .toList();
-    }
 
     /**
      * @param namespace The namespace you want to get a list of all topics for.
