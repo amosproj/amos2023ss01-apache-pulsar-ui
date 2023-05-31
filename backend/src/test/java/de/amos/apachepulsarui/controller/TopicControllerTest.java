@@ -9,8 +9,6 @@ import de.amos.apachepulsarui.dto.MessageDto;
 import de.amos.apachepulsarui.dto.ProducerDto;
 import de.amos.apachepulsarui.dto.SubscriptionDto;
 import de.amos.apachepulsarui.dto.TopicDto;
-import de.amos.apachepulsarui.service.NamespaceService;
-import de.amos.apachepulsarui.service.TenantService;
 import de.amos.apachepulsarui.service.TopicService;
 import net.bytebuddy.utility.RandomString;
 import org.apache.pulsar.common.policies.data.SubscriptionStats;
@@ -23,7 +21,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.when;
@@ -41,34 +38,26 @@ public class TopicControllerTest {
     private TopicService topicService;
 
     @MockBean
-    private NamespaceService namespaceService;
-
-    @MockBean
-    TenantService tenantService;
-
-    @MockBean
     private TopicStats topicStats;
 
     @MockBean
     private SubscriptionStats subscriptionStats;
 
     @Test
-    void returnAllTopicsByNamespace() throws Exception {
+    void returnAllTopicNames() throws Exception {
 
-        List<TopicDto> topics = Stream.of(
+        List<String> topics = List.of(
                 "persistent://public/default/tatooine",
                 "non-persistent://public/default/naboo",
                 "persistent://public/default/coruscant"
-        ).map(values -> TopicDto.createTopicDto(values, topicStats, RandomString.make(1))).toList();
-
-        when(topicService.getAllByNamespace("public/default")).thenReturn(topics);
-
-        mockMvc.perform(get("/topic/public/default")
+        );
+        when(topicService.getAll()).thenReturn(topics);
+        mockMvc.perform(get("/topic/all")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.topics[0].name", equalTo(topics.get(0).getName())))
-                .andExpect(jsonPath("$.topics[1].name", equalTo(topics.get(1).getName())))
-                .andExpect(jsonPath("$.topics[2].name", equalTo(topics.get(2).getName())));
+                .andExpect(jsonPath("$.topics[0]", equalTo(topics.get(0))))
+                .andExpect(jsonPath("$.topics[1]", equalTo(topics.get(1))))
+                .andExpect(jsonPath("$.topics[2]", equalTo(topics.get(2))));
     }
 
     @Test
