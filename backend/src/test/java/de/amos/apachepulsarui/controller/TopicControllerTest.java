@@ -5,10 +5,9 @@
 
 package de.amos.apachepulsarui.controller;
 
-import de.amos.apachepulsarui.dto.MessageDto;
-import de.amos.apachepulsarui.dto.ProducerDto;
-import de.amos.apachepulsarui.dto.SubscriptionDto;
-import de.amos.apachepulsarui.dto.TopicDto;
+import de.amos.apachepulsarui.dto.*;
+import de.amos.apachepulsarui.service.NamespaceService;
+import de.amos.apachepulsarui.service.TenantService;
 import de.amos.apachepulsarui.service.TopicService;
 import net.bytebuddy.utility.RandomString;
 import org.apache.pulsar.common.policies.data.SubscriptionStats;
@@ -38,6 +37,12 @@ public class TopicControllerTest {
     private TopicService topicService;
 
     @MockBean
+    private NamespaceService namespaceService;
+
+    @MockBean
+    TenantService tenantService;
+
+    @MockBean
     private TopicStats topicStats;
 
     @MockBean
@@ -51,7 +56,15 @@ public class TopicControllerTest {
                 "non-persistent://public/default/naboo",
                 "persistent://public/default/coruscant"
         );
-        when(topicService.getAll()).thenReturn(topics);
+
+        TenantDto tenantDto = TenantDto.fromString("pulic");
+        NamespaceDto namespaceDto = NamespaceDto.fromString("public/default");
+        when(tenantService.getAllTenants()).thenReturn(List.of(tenantDto));
+        when(namespaceService.getAllOfTenant(tenantDto)).thenReturn(List.of(namespaceDto));
+        when(topicService.getAllNamesByNamespace(namespaceDto.getId())).thenReturn(topics);
+
+
+
         mockMvc.perform(get("/topic/all")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())

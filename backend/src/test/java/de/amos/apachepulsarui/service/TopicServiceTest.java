@@ -6,8 +6,6 @@
 
 package de.amos.apachepulsarui.service;
 
-import de.amos.apachepulsarui.dto.NamespaceDto;
-import de.amos.apachepulsarui.dto.TenantDto;
 import de.amos.apachepulsarui.dto.TopicDto;
 import org.apache.pulsar.client.admin.Lookup;
 import org.apache.pulsar.client.admin.PulsarAdmin;
@@ -44,23 +42,14 @@ class TopicServiceTest {
     private MessageService messageService;
     @Mock
     private Lookup lookup;
-    @Mock
-    private NamespaceService namespaceService;
-    @Mock
-    private TenantService tenantService;
+
     @InjectMocks
     private TopicService topicService;
     MockedStatic<TopicDto> topicDtoMockedStatic;
     MockedStatic<TopicName> topicNameMockedStatic;
     private static final String BROKER = "Broker";
-    private static final String TENANT = "public";
     private static final String NAMESPACE = "public/default";
     private static final String TOPIC_NAME = "persistent://public/default/tatooine";
-    List<String> topicNames = List.of(
-            "persistent://public/default/tatooine",
-            "non-persistent://public/default/naboo",
-            "persistent://public/default/coruscant"
-    );
 
     @BeforeEach
     public void beforeEach() {
@@ -74,17 +63,6 @@ class TopicServiceTest {
         topicNameMockedStatic.close();
     }
 
-    @Test
-    void getAllTopicNames() throws PulsarAdminException {
-        TenantDto tenantDto = TenantDto.fromString(TENANT);
-        NamespaceDto namespaceDto = NamespaceDto.fromString(NAMESPACE);
-        when(tenantService.getAllTenants()).thenReturn(List.of(tenantDto));
-        when(namespaceService.getAllOfTenant(tenantDto)).thenReturn(List.of(namespaceDto));
-        whenAdminTopics();
-        when(topicService.getAllNamesByNamespace(namespaceDto.getId())).thenReturn(topicNames);
-
-        assertEquals(topicService.getAll(), topicNames);
-    }
 
     @Test
     void getAllTopicsByNamespace() throws PulsarAdminException {

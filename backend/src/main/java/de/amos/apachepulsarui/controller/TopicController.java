@@ -10,12 +10,16 @@ import de.amos.apachepulsarui.dto.ProducerDto;
 import de.amos.apachepulsarui.dto.SubscriptionDto;
 import de.amos.apachepulsarui.dto.TopicDto;
 import de.amos.apachepulsarui.dto.TopicsDto;
+import de.amos.apachepulsarui.service.NamespaceService;
+import de.amos.apachepulsarui.service.TenantService;
 import de.amos.apachepulsarui.service.TopicService;
 import lombok.RequiredArgsConstructor;
 import org.apache.pulsar.common.naming.TopicName;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -25,11 +29,20 @@ public class TopicController {
 
     private final TopicService topicService;
 
+    private final TenantService tenantService;
+
+    private final NamespaceService namespaceService;
+
+
     // Talked about this with Julian - probably we won't use it this way later, but at first it's easier for them
     // to just get all topics at once.
     @GetMapping("/all")
     public ResponseEntity<TopicsDto> getAll() {
-        return new ResponseEntity<>(new TopicsDto(topicService.getAll()), HttpStatus.OK);
+        List<String> allTopics = tenantService.getAllTenants().stream()
+                .flatMap(tenantDto -> namespaceService.getAllOfTenant(tenantDto).stream())
+                .flatMap(namespaceDto -> topicService.getAllNamesByNamespace(namespaceDto.getId()).stream())
+                .toList();
+        return new ResponseEntity<>(new TopicsDto(allTopics), HttpStatus.OK);
     }
 
     @GetMapping
