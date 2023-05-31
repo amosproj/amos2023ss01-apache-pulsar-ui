@@ -7,7 +7,6 @@
 package de.amos.apachepulsarui.controller;
 
 import de.amos.apachepulsarui.dto.NamespaceDto;
-import de.amos.apachepulsarui.dto.TenantDto;
 import de.amos.apachepulsarui.service.NamespaceService;
 import de.amos.apachepulsarui.service.TenantService;
 import org.junit.jupiter.api.Test;
@@ -48,11 +47,11 @@ public class NamespaceControllerTest {
         tenant1Namespaces.forEach(namespace -> namespace.setTopics(new ArrayList<>()));
         tenant2Namespaces.forEach(namespace -> namespace.setTopics(new ArrayList<>()));
 
-        List<TenantDto> tenants = List.of(TenantDto.fromString("tenant1"),
-                TenantDto.fromString("tenant2"));
-        Mockito.when(tenantService.getAllTenants()).thenReturn(tenants);
-        Mockito.when(namespaceService.getAllOfTenant(tenants.get(0))).thenReturn(tenant1Namespaces);
-        Mockito.when(namespaceService.getAllOfTenant(tenants.get(1))).thenReturn(tenant2Namespaces);
+        List<String> tenants = List.of("tenant1", "tenant2");
+        Mockito.when(tenantService.getAllNames()).thenReturn(tenants);
+        // TODO: reactivate when namespace has been refactored
+//        Mockito.when(namespaceService.getAllOfTenant(tenants.get(0))).thenReturn(tenant1Namespaces);
+//        Mockito.when(namespaceService.getAllOfTenant(tenants.get(1))).thenReturn(tenant2Namespaces);
 
         mockMvc.perform(get("/namespace"))
                 .andExpect(status().isOk())

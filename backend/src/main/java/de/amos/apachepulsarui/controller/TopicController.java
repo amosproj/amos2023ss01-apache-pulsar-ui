@@ -36,7 +36,7 @@ public class TopicController {
     // to just get all topics at once.
     @GetMapping("/all")
     public ResponseEntity<TopicsDto> getAll() {
-        List<TopicDto> allTopics = tenantService.getAllTenants().stream()
+        List<TopicDto> allTopics = tenantService.getAllNames().stream()
                 .flatMap(tenantDto -> namespaceService.getAllOfTenant(tenantDto).stream())
                 .flatMap(namespaceDto -> topicService.getAllByNamespace(namespaceDto.getId()).stream())
                 .toList();

@@ -11,6 +11,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 @Slf4j
@@ -18,9 +19,10 @@ import java.util.List;
 public class ClusterService {
 
     private final PulsarAdmin pulsarAdmin;
+    private final TenantService tenantService;
 
     @Cacheable("cluster.all")
-    public List<String> getAllClusterNames() {
+    public List<String> getAllNames() {
         try {
             return pulsarAdmin.clusters().getClusters();
         } catch (PulsarAdminException e) {
@@ -32,12 +34,17 @@ public class ClusterService {
     public ClusterDto getClusterDetails(String clusterName) {
 
         ClusterData clusterData = getClusterData(clusterName);
+        List<String> activeBrokers = getActiveBrokers(clusterName);
+        List<String> tenantsAllowedForCluster = getTenantsAllowedForCluster(clusterName);
 
         return ClusterDto.builder()
                 .name(clusterName)
                 .serviceUrl(clusterData.getServiceUrl())
                 .brokerServiceUrl(clusterData.getBrokerServiceUrl())
-                .brokers(getActiveBrokers(clusterName))
+                .brokers(activeBrokers)
+                .amountOfBrokers(activeBrokers.size())
+                .tenants(tenantsAllowedForCluster)
+                .amountOfTenants(tenantsAllowedForCluster.size())
                 .build();
     }
 
@@ -59,6 +66,23 @@ public class ClusterService {
                     "Could not fetch fetch active brokers of cluster '%s'".formatted(clusterName), e
             );
         }
+    }
+
+    private List<String> getTenantsAllowedForCluster(String clusterName) throws PulsarApiException {
+        return tenantService.getAllNames().stream()
+                .filter(tenantName -> {
+                    try {
+                        Set<String> allowedClusters = pulsarAdmin.tenants()
+                                .getTenantInfo(tenantName)
+                                .getAllowedClusters();
+                        return allowedClusters.contains(clusterName);
+                    } catch (PulsarAdminException e) {
+                        throw new PulsarApiException(
+                                "Could not fetch tenants allowed for cluster %s.".formatted(clusterName), e
+                        );
+                    }
+                })
+                .toList();
     }
 
 }

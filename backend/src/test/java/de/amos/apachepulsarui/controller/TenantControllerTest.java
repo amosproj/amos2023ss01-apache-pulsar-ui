@@ -43,7 +43,7 @@ public class TenantControllerTest {
         ).map(TenantDto::fromString).collect(Collectors.toList());
         tenants.forEach(tenant -> tenant.setNamespaces(new ArrayList<>()));
 
-        Mockito.when(tenantService.getAllTenants()).thenReturn(tenants);
+        Mockito.when(tenantService.getAllNames()).thenReturn(tenants);
 
         mockMvc.perform(get("/tenant"))
                 .andExpect(status().isOk())

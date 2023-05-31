@@ -30,7 +30,7 @@ public class NamespaceController {
 
     @GetMapping
     public ResponseEntity<NamespacesDto> getAllNamespaces() {
-        List<TenantDto> tenants = tenantService.getAllTenants();
+        List<TenantDto> tenants = tenantService.getAllNames();
         List<NamespaceDto> namespaceDtos = tenants.stream()
                 .flatMap(tenant -> namespaceService.getAllOfTenant(tenant).stream())
                 .toList();

@@ -18,7 +18,7 @@ public class ClusterDto {
 
     private String name;
 
-    private List<TenantDto> tenants;
+    private List<String> tenants;
 
 	private List<String> brokers;
 
@@ -26,24 +26,10 @@ public class ClusterDto {
 	private int amountOfTenants;
 
 	@Setter(AccessLevel.PRIVATE)
-	private int amountOfNamespaces;
-
-	@Setter(AccessLevel.PRIVATE)
-	private int amountOfTopics;
-
-	@Setter(AccessLevel.PRIVATE)
 	private int amountOfBrokers;
 
 	private String brokerServiceUrl;
 
 	private String serviceUrl;
-
-	/**
-	 * Set's the list of brokers, and it's size (amountOfBrokers) for this cluster.
-	 */
-	public void setBrokers(List<String> brokers) {
-		this.brokers = brokers;
-		this.amountOfBrokers = brokers.size();
-	}
 
 }

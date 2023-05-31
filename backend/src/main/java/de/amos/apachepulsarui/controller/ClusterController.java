@@ -25,8 +25,8 @@ public class ClusterController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<String >> getAll() {
-        return new ResponseEntity<>(clusterService.getAllClusterNames(), HttpStatus.OK);
+    public ResponseEntity<List<String>> getAll() {
+        return new ResponseEntity<>(clusterService.getAllNames(), HttpStatus.OK);
     }
 
 }
