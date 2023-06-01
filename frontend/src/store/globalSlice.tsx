@@ -27,7 +27,7 @@ export type globalState = {
 const initialState: globalState = {
 	showLP: true,
 	view: {
-		selectedNav: null,
+		selectedNav: 'cluster',
 		filteredId: null,
 	},
 	data: [],

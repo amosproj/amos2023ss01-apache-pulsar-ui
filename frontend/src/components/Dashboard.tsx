@@ -360,77 +360,63 @@ const Dashboard: React.FC<DashboardProps> = ({
 	}
 
 	const dashboardTitle = view + 's'
-	if (view) {
-		return (
-			<div
-				data-testid="main-dashboard"
-				className="flex main-card main-dashboard"
-			>
-				<div className="primary-dashboard">
-					<h2 className="text-black dashboard-title">
-						Available {dashboardTitle}
-					</h2>
-					{dataFiltered &&
-						dataFiltered.length > 0 &&
-						dataFiltered.map(
-							(
-								item:
-									| SampleCluster
-									| SampleTenant
-									| SampleNamespace
-									| SampleTopic
-									| SampleMessage
-							) => (
-								<Card
-									handleClick={handleClick}
-									key={'card-' + Math.floor(Math.random() * 999999)}
-									data={item}
-								></Card>
-							)
-						)}
-				</div>
-				<div className="secondary-dashboard w-full">
-					<CustomSearchbar
-						placeholder={'Search'}
-						setSearchQuery={setSearchQuery}
-					/>
-					{checkQueryLength(view) && (
-						<span
-							className="reset-all-filter-button"
-							onClick={() => resetAllFilters()}
-						>
-							Reset all filters
-						</span>
+
+	return (
+		<div data-testid="main-dashboard" className="flex main-card main-dashboard">
+			<div className="primary-dashboard">
+				<h2 className="text-black dashboard-title">
+					Available {dashboardTitle}
+				</h2>
+				{dataFiltered &&
+					dataFiltered.length > 0 &&
+					dataFiltered.map(
+						(
+							item:
+								| SampleCluster
+								| SampleTenant
+								| SampleNamespace
+								| SampleTopic
+								| SampleMessage
+						) => (
+							<Card
+								handleClick={handleClick}
+								key={'card-' + Math.floor(Math.random() * 999999)}
+								data={item}
+							></Card>
+						)
 					)}
-					<div className="flex filters-wrapper">
-						<h2 className="text-black dashboard-title">Filters</h2>
-						<FilterListIcon style={{ fill: '#A4A4A4' }} />
-					</div>
-					<CustomFilter
-						selectedClusters={clusterQuery}
-						selectedTenants={tenantQuery}
-						selectedNamespaces={namespaceQuery}
-						selectedTopics={topicQuery}
-						selectedMessages={messageQuery}
-						messages={completeMessages}
-						data={completeData}
-						handleChange={handleChange}
-						currentView={view}
-					/>
-				</div>
 			</div>
-		)
-	} else {
-		return (
-			<div className="flex main-card main-dashboard">
-				<div className="primary-dashboard">
-					<h2 className="text-black dashboard-title">
-						Welcome to Apache Pulsar UI
-					</h2>
+			<div className="secondary-dashboard w-full">
+				<CustomSearchbar
+					placeholder={'Search'}
+					setSearchQuery={setSearchQuery}
+				/>
+				{checkQueryLength(view) && (
+					<span
+						className="reset-all-filter-button"
+						onClick={() => resetAllFilters()}
+					>
+						Reset all filters
+					</span>
+				)}
+				<div className="flex filters-wrapper">
+					<h2 className="text-black dashboard-title">Filters</h2>
+					<FilterListIcon style={{ fill: '#A4A4A4' }} />
 				</div>
+				<CustomFilter
+					selectedClusters={clusterQuery}
+					selectedTenants={tenantQuery}
+					selectedNamespaces={namespaceQuery}
+					selectedTopics={topicQuery}
+					selectedMessages={messageQuery}
+					messages={completeMessages}
+					data={completeData}
+					handleChange={handleChange}
+					currentView={view}
+				/>
 			</div>
-		)
-	}
+		</div>
+	)
 }
 
 export default Dashboard
