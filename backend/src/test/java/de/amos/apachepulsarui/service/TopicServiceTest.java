@@ -68,7 +68,7 @@ class TopicServiceTest {
     void getAllTopicsByNamespace() throws PulsarAdminException {
         whenAdminTopics();
 
-        assertEquals(topicService.getAllNamesByNamespace(NAMESPACE), List.of(TOPIC_NAME));
+        assertEquals(topicService.getAllByNamespace(NAMESPACE), List.of(TOPIC_NAME));
     }
 
     private void whenTopicStats() throws PulsarAdminException {
@@ -101,7 +101,7 @@ class TopicServiceTest {
         whenTopicStats();
         whenOwnerBroker();
 
-        topicService.getTopicWithMessagesByName(TOPIC_NAME);
+        topicService.getTopicDetails(TOPIC_NAME);
 
         topicDtoMockedStatic.verify(
                 () -> TopicDto.createTopicDtoWithMessages(TOPIC_NAME, topicStats, BROKER, List.of()),

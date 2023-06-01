@@ -41,7 +41,7 @@ public class TopicService {
      * @return A list of topics (their fully qualified names).
      */
     @Cacheable("topic.allNamesByNamespace")
-    public List<String> getAllNamesByNamespace(String namespace) {
+    public List<String> getAllByNamespace(String namespace) {
         return getByNamespace(namespace);
     }
 
@@ -71,7 +71,7 @@ public class TopicService {
      * @return A {@link TopicDto}'s including {@link TopicStatsDto}, List of {@link MessageDto} and
      * additional metadata.
      */
-    public TopicDto getTopicWithMessagesByName(String name) {
+    public TopicDto getTopicDetails(String name) {
         List<MessageDto> messages = messageService.peekMessages(name);
         return TopicDto.createTopicDtoWithMessages(name,
                 getTopicStats(name),
