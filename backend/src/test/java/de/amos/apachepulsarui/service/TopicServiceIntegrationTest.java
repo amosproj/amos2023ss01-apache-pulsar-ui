@@ -30,7 +30,7 @@ public class TopicServiceIntegrationTest extends AbstractIntegrationTest {
     @Test
     void getByNamespace_returnsCreatedTopics() {
         topicService.createNewTopic("topic-service-integration-test");
-        List<String> topics = topicService.getAllNamesByNamespace("public/default");
+        List<String> topics = topicService.getAllByNamespace("public/default");
         Assertions.assertThat(topics.get(0))
                 .isEqualTo("persistent://public/default/topic-service-integration-test");
     }
@@ -55,7 +55,7 @@ public class TopicServiceIntegrationTest extends AbstractIntegrationTest {
             consumer.close();
             producer.close();
         }
-        TopicDto topic = topicService.getTopicWithMessagesByName(topicName);
+        TopicDto topic = topicService.getTopicDetails(topicName);
         // it seems there is no exactly once guarantees in pulsar which made the test flaky -> use greaterThan instead of equals
         Assertions.assertThat(topic.getProducedMessages()).isGreaterThanOrEqualTo(3);
         Assertions.assertThat(topic.getConsumedMessages()).isGreaterThanOrEqualTo(2);

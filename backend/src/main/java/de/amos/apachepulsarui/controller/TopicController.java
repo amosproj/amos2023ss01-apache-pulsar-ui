@@ -37,17 +37,17 @@ public class TopicController {
     // Talked about this with Julian - probably we won't use it this way later, but at first it's easier for them
     // to just get all topics at once.
     @GetMapping("/all")
-    public ResponseEntity<TopicsDto> getAll() {
+    public ResponseEntity<TopicsDto> getAllNames() {
         List<String> allTopics = tenantService.getAllTenants().stream()
                 .flatMap(tenantDto -> namespaceService.getAllOfTenant(tenantDto).stream())
-                .flatMap(namespaceDto -> topicService.getAllNamesByNamespace(namespaceDto.getId()).stream())
+                .flatMap(namespaceDto -> topicService.getAllByNamespace(namespaceDto.getId()).stream())
                 .toList();
         return new ResponseEntity<>(new TopicsDto(allTopics), HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity<TopicDto> getTopicWithMessagesByName(@RequestParam String name) {
-       return new ResponseEntity<>(topicService.getTopicWithMessagesByName(name), HttpStatus.OK);
+    public ResponseEntity<TopicDto> getTopicDetails(@RequestParam String name) {
+       return new ResponseEntity<>(topicService.getTopicDetails(name), HttpStatus.OK);
     }
 
     @GetMapping("/subscription/{subscription}")

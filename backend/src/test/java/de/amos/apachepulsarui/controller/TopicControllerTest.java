@@ -61,7 +61,7 @@ public class TopicControllerTest {
         NamespaceDto namespaceDto = NamespaceDto.fromString("public/default");
         when(tenantService.getAllTenants()).thenReturn(List.of(tenantDto));
         when(namespaceService.getAllOfTenant(tenantDto)).thenReturn(List.of(namespaceDto));
-        when(topicService.getAllNamesByNamespace(namespaceDto.getId())).thenReturn(topics);
+        when(topicService.getAllByNamespace(namespaceDto.getId())).thenReturn(topics);
 
 
 
@@ -79,7 +79,7 @@ public class TopicControllerTest {
         String fullTopic = "persistent://public/default/grogu";
         TopicDto topic = TopicDto.createTopicDto(name, topicStats, RandomString.make(1));
 
-        when(topicService.getTopicWithMessagesByName(fullTopic)).thenReturn(topic);
+        when(topicService.getTopicDetails(fullTopic)).thenReturn(topic);
 
         mockMvc.perform(get("/topic").queryParam("name", fullTopic)
                         .contentType(MediaType.APPLICATION_JSON))
