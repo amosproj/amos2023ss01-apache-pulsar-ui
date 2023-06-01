@@ -34,8 +34,6 @@ public class ProducerDto {
 
     private String connectedSince;
 
-
-
     public static ProducerDto create(PublisherStats publisherStats, List<MessageDto> messages) {
         return ProducerDto.builder()
                 .id(publisherStats.getProducerId())
