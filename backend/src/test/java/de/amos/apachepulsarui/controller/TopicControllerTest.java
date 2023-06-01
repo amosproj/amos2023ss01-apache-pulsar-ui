@@ -10,6 +10,7 @@ import de.amos.apachepulsarui.service.NamespaceService;
 import de.amos.apachepulsarui.service.TenantService;
 import de.amos.apachepulsarui.service.TopicService;
 import net.bytebuddy.utility.RandomString;
+import org.apache.pulsar.common.policies.data.PublisherStats;
 import org.apache.pulsar.common.policies.data.SubscriptionStats;
 import org.apache.pulsar.common.policies.data.TopicStats;
 import org.junit.jupiter.api.Test;
@@ -47,6 +48,9 @@ public class TopicControllerTest {
 
     @MockBean
     private SubscriptionStats subscriptionStats;
+
+    @MockBean
+    private PublisherStats publisherStats;
 
     @Test
     void returnAllTopicNames() throws Exception {
@@ -109,7 +113,10 @@ public class TopicControllerTest {
     void getProducerByNameAndTopic() throws Exception {
         String producer = "C3PO";
         String topic = "persistent://public/default/droide";
-        ProducerDto dto = new ProducerDto(producer, null, 0);
+        List<MessageDto> messages = List.of();
+        when(publisherStats.getProducerName()).thenReturn(producer);
+
+        ProducerDto dto = ProducerDto.create(publisherStats, messages);
 
         when(topicService.getProducerByTopic(topic, producer)).thenReturn(dto);
 
