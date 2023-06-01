@@ -44,11 +44,11 @@ public class SubscriptionDto {
 
     public static SubscriptionDto create(SubscriptionStats subscriptionStats, List<MessageDto> messages, String name) {
         List<String> consumers = getConsumers(subscriptionStats);
-        String active = consumers
-                .stream()
+        String active = consumers.stream()
                 .filter(c -> Objects.equals(c, subscriptionStats.getActiveConsumerName()))
                 .findFirst()
                 .orElse(null);
+        consumers.remove(active);
 
         return SubscriptionDto.builder()
                 .name(name)
