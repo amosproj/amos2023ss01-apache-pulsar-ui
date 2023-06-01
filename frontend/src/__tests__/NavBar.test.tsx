@@ -23,7 +23,9 @@ test('disconnect button dispatches backToLP reducer', () => {
 })
 
 test('every page button dispatches correct setNav reducer', () => {
-	const pages = ['Cluster', 'Namespace', 'Topic']
+	// const pages = ['Cluster', 'Namespace', 'Topic']
+	// Remove 'Cluster' because after #80 now the cluster view is the default view
+	const pages = ['Namespace', 'Topic']
 
 	render(
 		<Provider store={store}>
