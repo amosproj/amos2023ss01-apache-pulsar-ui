@@ -22,7 +22,7 @@ public class SubscriptionDto {
 
     private String activeConsumer;
 
-    private List<String> allConsumers;
+    private List<String> inactiveConsumers;
 
     private List<MessageDto> messages;
 
@@ -48,13 +48,14 @@ public class SubscriptionDto {
                 .filter(c -> Objects.equals(c, subscriptionStats.getActiveConsumerName()))
                 .findFirst()
                 .orElse(null);
-        consumers.remove(active);
-
+        List<String> inactive = consumers.stream()
+                .filter(c -> !Objects.equals(c, subscriptionStats.getActiveConsumerName()))
+                .toList();
         return SubscriptionDto.builder()
                 .name(name)
                 .messages(messages)
                 .activeConsumer(active)
-                .allConsumers(consumers)
+                .inactiveConsumers(inactive)
                 .msgAckRate(subscriptionStats.getMessageAckRate())
                 .msgBacklog(subscriptionStats.getMsgBacklog())
                 .bytesOutCounter(subscriptionStats.getBytesOutCounter())
