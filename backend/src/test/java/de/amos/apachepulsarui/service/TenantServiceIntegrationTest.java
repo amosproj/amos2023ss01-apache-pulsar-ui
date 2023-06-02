@@ -5,6 +5,7 @@
 
 package de.amos.apachepulsarui.service;
 
+import de.amos.apachepulsarui.dto.TenantDto;
 import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.apache.pulsar.client.admin.PulsarAdminException;
 import org.apache.pulsar.common.policies.data.TenantInfo;
@@ -46,13 +47,12 @@ public class TenantServiceIntegrationTest extends AbstractIntegrationTest {
                 .findFirst().orElseThrow();
         Assertions.assertThat(tenantX).isNotNull();
         Assertions.assertThat(tenantY).isNotNull();
-        // TODO: reactivate when namespace has been refactored
-//        Assertions.assertThat(tenantX.getNamespaces())
-//                .extracting(NamespaceDto::getId)
-//                .containsExactlyInAnyOrder("tenantX/namespace1", "tenantX/namespace2");
-//        Assertions.assertThat(tenantY.getNamespaces())
-//                .extracting(NamespaceDto::getId)
-//                .containsExactlyInAnyOrder("tenantY/namespace1");
+        TenantDto tenantDetailsX = tenantService.getTenantDetails(tenantX);
+        TenantDto tenantDetailsY = tenantService.getTenantDetails(tenantY);
+        Assertions.assertThat(tenantDetailsX.getNamespaces())
+                .containsExactlyInAnyOrder("tenantX/namespace1", "tenantX/namespace2");
+        Assertions.assertThat(tenantDetailsY.getNamespaces())
+                .containsExactlyInAnyOrder("tenantY/namespace1");
     }
 
     private void createTenant(String tenant) throws PulsarAdminException {
