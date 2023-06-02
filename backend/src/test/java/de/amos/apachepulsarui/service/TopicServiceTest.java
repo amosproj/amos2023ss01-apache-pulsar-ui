@@ -97,7 +97,6 @@ class TopicServiceTest {
 
     @Test
     void getTopicWithMessagesByName() throws PulsarAdminException {
-        when(messageService.peekMessages(TOPIC_NAME)).thenReturn(List.of());
         whenTopicStats();
         whenOwnerBroker();
 
