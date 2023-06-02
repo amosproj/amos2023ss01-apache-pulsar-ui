@@ -30,7 +30,7 @@ public class NamespaceController {
     private final TenantService tenantService;
 
     @GetMapping("/all")
-    public ResponseEntity<NamespacesDto> getAllNames() {
+    public ResponseEntity<NamespacesDto> getAll() {
         List<TenantDto> tenants = tenantService.getAllTenants();
         List<String> namespaceDtos = namespaceService.getAllNames(tenants);
         return new ResponseEntity<>(new NamespacesDto(namespaceDtos), HttpStatus.OK);
