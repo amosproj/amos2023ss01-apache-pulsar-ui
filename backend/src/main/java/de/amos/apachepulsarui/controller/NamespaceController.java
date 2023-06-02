@@ -30,19 +30,15 @@ public class NamespaceController {
     private final TenantService tenantService;
 
     @GetMapping("/all")
-    public ResponseEntity<NamespacesDto> getAllNamespaces() {
+    public ResponseEntity<NamespacesDto> getAllNames() {
         List<TenantDto> tenants = tenantService.getAllTenants();
-        List<String> namespaceDtos = tenants.stream()
-                .flatMap(tenant -> namespaceService.getAllOfTenant(tenant).stream().map(
-                        NamespaceDto::getId
-                ))
-                .toList();
+        List<String> namespaceDtos = namespaceService.getAllNames(tenants);
         return new ResponseEntity<>(new NamespacesDto(namespaceDtos), HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity<NamespaceDto> getNamespace(@RequestParam String name) {
-        return new ResponseEntity<>(namespaceService.getNamespaceByName(name), HttpStatus.OK);
+    public ResponseEntity<NamespaceDto> getNamespaceDetails(@RequestParam String name) {
+        return new ResponseEntity<>(namespaceService.getNamespaceDetails(name), HttpStatus.OK);
     }
 
 }
