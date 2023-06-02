@@ -1,7 +1,6 @@
 /*
  * SPDX-License-Identifier: MIT
- * SPDX-FileCopyrightText: 2023 Anna Haverkamp <anna.lucia.haverkamp@gmail.com>
- *
+ * SPDX-FileCopyrightText: 2023 Jonas Arnhold <jonasarnhold@web.de>
  */
 
 package de.amos.apachepulsarui.dto;
@@ -13,8 +12,8 @@ import java.util.List;
 
 @Data
 @AllArgsConstructor
-public class TenantsDto {
+public class ClustersDto {
 
-    private List<String> tenants;
+    private List<String> clusters;
 
 }

@@ -43,9 +43,8 @@ public class NamespaceControllerTest {
                 "tenant1/namespace2",
                 "tenant2/namespace1");
 
-        List<TenantDto> tenants = List.of(TenantDto.fromString("tenant1"),
-                TenantDto.fromString("tenant2"));
-        Mockito.when(tenantService.getAllTenants()).thenReturn(tenants);
+        List<String> tenants = List.of("tenant1", "tenant2");
+        Mockito.when(tenantService.getAllNames()).thenReturn(tenants);
         Mockito.when(namespaceService.getAllNames(tenants)).thenReturn(tenantNamespaces);
 
         mockMvc.perform(get("/namespace/all"))
@@ -69,4 +68,5 @@ public class NamespaceControllerTest {
                 .andExpect(jsonPath("$.amountOfTopics", equalTo(namespace.getAmountOfTopics())))
                 .andExpect(jsonPath("$.topics", equalTo(namespace.getTopics())));
     }
+
 }

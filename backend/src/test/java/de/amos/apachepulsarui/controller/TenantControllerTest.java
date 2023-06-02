@@ -6,7 +6,6 @@
 
 package de.amos.apachepulsarui.controller;
 
-import de.amos.apachepulsarui.dto.TenantDto;
 import de.amos.apachepulsarui.service.TenantService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -15,10 +14,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -37,17 +33,14 @@ public class TenantControllerTest {
     @Test
     void getAllTenants_returnsAllTenants() throws Exception {
 
-        List<TenantDto> tenants = Stream.of(
-                "tenant1",
-                "tenant2"
-        ).map(TenantDto::fromString).collect(Collectors.toList());
-        tenants.forEach(tenant -> tenant.setNamespaces(new ArrayList<>()));
+        List<String> tenants = List.of("tenant1", "tenant2");
 
         Mockito.when(tenantService.getAllNames()).thenReturn(tenants);
 
-        mockMvc.perform(get("/tenant"))
+        mockMvc.perform(get("/tenant/all"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.tenants[0].id", equalTo(tenants.get(0).getId())))
-                .andExpect(jsonPath("$.tenants[1].id", equalTo(tenants.get(1).getId())));
+                .andExpect(jsonPath("$.tenants[0]", equalTo(tenants.get(0))))
+                .andExpect(jsonPath("$.tenants[1]", equalTo(tenants.get(1))));
     }
+
 }

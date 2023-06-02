@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.apache.pulsar.client.admin.PulsarAdminException;
 import org.apache.pulsar.common.policies.data.TenantInfo;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,7 +20,8 @@ public class TenantService {
     private final PulsarAdmin pulsarAdmin;
     private final NamespaceService namespaceService;
 
-    public List<String> getAllNames() {
+    @Cacheable("tenant.all")
+    public List<String> getAllNames() throws PulsarApiException {
         try {
             return pulsarAdmin.tenants().getTenants();
         } catch (PulsarAdminException e) {
@@ -27,12 +29,13 @@ public class TenantService {
         }
     }
 
+    @Cacheable("tenant.detail")
     public TenantDto getTenantDetails(String tenantName) {
-
-        // TODO: add namespaces when refactoring is done
-
+        List<String> namespacesOfTenant = namespaceService.getAllOfTenant(tenantName);
         return TenantDto.builder()
                 .tenantInfo(getTenantInfo(tenantName))
+                .namespaces(namespacesOfTenant)
+                .amountOfNamespaces(namespacesOfTenant.size())
                 .build();
     }
 

@@ -7,6 +7,7 @@
 package de.amos.apachepulsarui.controller;
 
 import de.amos.apachepulsarui.dto.TenantDto;
+import de.amos.apachepulsarui.dto.TenantsDto;
 import de.amos.apachepulsarui.service.TenantService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,8 +16,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -31,8 +30,8 @@ public class TenantController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<String>> getAll() {
-        return new ResponseEntity<>(tenantService.getAllNames(), HttpStatus.OK);
+    public ResponseEntity<TenantsDto> getAll() {
+        return new ResponseEntity<>(new TenantsDto(tenantService.getAllNames()), HttpStatus.OK);
     }
 
 }

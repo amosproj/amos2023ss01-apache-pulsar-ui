@@ -8,7 +8,6 @@ package de.amos.apachepulsarui.controller;
 
 import de.amos.apachepulsarui.dto.NamespaceDto;
 import de.amos.apachepulsarui.dto.NamespacesDto;
-import de.amos.apachepulsarui.dto.TenantDto;
 import de.amos.apachepulsarui.service.NamespaceService;
 import de.amos.apachepulsarui.service.TenantService;
 import lombok.RequiredArgsConstructor;
@@ -31,9 +30,9 @@ public class NamespaceController {
 
     @GetMapping("/all")
     public ResponseEntity<NamespacesDto> getAllNames() {
-        List<TenantDto> tenants = tenantService.getAllTenants();
-        List<String> namespaceDtos = namespaceService.getAllNames(tenants);
-        return new ResponseEntity<>(new NamespacesDto(namespaceDtos), HttpStatus.OK);
+        List<String> tenants = tenantService.getAllNames();
+        List<String> namespaces = namespaceService.getAllNames(tenants);
+        return new ResponseEntity<>(new NamespacesDto(namespaces), HttpStatus.OK);
     }
 
     @GetMapping
