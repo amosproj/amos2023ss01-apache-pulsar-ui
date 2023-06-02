@@ -47,9 +47,7 @@ public class TopicService {
 
     private List<String> getByNamespace(String namespace) {
         try {
-            return pulsarAdmin.topics()
-                    .getList(namespace).stream()
-                    .toList();
+            return pulsarAdmin.topics().getList(namespace);
         } catch (PulsarAdminException e) {
             log.error("Could not fetch topics of namespace %s. E: %s".formatted(namespace, e));
             return List.of();
@@ -67,16 +65,23 @@ public class TopicService {
     }
 
     /**
-     * @param name The Name of the Topic you want to get a list of all topics for.
+     * @param name The Name of the Topic you want to get detailed information about
      * @return A {@link TopicDto}'s including {@link TopicStatsDto}, List of {@link MessageDto} and
      * additional metadata.
      */
     public TopicDto getTopicDetails(String name) {
-        List<MessageDto> messages = messageService.peekMessages(name);
-        return TopicDto.createTopicDtoWithMessages(name,
-                getTopicStats(name),
-                getOwnerBroker(name),
-                messages);
+        try {
+            List<String> subscriptions = pulsarAdmin.topics().getSubscriptions(name);
+            List<MessageDto> messages = subscriptions.stream().
+                    flatMap(sub -> messageService.peekMessages(name, sub).stream()).toList();
+            return TopicDto.createTopicDtoWithMessages(name,
+                    getTopicStats(name),
+                    getOwnerBroker(name),
+                    messages);
+
+        } catch (PulsarAdminException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private TopicStats getTopicStats(String fullTopicName) {

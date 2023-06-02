@@ -30,17 +30,6 @@ public class MessageService {
     private final PulsarClient pulsarClient;
     private final PulsarAdmin pulsarAdmin;
 
-
-    // TODO get all messages for all topics, instead of just the first one
-    public List<MessageDto> peekMessages(String topic) {
-        try {
-            List<String> subscriptions = pulsarAdmin.topics().getSubscriptions(topic);
-            return peekMessages(topic, subscriptions.get(0));
-        } catch (PulsarAdminException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public List<MessageDto> peekMessages(String topic, String subscription) {
         var schema = getSchemaIfExists(topic);
         try {

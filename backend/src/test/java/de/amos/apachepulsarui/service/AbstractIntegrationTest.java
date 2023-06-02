@@ -11,11 +11,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.util.TestPropertyValues;
+import org.springframework.cache.CacheManager;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.testcontainers.containers.PulsarContainer;
 import org.testcontainers.utility.DockerImageName;
+
+import java.util.Objects;
 
 
 @SpringBootTest
@@ -24,6 +27,9 @@ public class AbstractIntegrationTest {
 
     @Autowired
     private PulsarAdmin pulsarAdmin;
+
+    @Autowired
+    private CacheManager cacheManager;
 
     private static final PulsarContainer pulsar = new PulsarContainer(DockerImageName.parse("apachepulsar/pulsar:3.0.0"));
 
@@ -39,6 +45,9 @@ public class AbstractIntegrationTest {
         for (String topic : topics) {
             pulsarAdmin.topics().delete(topic);
         }
+
+        cacheManager.getCacheNames()
+                .forEach(cache -> Objects.requireNonNull(cacheManager.getCache(cache)).clear());
     }
 
     static class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
