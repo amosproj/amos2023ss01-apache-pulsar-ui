@@ -143,6 +143,9 @@ const globalSlice = createSlice({
 		) => {
 			state.data = action.payload
 		},
+		setClusterDataTEST: (state: globalState, action: PayloadAction<any>) => {
+			state.clusterData = action.payload
+		},
 		updateData: (state: globalState, action: PayloadAction<UpdateForData>) => {
 			state.data.map((single: MessageList) => {
 				if (single.id === action.payload.topic) {
@@ -211,7 +214,14 @@ const selectClusterData = (state: RootState): any =>
 const selectMessages = (state: RootState): any =>
 	state.globalControl.messageList
 
-export const { setNav, setView, updateData, setData, setEndpoint } = actions
+export const {
+	setNav,
+	setView,
+	updateData,
+	setData,
+	setEndpoint,
+	setClusterDataTEST,
+} = actions
 
 export {
 	selectShowLP,
