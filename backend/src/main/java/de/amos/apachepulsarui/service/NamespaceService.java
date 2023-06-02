@@ -25,6 +25,18 @@ public class NamespaceService {
 
     private final TopicService topicService;
 
+    public List<String> getAllNames(List<TenantDto> tenants) {
+        return tenants.stream()
+                .flatMap(tenant -> getAllOfTenant(tenant).stream().map(
+                        NamespaceDto::getId
+                ))
+                .toList();
+    }
+
+    public NamespaceDto getNamespaceDetails(String name) {
+        return enrichWithNamespaceData(NamespaceDto.fromString(name));
+    }
+
     public List<NamespaceDto> getAllOfTenant(TenantDto tenant) {
         try {
             return pulsarAdmin.namespaces()
@@ -53,5 +65,4 @@ public class NamespaceService {
             return namespace;
         }
     }
-
 }
