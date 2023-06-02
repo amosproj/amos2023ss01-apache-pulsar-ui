@@ -37,48 +37,12 @@ public class TopicService {
 
 
     /**
-     * @param name The Name of the Topic you want to get a list of all topics for.
-     * @return A {@link TopicDto}'s including {@link TopicStatsDto}, List of {@link MessageDto} and
-     * additional metadata.
-     */
-    public TopicDto getTopicWithMessagesByName(String name) {
-        List<MessageDto> messages = messageService.peekMessages(name);
-
-        return TopicDto.createTopicDtoWithMessages(name,
-                getTopicStats(name),
-                getOwnerBroker(name),
-                messages);
-    }
-
-    public boolean createNewTopic(String topic) {
-        try {
-            pulsarAdmin.topics().createNonPartitionedTopic(topic);
-            return true;
-        } catch (PulsarAdminException e) {
-            log.error("Could not create new topic %s. E: %s".formatted(topic, e));
-        }
-        return false;
-    }
-
-    /**
      * @param namespace The namespace you want to get a list of all topics for.
      * @return A list of topics (their fully qualified names).
      */
     @Cacheable("topic.allNamesByNamespace")
-    public List<String> getAllNamesByNamespace(String namespace) {
+    public List<String> getAllByNamespace(String namespace) {
         return getByNamespace(namespace);
-    }
-
-    /**
-     * @param namespace The namespace you want to get a list of all topics for.
-     * @return A list of {@link TopicDto}'s including {@link de.amos.apachepulsarui.dto.TopicStatsDto} and
-     * additional metadata.
-     */
-    @Cacheable("topic.allByNamespace")
-    public List<TopicDto> getAllByNamespace(String namespace) {
-        return getByNamespace(namespace).stream()
-                .map(this::createTopicDto)
-                .toList();
     }
 
     private List<String> getByNamespace(String namespace) {
@@ -92,8 +56,27 @@ public class TopicService {
         }
     }
 
-    private TopicDto createTopicDto(String completeTopicName) {
-        return TopicDto.createTopicDto(completeTopicName, this.getTopicStats(completeTopicName), this.getOwnerBroker(completeTopicName));
+    public boolean createNewTopic(String topic) {
+        try {
+            pulsarAdmin.topics().createNonPartitionedTopic(topic);
+            return true;
+        } catch (PulsarAdminException e) {
+            log.error("Could not create new topic %s. E: %s".formatted(topic, e));
+        }
+        return false;
+    }
+
+    /**
+     * @param name The Name of the Topic you want to get a list of all topics for.
+     * @return A {@link TopicDto}'s including {@link TopicStatsDto}, List of {@link MessageDto} and
+     * additional metadata.
+     */
+    public TopicDto getTopicDetails(String name) {
+        List<MessageDto> messages = messageService.peekMessages(name);
+        return TopicDto.createTopicDtoWithMessages(name,
+                getTopicStats(name),
+                getOwnerBroker(name),
+                messages);
     }
 
     private TopicStats getTopicStats(String fullTopicName) {

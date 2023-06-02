@@ -8,7 +8,6 @@ package de.amos.apachepulsarui.service;
 import de.amos.apachepulsarui.dto.TopicDto;
 import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.apache.pulsar.client.api.*;
-import org.apache.pulsar.common.naming.NamespaceName;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +30,8 @@ public class TopicServiceIntegrationTest extends AbstractIntegrationTest {
     @Test
     void getByNamespace_returnsCreatedTopics() {
         topicService.createNewTopic("topic-service-integration-test");
-        List<TopicDto> topics = topicService.getAllByNamespace("public/default");
-        Assertions.assertThat(topics.iterator().next().getName())
+        List<String> topics = topicService.getAllByNamespace("public/default");
+        Assertions.assertThat(topics.get(0))
                 .isEqualTo("persistent://public/default/topic-service-integration-test");
     }
 
@@ -56,10 +55,7 @@ public class TopicServiceIntegrationTest extends AbstractIntegrationTest {
             consumer.close();
             producer.close();
         }
-        TopicDto topic = topicService.getAllByNamespace(NamespaceName.get("public", "default").toString()).stream()
-                .filter(topicDto -> topicDto.getName().equals(topicName))
-                .findFirst()
-                .orElseThrow();
+        TopicDto topic = topicService.getTopicDetails(topicName);
         // it seems there is no exactly once guarantees in pulsar which made the test flaky -> use greaterThan instead of equals
         Assertions.assertThat(topic.getProducedMessages()).isGreaterThanOrEqualTo(3);
         Assertions.assertThat(topic.getConsumedMessages()).isGreaterThanOrEqualTo(2);

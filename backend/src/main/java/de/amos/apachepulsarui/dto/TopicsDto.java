@@ -14,6 +14,6 @@ import java.util.List;
 @Data
 public class TopicsDto {
 
-    private List<TopicDto> topics;
+    private List<String> topics;
 
 }
