@@ -114,7 +114,5 @@ test('should check if data is being displayed on the dashboard', async () => {
 			/>
 		</Provider>
 	)
-	expect(screen.getByTestId('main-dashboard')).toHaveTextContent(
-		'amos-demo-2'
-	)
+	expect(screen.getByTestId('main-dashboard')).toHaveTextContent('amos-demo-2')
 })
