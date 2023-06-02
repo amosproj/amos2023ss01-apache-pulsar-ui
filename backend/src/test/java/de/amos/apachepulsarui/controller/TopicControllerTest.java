@@ -61,13 +61,11 @@ public class TopicControllerTest {
                 "persistent://public/default/coruscant"
         );
 
-        TenantDto tenantDto = TenantDto.fromString("pulic");
-        NamespaceDto namespaceDto = NamespaceDto.fromString("public/default");
-        when(tenantService.getAllTenants()).thenReturn(List.of(tenantDto));
-        when(namespaceService.getAllOfTenant(tenantDto)).thenReturn(List.of(namespaceDto));
-        when(topicService.getAllByNamespace(namespaceDto.getId())).thenReturn(topics);
-
-
+        List<String> tenants = List.of("public");
+        List<String> namespaces = List.of("public/default");
+        when(tenantService.getAllNames()).thenReturn(tenants);
+        when(namespaceService.getAllNames(tenants)).thenReturn(namespaces);
+        when(topicService.getAllByNamespace(namespaces.get(0))).thenReturn(topics);
 
         mockMvc.perform(get("/topic/all")
                         .contentType(MediaType.APPLICATION_JSON))

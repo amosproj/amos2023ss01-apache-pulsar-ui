@@ -6,19 +6,19 @@
 package de.amos.apachepulsarui.dto;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
 
 @Data
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder
 public class ClusterDto {
 
-    private String id;
+    private String name;
 
-    private List<TenantDto> tenants;
+    private List<String> tenants;
 
 	private List<String> brokers;
 
@@ -26,58 +26,10 @@ public class ClusterDto {
 	private int amountOfTenants;
 
 	@Setter(AccessLevel.PRIVATE)
-	private int amountOfNamespaces;
-
-	@Setter(AccessLevel.PRIVATE)
-	private int amountOfTopics;
-
-	@Setter(AccessLevel.PRIVATE)
 	private int amountOfBrokers;
 
 	private String brokerServiceUrl;
 
 	private String serviceUrl;
-
-
-	public static ClusterDto fromString(String clusterId) {
-		ClusterDto clusterDto = new ClusterDto();
-		clusterDto.id = clusterId;
-		return clusterDto;
-	}
-
-	/**
-	 * Set's the list of tenants, and it's size (amountOfTenants) for this cluster.
-	 * Additionally, it computes the amountOfNamespaces and amountOfTopics for this cluster.
-	 */
-	public void setTenants(List<TenantDto> tenants) {
-		this.tenants = tenants;
-		this.amountOfTenants = tenants.size();
-		tenants.forEach(tenant -> {
-			this.amountOfNamespaces += tenant.getAmountOfNamespaces();
-			this.amountOfTopics += tenant.getAmountOfTopics();
-		});
-	}
-
-	/**
-	 * Set's the list of brokers, and it's size (amountOfBrokers) for this cluster.
-	 */
-	public void setBrokers(List<String> brokers) {
-		this.brokers = brokers;
-		this.amountOfBrokers = brokers.size();
-	}
-
-	/**
-	 * @return An unmodifiable copy of the tenants of this cluster.
-	 */
-	public List<TenantDto> getTenants() {
-		return List.copyOf(tenants);
-	}
-
-	/**
-	 * @return An unmodifiable copy of the brokers of this cluster.
-	 */
-	public List<String> getBrokers() {
-		return List.copyOf(brokers);
-	}
 
 }

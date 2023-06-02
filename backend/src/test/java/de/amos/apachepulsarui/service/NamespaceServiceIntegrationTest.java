@@ -6,7 +6,6 @@
 package de.amos.apachepulsarui.service;
 
 import de.amos.apachepulsarui.dto.NamespaceDto;
-import de.amos.apachepulsarui.dto.TenantDto;
 import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.apache.pulsar.client.admin.PulsarAdminException;
 import org.apache.pulsar.common.policies.data.TenantInfo;
@@ -39,15 +38,14 @@ public class NamespaceServiceIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     void getAllOfTenant_returnsNamespacesOfTenant() {
-        List<NamespaceDto> namespaces = namespaceService.getAllOfTenant(TenantDto.fromString("tenant1"));
-        var namespaceIds = namespaces.stream().map(NamespaceDto::getId).toList();
-        Assertions.assertThat(namespaceIds).contains("tenant1/namespace1", "tenant1/namespace2");
-        Assertions.assertThat(namespaceIds).doesNotContain("tenant2/namespace3");
+        List<String> namespaces = namespaceService.getAllOfTenant("tenant1");
+        Assertions.assertThat(namespaces).contains("tenant1/namespace1", "tenant1/namespace2");
+        Assertions.assertThat(namespaces).doesNotContain("tenant2/namespace3");
     }
 
     @Test
     void getAllNames_returnsAllNamespaces() {
-        List<TenantDto> tenants = List.of(TenantDto.fromString("tenant1"), TenantDto.fromString("tenant2"));
+        List<String> tenants = List.of("tenant1", "tenant2");
         List<String> namespaces = namespaceService.getAllNames(tenants);
         Assertions.assertThat(namespaces).contains("tenant1/namespace1", "tenant1/namespace2","tenant2/namespace3");
     }
