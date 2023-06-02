@@ -47,9 +47,7 @@ public class TopicService {
 
     private List<String> getByNamespace(String namespace) {
         try {
-            return pulsarAdmin.topics()
-                    .getList(namespace).stream()
-                    .toList();
+            return pulsarAdmin.topics().getList(namespace);
         } catch (PulsarAdminException e) {
             log.error("Could not fetch topics of namespace %s. E: %s".formatted(namespace, e));
             return List.of();

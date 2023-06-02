@@ -9,12 +9,15 @@ import de.amos.apachepulsarui.dto.TopicDto;
 import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.apache.pulsar.client.api.*;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 public class TopicServiceIntegrationTest extends AbstractIntegrationTest {
 
@@ -29,15 +32,16 @@ public class TopicServiceIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     void getByNamespace_returnsCreatedTopics() {
-        topicService.createNewTopic("persistent://public/default/topic-service-integration-test");
+        String topicName = "persistent://public/default/test123";
+        topicService.createNewTopic(topicName);
         List<String> topics = topicService.getAllByNamespace("public/default");
-        Assertions.assertThat(topics.get(0))
-                .isEqualTo("persistent://public/default/topic-service-integration-test");
+        Assertions.assertThat(topics).containsExactly(topicName);
     }
 
     @Test
-    void getAllByNamespace_returnsMessageCount() throws Exception {
+    void getTopicDetails_returnsMessageCount() throws Exception {
         String topicName = "persistent://public/default/topic-service-integration-test";
+        topicService.createNewTopic(topicName);
         var message = "hello world".getBytes(StandardCharsets.UTF_8);
         try (Producer<byte[]> producer = pulsarClient.newProducer().topic(topicName).create();
              Consumer<byte[]> consumer = pulsarClient.newConsumer().topic(topicName).subscriptionName("TestSubscriber").subscribe()) {
@@ -64,6 +68,7 @@ public class TopicServiceIntegrationTest extends AbstractIntegrationTest {
     @Test
     void getSubscriptionsByTopic () throws PulsarClientException {
         String topicName = "persistent://public/default/topic-service-integration-test";
+        topicService.createNewTopic(topicName);
         Consumer<byte[]> consumer = pulsarClient.newConsumer().topic(topicName).subscriptionName("TestSubscriber").subscribe();
 
         consumer.close();
@@ -74,6 +79,7 @@ public class TopicServiceIntegrationTest extends AbstractIntegrationTest {
     @Test
     void getProducerByTopic () throws Exception {
         String topicName = "persistent://public/default/topic-service-integration-test";
+        topicService.createNewTopic(topicName);
         var message = "hello world".getBytes(StandardCharsets.UTF_8);
         try (Producer<byte[]> producer = pulsarClient.newProducer().producerName("Producer").topic(topicName).create()) {
 
