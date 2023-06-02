@@ -29,7 +29,7 @@ public class TopicServiceIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     void getByNamespace_returnsCreatedTopics() {
-        topicService.createNewTopic("topic-service-integration-test");
+        topicService.createNewTopic("persistent://public/default/topic-service-integration-test");
         List<String> topics = topicService.getAllByNamespace("public/default");
         Assertions.assertThat(topics.get(0))
                 .isEqualTo("persistent://public/default/topic-service-integration-test");
