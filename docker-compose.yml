@@ -1,12 +1,7 @@
 version: '3'
-networks:
-  shared-network:
-    driver: bridge
 services:
   pulsar:
     image: 'apachepulsar/pulsar:3.0.0'
-    networks: 
-      - shared-network
     ports:
       - '6650:6650'
       - '8080:8080'
@@ -24,8 +19,6 @@ services:
     image: pulsarui/setuptopology
     profiles: 
       - demodata
-    networks:
-      - shared-network
     build:
       context: demodata/setup-topology
       dockerfile: Dockerfile
@@ -38,13 +31,11 @@ services:
     image: pulsarui/demoproducerconsumer
     profiles: 
       - demodata
-    networks:
-      - shared-network
     build:
       context: demodata/demo-producer-consumer
       dockerfile: Dockerfile
     environment:
-        - 'PULSAR_URL=pulsar://host.docker.internal:6650'
+        - 'PULSAR_URL=pulsar://pulsar:6650'
         - 'PUBLISH_INTERVAL_SECONDS=30'
     depends_on:
       setup-topology:
@@ -53,13 +44,11 @@ services:
     image: apachepulsarui/backend
     profiles: 
       - backend
-    networks:
-      - shared-network
     build: ./backend
     ports:
       - "8081:8081"
     environment:
-      - "PULSAR_CONSUMER_URL=pulsar://host.docker.internal:6650"
+      - "PULSAR_CONSUMER_URL=pulsar://pulsar:6650"
       - "PULSAR_ADMIN_URL=http://pulsar:8080"
     depends_on:
       pulsar:
