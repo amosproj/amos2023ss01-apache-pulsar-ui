@@ -1,0 +1,2 @@
+# force line ending to lf on windows since this will be executed in a linux container
+demodata/setup-topology/setup-topology.sh eol=lf
