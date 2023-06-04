@@ -13,14 +13,14 @@ assignees: ''
 3. So that {}
 
 ## Acceptance criteria
-* Criterion 1
-* Criterion 2
-* ...
+* 
 
 ## Definition of done (DoD)
-* Added only after week 5
-* The same for all features
-* Here goes the project specific part
+* Feature is done when the acceptance criteria are fullfiled
+* Feature is done when there are test where it is necessary and they pass
+* Feature is done when the linter passes
+* Feature is done when it is merged onto our main branch (after the code has been reviewed by at least one other person)
+* Feature is done when the code has been documentend or commented properly
 
 ## DoD general criteria
 * Feature has been fully implemented
