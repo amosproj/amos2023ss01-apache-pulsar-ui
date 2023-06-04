@@ -5,7 +5,7 @@ import { Provider } from 'react-redux'
 import store from '../store'
 import { setClusterDataTEST } from '../store/globalSlice'
 
-const dataTest = [
+const dataTest: Array<SampleCluster> = [
 	{
 		id: 'amos-demo-2',
 		tenants: [
@@ -20,18 +20,13 @@ const dataTest = [
 						topics: [
 							{
 								id: 'persistent://eu-tenant/hr/foo',
+								name: 'foo',
 								localName: 'foo',
 								namespace: 'hr',
 								tenant: 'eu-tenant',
 								cluster: 'amos-demo-2',
 								topicStatsDto: {
-									subscriptions: [
-										{
-											name: 'foo-sub',
-											consumers: [],
-											numberConsumers: 0,
-										},
-									],
+									subscriptions: [''],
 									producers: [],
 									numberSubscriptions: 1,
 									numberProducers: 0,

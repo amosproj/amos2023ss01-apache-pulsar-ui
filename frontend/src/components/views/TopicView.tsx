@@ -1,8 +1,5 @@
 import React, { useState } from 'react'
-import graph1 from '../../assets/images/demo-graph1.png'
-import graph2 from '../../assets/images/demo-graph2.png'
 import ProducerModal from '../modals/ProducerModal'
-import ConsumerModal from '../modals/ConsumerModal'
 import { Collapse, CardActions, Button } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import ExpandLessIcon from '@mui/icons-material/ExpandLess'
@@ -59,7 +56,7 @@ const TopicView: React.FC<TopicViewProps> = ({ data, handleClick }) => {
 								<span className="text-blue">
 									{topicProducers &&
 										topicProducers.length > 0 &&
-										topicProducers.map((item: string, index: number) => (
+										topicProducers.map((item: string) => (
 											<ProducerModal
 												key={'producer-' + Math.floor(Math.random() * 999999)}
 												producer={{

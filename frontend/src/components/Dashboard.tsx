@@ -5,6 +5,13 @@ import FilterListIcon from '@mui/icons-material/FilterList'
 import CustomFilter from './custom/CustomFilter'
 import { useAppDispatch } from '../store/hooks'
 import { setNav } from '../store/globalSlice'
+import {
+	instanceOfSampleTopic,
+	instanceOfSampleMessage,
+	flattenClustersToTenants,
+	flattenNamespacesToTopics,
+	flattenTenantsToNamespaces,
+} from '../Helpers'
 
 const Dashboard: React.FC<DashboardProps> = ({
 	completeData,
@@ -19,45 +26,22 @@ const Dashboard: React.FC<DashboardProps> = ({
 	const [messageQuery, setMessageQuery] = useState<string[]>([])
 	const dispatch = useAppDispatch()
 
-	function instanceOfSampleMessage(
-		object:
-			| SampleCluster
-			| SampleTenant
-			| SampleNamespace
-			| SampleTopic
-			| SampleMessage
-	): object is SampleMessage {
-		return 'payload' in object
-	}
-
-	function instanceOfSampleTopic(
-		object:
-			| SampleCluster
-			| SampleTenant
-			| SampleNamespace
-			| SampleTopic
-			| SampleMessage
-	): object is SampleTopic {
-		return 'topicStatsDto' in object
-	}
-
 	const divideData = (sampleData: Array<SampleCluster>) => {
-		const allTenants = sampleData
-			.map((item) => item.tenants)
-			.filter((el) => el.length > 0)
-			.flat()
+		const allTenants = flattenClustersToTenants(sampleData)
 
-		const allNamespaces = allTenants
-			.map((tenant) => tenant.namespaces)
-			.filter((el) => el.length > 0)
-			.flat()
+		const allNamespaces = flattenTenantsToNamespaces(allTenants)
 
-		const allTopics = allNamespaces
-			.map((namespace) => namespace.topics)
-			.filter((el) => el.length > 0)
-			.flat()
+		const allTopics = flattenNamespacesToTopics(allNamespaces)
 
-		return [allTenants, allNamespaces, allTopics]
+		if (view == 'tenant') {
+			return allTenants
+		} else if (view == 'namespace') {
+			return allNamespaces
+		} else if (view === 'topic') {
+			return allTopics
+		} else if (view === 'message') {
+			return completeMessages
+		}
 	}
 
 	const includeItemsByFilterQuery = (
@@ -142,11 +126,33 @@ const Dashboard: React.FC<DashboardProps> = ({
 		return newMessages
 	}
 
+	const applySearchbarQuery = (
+		searchQuery: string,
+		clusterData: Array<SampleCluster>,
+		tenantData: Array<SampleTenant>,
+		namespaceData: Array<SampleNamespace>,
+		topicData: Array<SampleTopic>,
+		messageData: Array<SampleMessage>
+	) => {
+		if (view === 'cluster') {
+			return includeItemsBySearchQuery(searchQuery, clusterData)
+		} else if (view === 'tenant') {
+			return includeItemsBySearchQuery(searchQuery, tenantData)
+		} else if (view === 'namespace') {
+			return includeItemsBySearchQuery(searchQuery, namespaceData)
+		} else if (view === 'topic') {
+			return includeItemsBySearchQuery(searchQuery, topicData)
+		} else if (view === 'message') {
+			return includeItemsBySearchQuery(searchQuery, messageData)
+		} else return clusterData
+	}
+
 	const filterData = (
 		query: string,
 		sampleData: Array<SampleCluster>,
 		sampleMessages: Array<SampleMessage>
 	) => {
+		//Case 1: no filter or search is applied
 		if (
 			clusterQuery.length <= 0 &&
 			tenantQuery.length <= 0 &&
@@ -155,76 +161,45 @@ const Dashboard: React.FC<DashboardProps> = ({
 			messageQuery.length <= 0 &&
 			!query
 		) {
-			let res:
-				| Array<SampleCluster>
-				| Array<SampleTenant>
-				| Array<SampleNamespace>
-				| Array<SampleTopic>
-				| Array<SampleMessage> = sampleData
-
-			const [allTenants, allNamespaces, allTopics] = divideData(res)
-
-			if (view == 'tenant') {
-				res = allTenants
-			} else if (view == 'namespace') {
-				res = allNamespaces
-			} else if (view === 'topic') {
-				res = allTopics
-			} else if (view === 'message') {
-				res = sampleMessages
-			}
-
-			return res
-		} else {
-			let newData = sampleData
-			if (clusterQuery.length > 0) {
-				newData = sampleData.filter((c: SampleCluster) =>
-					clusterQuery.includes(c.id)
-				)
-			}
-
-			let newTenants = newData
-				.map((item) => item.tenants)
-				.filter((el) => el.length > 0)
-				.flat()
-
+			return divideData(sampleData)
+		} //Case 2: a filter or search is applied
+		else {
+			//We select only the Clusters included in the cluster query state (clusterQuery)
+			const newClusters = includeItemsByFilterQuery(clusterQuery, sampleData)
+			//We dig deeper and get the Tenants of the filtered Clusters, we then flatten the array
+			let newTenants = flattenClustersToTenants(newClusters)
+			//We select only the Tenants included in the tenant query state (tenantQuery)
 			newTenants = includeItemsByFilterQuery(tenantQuery, newTenants)
-
-			let newNamespaces = newTenants
-				.map((tenant) => tenant.namespaces)
-				.filter((el) => el.length > 0)
-				.flat()
-
+			//We dig deeper and get the Namespaces of the filtered Tenants, we then flatten the array
+			let newNamespaces = flattenTenantsToNamespaces(newTenants)
+			//We select only the Namespaces included in the namespace query state (namespaceQuery)
 			newNamespaces = includeItemsByFilterQuery(namespaceQuery, newNamespaces)
-
-			let newTopics = newNamespaces
-				.map((n) => n.topics)
-				.filter((el) => el.length > 0)
-				.flat()
-
+			//We dig deeper and get the Topics of the filtered Namespaces, we then flatten the array
+			let newTopics = flattenNamespacesToTopics(newNamespaces)
+			//We select only the Topics included in the topic query state (topicQuery)
 			newTopics = includeItemsByFilterQuery(topicQuery, newTopics)
-
+			//In the function below, we use the ids of the filtered Clusters, Tenants,
+			//Namespaces, and Topics to derive inderctly which messages need to be displayed
 			let newMessages = getMessagesByFilters(
-				newData,
+				newClusters,
 				newTenants,
 				newNamespaces,
 				newTopics,
 				sampleMessages
 			)
-
+			//Finally, we select only the Messages included in the message query state (messageQuery)
 			newMessages = includeItemsByFilterQuery(messageQuery, newMessages)
 
-			if (view === 'cluster') {
-				return includeItemsBySearchQuery(query, newData)
-			} else if (view === 'tenant') {
-				return includeItemsBySearchQuery(query, newTenants)
-			} else if (view === 'namespace') {
-				return includeItemsBySearchQuery(query, newNamespaces)
-			} else if (view === 'topic') {
-				return includeItemsBySearchQuery(query, newTopics)
-			} else if (view === 'message') {
-				return includeItemsBySearchQuery(query, newMessages)
-			}
+			//Lastly, we use the applySearchbarQuery function to filter our new data based
+			//on what's inserted in the main searchbar
+			const newData = applySearchbarQuery(
+				query,
+				newClusters,
+				newTenants,
+				newNamespaces,
+				newTopics,
+				newMessages
+			)
 
 			return newData
 		}
@@ -238,46 +213,52 @@ const Dashboard: React.FC<DashboardProps> = ({
 		| Array<SampleMessage> = completeData
 
 	if (view) {
+		//This is the data that will be displayed in the frontend, it is the output of our "filterData" function
 		dataFiltered = filterData(searchQuery, completeData, completeMessages)
 	}
 
+	//This function moves from one view to another on click, it takes the id of the clicked element, and
+	//uses this information to set the clicked id as selected filter in the next view by using the "handleChange" function
 	const handleClick = (
 		e: React.MouseEvent<HTMLElement>,
 		currentEl: SampleCluster | SampleTenant | SampleNamespace | SampleTopic
 	) => {
 		e.preventDefault()
+		//Save ID
+		const selectedId = currentEl.id
 		if (view === 'cluster') {
-			const clusterId = currentEl.id
-			handleChange(clusterId, view)
+			//Update filters
+			handleChange(selectedId, view)
+			//Switch view
 			dispatch(setNav('tenant'))
 		} else if (view === 'tenant') {
-			const tenantId = currentEl.id
-			handleChange(tenantId, view)
+			handleChange(selectedId, view)
 			dispatch(setNav('namespace'))
 		} else if (view === 'namespace') {
-			const namespaceId = currentEl.id
-			handleChange(namespaceId, view)
+			handleChange(selectedId, view)
 			dispatch(setNav('topic'))
 		} else if (view === 'topic') {
-			const topicId = currentEl.id
-			handleChange(topicId, view)
+			handleChange(selectedId, view)
 			dispatch(setNav('message'))
 		}
 	}
 
+	//This function adds the selected id to the query state variables, in this way
+	//we keep track on what's included in the filter
 	const handleChange = (
 		id: string,
 		element: 'cluster' | 'tenant' | 'namespace' | 'topic' | 'message'
 	) => {
 		let newArr = []
-		console.log(element)
 		if (element === 'cluster') {
+			//If id is already in the query state, remove it, else add it
 			if (clusterQuery.includes(id)) {
 				newArr = [...clusterQuery]
 				newArr = newArr.filter((e) => e !== id)
 			} else {
 				newArr = [...clusterQuery, id]
 			}
+			//Update the query state
 			setClusterQuery(newArr)
 		} else if (element === 'tenant') {
 			if (tenantQuery.includes(id)) {
@@ -322,8 +303,19 @@ const Dashboard: React.FC<DashboardProps> = ({
 		setMessageQuery([])
 	}
 
+	//This function should decide wether to display the "Reset all filters" button on a certain view
+	//or not, this is necessary because a user could be f.e. on a Topic View, apply some filters for the
+	//Topics, and then switch back to the Cluster View, in this case the button should disappear
 	const checkQueryLength = (
-		currentView: 'cluster' | 'tenant' | 'namespace' | 'topic' | 'message'
+		currentView:
+			| 'cluster'
+			| 'tenant'
+			| 'namespace'
+			| 'topic'
+			| 'message'
+			| null
+			| string
+			| undefined
 	) => {
 		if (currentView === 'cluster' && clusterQuery.length > 0) {
 			return true

@@ -71,7 +71,7 @@ function App() {
 	}*/
 
 	//can later on be replaced by the fetchDataThunk
-	const getData = () => {
+	/*const getData = () => {
 		fetch('dummy/dummyClusters.json', {
 			headers: {
 				'Content-Type': 'application/json',
@@ -84,9 +84,9 @@ function App() {
 			.then(function (json) {
 				allData = json
 			})
-	}
+	}*/
 
-	const getMessages = () => {
+	/*const getMessages = () => {
 		fetch('dummy/dummyMessages.json', {
 			headers: {
 				'Content-Type': 'application/json',
@@ -99,7 +99,7 @@ function App() {
 			.then(function (json) {
 				allMessages = json
 			})
-	}
+	}*/
 
 	useEffect(() => {
 		dispatch(combineAsyncThunk())

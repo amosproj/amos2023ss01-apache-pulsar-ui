@@ -4,63 +4,15 @@ import NamespaceView from './views/NamespaceView'
 import TopicView from './views/TopicView'
 import MessageView from './views/MessageView'
 import TenantView from './views/TenantView'
+import {
+	instanceOfSampleCluster,
+	instanceOfSampleTenant,
+	instanceOfSampleNamespace,
+	instanceOfSampleTopic,
+	instanceOfSampleMessage,
+} from '../Helpers'
 
 const Card: React.FC<CardProps> = ({ data, handleClick }) => {
-	function instanceOfSampleCluster(
-		object:
-			| SampleCluster
-			| SampleTenant
-			| SampleNamespace
-			| SampleTopic
-			| SampleMessage
-	): object is SampleCluster {
-		return 'tenants' in object
-	}
-
-	function instanceOfSampleNamespace(
-		object:
-			| SampleCluster
-			| SampleTenant
-			| SampleNamespace
-			| SampleTopic
-			| SampleMessage
-	): object is SampleNamespace {
-		return 'topics' in object
-	}
-
-	function instanceOfSampleTopic(
-		object:
-			| SampleCluster
-			| SampleTenant
-			| SampleNamespace
-			| SampleTopic
-			| SampleMessage
-	): object is SampleTopic {
-		return 'topicStatsDto' in object
-	}
-
-	function instanceOfSampleTenant(
-		object:
-			| SampleCluster
-			| SampleTenant
-			| SampleNamespace
-			| SampleTopic
-			| SampleMessage
-	): object is SampleTenant {
-		return 'tenantInfo' in object
-	}
-
-	function instanceOfSampleMessage(
-		object:
-			| SampleCluster
-			| SampleTenant
-			| SampleNamespace
-			| SampleTopic
-			| SampleMessage
-	): object is SampleMessage {
-		return 'payload' in object
-	}
-
 	return (
 		<div className="main-card">
 			{instanceOfSampleCluster(data) ? (

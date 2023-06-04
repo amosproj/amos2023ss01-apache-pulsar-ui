@@ -6,7 +6,6 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { RootState } from '.'
 import { modifyData } from './modifyData-temp'
-import { Cluster } from 'cluster'
 
 export type View = {
 	selectedNav: string | null
@@ -16,12 +15,12 @@ export type View = {
 export type globalState = {
 	showLP: boolean
 	view: View
-	data: Array<MessageList>
+	data: Array<SampleTopic>
 	endpoint: string
 	rawClusterData: any
 	rawTopicData: any
 	clusterData: any
-	messageList: any[]
+	messageList: Array<SampleMessage>
 }
 
 const initialState: globalState = {
@@ -139,24 +138,18 @@ const globalSlice = createSlice({
 		},
 		setData: (
 			state: globalState,
-			action: PayloadAction<Array<MessageList>>
+			action: PayloadAction<Array<SampleTopic>>
 		) => {
 			state.data = action.payload
 		},
-		setClusterDataTEST: (state: globalState, action: PayloadAction<any>) => {
+		setClusterDataTEST: (
+			state: globalState,
+			action: PayloadAction<Array<SampleCluster>>
+		) => {
 			state.clusterData = action.payload
 		},
-		updateData: (state: globalState, action: PayloadAction<UpdateForData>) => {
-			state.data.map((single: MessageList) => {
-				if (single.id === action.payload.topic) {
-					const tempId = action.payload.topic + (single.messages.length + 1)
-					const newMessage = {
-						id: tempId,
-						value: action.payload.message,
-						topic: action.payload.topic,
-					}
-					single.messages = [...single.messages, newMessage]
-				}
+		updateData: (state: globalState) => {
+			state.data.map((single: SampleTopic) => {
 				return single
 			})
 		},
@@ -168,20 +161,20 @@ const globalSlice = createSlice({
 		builder.addCase(fetchRawClusterDataThunk.fulfilled, (state, action) => {
 			state.rawClusterData = JSON.parse(JSON.stringify(action.payload))
 		})
-		builder.addCase(fetchRawClusterDataThunk.rejected, (state) => {
+		builder.addCase(fetchRawClusterDataThunk.rejected, () => {
 			console.log('fetch raw cluster data failed')
 		})
 		builder.addCase(fetchRawTopicDataThunk.fulfilled, (state, action) => {
 			state.rawTopicData = JSON.parse(JSON.stringify(action.payload))
 		})
-		builder.addCase(fetchRawTopicDataThunk.rejected, (state) => {
+		builder.addCase(fetchRawTopicDataThunk.rejected, () => {
 			console.log('fetch raw topic data failed')
 		})
-		builder.addCase(combineAsyncThunk.fulfilled, (state, action) => {
+		builder.addCase(combineAsyncThunk.fulfilled, (state) => {
 			//combine raw data to meet dummy data structure and save it in clusterData
 			state.clusterData = modifyData(state.rawClusterData, state.rawTopicData)
 		})
-		builder.addCase(combineAsyncThunk.rejected, (state, action) => {
+		builder.addCase(combineAsyncThunk.rejected, (state) => {
 			console.log('combine Async thunk failed')
 			state.clusterData = []
 			state.rawClusterData = []
@@ -190,7 +183,7 @@ const globalSlice = createSlice({
 		builder.addCase(fetchAllMessagesThunk.fulfilled, (state, action) => {
 			state.messageList = action.payload
 		})
-		builder.addCase(fetchAllMessagesThunk.rejected, (state) => {
+		builder.addCase(fetchAllMessagesThunk.rejected, () => {
 			console.log('fetch all messages thunk failed')
 		})
 	},
@@ -198,7 +191,7 @@ const globalSlice = createSlice({
 
 const { actions, reducer } = globalSlice
 
-const selectData = (state: RootState): Array<MessageList> =>
+const selectData = (state: RootState): Array<SampleTopic> =>
 	state.globalControl.data
 
 const selectView = (state: RootState): View => state.globalControl.view
