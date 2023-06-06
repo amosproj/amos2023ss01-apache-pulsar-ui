@@ -33,11 +33,7 @@ public class TopicController {
 
     private final NamespaceService namespaceService;
 
-
-    // Talked about this with Julian - probably we won't use it this way later, but at first it's easier for them
-    // to just get all topics at once.
     @GetMapping("/all")
-
     public ResponseEntity<TopicsDto> getAllNames() {
         List<String> allTenants = tenantService.getAllNames();
         List<String> allNamespaces = namespaceService.getAllNames(allTenants);
@@ -61,7 +57,6 @@ public class TopicController {
     public ResponseEntity<ProducerDto> getProducerByNameAndTopic(@RequestParam String topic, @PathVariable String producer) {
         return new ResponseEntity<>(topicService.getProducerByTopic(topic, producer), HttpStatus.OK);
     }
-
 
     @PostMapping("/new")
     public ResponseEntity<Void> newTopic(@RequestParam String topic) {
