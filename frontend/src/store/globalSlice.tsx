@@ -6,7 +6,6 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { RootState } from '.'
 import { modifyData } from './modifyData-temp'
-import { Cluster } from 'cluster'
 
 export type View = {
 	selectedNav: string | null
@@ -14,23 +13,19 @@ export type View = {
 }
 
 export type globalState = {
-	showLP: boolean
 	view: View
-	data: Array<MessageList>
 	endpoint: string
 	rawClusterData: any
 	rawTopicData: any
 	clusterData: any
-	messageList: any[]
+	messageList: Array<SampleMessage>
 }
 
 const initialState: globalState = {
-	showLP: true,
 	view: {
-		selectedNav: null,
+		selectedNav: 'cluster',
 		filteredId: null,
 	},
-	data: [],
 	endpoint: '127.0.0.1:8080',
 	rawClusterData: [],
 	rawTopicData: {},
@@ -107,7 +102,7 @@ const fetchAllMessagesThunk = createAsyncThunk(
 	}
 )
 
-const combineAsyncThunk = createAsyncThunk(
+const combineDataThunk = createAsyncThunk(
 	'globalController/combineData',
 	async (_, thunkAPI) => {
 		const { dispatch } = thunkAPI
@@ -137,48 +132,36 @@ const globalSlice = createSlice({
 		setView: (state, action: PayloadAction<View>) => {
 			state.view = action.payload
 		},
-		setData: (
+		setClusterDataTEST: (
 			state: globalState,
-			action: PayloadAction<Array<MessageList>>
+			action: PayloadAction<Array<SampleCluster>>
 		) => {
-			state.data = action.payload
+			state.clusterData = action.payload
 		},
-		updateData: (state: globalState, action: PayloadAction<UpdateForData>) => {
-			state.data.map((single: MessageList) => {
-				if (single.id === action.payload.topic) {
-					const tempId = action.payload.topic + (single.messages.length + 1)
-					const newMessage = {
-						id: tempId,
-						value: action.payload.message,
-						topic: action.payload.topic,
-					}
-					single.messages = [...single.messages, newMessage]
-				}
-				return single
-			})
-		},
+		/*
 		setEndpoint: (state: globalState, action: PayloadAction<string>) => {
 			state.endpoint = action.payload
 		},
+		*/
 	},
 	extraReducers: (builder) => {
 		builder.addCase(fetchRawClusterDataThunk.fulfilled, (state, action) => {
 			state.rawClusterData = JSON.parse(JSON.stringify(action.payload))
 		})
-		builder.addCase(fetchRawClusterDataThunk.rejected, (state) => {
+		builder.addCase(fetchRawClusterDataThunk.rejected, () => {
 			console.log('fetch raw cluster data failed')
 		})
 		builder.addCase(fetchRawTopicDataThunk.fulfilled, (state, action) => {
 			state.rawTopicData = JSON.parse(JSON.stringify(action.payload))
 		})
-		builder.addCase(fetchRawTopicDataThunk.rejected, (state) => {
+		builder.addCase(fetchRawTopicDataThunk.rejected, () => {
 			console.log('fetch raw topic data failed')
 		})
-		builder.addCase(combineAsyncThunk.fulfilled, (state, action) => {
+		builder.addCase(combineDataThunk.fulfilled, (state) => {
 			//combine raw data to meet dummy data structure and save it in clusterData
 			state.clusterData = modifyData(state.rawClusterData, state.rawTopicData)
 		})
-		builder.addCase(combineAsyncThunk.rejected, (state, action) => {
+		builder.addCase(combineDataThunk.rejected, (state) => {
 			console.log('combine Async thunk failed')
 			state.clusterData = []
 			state.rawClusterData = []
@@ -187,7 +170,7 @@ const globalSlice = createSlice({
 		builder.addCase(fetchAllMessagesThunk.fulfilled, (state, action) => {
 			state.messageList = action.payload
 		})
-		builder.addCase(fetchAllMessagesThunk.rejected, (state) => {
+		builder.addCase(fetchAllMessagesThunk.rejected, () => {
 			console.log('fetch all messages thunk failed')
 		})
 	},
@@ -195,12 +178,7 @@ const globalSlice = createSlice({
 
 const { actions, reducer } = globalSlice
 
-const selectData = (state: RootState): Array<MessageList> =>
-	state.globalControl.data
-
 const selectView = (state: RootState): View => state.globalControl.view
-
-const selectShowLP = (state: RootState): boolean => state.globalControl.showLP
 
 const selectEndpoint = (state: RootState): string =>
 	state.globalControl.endpoint
@@ -211,15 +189,13 @@ const selectClusterData = (state: RootState): any =>
 const selectMessages = (state: RootState): any =>
 	state.globalControl.messageList
 
-export const { setNav, setView, updateData, setData, setEndpoint } = actions
+export const { setNav, setView, setClusterDataTEST } = actions
 
 export {
-	selectShowLP,
 	selectEndpoint,
-	selectData,
 	selectView,
 	selectClusterData,
-	combineAsyncThunk,
+	combineDataThunk,
 	selectMessages,
 	fetchAllMessagesThunk,
 }

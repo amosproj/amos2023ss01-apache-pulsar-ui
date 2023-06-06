@@ -1,3 +1,7 @@
+// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: 2010-2021 Dirk Riehle <dirk@riehle.org
+// SPDX-FileCopyrightText: 2019 Georg Schwarz <georg. schwarz@fau.de>
+
 import React from 'react'
 import Box from '@mui/material/Box'
 import InputLabel from '@mui/material/InputLabel'

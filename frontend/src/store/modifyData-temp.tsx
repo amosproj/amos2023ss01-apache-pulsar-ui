@@ -1,43 +1,10 @@
-interface Cluster {
-	id: string
-	tenants: Tenant[]
-	brokers: string[]
-	amountOfTenants: number
-	amountOfNamespaces: number
-	amountOfTopics: number
-	amountOfBrokers: number
-	brokerServiceUrl: string
-	serviceUrl: string
-}
-
-interface Tenant {
-	id: string
-	namespaces: Namespace[]
-	amountOfNamespaces: number
-	amountOfTopics: number
-	tenantInfo: TenantInfo
-}
-
-interface TenantInfo {
-	adminRoles: string[]
-	allowedClusters: string[]
-}
-
-interface Namespace {
-	id: string
-	topics: (string | Topic)[]
-	amountOfTopics: number
-	bundlesData: BundlesData
-	messagesTTL: any // Use 'any' for now, you might want to replace it with the actual type
-	retentionPolicies: any // Use 'any' for now, you might want to replace it with the actual type
-}
-
-interface BundlesData {
-	boundaries: string[]
-	numBundles: number
-}
+// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: 2010-2021 Dirk Riehle <dirk@riehle.org>
+// SPDX-FileCopyrightText: 2019 Georg Schwarz <georg.schwarz@fau.de>
 
 interface Topic {
+	id: string
+	cluster: string
 	name: string
 	localName: string
 	namespace: string
@@ -69,10 +36,10 @@ interface TopicData {
  * @returns modified data
  */
 export const modifyData = (
-	clusters: Array<Cluster>,
+	clusters: Array<SampleCluster>,
 	topics: TopicData
-): Array<Cluster> => {
-	const newData = clusters.map((cluster: Cluster) => {
+): Array<SampleCluster> => {
+	const newData = clusters.map((cluster: SampleCluster) => {
 		const clusterCopy = { ...cluster }
 		let newCluster = addClusterAndTenant(clusterCopy)
 		newCluster = replaceTopicStrings(clusterCopy, topics)
@@ -87,7 +54,7 @@ export const modifyData = (
  * @param cluster
  * @returns modified cluster
  */
-const addClusterAndTenant = (cluster: Cluster): Cluster => {
+const addClusterAndTenant = (cluster: SampleCluster): SampleCluster => {
 	// Add 'cluster' property to tenants
 	cluster.tenants = cluster.tenants.map((tenant) => {
 		// Add 'cluster' property to tenant
@@ -106,7 +73,10 @@ const addClusterAndTenant = (cluster: Cluster): Cluster => {
 	return cluster
 }
 
-const replaceTopicStrings = (cluster: Cluster, topics: TopicData): Cluster => {
+const replaceTopicStrings = (
+	cluster: SampleCluster,
+	topics: TopicData
+): SampleCluster => {
 	const topicsMap = new Map(topics.topics.map((topic) => [topic.name, topic]))
 
 	// Replace topic strings with topic objects. non strings stay the same

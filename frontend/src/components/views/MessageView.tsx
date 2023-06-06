@@ -1,11 +1,24 @@
-import React from 'react'
-import graph1 from '../../assets/images/demo-graph1.png'
-import graph2 from '../../assets/images/demo-graph2.png'
+// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: 2010-2021 Dirk Riehle <dirk@riehle.org
+// SPDX-FileCopyrightText: 2019 Georg Schwarz <georg. schwarz@fau.de>
+
+import React, { useState } from 'react'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import ExpandLessIcon from '@mui/icons-material/ExpandLess'
+import { Collapse, CardActions, Button } from '@mui/material'
 
 const MessageView: React.FC<MessageViewProps> = ({ data }) => {
+	const [expanded, setExpanded] = useState(false)
+
+	const handleExpand = () => {
+		//TODO if(!data) fetch detailed data
+		setExpanded(!expanded)
+	}
+
 	return (
 		<div className="flex flex-col card-content">
 			<h2 className="uppercase">{data?.payload}</h2>
+			<div className="grey-line"></div>
 			<div className="flex card-inner">
 				<div className="flex flex-col card-col card-col-1">
 					<div className="flex flex-col card-info">
@@ -34,32 +47,60 @@ const MessageView: React.FC<MessageViewProps> = ({ data }) => {
 							</span>
 						</p>
 					</div>
-					<div className="grey-line"></div>
-					<div className="flex flex-col card-info">
-						<p className="text-black">
-							Schema:{' '}
-							<span className="text-blue">
-								{data?.schema ? data.schema : 'N/A'}
-							</span>
-						</p>
-						<p className="text-black">
-							Message ID:{' '}
-							<span className="text-blue">{data?.id ? data.id : 'N/A'}</span>
-						</p>
-						<p className="text-black">
-							Publish time:{' '}
-							<span className="text-blue">
-								{data?.publishTime ? data.publishTime : 'N/A'}
-							</span>
-						</p>
+				</div>
+			</div>
+			<Collapse in={expanded} timeout="auto" unmountOnExit>
+				<div className="flex card-inner">
+					<div className="flex flex-col card-col card-col-1">
+						<div className="flex flex-col card-info">
+							<div className="grey-line"></div>
+							<div className="flex flex-col card-info">
+								<p className="text-black">
+									Schema:{' '}
+									<span className="text-blue">
+										{data?.schema ? data.schema : 'N/A'}
+									</span>
+								</p>
+								<p className="text-black">
+									Message ID:{' '}
+									<span className="text-blue">
+										{data?.id ? data.id : 'N/A'}
+									</span>
+								</p>
+								<p className="text-black">
+									Publish time:{' '}
+									<span className="text-blue">
+										{data?.publishTime ? data.publishTime : 'N/A'}
+									</span>
+								</p>
+							</div>
+						</div>
 					</div>
 				</div>
-				<div className="flex flex-col card-col card-col-2">
-					<img className="my-auto" src={graph2}></img>
-				</div>
-				<div className="flex flex-col card-col card-col-3">
-					<img className="my-auto" src={graph1}></img>
-				</div>
+			</Collapse>
+			<div className="flex justify-between">
+				{' '}
+				<CardActions disableSpacing>
+					{expanded ? (
+						<Button
+							variant={'contained'}
+							style={{ marginRight: '10px' }}
+							onClick={handleExpand}
+							endIcon={<ExpandLessIcon />}
+						>
+							Hide
+						</Button>
+					) : (
+						<Button
+							variant={'contained'}
+							style={{ marginRight: '10px' }}
+							onClick={handleExpand}
+							endIcon={<ExpandMoreIcon />}
+						>
+							show details
+						</Button>
+					)}
+				</CardActions>
 			</div>
 		</div>
 	)

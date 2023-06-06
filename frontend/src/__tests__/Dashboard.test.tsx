@@ -3,6 +3,7 @@ import { render, screen } from '@testing-library/react'
 import Dashboard from '../components/Dashboard'
 import { Provider } from 'react-redux'
 import store from '../store'
+import { setClusterDataTEST } from '../store/globalSlice'
 
 const dataTest: Array<SampleCluster> = [
 	{
@@ -19,18 +20,13 @@ const dataTest: Array<SampleCluster> = [
 						topics: [
 							{
 								id: 'persistent://eu-tenant/hr/foo',
+								name: 'foo',
 								localName: 'foo',
 								namespace: 'hr',
 								tenant: 'eu-tenant',
 								cluster: 'amos-demo-2',
 								topicStatsDto: {
-									subscriptions: [
-										{
-											name: 'foo-sub',
-											consumers: [],
-											numberConsumers: 0,
-										},
-									],
+									subscriptions: [''],
 									producers: [],
 									numberSubscriptions: 1,
 									numberProducers: 0,
@@ -78,13 +74,40 @@ const dataTest: Array<SampleCluster> = [
 	},
 ]
 
+const messagesTest = [
+	{
+		id: 'message-1',
+		payload: 'I am a dummy',
+		schema: '',
+		cluster: 'amos-demo',
+		tenant: 'eu-tenant',
+		namespace: 'eu-tenant/sales',
+		topic: 'persistent://eu-tenant/sales/bar',
+		publishTime: '13:22 PM',
+	},
+	{
+		id: 'message-2',
+		payload: 'Message that has another text',
+		schema: '',
+		cluster: 'amos-demo-2',
+		tenant: 'eu-tenant',
+		namespace: 'eu-tenant/sales',
+		topic: 'persistent://eu-tenant/sales/foobar',
+		publishTime: '10:05 AM',
+	},
+]
+
 test('should check if data is being displayed on the dashboard', async () => {
+	store.dispatch(setClusterDataTEST(dataTest))
+
 	render(
 		<Provider store={store}>
-			<Dashboard completeData={dataTest} view="cluster" />
+			<Dashboard
+				completeData={store.getState().globalControl.clusterData}
+				completeMessages={messagesTest}
+				view="cluster"
+			/>
 		</Provider>
 	)
-	expect(screen.getByTestId('main-dashboard')).toHaveTextContent(
-		'Service URL: http://broker:8082'
-	)
+	expect(screen.getByTestId('main-dashboard')).toHaveTextContent('amos-demo-2')
 })

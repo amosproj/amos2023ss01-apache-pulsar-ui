@@ -31,7 +31,14 @@ interface CardProps {
 interface DashboardProps {
 	completeData: Array<SampleCluster>
 	completeMessages: Array<SampleMessage>
-	view?: 'cluster' | 'tenant' | 'namespace' | 'topic' | 'message' | null | any
+	view?:
+		| 'cluster'
+		| 'tenant'
+		| 'namespace'
+		| 'topic'
+		| 'message'
+		| string
+		| null
 }
 
 interface CustomAccordionProps {
@@ -110,17 +117,20 @@ interface CustomFilterProps {
 		id: string,
 		element: 'cluster' | 'tenant' | 'namespace' | 'topic' | 'message'
 	) => void
-	currentView: 'cluster' | 'tenant' | 'namespace' | 'topic' | 'message'
+	currentView:
+		| 'cluster'
+		| 'tenant'
+		| 'namespace'
+		| 'topic'
+		| 'message'
+		| undefined
+		| null
+		| string
 }
 
 interface CustomSearchProps {
 	setSearchQuery: React.Dispatch<React.SetStateAction<string>>
 	placeholder: string
-}
-
-//Slice interfaces
-interface CounterState {
-	value: number
 }
 
 interface UpdateForData {
