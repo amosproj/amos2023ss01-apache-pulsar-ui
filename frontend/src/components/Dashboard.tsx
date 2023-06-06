@@ -361,11 +361,9 @@ const Dashboard: React.FC<DashboardProps> = ({
 	const dashboardTitle = view + 's'
 
 	return (
-		<div data-testid="main-dashboard" className="flex main-card main-dashboard">
+		<div data-testid="main-dashboard" className="main-card main-dashboard">
 			<div className="primary-dashboard">
-				<h2 className="text-black dashboard-title">
-					Available {dashboardTitle}
-				</h2>
+				<h2 className="dashboard-title">Available {dashboardTitle}</h2>
 				{dataFiltered &&
 					dataFiltered.length > 0 &&
 					dataFiltered.map(
@@ -385,7 +383,7 @@ const Dashboard: React.FC<DashboardProps> = ({
 						)
 					)}
 			</div>
-			<div className="secondary-dashboard w-full">
+			<div className="secondary-dashboard">
 				<CustomSearchbar
 					placeholder={'Search'}
 					setSearchQuery={setSearchQuery}
@@ -398,8 +396,8 @@ const Dashboard: React.FC<DashboardProps> = ({
 						Reset all filters
 					</span>
 				)}
-				<div className="flex filters-wrapper">
-					<h2 className="text-black dashboard-title">Filters</h2>
+				<div className="filters-wrapper">
+					<h2 className="dashboard-title">Filters</h2>
 					<FilterListIcon style={{ fill: '#A4A4A4' }} />
 				</div>
 				<CustomFilter
