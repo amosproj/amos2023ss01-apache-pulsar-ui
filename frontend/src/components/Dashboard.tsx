@@ -361,7 +361,7 @@ const Dashboard: React.FC<DashboardProps> = ({
 	const dashboardTitle = view + 's'
 
 	return (
-		<div data-testid="main-dashboard" className="main-card main-dashboard">
+		<div data-testid="main-dashboard" className="main-dashboard">
 			<div className="primary-dashboard">
 				<h2 className="dashboard-title">Available {dashboardTitle}</h2>
 				{dataFiltered &&
