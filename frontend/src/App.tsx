@@ -14,7 +14,7 @@ import {
 } from './store/globalSlice'
 import NavBar from './components/NavBar'
 import Dashboard from './components/Dashboard'
-import { combineAsyncThunk } from './store/globalSlice'
+import { combineDataThunk } from './store/globalSlice'
 import { useInterval } from './components/custom/hooks'
 
 let allData: Array<SampleCluster> = []
@@ -102,7 +102,7 @@ function App() {
 	}*/
 
 	useEffect(() => {
-		dispatch(combineAsyncThunk())
+		dispatch(combineDataThunk())
 		//getMessages()
 	}, [])
 

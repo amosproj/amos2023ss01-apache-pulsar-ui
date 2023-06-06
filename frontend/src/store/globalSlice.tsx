@@ -13,9 +13,7 @@ export type View = {
 }
 
 export type globalState = {
-	showLP: boolean
 	view: View
-	data: Array<SampleTopic>
 	endpoint: string
 	rawClusterData: any
 	rawTopicData: any
@@ -24,12 +22,10 @@ export type globalState = {
 }
 
 const initialState: globalState = {
-	showLP: true,
 	view: {
 		selectedNav: 'cluster',
 		filteredId: null,
 	},
-	data: [],
 	endpoint: '127.0.0.1:8080',
 	rawClusterData: [],
 	rawTopicData: {},
@@ -106,7 +102,7 @@ const fetchAllMessagesThunk = createAsyncThunk(
 	}
 )
 
-const combineAsyncThunk = createAsyncThunk(
+const combineDataThunk = createAsyncThunk(
 	'globalController/combineData',
 	async (_, thunkAPI) => {
 		const { dispatch } = thunkAPI
@@ -136,26 +132,17 @@ const globalSlice = createSlice({
 		setView: (state, action: PayloadAction<View>) => {
 			state.view = action.payload
 		},
-		setData: (
-			state: globalState,
-			action: PayloadAction<Array<SampleTopic>>
-		) => {
-			state.data = action.payload
-		},
 		setClusterDataTEST: (
 			state: globalState,
 			action: PayloadAction<Array<SampleCluster>>
 		) => {
 			state.clusterData = action.payload
 		},
-		updateData: (state: globalState) => {
-			state.data.map((single: SampleTopic) => {
-				return single
-			})
-		},
+		/*
 		setEndpoint: (state: globalState, action: PayloadAction<string>) => {
 			state.endpoint = action.payload
 		},
+		*/
 	},
 	extraReducers: (builder) => {
 		builder.addCase(fetchRawClusterDataThunk.fulfilled, (state, action) => {
@@ -170,11 +157,11 @@ const globalSlice = createSlice({
 		builder.addCase(fetchRawTopicDataThunk.rejected, () => {
 			console.log('fetch raw topic data failed')
 		})
-		builder.addCase(combineAsyncThunk.fulfilled, (state) => {
+		builder.addCase(combineDataThunk.fulfilled, (state) => {
 			//combine raw data to meet dummy data structure and save it in clusterData
 			state.clusterData = modifyData(state.rawClusterData, state.rawTopicData)
 		})
-		builder.addCase(combineAsyncThunk.rejected, (state) => {
+		builder.addCase(combineDataThunk.rejected, (state) => {
 			console.log('combine Async thunk failed')
 			state.clusterData = []
 			state.rawClusterData = []
@@ -191,12 +178,7 @@ const globalSlice = createSlice({
 
 const { actions, reducer } = globalSlice
 
-const selectData = (state: RootState): Array<SampleTopic> =>
-	state.globalControl.data
-
 const selectView = (state: RootState): View => state.globalControl.view
-
-const selectShowLP = (state: RootState): boolean => state.globalControl.showLP
 
 const selectEndpoint = (state: RootState): string =>
 	state.globalControl.endpoint
@@ -207,22 +189,13 @@ const selectClusterData = (state: RootState): any =>
 const selectMessages = (state: RootState): any =>
 	state.globalControl.messageList
 
-export const {
-	setNav,
-	setView,
-	updateData,
-	setData,
-	setEndpoint,
-	setClusterDataTEST,
-} = actions
+export const { setNav, setView, setClusterDataTEST } = actions
 
 export {
-	selectShowLP,
 	selectEndpoint,
-	selectData,
 	selectView,
 	selectClusterData,
-	combineAsyncThunk,
+	combineDataThunk,
 	selectMessages,
 	fetchAllMessagesThunk,
 }
