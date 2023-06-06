@@ -33,6 +33,7 @@ public class TenantService {
     public TenantDto getTenantDetails(String tenantName) {
         List<String> namespacesOfTenant = namespaceService.getAllOfTenant(tenantName);
         return TenantDto.builder()
+                .name(tenantName)
                 .tenantInfo(getTenantInfo(tenantName))
                 .namespaces(namespacesOfTenant)
                 .amountOfNamespaces(namespacesOfTenant.size())

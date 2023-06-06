@@ -17,7 +17,7 @@ import java.util.List;
 @Builder
 public class TenantDto {
 
-    private String id;
+    private String name;
 
     private List<String> namespaces;
 
