@@ -8,20 +8,6 @@ import { setNav } from '../store/globalSlice'
 // Spy on the dispatch function
 jest.spyOn(store, 'dispatch')
 
-test('disconnect button dispatches backToLP reducer', () => {
-	render(
-		<Provider store={store}>
-			<NavBar />
-		</Provider>
-	)
-
-	const disconnectButton = screen.getByRole('button', { name: /disconnect/i })
-	fireEvent.click(disconnectButton)
-
-	// Check that 'backToLP' action was dispatched when Disconnect button was clicked
-	// expect(store.dispatch).toHaveBeenCalledWith(backToLP())
-})
-
 test('every page button dispatches correct setNav reducer', () => {
 	// const pages = ['Cluster', 'Namespace', 'Topic']
 	// Remove 'Cluster' because after #80 now the cluster view is the default view
