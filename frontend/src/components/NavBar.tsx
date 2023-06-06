@@ -40,10 +40,10 @@ function NavBar() {
 		dispatch(setNav(tag))
 	}
 
-	const handleClickOnDisconnect = () => {
-		//TODO add disconnect functionality
-		// dispatch(backToLP())
-	}
+	// const handleClickOnDisconnect = () => {
+	// 	//TODO add disconnect functionality
+	// 	// dispatch(backToLP())
+	// }
 
 	const endpoint = useAppSelector(selectEndpoint)
 
@@ -67,21 +67,22 @@ function NavBar() {
 						inputProps={{ style: { textAlign: 'center' } }}
 						size="small"
 						style={{
-							width: '110px',
+							width: '120px',
 							marginLeft: '20px',
 							marginRight: '5px',
 							textAlign: 'center',
 							background: 'white',
+							borderRadius: '5px',
 						}}
 					/>
-					<Button
+					{/* <Button
 						variant="outlined"
 						style={{ color: 'white', background: '#ba000d' }}
 						size="small"
 						onClick={handleClickOnDisconnect}
 					>
 						Disconnect
-					</Button>
+					</Button> */}
 					<Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
 						<IconButton
 							size="large"
