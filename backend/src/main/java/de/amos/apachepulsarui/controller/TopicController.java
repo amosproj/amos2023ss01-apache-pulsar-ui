@@ -14,7 +14,6 @@ import de.amos.apachepulsarui.service.NamespaceService;
 import de.amos.apachepulsarui.service.TenantService;
 import de.amos.apachepulsarui.service.TopicService;
 import lombok.RequiredArgsConstructor;
-import org.apache.pulsar.common.naming.NamespaceName;
 import org.apache.pulsar.common.naming.TopicName;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,34 +27,29 @@ import java.util.List;
 @RequestMapping("/topic")
 public class TopicController {
 
-    private final TenantService tenantService;
-    private final NamespaceService namespaceService;
     private final TopicService topicService;
 
-    // Talked about this with Julian - probably we won't use it this way later, but at first it's easier for them
-    // to just get all topics at once.
+    private final TenantService tenantService;
+
+    private final NamespaceService namespaceService;
+
     @GetMapping("/all")
-    public ResponseEntity<TopicsDto> getAll() {
-        List<TopicDto> allTopics = tenantService.getAllTenants().stream()
-                .flatMap(tenantDto -> namespaceService.getAllOfTenant(tenantDto).stream())
-                .flatMap(namespaceDto -> topicService.getAllByNamespace(namespaceDto.getId()).stream())
+    public ResponseEntity<TopicsDto> getAllNames() {
+        List<String> allTenants = tenantService.getAllNames();
+        List<String> allNamespaces = namespaceService.getAllNames(allTenants);
+        List<String> allTopics = allNamespaces.stream()
+                .flatMap(namespaceName -> topicService.getAllByNamespace(namespaceName).stream())
                 .toList();
         return new ResponseEntity<>(new TopicsDto(allTopics), HttpStatus.OK);
     }
 
-    @GetMapping("/{tenant}/{namespace}")
-    public ResponseEntity<TopicsDto> getTopicsByNamespace(@PathVariable String namespace, @PathVariable String tenant) {
-        String namespaceName = NamespaceName.get(tenant, namespace).toString();
-        return new ResponseEntity<>(new TopicsDto(topicService.getAllByNamespace(namespaceName)), HttpStatus.OK);
-    }
-
     @GetMapping
-    public ResponseEntity<TopicDto> getTopicWithMessagesByName(@RequestParam String name) {
-       return new ResponseEntity<>(topicService.getTopicWithMessagesByName(name), HttpStatus.OK);
+    public ResponseEntity<TopicDto> getTopicDetails(@RequestParam String name) {
+       return new ResponseEntity<>(topicService.getTopicDetails(name), HttpStatus.OK);
     }
 
     @GetMapping("/subscription/{subscription}")
-    public ResponseEntity<SubscriptionDto> getSubyscriptionByNameAndTopic(@RequestParam String topic, @PathVariable String subscription) {
+    public ResponseEntity<SubscriptionDto> getSubscriptionByNameAndTopic(@RequestParam String topic, @PathVariable String subscription) {
         return new ResponseEntity<>(topicService.getSubscriptionByTopic(topic, subscription), HttpStatus.OK);
     }
 
@@ -63,7 +57,6 @@ public class TopicController {
     public ResponseEntity<ProducerDto> getProducerByNameAndTopic(@RequestParam String topic, @PathVariable String producer) {
         return new ResponseEntity<>(topicService.getProducerByTopic(topic, producer), HttpStatus.OK);
     }
-
 
     @PostMapping("/new")
     public ResponseEntity<Void> newTopic(@RequestParam String topic) {

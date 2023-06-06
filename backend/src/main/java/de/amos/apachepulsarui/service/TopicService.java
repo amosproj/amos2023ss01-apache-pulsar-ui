@@ -6,6 +6,7 @@
 
 package de.amos.apachepulsarui.service;
 
+import de.amos.apachepulsarui.controller.exception.PulsarApiException;
 import de.amos.apachepulsarui.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,78 +38,64 @@ public class TopicService {
 
 
     /**
-     * @param name The Name of the Topic you want to get a list of all topics for.
-     * @return A {@link TopicDto}'s including {@link TopicStatsDto}, List of {@link MessageDto} and
-     * additional metadata.
-     */
-    public TopicDto getTopicWithMessagesByName(String name) {
-        List<MessageDto> messages = messageService.peekMessages(name);
-
-        return TopicDto.createTopicDtoWithMessages(name,
-                getTopicStats(name),
-                getOwnerBroker(name),
-                messages);
-    }
-
-    public boolean createNewTopic(String topic) {
-        try {
-            pulsarAdmin.topics().createNonPartitionedTopic(topic);
-            return true;
-        } catch (PulsarAdminException e) {
-            log.error("Could not create new topic %s. E: %s".formatted(topic, e));
-        }
-        return false;
-    }
-
-    /**
      * @param namespace The namespace you want to get a list of all topics for.
      * @return A list of topics (their fully qualified names).
      */
     @Cacheable("topic.allNamesByNamespace")
-    public List<String> getAllNamesByNamespace(String namespace) {
+    public List<String> getAllByNamespace(String namespace) {
         return getByNamespace(namespace);
     }
 
+    private List<String> getByNamespace(String namespace) throws PulsarApiException {
+        try {
+            return pulsarAdmin.topics().getList(namespace);
+        } catch (PulsarAdminException e) {
+           throw new PulsarApiException("Could not fetch topics of namespace %s.".formatted(namespace), e);
+        }
+    }
+
+    public boolean createNewTopic(String topic) throws PulsarApiException {
+        try {
+            pulsarAdmin.topics().createNonPartitionedTopic(topic);
+            return true;
+        } catch (PulsarAdminException e) {
+            throw new PulsarApiException("Could not create new topic %s.".formatted(topic), e);
+        }
+    }
+
     /**
-     * @param namespace The namespace you want to get a list of all topics for.
-     * @return A list of {@link TopicDto}'s including {@link de.amos.apachepulsarui.dto.TopicStatsDto} and
+     * @param topicName The Name of the Topic you want to get detailed information about
+     * @return A {@link TopicDto}'s including {@link TopicStatsDto}, List of {@link MessageDto} and
      * additional metadata.
      */
-    @Cacheable("topic.allByNamespace")
-    public List<TopicDto> getAllByNamespace(String namespace) {
-        return getByNamespace(namespace).stream()
-                .map(this::createTopicDto)
-                .toList();
-    }
-
-    private List<String> getByNamespace(String namespace) {
+    public TopicDto getTopicDetails(String topicName) throws PulsarApiException {
         try {
-            return pulsarAdmin.topics()
-                    .getList(namespace).stream()
-                    .toList();
+            List<String> subscriptions = pulsarAdmin.topics().getSubscriptions(topicName);
+            List<MessageDto> messages = subscriptions.stream().
+                    flatMap(sub -> messageService.peekMessages(topicName, sub).stream()).toList();
+            return TopicDto.createTopicDtoWithMessages(topicName,
+                    getTopicStats(topicName),
+                    getOwnerBroker(topicName),
+                    messages);
+
         } catch (PulsarAdminException e) {
-            log.error("Could not fetch topics of namespace %s. E: %s".formatted(namespace, e));
-            return List.of();
+            throw new PulsarApiException("Could not fetch topic details for topic %s.".formatted(topicName), e);
         }
     }
 
-    private TopicDto createTopicDto(String completeTopicName) {
-        return TopicDto.createTopicDto(completeTopicName, this.getTopicStats(completeTopicName), this.getOwnerBroker(completeTopicName));
-    }
-
-    private TopicStats getTopicStats(String fullTopicName) {
+    private TopicStats getTopicStats(String topicName) throws PulsarApiException {
         try {
-            return pulsarAdmin.topics().getStats(fullTopicName);
+            return pulsarAdmin.topics().getStats(topicName);
         } catch (PulsarAdminException e) {
-            throw new RuntimeException(e);
+            throw new PulsarApiException("Could not fetch topic stats for topic %s.".formatted(topicName), e);
         }
     }
 
-    private String getOwnerBroker(String fullTopicName) {
+    private String getOwnerBroker(String topicName) throws PulsarApiException {
         try {
-            return pulsarAdmin.lookups().lookupTopic(fullTopicName);
+            return pulsarAdmin.lookups().lookupTopic(topicName);
         } catch (PulsarAdminException e) {
-            throw new RuntimeException(e);
+            throw new PulsarApiException("Could not fetch owner broker for topic %s.".formatted(topicName), e);
         }
     }
 

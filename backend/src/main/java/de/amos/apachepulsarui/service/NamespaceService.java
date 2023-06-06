@@ -5,8 +5,8 @@
 
 package de.amos.apachepulsarui.service;
 
+import de.amos.apachepulsarui.controller.exception.PulsarApiException;
 import de.amos.apachepulsarui.dto.NamespaceDto;
-import de.amos.apachepulsarui.dto.TenantDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pulsar.client.admin.Namespaces;
@@ -25,33 +25,39 @@ public class NamespaceService {
 
     private final TopicService topicService;
 
-    public List<NamespaceDto> getAllOfTenant(TenantDto tenant) {
+    public List<String> getAllNames(List<String> tenants) {
+        return tenants.stream()
+                .flatMap(tenantName -> getAllOfTenant(tenantName).stream())
+                .toList();
+    }
+
+    public NamespaceDto getNamespaceDetails(String namespaceName) {
+        return enrichWithNamespaceData(NamespaceDto.fromString(namespaceName));
+    }
+
+    public List<String> getAllOfTenant(String tenantName) throws PulsarApiException {
         try {
-            return pulsarAdmin.namespaces()
-                    .getNamespaces(tenant.getId()).stream()
-                    .map(NamespaceDto::fromString)
-                    .map(this::enrichWithNamespaceData)
-                    .toList();
+            return pulsarAdmin.namespaces().getNamespaces(tenantName);
         } catch (PulsarAdminException e) {
-            log.error("Could not fetch namespaces of tenant %s. E: %s".formatted(tenant.getId(), e));
-            return List.of();
+            throw new PulsarApiException("Could not fetch namespaces of tenant %s.".formatted(tenantName), e);
         }
     }
 
-    private NamespaceDto enrichWithNamespaceData(NamespaceDto namespace) {
+    private NamespaceDto enrichWithNamespaceData(NamespaceDto namespace) throws PulsarApiException {
         try {
+
             Namespaces namespaces = pulsarAdmin.namespaces();
 
             namespace.setBundlesData(namespaces.getBundles(namespace.getId()));
             namespace.setMessagesTTL(namespaces.getNamespaceMessageTTL(namespace.getId()));
             namespace.setRetentionPolicies(namespaces.getRetention(namespace.getId()));
-            namespace.setTopics(topicService.getAllNamesByNamespace(namespace.getId()));
+            namespace.setTopics(topicService.getAllByNamespace(namespace.getId()));
 
             return namespace;
         } catch (PulsarAdminException e) {
-            log.error("Could not fetch namespace data of namespace %s. E: %s".formatted(namespace.getId(), e));
-            return namespace;
+            throw new PulsarApiException(
+                    "Could not fetch namespace data of namespace %s.".formatted(namespace.getId()), e
+            );
         }
     }
-
 }

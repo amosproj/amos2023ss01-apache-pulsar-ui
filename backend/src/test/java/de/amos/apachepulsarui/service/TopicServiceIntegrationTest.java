@@ -8,7 +8,6 @@ package de.amos.apachepulsarui.service;
 import de.amos.apachepulsarui.dto.TopicDto;
 import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.apache.pulsar.client.api.*;
-import org.apache.pulsar.common.naming.NamespaceName;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,15 +29,16 @@ public class TopicServiceIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     void getByNamespace_returnsCreatedTopics() {
-        topicService.createNewTopic("topic-service-integration-test");
-        List<TopicDto> topics = topicService.getAllByNamespace("public/default");
-        Assertions.assertThat(topics.iterator().next().getName())
-                .isEqualTo("persistent://public/default/topic-service-integration-test");
+        String topicName = "persistent://public/default/test123";
+        topicService.createNewTopic(topicName);
+        List<String> topics = topicService.getAllByNamespace("public/default");
+        Assertions.assertThat(topics).containsExactly(topicName);
     }
 
     @Test
-    void getAllByNamespace_returnsMessageCount() throws Exception {
+    void getTopicDetails_returnsMessageCount() throws Exception {
         String topicName = "persistent://public/default/topic-service-integration-test";
+        topicService.createNewTopic(topicName);
         var message = "hello world".getBytes(StandardCharsets.UTF_8);
         try (Producer<byte[]> producer = pulsarClient.newProducer().topic(topicName).create();
              Consumer<byte[]> consumer = pulsarClient.newConsumer().topic(topicName).subscriptionName("TestSubscriber").subscribe()) {
@@ -56,10 +56,7 @@ public class TopicServiceIntegrationTest extends AbstractIntegrationTest {
             consumer.close();
             producer.close();
         }
-        TopicDto topic = topicService.getAllByNamespace(NamespaceName.get("public", "default").toString()).stream()
-                .filter(topicDto -> topicDto.getName().equals(topicName))
-                .findFirst()
-                .orElseThrow();
+        TopicDto topic = topicService.getTopicDetails(topicName);
         // it seems there is no exactly once guarantees in pulsar which made the test flaky -> use greaterThan instead of equals
         Assertions.assertThat(topic.getProducedMessages()).isGreaterThanOrEqualTo(3);
         Assertions.assertThat(topic.getConsumedMessages()).isGreaterThanOrEqualTo(2);
@@ -68,6 +65,7 @@ public class TopicServiceIntegrationTest extends AbstractIntegrationTest {
     @Test
     void getSubscriptionsByTopic () throws PulsarClientException {
         String topicName = "persistent://public/default/topic-service-integration-test";
+        topicService.createNewTopic(topicName);
         Consumer<byte[]> consumer = pulsarClient.newConsumer().topic(topicName).subscriptionName("TestSubscriber").subscribe();
 
         consumer.close();
@@ -78,6 +76,7 @@ public class TopicServiceIntegrationTest extends AbstractIntegrationTest {
     @Test
     void getProducerByTopic () throws Exception {
         String topicName = "persistent://public/default/topic-service-integration-test";
+        topicService.createNewTopic(topicName);
         var message = "hello world".getBytes(StandardCharsets.UTF_8);
         try (Producer<byte[]> producer = pulsarClient.newProducer().producerName("Producer").topic(topicName).create()) {
 

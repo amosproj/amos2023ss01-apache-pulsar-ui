@@ -46,7 +46,7 @@ public class MessageServiceIntegrationTest extends AbstractIntegrationTest {
         MessageDto messageToSend = aMessage(topicName, "Hello World");
         Long timeBeforeSend = Instant.now().getEpochSecond();
         messageService.sendMessage(messageToSend);
-        var messages = messageService.peekMessages(topicName);
+        var messages = messageService.peekMessages(topicName, "getGreatMessages");
 
         MessageDto messageReceived = messages.get(0);
         assertThat(messageReceived.getMessageId()).isNotEmpty(); // generated
@@ -73,7 +73,7 @@ public class MessageServiceIntegrationTest extends AbstractIntegrationTest {
 
             producer.send(new TestSchema("Keks", 3));
         }
-        var messages = messageService.peekMessages(topicName);
+        var messages = messageService.peekMessages(topicName, "getSchemaMessages");
 
         MessageDto messageReceived = messages.get(0);
         assertThat(messageReceived.getSchema()).isEqualTo(schema.getSchemaInfo().getSchemaDefinition());

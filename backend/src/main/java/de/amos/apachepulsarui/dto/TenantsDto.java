@@ -11,9 +11,10 @@ import lombok.Data;
 
 import java.util.List;
 
-@AllArgsConstructor
 @Data
+@AllArgsConstructor
 public class TenantsDto {
 
-    private List<TenantDto> tenants;
+    private List<String> tenants;
+
 }

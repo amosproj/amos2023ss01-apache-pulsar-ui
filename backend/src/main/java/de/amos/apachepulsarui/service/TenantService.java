@@ -1,11 +1,13 @@
 package de.amos.apachepulsarui.service;
 
-import de.amos.apachepulsarui.dto.NamespaceDto;
+import de.amos.apachepulsarui.controller.exception.PulsarApiException;
 import de.amos.apachepulsarui.dto.TenantDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.apache.pulsar.client.admin.PulsarAdminException;
+import org.apache.pulsar.common.policies.data.TenantInfo;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,35 +18,33 @@ import java.util.List;
 public class TenantService {
 
     private final PulsarAdmin pulsarAdmin;
-
     private final NamespaceService namespaceService;
 
-    public List<TenantDto> getAllTenants() {
+    @Cacheable("tenant.all")
+    public List<String> getAllNames() throws PulsarApiException {
         try {
-            return pulsarAdmin.tenants().getTenants().stream()
-                    .map(TenantDto::fromString)
-                    .map(this::enrichWithTenantInfo)
-                    .map(this::enrichWithNamespaces)
-                    .toList();
+            return pulsarAdmin.tenants().getTenants();
         } catch (PulsarAdminException e) {
-            log.error("Could not get list of all tenants. E: %s".formatted(e));
-            return List.of();
+            throw new PulsarApiException("Could not get a list of all tenants.", e);
         }
     }
 
-    private TenantDto enrichWithNamespaces(TenantDto tenant) {
-        List<NamespaceDto> namespacesOfTenant = namespaceService.getAllOfTenant(tenant);
-        tenant.setNamespaces(namespacesOfTenant);
-        return tenant;
+    @Cacheable("tenant.detail")
+    public TenantDto getTenantDetails(String tenantName) {
+        List<String> namespacesOfTenant = namespaceService.getAllOfTenant(tenantName);
+        return TenantDto.builder()
+                .name(tenantName)
+                .tenantInfo(getTenantInfo(tenantName))
+                .namespaces(namespacesOfTenant)
+                .amountOfNamespaces(namespacesOfTenant.size())
+                .build();
     }
 
-    private TenantDto enrichWithTenantInfo(TenantDto tenant) {
+    private TenantInfo getTenantInfo(String tenantName) {
         try {
-			tenant.setTenantInfo(pulsarAdmin.tenants().getTenantInfo(tenant.getId()));
-			return tenant;
+			return pulsarAdmin.tenants().getTenantInfo(tenantName);
         } catch (PulsarAdminException e) {
-            log.error("Could not fetch tenant info of tenant %s. E: %s".formatted(tenant.getId(), e));
-            return tenant;
+            throw new PulsarApiException("Could not fetch tenant info of tenant %s.".formatted(tenantName), e);
         }
     }
 

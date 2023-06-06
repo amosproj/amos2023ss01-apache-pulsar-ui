@@ -6,7 +6,6 @@
 package de.amos.apachepulsarui.service;
 
 import de.amos.apachepulsarui.dto.NamespaceDto;
-import de.amos.apachepulsarui.dto.TenantDto;
 import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.apache.pulsar.client.admin.PulsarAdminException;
 import org.apache.pulsar.common.policies.data.TenantInfo;
@@ -38,11 +37,29 @@ public class NamespaceServiceIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void getAllNamespacesOfTenant_returnsNamespacesOfTenant() {
-        List<NamespaceDto> namespaces = namespaceService.getAllOfTenant(TenantDto.fromString("tenant1"));
-        var namespaceIds = namespaces.stream().map(NamespaceDto::getId).toList();
-        Assertions.assertThat(namespaceIds).contains("tenant1/namespace1", "tenant1/namespace2");
-        Assertions.assertThat(namespaceIds).doesNotContain("tenant2/namespace3");
+    void getAllOfTenant_returnsNamespacesOfTenant() {
+        List<String> namespaces = namespaceService.getAllOfTenant("tenant1");
+        Assertions.assertThat(namespaces).contains("tenant1/namespace1", "tenant1/namespace2");
+        Assertions.assertThat(namespaces).doesNotContain("tenant2/namespace3");
+    }
+
+    @Test
+    void getAllNames_returnsAllNamespaces() {
+        List<String> tenants = List.of("tenant1", "tenant2");
+        List<String> namespaces = namespaceService.getAllNames(tenants);
+        Assertions.assertThat(namespaces).contains("tenant1/namespace1", "tenant1/namespace2","tenant2/namespace3");
+    }
+
+    @Test
+    void getNamespaceDetails_returnsNamespaces() throws PulsarAdminException {
+        pulsarAdmin.namespaces().createNamespace("tenant1/namespace4");
+        pulsarAdmin.topics().createNonPartitionedTopic("persistent://tenant1/namespace4/testTopic");
+
+        NamespaceDto namespace = namespaceService.getNamespaceDetails("tenant1/namespace4");
+
+        Assertions.assertThat(namespace.getId()).isEqualTo("tenant1/namespace4");
+        Assertions.assertThat(namespace.getTopics()).contains("persistent://tenant1/namespace4/testTopic");
+        Assertions.assertThat(namespace.getAmountOfTopics()).isEqualTo(1);
     }
 
     private void createTenant(String tenant) throws PulsarAdminException {

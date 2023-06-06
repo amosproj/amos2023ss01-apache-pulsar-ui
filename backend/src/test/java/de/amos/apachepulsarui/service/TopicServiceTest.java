@@ -25,6 +25,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
@@ -41,11 +42,14 @@ class TopicServiceTest {
     private MessageService messageService;
     @Mock
     private Lookup lookup;
+
     @InjectMocks
     private TopicService topicService;
     MockedStatic<TopicDto> topicDtoMockedStatic;
     MockedStatic<TopicName> topicNameMockedStatic;
-
+    private static final String BROKER = "Broker";
+    private static final String NAMESPACE = "public/default";
+    private static final String TOPIC_NAME = "persistent://public/default/tatooine";
 
     @BeforeEach
     public void beforeEach() {
@@ -59,58 +63,47 @@ class TopicServiceTest {
         topicNameMockedStatic.close();
     }
 
+
     @Test
-    void getAllTopics() throws PulsarAdminException {
+    void getAllTopicsByNamespace() throws PulsarAdminException {
         whenAdminTopics();
-        whenTopicStats();
-        whenOwnerBroker();
 
-        topicService.getAllByNamespace("abc");
-
-        topicDtoMockedStatic.verify(
-                () -> TopicDto.createTopicDto("Topic", topicStats, "zyx"),
-                times(1)
-        );
+        assertEquals(topicService.getAllByNamespace(NAMESPACE), List.of(TOPIC_NAME));
     }
 
     private void whenTopicStats() throws PulsarAdminException {
         when(pulsarAdmin.topics()).thenReturn(topics);
-        when(pulsarAdmin.topics().getStats("Topic")).thenReturn(topicStats);
+        when(pulsarAdmin.topics().getStats(TOPIC_NAME)).thenReturn(topicStats);
     }
-
 
     private void whenAdminTopics() throws PulsarAdminException {
         when(pulsarAdmin.topics()).thenReturn(topics);
-        when(pulsarAdmin.topics().getList("abc")).thenReturn(List.of("Topic"));
+        when(pulsarAdmin.topics().getList(NAMESPACE)).thenReturn(List.of(TOPIC_NAME));
     }
 
     private void whenOwnerBroker() throws PulsarAdminException {
         when(pulsarAdmin.lookups()).thenReturn(lookup);
-        when(pulsarAdmin.lookups().lookupTopic("Topic")).thenReturn("zyx");
-
+        when(pulsarAdmin.lookups().lookupTopic(TOPIC_NAME)).thenReturn(BROKER);
     }
 
     @Test
     void createNewTopic() throws PulsarAdminException {
-        String topic = "Topic";
         when(pulsarAdmin.topics()).thenReturn(topics);
 
-        assertTrue(topicService.createNewTopic(topic));
+        assertTrue(topicService.createNewTopic(TOPIC_NAME));
 
-        verify(pulsarAdmin.topics()).createNonPartitionedTopic(topic);
+        verify(pulsarAdmin.topics()).createNonPartitionedTopic(TOPIC_NAME);
     }
 
     @Test
     void getTopicWithMessagesByName() throws PulsarAdminException {
-        when(messageService.peekMessages("Topic")).thenReturn(List.of());
         whenTopicStats();
         whenOwnerBroker();
 
-        topicService.getTopicWithMessagesByName("Topic");
-
+        topicService.getTopicDetails(TOPIC_NAME);
 
         topicDtoMockedStatic.verify(
-                () -> TopicDto.createTopicDtoWithMessages("Topic", topicStats, "zyx", List.of()),
+                () -> TopicDto.createTopicDtoWithMessages(TOPIC_NAME, topicStats, BROKER, List.of()),
                 times(1)
         );
     }

@@ -1,6 +1,6 @@
 /*
  * SPDX-License-Identifier: MIT
- * SPDX-FileCopyrightText: 2023 Anna Haverkamp <anna.lucia.haverkamp@gmail.com>
+ * SPDX-FileCopyrightText: 2023 Jonas Arnhold <jonasarnhold@web.de>
  */
 
 package de.amos.apachepulsarui.dto;
@@ -10,10 +10,10 @@ import lombok.Data;
 
 import java.util.List;
 
-@AllArgsConstructor
 @Data
-public class TopicsDto {
+@AllArgsConstructor
+public class ClustersDto {
 
-    private List<String> topics;
+    private List<String> clusters;
 
 }
