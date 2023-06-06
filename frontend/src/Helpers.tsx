@@ -10,7 +10,9 @@ export function instanceOfSampleCluster(
 		| SampleTopic
 		| SampleMessage
 ): object is SampleCluster {
-	return 'tenants' in object
+	if (object) {
+		return 'tenants' in object
+	} else return false
 }
 
 export function instanceOfSampleNamespace(
@@ -21,7 +23,9 @@ export function instanceOfSampleNamespace(
 		| SampleTopic
 		| SampleMessage
 ): object is SampleNamespace {
-	return 'topics' in object
+	if (object) {
+		return 'topics' in object
+	} else return false
 }
 
 export function instanceOfSampleTopic(
@@ -32,7 +36,9 @@ export function instanceOfSampleTopic(
 		| SampleTopic
 		| SampleMessage
 ): object is SampleTopic {
-	return 'topicStatsDto' in object
+	if (object) {
+		return 'topicStatsDto' in object
+	} else return false
 }
 
 export function instanceOfSampleTenant(
@@ -43,7 +49,9 @@ export function instanceOfSampleTenant(
 		| SampleTopic
 		| SampleMessage
 ): object is SampleTenant {
-	return 'tenantInfo' in object
+	if (object) {
+		return 'tenantInfo' in object
+	} else return false
 }
 
 export function instanceOfSampleMessage(
@@ -54,7 +62,9 @@ export function instanceOfSampleMessage(
 		| SampleTopic
 		| SampleMessage
 ): object is SampleMessage {
-	return 'payload' in object
+	if (object) {
+		return 'payload' in object
+	} else return false
 }
 
 export const flattenClustersToTenants = (myClusters: Array<SampleCluster>) => {

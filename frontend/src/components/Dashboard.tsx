@@ -45,7 +45,7 @@ const Dashboard: React.FC<DashboardProps> = ({
 			return allTopics
 		} else if (view === 'message') {
 			return completeMessages
-		}
+		} else return sampleData
 	}
 
 	const includeItemsByFilterQuery = (
@@ -229,7 +229,10 @@ const Dashboard: React.FC<DashboardProps> = ({
 	) => {
 		e.preventDefault()
 		//Save ID
-		const selectedId = currentEl.id
+		let selectedId = currentEl.id
+		if (instanceOfSampleTopic(currentEl)) {
+			selectedId = currentEl.localName
+		}
 		if (view === 'cluster') {
 			//Update filters
 			handleChange(selectedId, view)

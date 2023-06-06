@@ -85,7 +85,7 @@ const NamespaceView: React.FC<NamespaceViewProps> = ({ data, handleClick }) => {
 					</div>
 				</div>
 			</Collapse>
-			<div className="flex justify-between">
+			<div className="flex justify-between card-buttons-container">
 				{' '}
 				<CardActions disableSpacing>
 					{expanded ? (

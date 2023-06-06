@@ -14,9 +14,10 @@ import Container from '@mui/material/Container'
 import Button from '@mui/material/Button'
 import MenuItem from '@mui/material/MenuItem'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
-import { selectEndpoint, selectView, setNav } from '../store/globalSlice'
+import { selectView, setNav } from '../store/globalSlice'
+// import { selectEndpoint } from '../store/globalSlice'
 import logo from '../assets/images/team-logo-light.png'
-import { Input } from '@mui/material'
+// import { Input } from '@mui/material'
 import { InfoModal } from './InfoModal'
 
 //Removed 'Message' from this array for now
@@ -45,7 +46,7 @@ function NavBar() {
 	// 	// dispatch(backToLP())
 	// }
 
-	const endpoint = useAppSelector(selectEndpoint)
+	// const endpoint = useAppSelector(selectEndpoint)
 
 	return (
 		<AppBar position="static">
@@ -61,7 +62,7 @@ function NavBar() {
 							verticalAlign: 'middle',
 						}}
 					/>
-					<Input
+					{/* <Input
 						disabled
 						defaultValue={endpoint}
 						inputProps={{ style: { textAlign: 'center' } }}
@@ -74,8 +75,7 @@ function NavBar() {
 							background: 'white',
 							borderRadius: '5px',
 						}}
-					/>
-					{/* <Button
+					/><Button
 						variant="outlined"
 						style={{ color: 'white', background: '#ba000d' }}
 						size="small"
