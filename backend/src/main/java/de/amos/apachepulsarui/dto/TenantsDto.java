@@ -15,6 +15,6 @@ import java.util.List;
 @AllArgsConstructor
 public class TenantsDto {
 
-    private List<String> tenants;
+    private List<TenantDto> tenants;
 
 }
