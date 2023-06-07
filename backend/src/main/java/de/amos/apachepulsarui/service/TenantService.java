@@ -1,6 +1,7 @@
 package de.amos.apachepulsarui.service;
 
 import de.amos.apachepulsarui.dto.TenantDto;
+import de.amos.apachepulsarui.dto.TenantDetailsDto;
 import de.amos.apachepulsarui.exception.PulsarApiException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +21,6 @@ public class TenantService {
     private final PulsarAdmin pulsarAdmin;
     private final NamespaceService namespaceService;
 
-    @Cacheable("tenant.all")
     public List<String> getAllNames() throws PulsarApiException {
         try {
             return pulsarAdmin.tenants().getTenants();
@@ -29,10 +29,34 @@ public class TenantService {
         }
     }
 
+    @Cacheable("tenats.getAll")
+    public List<TenantDto> getAllFiltered(List<String> tenants) throws PulsarApiException {
+        try {
+            List<String> tenantNames = pulsarAdmin.tenants().getTenants();
+
+            if (tenants == null || tenants.isEmpty()) {
+                return tenantNames.stream()
+                        .map(name -> TenantDto.create(getTenantInfo(name), name))
+                        .toList();
+            }
+
+            List<String> filteredNames = tenantNames.stream()
+                    .filter(tenant -> tenants.stream().anyMatch(t -> t.equals(tenant)))
+                    .toList();
+
+            return filteredNames.stream()
+                    .map(name -> TenantDto.create(getTenantInfo(name), name))
+                    .toList();
+
+        } catch (PulsarAdminException e) {
+            throw new PulsarApiException("Could not get a list of all tenants.", e);
+        }
+    }
+
     @Cacheable("tenant.detail")
-    public TenantDto getTenantDetails(String tenantName) {
+    public TenantDetailsDto getTenantDetails(String tenantName) {
         List<String> namespacesOfTenant = namespaceService.getAllOfTenant(tenantName);
-        return TenantDto.builder()
+        return TenantDetailsDto.builder()
                 .name(tenantName)
                 .tenantInfo(getTenantInfo(tenantName))
                 .namespaces(namespacesOfTenant)
@@ -40,9 +64,10 @@ public class TenantService {
                 .build();
     }
 
+
     private TenantInfo getTenantInfo(String tenantName) {
         try {
-			return pulsarAdmin.tenants().getTenantInfo(tenantName);
+            return pulsarAdmin.tenants().getTenantInfo(tenantName);
         } catch (PulsarAdminException e) {
             throw new PulsarApiException("Could not fetch tenant info of tenant '%s'".formatted(tenantName), e);
         }
