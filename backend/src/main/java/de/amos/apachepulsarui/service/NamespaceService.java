@@ -6,12 +6,14 @@
 package de.amos.apachepulsarui.service;
 
 import de.amos.apachepulsarui.controller.exception.PulsarApiException;
+import de.amos.apachepulsarui.dto.NamespaceDetailDto;
 import de.amos.apachepulsarui.dto.NamespaceDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pulsar.client.admin.Namespaces;
 import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.apache.pulsar.client.admin.PulsarAdminException;
+import org.apache.pulsar.common.naming.NamespaceName;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,8 +33,20 @@ public class NamespaceService {
                 .toList();
     }
 
-    public NamespaceDto getNamespaceDetails(String namespaceName) {
-        return enrichWithNamespaceData(NamespaceDto.fromString(namespaceName));
+    public List<NamespaceDto> getAllNamespacesForNamespaces(List<String> namespaces) {
+        return namespaces.stream().map(NamespaceDto::fromString).map(this::enrichWithCardDetails).toList();
+    }
+
+    public List<NamespaceDto> getAllNamespacesForTenants(List<String> tenants) {
+        return tenants.stream()
+                .flatMap(tenantName -> getAllOfTenant(tenantName).stream())
+                .map(NamespaceDto::fromString)
+                .map(this::enrichWithCardDetails)
+                .toList();
+    }
+
+    public NamespaceDetailDto getNamespaceDetails(String namespaceName) {
+        return enrichWithNamespaceData(NamespaceDetailDto.fromString(namespaceName));
     }
 
     public List<String> getAllOfTenant(String tenantName) throws PulsarApiException {
@@ -43,7 +57,7 @@ public class NamespaceService {
         }
     }
 
-    private NamespaceDto enrichWithNamespaceData(NamespaceDto namespace) throws PulsarApiException {
+    private NamespaceDetailDto enrichWithNamespaceData(NamespaceDetailDto namespace) throws PulsarApiException {
         try {
 
             Namespaces namespaces = pulsarAdmin.namespaces();
@@ -59,5 +73,10 @@ public class NamespaceService {
                     "Could not fetch namespace data of namespace %s.".formatted(namespace.getId()), e
             );
         }
+    }
+
+    private NamespaceDto enrichWithCardDetails(NamespaceDto namespace) {
+            namespace.setTenant(NamespaceName.get(namespace.getId()).getTenant());
+            return namespace;
     }
 }

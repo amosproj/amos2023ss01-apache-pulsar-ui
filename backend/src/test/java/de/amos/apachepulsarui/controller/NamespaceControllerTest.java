@@ -6,6 +6,7 @@
 
 package de.amos.apachepulsarui.controller;
 
+import de.amos.apachepulsarui.dto.NamespaceDetailDto;
 import de.amos.apachepulsarui.dto.NamespaceDto;
 import de.amos.apachepulsarui.service.NamespaceService;
 import de.amos.apachepulsarui.service.TenantService;
@@ -36,28 +37,28 @@ public class NamespaceControllerTest {
     TenantService tenantService;
 
     @Test
-    void getAllNamespaces_returnsAllNamespacesAsStrings() throws Exception {
+    void getAllNamespacesForTenants_returnsAllNamespaces() throws Exception {
 
-        List<String> tenantNamespaces = List.of(
-                "tenant1/namespace1",
-                "tenant1/namespace2",
-                "tenant2/namespace1");
+        List<NamespaceDto> tenantNamespaces = List.of(
+                NamespaceDto.fromString("tenant1/namespace1"),
+                NamespaceDto.fromString("tenant1/namespace2"),
+                NamespaceDto.fromString("tenant2/namespace1"));
 
         List<String> tenants = List.of("tenant1", "tenant2");
         Mockito.when(tenantService.getAllNames()).thenReturn(tenants);
-        Mockito.when(namespaceService.getAllNames(tenants)).thenReturn(tenantNamespaces);
+        Mockito.when(namespaceService.getAllNamespacesForTenants(tenants)).thenReturn(tenantNamespaces);
 
-        mockMvc.perform(get("/namespace/all"))
+        mockMvc.perform(get("/namespace/all?tenants=tenant1,tenant2"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.namespaces[0]", equalTo(tenantNamespaces.get(0))))
-                .andExpect(jsonPath("$.namespaces[1]", equalTo(tenantNamespaces.get(1))))
-                .andExpect(jsonPath("$.namespaces[2]", equalTo(tenantNamespaces.get(2))));
+                .andExpect(jsonPath("$.namespaces[0].id", equalTo(tenantNamespaces.get(0).getId())))
+                .andExpect(jsonPath("$.namespaces[1].id", equalTo(tenantNamespaces.get(1).getId())))
+                .andExpect(jsonPath("$.namespaces[2].id", equalTo(tenantNamespaces.get(2).getId())));
     }
 
     @Test
     void getNamespaceDetails_returnsNamespace() throws Exception {
 
-        NamespaceDto namespace = NamespaceDto.fromString("tenantX/namespace1");
+        NamespaceDetailDto namespace = NamespaceDetailDto.fromString("tenantX/namespace1");
         namespace.setTopics(List.of("a", "b"));
 
         Mockito.when(namespaceService.getNamespaceDetails("tenantX/namespace1")).thenReturn(namespace);
