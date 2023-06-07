@@ -6,7 +6,9 @@
 
 package de.amos.apachepulsarui.controller;
 
+import de.amos.apachepulsarui.dto.TenantDto;
 import de.amos.apachepulsarui.service.TenantService;
+import org.apache.pulsar.common.policies.data.TenantInfo;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,14 +35,30 @@ public class TenantControllerTest {
     @Test
     void getAllTenants_returnsAllTenants() throws Exception {
 
-        List<String> tenants = List.of("tenant1", "tenant2");
+        TenantInfo TenantInfoImpl = null;
+        List<TenantDto> tenants = List.of(TenantDto.create(TenantInfoImpl, "abc"));
 
-        Mockito.when(tenantService.getAllNames()).thenReturn(tenants);
+        Mockito.when(tenantService.getAllFiltered(null)).thenReturn(tenants);
 
         mockMvc.perform(get("/tenant/all"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.tenants[0]", equalTo(tenants.get(0))))
-                .andExpect(jsonPath("$.tenants[1]", equalTo(tenants.get(1))));
+                .andExpect(jsonPath("$.tenants[0].name", equalTo("abc")));
+
+    }
+
+
+    @Test
+    void getAllTenants_returnsFilteredTenants() throws Exception {
+
+        TenantInfo TenantInfoImpl = null;
+        List<TenantDto> tenants = List.of(TenantDto.create(TenantInfoImpl, "abc"));
+
+        Mockito.when(tenantService.getAllFiltered(List.of("abc"))).thenReturn(tenants);
+
+        mockMvc.perform(get("/tenant/all?tenants=abc"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.tenants[0].name", equalTo("abc")));
+
     }
 
 }
