@@ -29,26 +29,14 @@ public class NamespaceController {
     private final NamespaceService namespaceService;
     private final TenantService tenantService;
 
-//    @GetMapping("/all")
-//    public ResponseEntity<NamespacesDto> getAllNames() {
-//        List<String> tenants = tenantService.getAllNames();
-//        List<String> namespaces = namespaceService.getAllNames(tenants);
-//        return new ResponseEntity<>(new NamespacesDto(namespaces), HttpStatus.OK);
-//    }
-
     @GetMapping("/all")
-    public ResponseEntity<NamespacesDto> getAll(@RequestParam(required = false, defaultValue = "") List<String> tenants, @RequestParam(required = false, defaultValue = "") List<String> namespaces) {
-        List<NamespaceDto> namespaceDtos;
-        if (tenants.isEmpty()) {
-            tenants = tenantService.getAllNames();
-        }
-        if (namespaces.isEmpty()) {
-             namespaceDtos = namespaceService.getAllNamespacesForTenants(tenants);
+    public ResponseEntity<NamespacesDto> getAll(@RequestParam(required = false, defaultValue = "") List<String> tenants,
+                                                @RequestParam(required = false, defaultValue = "") List<String> namespaces) {
+        if (!namespaces.isEmpty()) {
+            return wrapInEntity(getAllForNamespaces(namespaces));
         } else {
-            namespaceDtos = namespaceService.getAllNamespacesForNamespaces(namespaces);
+            return wrapInEntity(getAllForTenants(tenants));
         }
-
-        return new ResponseEntity<>(new NamespacesDto(namespaceDtos), HttpStatus.OK);
     }
 
     @GetMapping
@@ -56,4 +44,18 @@ public class NamespaceController {
         return new ResponseEntity<>(namespaceService.getNamespaceDetails(name), HttpStatus.OK);
     }
 
+    private ResponseEntity<NamespacesDto> wrapInEntity(List<NamespaceDto> namespaceDtos) {
+        return new ResponseEntity<>(new NamespacesDto(namespaceDtos), HttpStatus.OK);
+    }
+
+    private List<NamespaceDto> getAllForNamespaces(List<String> namespaces) {
+        return namespaceService.getAllForNamespaces(namespaces);
+    }
+
+    private List<NamespaceDto> getAllForTenants(List<String> tenants) {
+        if (tenants.isEmpty()) {
+            tenants = tenantService.getAllNames();
+        }
+        return namespaceService.getAllForTenants(tenants);
+    }
 }
