@@ -16,6 +16,12 @@ import {
 	flattenNamespacesToTopics,
 	flattenTenantsToNamespaces,
 } from '../Helpers'
+// import {
+// 	setCluster,
+// 	setTenant,
+// 	setNamespace,
+// 	setTopic,
+// } from '../store/filterSlice'
 
 const Dashboard: React.FC<DashboardProps> = ({
 	completeData,
