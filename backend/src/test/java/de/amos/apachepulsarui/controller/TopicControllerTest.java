@@ -64,7 +64,7 @@ public class TopicControllerTest {
         List<String> tenants = List.of("public");
         List<String> namespaces = List.of("public/default");
         when(tenantService.getAllNames()).thenReturn(tenants);
-        when(namespaceService.getAllNames(tenants)).thenReturn(namespaces);
+        when(namespaceService.getNamespaceNamesForTenants(tenants)).thenReturn(namespaces);
         when(topicService.getAllByNamespace(namespaces.get(0))).thenReturn(topics);
 
         mockMvc.perform(get("/topic/all")
@@ -79,7 +79,7 @@ public class TopicControllerTest {
     void returnTopicByName() throws Exception {
         String name = "grogu";
         String fullTopic = "persistent://public/default/grogu";
-        TopicDto topic = TopicDto.createTopicDto(name, topicStats, RandomString.make(1));
+        TopicDetailDto topic = TopicDetailDto.create(name, topicStats, RandomString.make(1));
 
         when(topicService.getTopicDetails(fullTopic)).thenReturn(topic);
 
