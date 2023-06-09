@@ -9,18 +9,12 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.pulsar.common.naming.TopicName;
-import org.apache.pulsar.common.policies.data.TopicStats;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TopicDto {
 
     private String name;
-
-	private String localName;
 
 	private String namespace;
 
@@ -30,8 +24,7 @@ public class TopicDto {
         TopicName topicName = TopicName.get(completeTopicName);
 		TopicDto topicDetailDto = new TopicDto();
 		topicDetailDto.name = topicName.toString();
-		topicDetailDto.localName = topicName.getLocalName();
-		topicDetailDto.namespace = topicName.getNamespacePortion();
+		topicDetailDto.namespace = topicName.getNamespace();
 		topicDetailDto.tenant = topicName.getTenant();
 
 		return topicDetailDto;

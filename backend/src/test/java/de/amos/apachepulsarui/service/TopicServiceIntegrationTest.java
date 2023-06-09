@@ -6,16 +6,21 @@
 package de.amos.apachepulsarui.service;
 
 import de.amos.apachepulsarui.dto.TopicDetailDto;
+import de.amos.apachepulsarui.dto.TopicDto;
 import org.apache.pulsar.client.admin.PulsarAdmin;
+import org.apache.pulsar.client.admin.PulsarAdminException;
 import org.apache.pulsar.client.api.*;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class TopicServiceIntegrationTest extends AbstractIntegrationTest {
 
     @Autowired
@@ -27,9 +32,42 @@ public class TopicServiceIntegrationTest extends AbstractIntegrationTest {
     @Autowired
     private PulsarAdmin pulsarAdmin;
 
+    @BeforeAll
+    void createTenantsAndNamespaces() throws PulsarAdminException {
+        pulsarAdmin.namespaces().createNamespace("public/namespace1");
+        pulsarAdmin.namespaces().createNamespace("public/namespace2");
+    }
+
     @Test
-    void getByNamespace_returnsCreatedTopics() {
-        String topicName = "persistent://public/default/test123";
+    void getAllForNamespaces_returnsTopics() {
+        List<String> namespaces = List.of("public/namespace1", "public/namespace2");
+        topicService.createNewTopic("persistent://public/namespace1/topic1");
+        topicService.createNewTopic("persistent://public/namespace2/topic1");
+
+        List<TopicDto> expectedTopics = List.of(
+                TopicDto.create("persistent://public/namespace1/topic1"),
+                TopicDto.create("persistent://public/namespace2/topic1"));
+
+        List<TopicDto> topics = topicService.getAllForNamespaces(namespaces);
+        Assertions.assertThat(topics).containsExactlyInAnyOrderElementsOf(expectedTopics);
+    }
+
+    @Test
+    void getAllForTopics_returnsExistingTopics() {
+        List<String> topicNames = List.of("persistent://public/namespace1/topic3",
+                "persistent://public/namespace2/topic4");
+
+        topicService.createNewTopic("persistent://public/namespace1/topic3");
+
+        TopicDto expectedTopic = TopicDto.create("persistent://public/namespace1/topic3");
+
+        List<TopicDto> topics = topicService.getAllForTopics(topicNames);
+        Assertions.assertThat(topics).containsExactly(expectedTopic);
+    }
+
+    @Test
+    void getAllByNamespace_returnsTopics() {
+        String topicName = "persistent://public/default/topic1";
         topicService.createNewTopic(topicName);
         List<String> topics = topicService.getAllByNamespace("public/default");
         Assertions.assertThat(topics).containsExactly(topicName);
