@@ -62,6 +62,7 @@ public class SubscriptionDto {
                 .replicated(subscriptionStats.isReplicated())
                 .msgOutCounter(subscriptionStats.getMsgOutCounter())
                 .type(subscriptionStats.getType())
+                .numberConsumers(consumers.size())
                 .backlogSize(subscriptionStats.getBacklogSize())
                 .build();
     }
