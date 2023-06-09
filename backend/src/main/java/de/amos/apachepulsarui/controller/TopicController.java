@@ -10,6 +10,7 @@ import de.amos.apachepulsarui.dto.ProducerDto;
 import de.amos.apachepulsarui.dto.SubscriptionDto;
 import de.amos.apachepulsarui.dto.TopicDto;
 import de.amos.apachepulsarui.dto.TopicsDto;
+import de.amos.apachepulsarui.exception.BadRequestException;
 import de.amos.apachepulsarui.service.NamespaceService;
 import de.amos.apachepulsarui.service.TenantService;
 import de.amos.apachepulsarui.service.TopicService;
@@ -61,12 +62,10 @@ public class TopicController {
     @PostMapping("/new")
     public ResponseEntity<Void> newTopic(@RequestParam String topic) {
         if (!TopicName.isValid(topic)) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            throw new BadRequestException.InvalidTopicName();
         }
-        if (topicService.createNewTopic(topic)) {
-            return new ResponseEntity<>(HttpStatus.CREATED);
-        }
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        topicService.createNewTopic(topic);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
 }

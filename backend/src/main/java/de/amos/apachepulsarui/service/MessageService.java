@@ -7,6 +7,7 @@
 package de.amos.apachepulsarui.service;
 
 import de.amos.apachepulsarui.dto.MessageDto;
+import de.amos.apachepulsarui.exception.PulsarApiException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pulsar.client.admin.PulsarAdmin;
@@ -30,7 +31,7 @@ public class MessageService {
     private final PulsarClient pulsarClient;
     private final PulsarAdmin pulsarAdmin;
 
-    public List<MessageDto> peekMessages(String topic, String subscription) {
+    public List<MessageDto> peekMessages(String topic, String subscription) throws PulsarApiException {
         var schema = getSchemaIfExists(topic);
         try {
             var messages = pulsarAdmin.topics().peekMessages(topic, subscription, MAX_NUM_MESSAGES);
@@ -38,7 +39,10 @@ public class MessageService {
                     .map(message -> MessageDto.fromExistingMessage(message, schema))
                     .toList();
         } catch (PulsarAdminException e) {
-            throw new RuntimeException(e);
+            throw new PulsarApiException(
+                    "Could not peek messages for topic '%s' with subscription '%s'".formatted(topic, subscription),
+                    e
+            );
         }
     }
 
@@ -50,31 +54,28 @@ public class MessageService {
         }
     }
 
-    public boolean sendMessage(MessageDto messageDto) {
+    public void sendMessage(MessageDto messageDto) throws PulsarApiException {
         try {
             Producer<byte[]> producer = this.createProducerFor(messageDto.getTopic());
             producer.send(messageDto.getPayload().getBytes(StandardCharsets.UTF_8));
             producer.close();
-            return true;
         } catch (PulsarClientException e) {
-            log.error("Could not send messageDto to topic %s.".formatted(messageDto.getTopic()));
-            return false;
+            throw new PulsarApiException("Could not send messageDto to topic '%s'".formatted(messageDto.getTopic()), e);
         }
     }
 
-    public boolean sendMessages(List<MessageDto> messageDtos) {
+    public void sendMessages(List<MessageDto> messageDtos) throws PulsarApiException {
         try {
             Producer<byte[]> producer = this.createProducerFor(messageDtos.iterator().next().getTopic());
             for (MessageDto messageDto : messageDtos) {
                 producer.send(messageDto.getPayload().getBytes(StandardCharsets.UTF_8));
             }
             producer.close();
-            return true;
         } catch (PulsarClientException e) {
-            log.error("Could not list of %s messageDtos to topic %s."
-                    .formatted(messageDtos.size(), messageDtos.iterator().next().getTopic())
+            throw new PulsarApiException(
+                    "Could not list of %s messageDtos to topic '%s'".formatted(messageDtos.size(), messageDtos.iterator().next().getTopic()),
+                    e
             );
-            return false;
         }
     }
 
