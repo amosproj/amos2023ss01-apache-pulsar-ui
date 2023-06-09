@@ -26,8 +26,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class TopicServiceTest {
@@ -90,7 +91,7 @@ class TopicServiceTest {
     void createNewTopic() throws PulsarAdminException {
         when(pulsarAdmin.topics()).thenReturn(topics);
 
-        assertTrue(topicService.createNewTopic(TOPIC_NAME));
+        topicService.createNewTopic(TOPIC_NAME);
 
         verify(pulsarAdmin.topics()).createNonPartitionedTopic(TOPIC_NAME);
     }

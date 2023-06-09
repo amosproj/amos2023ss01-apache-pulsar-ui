@@ -6,8 +6,12 @@
 
 package de.amos.apachepulsarui.service;
 
-import de.amos.apachepulsarui.controller.exception.PulsarApiException;
-import de.amos.apachepulsarui.dto.*;
+import de.amos.apachepulsarui.dto.MessageDto;
+import de.amos.apachepulsarui.dto.ProducerDto;
+import de.amos.apachepulsarui.dto.SubscriptionDto;
+import de.amos.apachepulsarui.dto.TopicDto;
+import de.amos.apachepulsarui.dto.TopicStatsDto;
+import de.amos.apachepulsarui.exception.PulsarApiException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pulsar.client.admin.PulsarAdmin;
@@ -50,16 +54,15 @@ public class TopicService {
         try {
             return pulsarAdmin.topics().getList(namespace);
         } catch (PulsarAdminException e) {
-           throw new PulsarApiException("Could not fetch topics of namespace %s.".formatted(namespace), e);
+           throw new PulsarApiException("Could not fetch topics of namespace '%s'".formatted(namespace), e);
         }
     }
 
-    public boolean createNewTopic(String topic) throws PulsarApiException {
+    public void createNewTopic(String topic) throws PulsarApiException {
         try {
             pulsarAdmin.topics().createNonPartitionedTopic(topic);
-            return true;
         } catch (PulsarAdminException e) {
-            throw new PulsarApiException("Could not create new topic %s.".formatted(topic), e);
+            throw new PulsarApiException("Could not create new topic '%s'".formatted(topic), e);
         }
     }
 
@@ -79,7 +82,7 @@ public class TopicService {
                     messages);
 
         } catch (PulsarAdminException e) {
-            throw new PulsarApiException("Could not fetch topic details for topic %s.".formatted(topicName), e);
+            throw new PulsarApiException("Could not fetch topic details for topic '%s'".formatted(topicName), e);
         }
     }
 
@@ -87,7 +90,7 @@ public class TopicService {
         try {
             return pulsarAdmin.topics().getStats(topicName);
         } catch (PulsarAdminException e) {
-            throw new PulsarApiException("Could not fetch topic stats for topic %s.".formatted(topicName), e);
+            throw new PulsarApiException("Could not fetch topic stats for topic '%s'".formatted(topicName), e);
         }
     }
 
@@ -95,7 +98,7 @@ public class TopicService {
         try {
             return pulsarAdmin.lookups().lookupTopic(topicName);
         } catch (PulsarAdminException e) {
-            throw new PulsarApiException("Could not fetch owner broker for topic %s.".formatted(topicName), e);
+            throw new PulsarApiException("Could not fetch owner broker for topic '%s'".formatted(topicName), e);
         }
     }
 
