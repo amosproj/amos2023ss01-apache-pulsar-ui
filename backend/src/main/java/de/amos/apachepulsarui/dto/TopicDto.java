@@ -26,44 +26,14 @@ public class TopicDto {
 
 	private String tenant;
 
-	private boolean isPersistent;
-
-	private String ownerBroker;
-
-	private TopicStatsDto topicStatsDto;
-
-	private long producedMessages;
-
-	private long consumedMessages;
-
-	private List<MessageDto> messagesDto = new ArrayList<>();
-
-
-	/**
-     * Converts a valid complete topic name (like "persistent://eu-tenant/hr/fizzbuzz" into a {@link TopicDto}.
-     */
-    public static TopicDto createTopicDto(String completeTopicName, TopicStats topicStats, String ownerBroker) {
+    public static TopicDto create(String completeTopicName) {
         TopicName topicName = TopicName.get(completeTopicName);
-		TopicDto topicDto = new TopicDto();
-		topicDto.name = topicName.toString();
-		topicDto.localName = topicName.getLocalName();
-		topicDto.namespace = topicName.getNamespacePortion();
-		topicDto.tenant = topicName.getTenant();
-		topicDto.isPersistent = topicName.isPersistent();
-		topicDto.ownerBroker = ownerBroker;
-		topicDto.setTopicStatsDto(TopicStatsDto.createTopicStatsDto(topicStats));
-		topicDto.producedMessages = topicDto.topicStatsDto.getProducedMesages();
-		topicDto.consumedMessages = topicDto.topicStatsDto.getConsumedMessages();
+		TopicDto topicDetailDto = new TopicDto();
+		topicDetailDto.name = topicName.toString();
+		topicDetailDto.localName = topicName.getLocalName();
+		topicDetailDto.namespace = topicName.getNamespacePortion();
+		topicDetailDto.tenant = topicName.getTenant();
 
-		return topicDto;
+		return topicDetailDto;
     }
-
-	public static TopicDto createTopicDtoWithMessages(String completeTopicName, TopicStats topicStats, String ownerBroker, List<MessageDto> messages) {
-		TopicDto topicDto = createTopicDto(completeTopicName, topicStats, ownerBroker);
-		topicDto.setMessagesDto(messages);
-		return topicDto;
-	}
-
-
-
 }

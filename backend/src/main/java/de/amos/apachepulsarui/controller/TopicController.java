@@ -6,10 +6,7 @@
 
 package de.amos.apachepulsarui.controller;
 
-import de.amos.apachepulsarui.dto.ProducerDto;
-import de.amos.apachepulsarui.dto.SubscriptionDto;
-import de.amos.apachepulsarui.dto.TopicDto;
-import de.amos.apachepulsarui.dto.TopicsDto;
+import de.amos.apachepulsarui.dto.*;
 import de.amos.apachepulsarui.exception.BadRequestException;
 import de.amos.apachepulsarui.service.NamespaceService;
 import de.amos.apachepulsarui.service.TenantService;
@@ -35,17 +32,20 @@ public class TopicController {
     private final NamespaceService namespaceService;
 
     @GetMapping("/all")
-    public ResponseEntity<TopicsDto> getAllNames() {
-        List<String> allTenants = tenantService.getAllNames();
-        List<String> allNamespaces = namespaceService.getAllNames(allTenants);
-        List<String> allTopics = allNamespaces.stream()
-                .flatMap(namespaceName -> topicService.getAllByNamespace(namespaceName).stream())
-                .toList();
-        return new ResponseEntity<>(new TopicsDto(allTopics), HttpStatus.OK);
+    public ResponseEntity<TopicsDto> getAll(@RequestParam(required = false, defaultValue = "") List<String> tenants,
+                                            @RequestParam(required = false, defaultValue = "") List<String> namespaces,
+                                            @RequestParam(required = false, defaultValue = "") List<String> topics) {
+        if (!topics.isEmpty()) {
+            return wrapInEntity(getAllForTopics(topics));
+        } else if (!namespaces.isEmpty()) {
+            return wrapInEntity(getAllForNamespaces(namespaces));
+        } else {
+            return wrapInEntity(getAllForTenants(tenants));
+        }
     }
 
     @GetMapping
-    public ResponseEntity<TopicDto> getTopicDetails(@RequestParam String name) {
+    public ResponseEntity<TopicDetailDto> getTopicDetails(@RequestParam String name) {
        return new ResponseEntity<>(topicService.getTopicDetails(name), HttpStatus.OK);
     }
 
@@ -66,6 +66,26 @@ public class TopicController {
         }
         topicService.createNewTopic(topic);
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    private ResponseEntity<TopicsDto> wrapInEntity(List<TopicDto> topicDtos) {
+        return new ResponseEntity<>(new TopicsDto(topicDtos), HttpStatus.OK);
+    }
+
+    private List<TopicDto> getAllForTopics(List<String> topics) {
+        return topicService.getAllForTopics(topics);
+    }
+
+    private List<TopicDto> getAllForNamespaces(List<String> namespaces) {
+        return topicService.getAllForNamespaces(namespaces);
+    }
+
+    private List<TopicDto> getAllForTenants(List<String> tenants) {
+        if (tenants.isEmpty()) {
+            tenants = tenantService.getAllNames();
+        }
+        List<String> namespaces = namespaceService.getNamespaceNamesForTenants(tenants);
+        return topicService.getAllForNamespaces(namespaces);
     }
 
 }
