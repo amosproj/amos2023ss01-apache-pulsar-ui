@@ -5,7 +5,7 @@
 
 package de.amos.apachepulsarui.service;
 
-import de.amos.apachepulsarui.dto.TopicDto;
+import de.amos.apachepulsarui.dto.TopicDetailDto;
 import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.apache.pulsar.client.api.*;
 import org.assertj.core.api.Assertions;
@@ -56,7 +56,7 @@ public class TopicServiceIntegrationTest extends AbstractIntegrationTest {
             consumer.close();
             producer.close();
         }
-        TopicDto topic = topicService.getTopicDetails(topicName);
+        TopicDetailDto topic = topicService.getTopicDetails(topicName);
         // it seems there is no exactly once guarantees in pulsar which made the test flaky -> use greaterThan instead of equals
         Assertions.assertThat(topic.getProducedMessages()).isGreaterThanOrEqualTo(3);
         Assertions.assertThat(topic.getConsumedMessages()).isGreaterThanOrEqualTo(2);
