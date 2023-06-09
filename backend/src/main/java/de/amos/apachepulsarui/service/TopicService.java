@@ -43,6 +43,7 @@ public class TopicService {
     public List<TopicDto> getAllForTopics(List<String> topics) {
         return topics.stream()
                 .map(TopicDto::create)
+                .filter(this::exists)
                 .toList();
     }
 
@@ -142,5 +143,14 @@ public class TopicService {
 
         Map<Object, Boolean> seen = new ConcurrentHashMap<>();
         return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
+    }
+
+
+    private boolean exists(TopicDto topic) {
+        try {
+            return pulsarAdmin.topics().getList(topic.getNamespace()).contains(topic.getName());
+        } catch (PulsarAdminException e) {
+            return false;
+        }
     }
 }
