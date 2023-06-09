@@ -8,6 +8,7 @@ package de.amos.apachepulsarui.controller;
 
 import de.amos.apachepulsarui.dto.MessageDto;
 import de.amos.apachepulsarui.dto.MessagesDto;
+import de.amos.apachepulsarui.exception.BadRequestException;
 import de.amos.apachepulsarui.service.MessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -37,12 +38,10 @@ public class MessageController {
     )
     public ResponseEntity<Void> sendMessage(@RequestBody @Valid MessageDto messageDto) {
         if (messageService.inValidTopicName(messageDto)) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            throw new BadRequestException.InvalidTopicName();
         }
-        if (messageService.sendMessage(messageDto)) {
-            return new ResponseEntity<>(HttpStatus.CREATED);
-        }
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        messageService.sendMessage(messageDto);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
 }

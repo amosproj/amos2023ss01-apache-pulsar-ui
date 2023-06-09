@@ -5,8 +5,9 @@
 
 package de.amos.apachepulsarui.config;
 
-import lombok.SneakyThrows;
+import de.amos.apachepulsarui.exception.PulsarApiException;
 import org.apache.pulsar.client.api.PulsarClient;
+import org.apache.pulsar.client.api.PulsarClientException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,11 +19,17 @@ public class PulsarClientConfig {
     private String pulsarConnectionUrl;
 
     @Bean
-    @SneakyThrows
-    public PulsarClient buildClient() {
-        return PulsarClient.builder()
-                .serviceUrl(pulsarConnectionUrl)
-                .build();
+    public PulsarClient buildClient() throws PulsarApiException {
+        try {
+            return PulsarClient.builder()
+                    .serviceUrl(pulsarConnectionUrl)
+                    .build();
+        } catch (PulsarClientException e) {
+            throw new PulsarApiException(
+                    "Could not initialize a pulsar client while trying to connect to %s".formatted(pulsarConnectionUrl),
+                    e
+            );
+        }
     }
 
 }

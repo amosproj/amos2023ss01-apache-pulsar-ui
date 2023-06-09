@@ -1,7 +1,7 @@
 package de.amos.apachepulsarui.service;
 
-import de.amos.apachepulsarui.controller.exception.PulsarApiException;
 import de.amos.apachepulsarui.dto.ClusterDto;
+import de.amos.apachepulsarui.exception.PulsarApiException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pulsar.client.admin.PulsarAdmin;
@@ -26,7 +26,7 @@ public class ClusterService {
         try {
             return pulsarAdmin.clusters().getClusters();
         } catch (PulsarAdminException e) {
-            throw new PulsarApiException("Could not fetch list a list of all clusters.", e);
+            throw new PulsarApiException("Could not fetch list a list of all clusters", e);
         }
     }
 
@@ -78,7 +78,7 @@ public class ClusterService {
                         return allowedClusters.contains(clusterName);
                     } catch (PulsarAdminException e) {
                         throw new PulsarApiException(
-                                "Could not fetch tenants allowed for cluster %s.".formatted(clusterName), e
+                                "Could not fetch tenants allowed for cluster '%s'".formatted(clusterName), e
                         );
                     }
                 })

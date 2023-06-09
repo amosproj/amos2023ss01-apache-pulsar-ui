@@ -5,8 +5,8 @@
 
 package de.amos.apachepulsarui.service;
 
-import de.amos.apachepulsarui.controller.exception.PulsarApiException;
 import de.amos.apachepulsarui.dto.NamespaceDto;
+import de.amos.apachepulsarui.exception.PulsarApiException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pulsar.client.admin.Namespaces;
@@ -39,7 +39,7 @@ public class NamespaceService {
         try {
             return pulsarAdmin.namespaces().getNamespaces(tenantName);
         } catch (PulsarAdminException e) {
-            throw new PulsarApiException("Could not fetch namespaces of tenant %s.".formatted(tenantName), e);
+            throw new PulsarApiException("Could not fetch namespaces of tenant '%s'".formatted(tenantName), e);
         }
     }
 
@@ -56,8 +56,9 @@ public class NamespaceService {
             return namespace;
         } catch (PulsarAdminException e) {
             throw new PulsarApiException(
-                    "Could not fetch namespace data of namespace %s.".formatted(namespace.getId()), e
+                    "Could not fetch namespace data of namespace '%s'".formatted(namespace.getId()), e
             );
         }
     }
+
 }
