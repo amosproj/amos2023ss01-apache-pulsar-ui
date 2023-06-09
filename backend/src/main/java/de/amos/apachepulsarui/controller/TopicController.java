@@ -58,6 +58,11 @@ public class TopicController {
         return new ResponseEntity<>(topicService.getProducerByTopic(topic, producer), HttpStatus.OK);
     }
 
+    @GetMapping("/consumer/{consumer}")
+    public ResponseEntity<ConsumerDto> getConsumerByNameAndTopic(@RequestParam String topic, @PathVariable String consumer) {
+        return new ResponseEntity<>(topicService.getConsumerByTopic(topic, consumer), HttpStatus.OK);
+    }
+
     @PostMapping("/new")
     public ResponseEntity<Void> newTopic(@RequestParam String topic) {
         if (!TopicName.isValid(topic)) {

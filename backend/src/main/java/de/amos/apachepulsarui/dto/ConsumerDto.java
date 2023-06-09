@@ -15,10 +15,32 @@ import org.apache.pulsar.common.policies.data.ConsumerStats;
 public class ConsumerDto {
 
     private String name;
-
+    private String address;
+    private long availablePermits;
+    private long bytesOutCounter;
+    private String clientVersion;
+    private String connectedSince;
+    private long lastAckedTimestamp;
+    private long lastConsumedTimestamp;
+    private long messageOutCounter;
+    private int unackedMessages;
+    private boolean blockedConsumerOnUnackedMsgs;
     public static ConsumerDto create(ConsumerStats consumerStats) {
-        return ConsumerDto.builder().name(consumerStats.getConsumerName()).build();
+        return ConsumerDto.builder()
+                .name(consumerStats.getConsumerName())
+                .address(consumerStats.getAddress())
+                .availablePermits(consumerStats.getAvailablePermits())
+                .bytesOutCounter(consumerStats.getBytesOutCounter())
+                .clientVersion(consumerStats.getClientVersion())
+                .connectedSince(consumerStats.getConnectedSince())
+                .lastAckedTimestamp(consumerStats.getLastAckedTimestamp())
+                .lastConsumedTimestamp(consumerStats.getLastConsumedTimestamp())
+                .messageOutCounter(consumerStats.getMsgOutCounter())
+                .unackedMessages(consumerStats.getUnackedMessages())
+                .blockedConsumerOnUnackedMsgs(consumerStats.isBlockedConsumerOnUnackedMsgs())
+                .build();
     }
+
 
 
 }

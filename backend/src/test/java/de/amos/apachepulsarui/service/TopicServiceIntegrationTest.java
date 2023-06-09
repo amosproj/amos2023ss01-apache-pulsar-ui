@@ -125,4 +125,15 @@ public class TopicServiceIntegrationTest extends AbstractIntegrationTest {
 
     }
 
+    @Test
+    void getConsumerByTopic () throws Exception {
+        String topicName = "persistent://public/default/topic-service-integration-test";
+        topicService.createNewTopic(topicName);
+        var message = "hello world".getBytes(StandardCharsets.UTF_8);
+        try (Consumer<byte[]> consumer = pulsarClient.newConsumer().consumerName("consumer").topic(topicName).subscriptionName("subscription").subscribe()) {
+            Assertions.assertThat(topicService.getConsumerByTopic(topicName,"consumer").getName()).isEqualTo("consumer");
+        }
+
+    }
+
 }

@@ -10,6 +10,7 @@ import de.amos.apachepulsarui.service.NamespaceService;
 import de.amos.apachepulsarui.service.TenantService;
 import de.amos.apachepulsarui.service.TopicService;
 import net.bytebuddy.utility.RandomString;
+import org.apache.pulsar.common.policies.data.ConsumerStats;
 import org.apache.pulsar.common.policies.data.PublisherStats;
 import org.apache.pulsar.common.policies.data.SubscriptionStats;
 import org.apache.pulsar.common.policies.data.TopicStats;
@@ -51,6 +52,9 @@ public class TopicControllerTest {
 
     @MockBean
     private PublisherStats publisherStats;
+
+    @MockBean
+    private ConsumerStats consumerStats;
 
     @Test
     void getAll_withoutParameters_returnsAllTopics() throws Exception {
@@ -194,6 +198,24 @@ public class TopicControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", equalTo(producer)));
+    }
+
+    @Test
+    void getConsumerByNameAndTopic() throws Exception {
+        String consumer = "BB8";
+        String topic = "persistent://public/default/droide";
+
+        when(consumerStats.getConsumerName()).thenReturn(consumer);
+
+        ConsumerDto consumerDto = ConsumerDto.create(consumerStats);
+
+        when(topicService.getConsumerByTopic(topic, consumer)).thenReturn(consumerDto);
+
+        mockMvc.perform(get("/topic/consumer/" + consumer)
+                        .queryParam("topic", topic)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name", equalTo(consumer)));
     }
 
 }

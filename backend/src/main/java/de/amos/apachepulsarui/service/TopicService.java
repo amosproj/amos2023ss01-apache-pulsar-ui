@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.apache.pulsar.client.admin.PulsarAdminException;
+import org.apache.pulsar.common.policies.data.ConsumerStats;
 import org.apache.pulsar.common.policies.data.PublisherStats;
 import org.apache.pulsar.common.policies.data.TopicStats;
 import org.springframework.cache.annotation.Cacheable;
@@ -35,6 +36,8 @@ public class TopicService {
     private final PulsarAdmin pulsarAdmin;
 
     private final MessageService messageService;
+
+    private final ConsumerService consumerService;
 
     public List<TopicDto> getAllForTopics(List<String> topics) {
         return topics.stream()
@@ -141,6 +144,14 @@ public class TopicService {
         Map<Object, Boolean> seen = new ConcurrentHashMap<>();
         return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
     }
+
+    public ConsumerDto getConsumerByTopic(String topic, String consumer) {
+        TopicStats topicStats = getTopicStats(topic);
+        ConsumerStats consumerStats = consumerService.getConsumerStatsByTopic(topicStats, consumer);
+        return ConsumerDto.create(consumerStats);
+    }
+
+
 
 
     private boolean exists(TopicDto topic) {
