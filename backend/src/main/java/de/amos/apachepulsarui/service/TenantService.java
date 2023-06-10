@@ -34,17 +34,14 @@ public class TenantService {
         try {
             List<String> tenantNames = pulsarAdmin.tenants().getTenants();
 
-            if (tenants == null || tenants.isEmpty()) {
+            if (tenants.isEmpty()) {
                 return tenantNames.stream()
                         .map(name -> TenantDto.create(getTenantInfo(name), name))
                         .toList();
             }
 
-            List<String> filteredNames = tenantNames.stream()
-                    .filter(tenant -> tenants.stream().anyMatch(t -> t.equals(tenant)))
-                    .toList();
-
-            return filteredNames.stream()
+            return tenantNames.stream()
+                    .filter(tenants::contains)
                     .map(name -> TenantDto.create(getTenantInfo(name), name))
                     .toList();
 
