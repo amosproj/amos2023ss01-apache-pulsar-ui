@@ -50,8 +50,7 @@ public class TenantControllerTest {
     @Test
     void getAllTenants_returnsFilteredTenants() throws Exception {
 
-        TenantInfo TenantInfoImpl = null;
-        List<TenantDto> tenants = List.of(TenantDto.create(TenantInfoImpl, "abc"));
+        List<TenantDto> tenants = List.of(TenantDto.create(null, "abc"));
 
         Mockito.when(tenantService.getAllFiltered(List.of("abc"))).thenReturn(tenants);
 

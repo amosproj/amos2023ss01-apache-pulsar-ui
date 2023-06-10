@@ -32,7 +32,7 @@ public class TenantController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<TenantsDto> getAllFiltered(@RequestParam (required = false) List<String> tenants) {
+    public ResponseEntity<TenantsDto> getAllFiltered(@RequestParam (required = false, defaultValue = "") List<String> tenants) {
         return new ResponseEntity<>(new TenantsDto(tenantService.getAllFiltered(tenants)), HttpStatus.OK);
     }
 
