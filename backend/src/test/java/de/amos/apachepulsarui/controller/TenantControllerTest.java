@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
+import static java.util.Collections.emptyList;
 import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -38,7 +39,7 @@ public class TenantControllerTest {
         TenantInfo TenantInfoImpl = null;
         List<TenantDto> tenants = List.of(TenantDto.create(TenantInfoImpl, "abc"));
 
-        Mockito.when(tenantService.getAllFiltered(null)).thenReturn(tenants);
+        Mockito.when(tenantService.getAllFiltered(emptyList())).thenReturn(tenants);
 
         mockMvc.perform(get("/tenant/all"))
                 .andExpect(status().isOk())
