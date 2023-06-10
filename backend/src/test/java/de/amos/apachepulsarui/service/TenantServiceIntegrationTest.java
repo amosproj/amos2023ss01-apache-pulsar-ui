@@ -5,8 +5,8 @@
 
 package de.amos.apachepulsarui.service;
 
-import de.amos.apachepulsarui.dto.TenantDto;
 import de.amos.apachepulsarui.dto.TenantDetailsDto;
+import de.amos.apachepulsarui.dto.TenantDto;
 import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.apache.pulsar.client.admin.PulsarAdminException;
 import org.apache.pulsar.common.policies.data.TenantInfo;
@@ -19,7 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class TenantServiceIntegrationTest extends AbstractIntegrationTest {
@@ -59,18 +60,20 @@ public class TenantServiceIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void getAllTenatsFiltered() {
+    void getAllTenatsFiltered() throws PulsarAdminException {
+        String name1 = "tenantA";
+        String name2 = "tenantB";
+
+        createTenant(name1);
+        createTenant(name2);
+
         List<TenantDto> tenants = tenantService.getAllFiltered(Collections.emptyList());
-        var tenantY = tenants.stream()
-                .filter(tenant -> Objects.equals(tenant.getName(), "tenantY"))
-                .findFirst().orElseThrow();
 
-        var tenantX = tenants.stream()
-                .filter(tenant -> Objects.equals(tenant.getName(), "tenantX"))
-                .findFirst().orElseThrow();
+        List<String> tenantNames = tenants.stream().map(TenantDto::getName).toList();
 
-        Assertions.assertThat(tenantX).isNotNull();
-        Assertions.assertThat(tenantY).isNotNull();
+        assertTrue(tenantNames.contains(name1));
+        assertTrue(tenantNames.contains(name2));
+
     }
 
     @Test
