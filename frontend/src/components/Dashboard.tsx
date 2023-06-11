@@ -353,7 +353,7 @@ const Dashboard: React.FC<DashboardProps> = ({
 					messages={completeMessages}
 					data={completeData}
 					handleChange={handleChange}
-					currentView={view}
+					currentView={location.pathname.slice(1)}
 				/>
 			</div>
 		</div>
