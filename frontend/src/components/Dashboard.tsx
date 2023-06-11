@@ -2,7 +2,7 @@
 // SPDX-FileCopyrightText: 2010-2021 Dirk Riehle <dirk@riehle.org
 // SPDX-FileCopyrightText: 2019 Georg Schwarz <georg. schwarz@fau.de>
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import CustomSearchbar from './custom/CustomSearchbar'
 import FilterListIcon from '@mui/icons-material/FilterList'
 import CustomFilter from './custom/CustomFilter'
@@ -15,7 +15,15 @@ import {
 	flattenNamespacesToTopics,
 	flattenTenantsToNamespaces,
 } from '../Helpers'
-import { Routes, Route, Link, Navigate, Outlet } from 'react-router-dom'
+import {
+	Routes,
+	Route,
+	Link,
+	Navigate,
+	Outlet,
+	redirect,
+	useNavigate,
+} from 'react-router-dom'
 import ClusterGroup from './pages/cluster'
 import NamespaceGroup from './pages/namespace'
 import TenantGroup from './pages/tenant'
@@ -43,6 +51,12 @@ const Dashboard: React.FC<DashboardProps> = ({
 	const [topicQuery, setTopicQuery] = useState<string[]>([])
 	const [messageQuery, setMessageQuery] = useState<string[]>([])
 	const dispatch = useAppDispatch()
+	const navigate = useNavigate()
+
+	//used to navigate directly to /cluster instead of /
+	useEffect(() => {
+		if (location.pathname === '/') navigate('/cluster')
+	}, [])
 
 	/*
 	const divideData = (sampleData: Array<SampleCluster>) => {
