@@ -8,11 +8,7 @@ package de.amos.apachepulsarui.dto;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.apache.pulsar.common.policies.data.BundlesData;
-import org.apache.pulsar.common.policies.data.RetentionPolicies;
-
-import java.util.List;
+import org.apache.pulsar.common.naming.NamespaceName;
 
 @Data
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -20,33 +16,12 @@ public class NamespaceDto {
 
     private String id;
 
-	private List<String> topics;
-
-	@Setter(AccessLevel.PRIVATE)
-	private int amountOfTopics = 0;
-
-	private BundlesData bundlesData;
-
-	private Integer messagesTTL;
-
-	private RetentionPolicies retentionPolicies;
+	private String tenant;
 
 	public static NamespaceDto fromString(String namespaceId) {
 		NamespaceDto namespaceDto = new NamespaceDto();
 		namespaceDto.setId(namespaceId);
+		namespaceDto.setTenant(NamespaceName.get(namespaceId).getTenant());
 		return namespaceDto;
 	}
-
-	public void setTopics(List<String> topics) {
-		this.topics = topics;
-		this.amountOfTopics = topics.size();
-	}
-
-	/**
-	 * @return An unmodifiable copy of the topics of this namespace.
-	 */
-	public List<String> getTopics() {
-		return List.copyOf(topics);
-	}
-
 }

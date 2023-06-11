@@ -6,6 +6,7 @@
 
 package de.amos.apachepulsarui.controller;
 
+import de.amos.apachepulsarui.dto.NamespaceDetailDto;
 import de.amos.apachepulsarui.dto.NamespaceDto;
 import de.amos.apachepulsarui.dto.NamespacesDto;
 import de.amos.apachepulsarui.service.NamespaceService;
@@ -29,15 +30,32 @@ public class NamespaceController {
     private final TenantService tenantService;
 
     @GetMapping("/all")
-    public ResponseEntity<NamespacesDto> getAllNames() {
-        List<String> tenants = tenantService.getAllNames();
-        List<String> namespaces = namespaceService.getAllNames(tenants);
-        return new ResponseEntity<>(new NamespacesDto(namespaces), HttpStatus.OK);
+    public ResponseEntity<NamespacesDto> getAll(@RequestParam(required = false, defaultValue = "") List<String> tenants,
+                                                @RequestParam(required = false, defaultValue = "") List<String> namespaces) {
+        if (!namespaces.isEmpty()) {
+            return wrapInEntity(getAllForNamespaces(namespaces));
+        } else {
+            return wrapInEntity(getAllForTenants(tenants));
+        }
     }
 
     @GetMapping
-    public ResponseEntity<NamespaceDto> getNamespaceDetails(@RequestParam String name) {
+    public ResponseEntity<NamespaceDetailDto> getNamespaceDetails(@RequestParam String name) {
         return new ResponseEntity<>(namespaceService.getNamespaceDetails(name), HttpStatus.OK);
     }
 
+    private ResponseEntity<NamespacesDto> wrapInEntity(List<NamespaceDto> namespaceDtos) {
+        return new ResponseEntity<>(new NamespacesDto(namespaceDtos), HttpStatus.OK);
+    }
+
+    private List<NamespaceDto> getAllForNamespaces(List<String> namespaces) {
+        return namespaceService.getAllForNamespaces(namespaces);
+    }
+
+    private List<NamespaceDto> getAllForTenants(List<String> tenants) {
+        if (tenants.isEmpty()) {
+            tenants = tenantService.getAllNames();
+        }
+        return namespaceService.getAllForTenants(tenants);
+    }
 }

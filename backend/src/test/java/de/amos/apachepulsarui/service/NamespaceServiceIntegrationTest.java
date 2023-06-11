@@ -5,6 +5,7 @@
 
 package de.amos.apachepulsarui.service;
 
+import de.amos.apachepulsarui.dto.NamespaceDetailDto;
 import de.amos.apachepulsarui.dto.NamespaceDto;
 import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.apache.pulsar.client.admin.PulsarAdminException;
@@ -44,21 +45,33 @@ public class NamespaceServiceIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void getAllNames_returnsAllNamespaces() {
-        List<String> tenants = List.of("tenant1", "tenant2");
-        List<String> namespaces = namespaceService.getAllNames(tenants);
-        Assertions.assertThat(namespaces).contains("tenant1/namespace1", "tenant1/namespace2","tenant2/namespace3");
+    void getAllForTenants_returnsAllNamespaces() {
+        List<String> tenants = List.of("tenant1");
+        NamespaceDto expectedNamespaceDto1 = NamespaceDto.fromString("tenant1/namespace1");
+        NamespaceDto expectedNamespaceDto2 = NamespaceDto.fromString("tenant1/namespace2");
+
+        List<NamespaceDto> namespaces = namespaceService.getAllForTenants(tenants);
+        Assertions.assertThat(namespaces).containsExactlyInAnyOrder(expectedNamespaceDto1, expectedNamespaceDto2);
+    }
+
+    @Test
+    void getAllForNamespaces_returnsAllNamespaces() {
+        List<String> namespaces = List.of("tenant1/namespace1", "tenant2/namespace3");
+        NamespaceDto expectedNamespaceDto1 = NamespaceDto.fromString("tenant1/namespace1");
+        NamespaceDto expectedNamespaceDto2 = NamespaceDto.fromString("tenant2/namespace3");
+
+        List<NamespaceDto> namespaceDtos = namespaceService.getAllForNamespaces(namespaces);
+        Assertions.assertThat(namespaceDtos).containsExactlyInAnyOrder(expectedNamespaceDto1, expectedNamespaceDto2);
     }
 
     @Test
     void getNamespaceDetails_returnsNamespaces() throws PulsarAdminException {
-        pulsarAdmin.namespaces().createNamespace("tenant1/namespace4");
-        pulsarAdmin.topics().createNonPartitionedTopic("persistent://tenant1/namespace4/testTopic");
+        pulsarAdmin.topics().createNonPartitionedTopic("persistent://tenant1/namespace1/testTopic");
 
-        NamespaceDto namespace = namespaceService.getNamespaceDetails("tenant1/namespace4");
+        NamespaceDetailDto namespace = namespaceService.getNamespaceDetails("tenant1/namespace1");
 
-        Assertions.assertThat(namespace.getId()).isEqualTo("tenant1/namespace4");
-        Assertions.assertThat(namespace.getTopics()).contains("persistent://tenant1/namespace4/testTopic");
+        Assertions.assertThat(namespace.getId()).isEqualTo("tenant1/namespace1");
+        Assertions.assertThat(namespace.getTopics()).contains("persistent://tenant1/namespace1/testTopic");
         Assertions.assertThat(namespace.getAmountOfTopics()).isEqualTo(1);
     }
 
