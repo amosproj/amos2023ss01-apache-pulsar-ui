@@ -11,14 +11,14 @@ import { addFilter } from '../../store/filterSlice'
 import { useAppDispatch } from '../../store/hooks'
 
 const TenantView: React.FC<TenantViewProps> = ({ data }) => {
-	const { id, adminRoles }: TenantInfo = data
+	const { name, adminRoles }: TenantInfo = data
 
 	const [expanded, setExpanded] = useState(false)
 	const dispatch = useAppDispatch()
 	const navigate = useNavigate()
 
 	const handleDrillDown = () => {
-		dispatch(addFilter({ filterName: 'tenant', id: id }))
+		dispatch(addFilter({ filterName: 'tenant', id: name }))
 		navigate('/namespace')
 	}
 	const handleExpand = () => {
@@ -28,7 +28,7 @@ const TenantView: React.FC<TenantViewProps> = ({ data }) => {
 
 	return (
 		<div className="flex flex-col card-content">
-			<h2 className="uppercase">{id}</h2>
+			<h2 className="uppercase">{name}</h2>
 			<div className="flex card-inner">
 				<div className="flex flex-col card-col card-col-1">
 					<div className="flex flex-col card-info">
