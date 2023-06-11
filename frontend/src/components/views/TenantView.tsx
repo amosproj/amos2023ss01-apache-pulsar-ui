@@ -6,12 +6,21 @@ import React, { useState } from 'react'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import { Collapse, CardActions, Button } from '@mui/material'
+import { useNavigate } from 'react-router-dom'
+import { addFilter } from '../../store/filterSlice'
+import { useAppDispatch } from '../../store/hooks'
 
-const TenantView: React.FC<TenantViewProps> = ({ data, handleClick }) => {
-	const tenantAdminRoles = data?.tenantInfo?.adminRoles
+const TenantView: React.FC<TenantViewProps> = ({ data }) => {
+	const { id, adminRoles }: TenantInfo = data
 
 	const [expanded, setExpanded] = useState(false)
+	const dispatch = useAppDispatch()
+	const navigate = useNavigate()
 
+	const handleDrillDown = () => {
+		dispatch(addFilter({ filterName: 'tenant', id: id }))
+		navigate('/namespace')
+	}
 	const handleExpand = () => {
 		//TODO if(!data) fetch detailed data
 		setExpanded(!expanded)
@@ -19,22 +28,16 @@ const TenantView: React.FC<TenantViewProps> = ({ data, handleClick }) => {
 
 	return (
 		<div className="flex flex-col card-content">
-			<h2 className="uppercase">{data?.id}</h2>
+			<h2 className="uppercase">{id}</h2>
 			<div className="flex card-inner">
 				<div className="flex flex-col card-col card-col-1">
 					<div className="flex flex-col card-info">
 						<p className="text-black">
-							Cluster:{' '}
-							<span className="text-blue">
-								{data?.cluster ? data.cluster : 'N/A'}
-							</span>
-						</p>
-						<p className="text-black">
 							Admin Roles:{' '}
 							<span className="text-blue">
-								{tenantAdminRoles &&
-									tenantAdminRoles.length > 0 &&
-									tenantAdminRoles.map((item: string, index: number) => (
+								{adminRoles &&
+									adminRoles.length > 0 &&
+									adminRoles.map((item: string, index: number) => (
 										<span key={index}>{item}, </span>
 									))}
 							</span>
@@ -47,7 +50,7 @@ const TenantView: React.FC<TenantViewProps> = ({ data, handleClick }) => {
 			<Collapse in={expanded} timeout="auto" unmountOnExit>
 				<div className="flex card-inner">
 					<div className="flex flex-col card-col card-col-1">
-						<div className="flex flex-col card-info">
+						{/*<div className="flex flex-col card-info">
 							<p className="text-black">
 								Namespaces:{' '}
 								<span className="text-blue">
@@ -61,6 +64,7 @@ const TenantView: React.FC<TenantViewProps> = ({ data, handleClick }) => {
 								</span>
 							</p>
 						</div>
+						*/}
 					</div>
 				</div>
 			</Collapse>
@@ -86,7 +90,7 @@ const TenantView: React.FC<TenantViewProps> = ({ data, handleClick }) => {
 							show details
 						</Button>
 					)}
-					<Button variant={'contained'} onClick={(e) => handleClick(e, data)}>
+					<Button variant={'contained'} onClick={handleDrillDown}>
 						drill down
 					</Button>
 				</CardActions>

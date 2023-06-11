@@ -5,16 +5,17 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { RootState } from '.'
 
-type FilterState = {
+export type FilterState = {
 	cluster: string[]
 	tenant: string[]
 	namespace: string[]
 	topic: string[]
+	message: string[]
 }
 
 type UpdateSingleFilter = {
-	filterName: keyof FilterState
-	query: string
+	filterName: 'cluster' | 'tenant' | 'namespace' | 'topic' | 'message'
+	id: string
 }
 
 const initialState: FilterState = {
@@ -22,6 +23,7 @@ const initialState: FilterState = {
 	tenant: [],
 	namespace: [],
 	topic: [],
+	message: [],
 }
 
 const filterSlice = createSlice({
@@ -43,15 +45,18 @@ const filterSlice = createSlice({
 		// Adds query to one single filter (cluster, tenant, namespace, topic)
 		addFilter: (state, action: PayloadAction<UpdateSingleFilter>) => {
 			const filterName = action.payload.filterName
-			state[filterName].push(action.payload.query)
+			state[filterName].push(action.payload.id)
 		},
 		// Deletes query from one single filter (cluster, tenant, namespace, topic)
 		deleteFilter: (state, action: PayloadAction<UpdateSingleFilter>) => {
 			const filterName = action.payload.filterName
-			const query = action.payload.query
+			const query = action.payload.id
 			state[filterName] = state[filterName].filter((element) => {
 				return element !== query
 			})
+		},
+		resetAllFilters: (state) => {
+			state = initialState
 		},
 	},
 })
@@ -78,6 +83,7 @@ export const {
 	setTopic,
 	addFilter,
 	deleteFilter,
+	resetAllFilters,
 } = filterSlice.actions
 
 export default filterSlice.reducer

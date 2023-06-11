@@ -31,6 +31,7 @@ interface CardProps {
 interface DashboardProps {
 	completeData: Array<SampleCluster>
 	completeMessages: Array<SampleMessage>
+	children: ReactNode
 	view?:
 		| 'cluster'
 		| 'tenant'
@@ -69,36 +70,60 @@ interface formProps {
 	triggerUpdate(message: string, topic: string): void
 }
 
+interface ClusterInfo {
+	id: string
+}
+
+interface TenantInfo {
+	id: string
+	adminRoles: string[]
+}
+
+interface NamespaceInfo {
+	id: string
+	tenant: string
+}
+
+interface TopicInfo {
+	id: string
+	localName: string
+	tenant: string
+	namespace: string
+}
+interface ClusterDetail {
+	detail: any
+}
+
+interface TenantDetail {
+	detail: any
+}
+
+interface NamespaceDetail {
+	detail: any
+}
+
+interface TopicDetail {
+	detail: any
+}
+
+interface MessageStandard {
+	id: string
+}
+
 interface ClusterViewProps {
-	data: SampleCluster
-	handleClick: (
-		e: React.MouseEvent<HTMLElement>,
-		currentEl: SampleCluster | SampleTenant | SampleNamespace | SampleTopic
-	) => void
+	data: ClusterInfo
 }
 
 interface TenantViewProps {
-	data: SampleTenant
-	handleClick: (
-		e: React.MouseEvent<HTMLElement>,
-		currentEl: SampleCluster | SampleTenant | SampleNamespace | SampleTopic
-	) => void
+	data: TenantInfo
 }
 
 interface NamespaceViewProps {
-	data: SampleNamespace
-	handleClick: (
-		e: React.MouseEvent<HTMLElement>,
-		currentEl: SampleCluster | SampleTenant | SampleNamespace | SampleTopic
-	) => void
+	data: NamespaceInfo
 }
 
 interface TopicViewProps {
-	data: SampleTopic
-	handleClick: (
-		e: React.MouseEvent<HTMLElement>,
-		currentEl: SampleCluster | SampleTenant | SampleNamespace | SampleTopic
-	) => void
+	data: TopicInfo
 }
 
 interface MessageViewProps {
@@ -115,7 +140,7 @@ interface CustomFilterProps {
 	messages: Array<SampleMessage>
 	handleChange: (
 		id: string,
-		element: 'cluster' | 'tenant' | 'namespace' | 'topic' | 'message'
+		filterName: 'cluster' | 'tenant' | 'namespace' | 'topic' | 'message'
 	) => void
 	currentView:
 		| 'cluster'
