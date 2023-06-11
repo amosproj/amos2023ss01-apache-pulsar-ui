@@ -7,28 +7,9 @@ import CustomSearchbar from './custom/CustomSearchbar'
 import FilterListIcon from '@mui/icons-material/FilterList'
 import CustomFilter from './custom/CustomFilter'
 import { useAppDispatch } from '../store/hooks'
-import { setNav } from '../store/globalSlice'
-import {
-	instanceOfSampleTopic,
-	instanceOfSampleMessage,
-	flattenClustersToTenants,
-	flattenNamespacesToTopics,
-	flattenTenantsToNamespaces,
-} from '../Helpers'
-import {
-	Routes,
-	Route,
-	Link,
-	Navigate,
-	Outlet,
-	redirect,
-	useNavigate,
-} from 'react-router-dom'
-import ClusterGroup from './pages/cluster'
-import NamespaceGroup from './pages/namespace'
-import TenantGroup from './pages/tenant'
-import TopicGroup from './pages/topic'
-import { FilterState, addFilter, resetAllFilters } from '../store/filterSlice'
+import { useNavigate } from 'react-router-dom'
+
+import { addFilter, resetAllFilters } from '../store/filterSlice'
 // import {
 // 	setCluster,
 // 	setTenant,
@@ -246,6 +227,7 @@ const Dashboard: React.FC<DashboardProps> = ({
 			dataFiltered = filterData(searchQuery, completeData, completeMessages)
 		}
 	*/
+	/*
 	//This function moves from one view to another on click, it takes the id of the clicked element, and
 	//uses this information to set the clicked id as selected filter in the next view by using the "handleChange" function
 	const handleClick = (
@@ -274,7 +256,7 @@ const Dashboard: React.FC<DashboardProps> = ({
 			dispatch(setNav('message'))
 		}
 	}
-
+*/
 	//This function adds the selected id to the query state variables, in this way
 	//we keep track on what's included in the filter
 	const handleChange = (
