@@ -10,29 +10,39 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import { useNavigate } from 'react-router-dom'
 import { addFilter } from '../../../store/filterSlice'
 import { useAppDispatch } from '../../../store/hooks'
+import axios from 'axios'
+import ConsumerModal from '../../modals/ConsumerModal'
 
 const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 	const { name, tenant, namespace }: TopicInfo = data
-
-	/*
-	const topicConsumers = data?.topicStatsDto?.subscriptions
-		.map((item: SampleSubscription) => item.consumers)
-		.filter((el: Array<string>) => el && el.length > 0)
-		.flat()
-	*/
-	//const topicProducers = data?.topicStatsDto?.producers
-
 	const [expanded, setExpanded] = useState(false)
+	const [details, setDetails] = useState<TopicDetail>()
 	const dispatch = useAppDispatch()
 	const navigate = useNavigate()
 
+	const fetchData = () => {
+		const url = 'http://localhost:8081/api/topic/'
+
+		// Sending GET request
+		const params = {
+			name: name,
+		}
+		axios
+			.get<TopicDetail>(url, { params })
+			.then((response) => {
+				setDetails(response.data)
+			})
+			.catch((error) => {
+				console.log(error)
+			})
+	}
 	const handleDrillDown = () => {
 		dispatch(addFilter({ filterName: 'topic', id: name }))
 		navigate('/message')
 	}
 
 	const handleExpand = () => {
-		//TODO if(!data) fetch detailed data
+		if (!details) fetchData()
 		setExpanded(!expanded)
 	}
 
@@ -57,40 +67,50 @@ const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 			<Collapse in={expanded} timeout="auto" unmountOnExit>
 				<div className="flex card-inner">
 					<div className="flex flex-col card-col card-col-1">
-						{/*<div className="flex flex-col card-info">
+						<div className="flex flex-col card-info">
+							<p className="text-black">
+								Owner Broker:{' '}
+								<span className="text-blue">
+									{details?.ownerBroker ? details.ownerBroker : 'N/A'}
+								</span>
+							</p>
 							<p className="text-black">
 								Producers:{' '}
-								<span className="text-blue">
-									{topicProducers &&
-										topicProducers.length > 0 &&
-										topicProducers.map((item: string) => (
+								{details && details.topicStatsDto.producers.length > 0 ? (
+									details.topicStatsDto.producers.map(
+										(item: string, index: number) => (
 											<ProducerModal
-												key={'producer-' + Math.floor(Math.random() * 999999)}
+												key={index}
 												producer={{
 													producerName: item,
 													topicList: ['SampleTopic1', 'SampleTopic2'],
 													messageList: ['SampleMessage1', 'SampleMessage2'],
 												}}
 											/>
-										))}
-								</span>
+										)
+									)
+								) : (
+									<span className="text-blue">None</span>
+								)}
 							</p>
 							<p className="text-black">
-								Consumers:{' '}
-								<span className="text-blue">
-									{/*topicConsumers &&
-									topicConsumers.length > 0 &&
-									topicConsumers.map((item: string, index: number) => (
-										<ConsumerModal
-											key={'consumer-' + Math.floor(Math.random() * 999999)}
-											consumer={{
-												consumerName: item,
-												topicList: ['SampleTopic1', 'SampleTopic2'],
-												messageList: ['SampleMessage1', 'SampleMessage2'],
-											}}
-										/>
-										))
-								</span>
+								Subscriptions:{' '}
+								{details && details.topicStatsDto.subscriptions.length > 0 ? (
+									details.topicStatsDto.subscriptions.map(
+										(item: string, index: number) => (
+											<ConsumerModal
+												key={index}
+												consumer={{
+													consumerName: item,
+													topicList: ['SampleTopic1', 'SampleTopic2'],
+													messageList: ['SampleMessage1', 'SampleMessage2'],
+												}}
+											/>
+										)
+									)
+								) : (
+									<span className="text-blue">None</span>
+								)}
 							</p>
 						</div>
 						<div className="grey-line"></div>
@@ -98,29 +118,38 @@ const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 							<p className="text-black">
 								Produced messages:{' '}
 								<span className="text-blue">
-									{data?.topicStatsDto?.producedMesages
-										? data.topicStatsDto.producedMesages
+									{details?.topicStatsDto.producedMesages
+										? details?.topicStatsDto.producedMesages
+										: 0}
+								</span>
+							</p>
+							<p className="text-black">
+								Consumed messages:{' '}
+								<span className="text-blue">
+									{details?.topicStatsDto.consumedMessages
+										? details?.topicStatsDto.consumedMessages
 										: 0}
 								</span>
 							</p>
 							<p className="text-black">
 								Average message size:{' '}
 								<span className="text-blue">
-									{data?.topicStatsDto?.averageMessageSize
-										? data.topicStatsDto.averageMessageSize
-										: 0}
+									{details?.topicStatsDto?.averageMessageSize
+										? details.topicStatsDto.averageMessageSize
+										: 0}{' '}
+									Bytes
 								</span>
 							</p>
 							<p className="text-black">
 								Storage size:{' '}
 								<span className="text-blue">
-									{data?.topicStatsDto?.storageSize
-										? data.topicStatsDto.storageSize
-										: 0}
+									{details?.topicStatsDto?.storageSize
+										? details.topicStatsDto.storageSize
+										: 0}{' '}
+									Bytes
 								</span>
 							</p>
 						</div>
-						*/}
 					</div>
 				</div>
 			</Collapse>
