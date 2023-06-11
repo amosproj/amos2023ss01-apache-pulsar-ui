@@ -7,45 +7,48 @@ import ProducerModal from '../modals/ProducerModal'
 import { Collapse, CardActions, Button } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import ExpandLessIcon from '@mui/icons-material/ExpandLess'
+import { useNavigate } from 'react-router-dom'
+import { addFilter } from '../../store/filterSlice'
+import { useAppDispatch } from '../../store/hooks'
 
-const TopicView: React.FC<TopicViewProps> = ({ data, handleClick }) => {
+const TopicView: React.FC<TopicViewProps> = ({ data }) => {
+	const { id, localName, tenant, namespace }: TopicInfo = data
+
 	/*
 	const topicConsumers = data?.topicStatsDto?.subscriptions
 		.map((item: SampleSubscription) => item.consumers)
 		.filter((el: Array<string>) => el && el.length > 0)
 		.flat()
 	*/
-	const topicProducers = data?.topicStatsDto?.producers
+	//const topicProducers = data?.topicStatsDto?.producers
 
 	const [expanded, setExpanded] = useState(false)
+	const dispatch = useAppDispatch()
+	const navigate = useNavigate()
+
+	const handleDrillDown = () => {
+		dispatch(addFilter({ filterName: 'topic', id: id }))
+		navigate('/message')
+	}
 
 	const handleExpand = () => {
 		//TODO if(!data) fetch detailed data
 		setExpanded(!expanded)
 	}
+
 	return (
 		<div className="flex flex-col card-content">
-			<h2>{data?.localName}</h2>
+			<h2>{localName}</h2>
 			<div className="flex card-inner">
 				<div className="flex flex-col card-col card-col-1">
 					<div className="flex flex-col card-info">
 						<p className="text-black">
-							Cluster:{' '}
-							<span className="text-blue">
-								{data?.cluster ? data.cluster : 'N/A'}
-							</span>
-						</p>
-						<p className="text-black">
 							Tenant:{' '}
-							<span className="text-blue">
-								{data?.tenant ? data.tenant : 'N/A'}
-							</span>
+							<span className="text-blue">{tenant ? tenant : 'N/A'}</span>
 						</p>
 						<p className="text-black">
 							Namespace:{' '}
-							<span className="text-blue">
-								{data?.namespace ? data.namespace : 'N/A'}
-							</span>
+							<span className="text-blue">{namespace ? namespace : 'N/A'}</span>
 						</p>
 					</div>
 				</div>
@@ -54,7 +57,7 @@ const TopicView: React.FC<TopicViewProps> = ({ data, handleClick }) => {
 			<Collapse in={expanded} timeout="auto" unmountOnExit>
 				<div className="flex card-inner">
 					<div className="flex flex-col card-col card-col-1">
-						<div className="flex flex-col card-info">
+						{/*<div className="flex flex-col card-info">
 							<p className="text-black">
 								Producers:{' '}
 								<span className="text-blue">
@@ -86,7 +89,7 @@ const TopicView: React.FC<TopicViewProps> = ({ data, handleClick }) => {
 												messageList: ['SampleMessage1', 'SampleMessage2'],
 											}}
 										/>
-										))*/}
+										))
 								</span>
 							</p>
 						</div>
@@ -117,6 +120,7 @@ const TopicView: React.FC<TopicViewProps> = ({ data, handleClick }) => {
 								</span>
 							</p>
 						</div>
+						*/}
 					</div>
 				</div>
 			</Collapse>
@@ -142,7 +146,7 @@ const TopicView: React.FC<TopicViewProps> = ({ data, handleClick }) => {
 							show details
 						</Button>
 					)}
-					<Button variant={'contained'} onClick={(e) => handleClick(e, data)}>
+					<Button variant={'contained'} onClick={handleDrillDown}>
 						drill down
 					</Button>
 				</CardActions>

@@ -6,26 +6,59 @@ import React, { useState } from 'react'
 import { Button, CardActions, Collapse } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import ExpandLessIcon from '@mui/icons-material/ExpandLess'
+import { useAppDispatch } from '../../store/hooks'
+import { addFilter } from '../../store/filterSlice'
+import { useNavigate } from 'react-router-dom'
 
-const ClusterView: React.FC<ClusterViewProps> = ({ data, handleClick }) => {
+const ClusterView: React.FC<ClusterViewProps> = ({ data }) => {
+	const { id }: ClusterInfo = data
 	const [expanded, setExpanded] = useState(false)
+	const [details, setDetails] = useState<ClusterDetail>()
 
+	const dispatch = useAppDispatch()
+	const navigate = useNavigate()
+
+	const handleDrillDown = () => {
+		dispatch(addFilter({ filterName: 'cluster', id: id }))
+		navigate('/tenant')
+	}
+
+	const fetchData = () => {
+		const url = 'http://localhost:8081/api/cluster/' + data.id
+
+		/*
+				// Sending GET request
+				axios
+					.get<ClusterDetail>(url, {  })
+					.then((response) => {
+						setDetails(response.data)
+						setLoading(false)
+					})
+					.catch((error) => {
+						setError(error.message)
+						setLoading(false)
+					})
+					*/
+	}
 	const handleExpand = () => {
-		//TODO if(!data) fetch detailed data
+		if (!data) fetchData()
 		setExpanded(!expanded)
 	}
 	return (
 		<div className="flex flex-col card-content">
-			<h2 className="uppercase">{data.id}</h2>
+			<h2 className="uppercase">{id}</h2>
 			<div className="grey-line"></div>
 			<Collapse in={expanded} timeout="auto" unmountOnExit>
 				<div className="flex card-inner">
 					<div className="flex flex-col card-col card-col-1">
+						{/*
 						<div className="flex flex-col card-info">
 							<p className="text-black">
 								Brokers:{' '}
 								<span className="text-blue">
-									{data?.brokers?.length > 0 ? data.brokers.length : 0}
+									{data?.brokers && data?.brokers?.length > 0
+										? data.brokers?.length
+										: 0}
 								</span>
 							</p>
 							<p className="text-black">
@@ -68,7 +101,8 @@ const ClusterView: React.FC<ClusterViewProps> = ({ data, handleClick }) => {
 									{data?.brokerServiceUrl ? data.brokerServiceUrl : 'N/A'}
 								</span>
 							</p>
-						</div>
+								</div>
+							*/}
 					</div>
 				</div>
 			</Collapse>
@@ -94,7 +128,7 @@ const ClusterView: React.FC<ClusterViewProps> = ({ data, handleClick }) => {
 							show details
 						</Button>
 					)}
-					<Button variant={'contained'} onClick={(e) => handleClick(e, data)}>
+					<Button variant={'contained'} onClick={handleDrillDown}>
 						drill down
 					</Button>
 				</CardActions>

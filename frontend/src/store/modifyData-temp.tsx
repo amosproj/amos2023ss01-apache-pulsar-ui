@@ -35,7 +35,7 @@ interface TopicData {
  * @param cluster
  * @returns modified data
  */
-export const modifyData = (
+/*export const modifyData = (
 	clusters: Array<SampleCluster>,
 	topics: TopicData
 ): Array<SampleCluster> => {
@@ -48,12 +48,13 @@ export const modifyData = (
 
 	return newData
 }
-
+*/
 /**
  * Takes in standard cluster from sprint release 5 and converts it to dummy data structure
  * @param cluster
  * @returns modified cluster
  */
+/*
 const addClusterAndTenant = (cluster: SampleCluster): SampleCluster => {
 	// Add 'cluster' property to tenants
 	cluster.tenants = cluster.tenants.map((tenant) => {
@@ -102,3 +103,4 @@ const replaceTopicStrings = (
 
 	return cluster
 }
+*/

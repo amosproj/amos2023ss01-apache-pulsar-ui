@@ -6,10 +6,21 @@ import React, { useState } from 'react'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import { Collapse, CardActions, Button } from '@mui/material'
+import { useNavigate } from 'react-router-dom'
+import { addFilter } from '../../store/filterSlice'
+import { useAppDispatch } from '../../store/hooks'
 
-const NamespaceView: React.FC<NamespaceViewProps> = ({ data, handleClick }) => {
+const NamespaceView: React.FC<NamespaceViewProps> = ({ data }) => {
+	const { id, tenant }: NamespaceInfo = data
+
 	const [expanded, setExpanded] = useState(false)
+	const dispatch = useAppDispatch()
+	const navigate = useNavigate()
 
+	const handleDrillDown = () => {
+		dispatch(addFilter({ filterName: 'namespace', id: id }))
+		navigate('/topic')
+	}
 	const handleExpand = () => {
 		//TODO if(!data) fetch detailed data
 		setExpanded(!expanded)
@@ -17,15 +28,13 @@ const NamespaceView: React.FC<NamespaceViewProps> = ({ data, handleClick }) => {
 
 	return (
 		<div className="flex flex-col card-content">
-			<h2 className="uppercase">{data.id}</h2>
+			<h2 className="uppercase">{id}</h2>
 			<div className="flex card-inner">
 				<div className="flex flex-col card-col card-col-1">
 					<div className="flex flex-col card-info">
 						<p className="text-black">
-							Cluster:{' '}
-							<span className="text-blue">
-								{data?.cluster ? data.cluster : 'N/A'}
-							</span>
+							Tenant:{' '}
+							<span className="text-blue">{tenant ? tenant : 'N/A'}</span>
 						</p>
 					</div>
 				</div>
@@ -34,7 +43,7 @@ const NamespaceView: React.FC<NamespaceViewProps> = ({ data, handleClick }) => {
 			<Collapse in={expanded} timeout="auto" unmountOnExit>
 				<div className="flex card-inner">
 					<div className="flex flex-col card-col card-col-1">
-						<div className="flex flex-col card-info">
+						{/*<div className="flex flex-col card-info">
 							<p className="text-black">
 								Bundles:{' '}
 								<span className="text-blue">
@@ -81,7 +90,7 @@ const NamespaceView: React.FC<NamespaceViewProps> = ({ data, handleClick }) => {
 									{data?.amountOfTopics ? data.amountOfTopics : 0}
 								</span>
 							</p>
-						</div>
+						</div>*/}
 					</div>
 				</div>
 			</Collapse>
@@ -107,7 +116,7 @@ const NamespaceView: React.FC<NamespaceViewProps> = ({ data, handleClick }) => {
 							show details
 						</Button>
 					)}
-					<Button variant={'contained'} onClick={(e) => handleClick(e, data)}>
+					<Button variant={'contained'} onClick={handleDrillDown}>
 						drill down
 					</Button>
 				</CardActions>

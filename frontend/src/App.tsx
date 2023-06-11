@@ -6,25 +6,20 @@ import React, { useEffect } from 'react'
 import './App.css'
 import './assets/styles/styles.scss'
 import { useAppDispatch, useAppSelector } from './store/hooks'
-import {
-	fetchAllMessagesThunk,
-	selectClusterData,
-	selectMessages,
-	selectView,
-} from './store/globalSlice'
+import { selectView } from './store/globalSlice'
 import NavBar from './components/NavBar'
 import Dashboard from './components/Dashboard'
-import { combineDataThunk } from './store/globalSlice'
-import { useInterval } from './components/custom/hooks'
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
+import ClusterGroup from './components/pages/cluster'
+import NamespaceGroup from './components/pages/namespace'
+import TenantGroup from './components/pages/tenant'
+import TopicGroup from './components/pages/topic'
 
-let allData: Array<SampleCluster> = []
-let allMessages: Array<SampleMessage> = []
+const allData: Array<SampleCluster> = []
+const allMessages: Array<SampleMessage> = []
 
 function App() {
 	const view = useAppSelector(selectView)
-	const dispatch = useAppDispatch()
-	allData = useAppSelector(selectClusterData)
-	allMessages = useAppSelector(selectMessages)
 	/** Landing Page Logic */
 	// const showLP = useAppSelector(selectShowLP)
 	/** End of Landing Page Logic */
@@ -101,31 +96,30 @@ function App() {
 			})
 	}*/
 
-	useEffect(() => {
-		dispatch(combineDataThunk())
-		//getMessages()
-	}, [])
-
-	//dispatch fetch all messages on clusterData change / when combineAsyncThunk is done
-	useEffect(() => {
-		dispatch(fetchAllMessagesThunk())
-	}, [allData])
-
-	//fetch messages every 30 seconds
-	useInterval(() => {
-		dispatch(fetchAllMessagesThunk())
-	}, 30000)
-
 	return (
 		<>
-			<div className="dashboard-container">
-				<NavBar />
-				<Dashboard
-					completeData={allData}
-					completeMessages={allMessages}
-					view={view.selectedNav}
-				/>
-			</div>
+			<Router>
+				<div className="dashboard-container">
+					<NavBar />
+					<Dashboard
+						completeData={allData}
+						completeMessages={allMessages}
+						view={view.selectedNav}
+					>
+						<Routes>
+							<Route path="/" element={<ClusterGroup />}></Route>
+							<Route path="/cluster" element={<ClusterGroup />}></Route>
+							<Route path="/tenant" element={<TenantGroup />}></Route>
+							<Route path="/namespace" element={<NamespaceGroup />}></Route>
+							<Route path="/topic" element={<TopicGroup />}></Route>
+							<Route
+								path="/message"
+								element={<div>in development</div>}
+							></Route>
+						</Routes>
+					</Dashboard>
+				</div>
+			</Router>
 		</>
 	)
 }

@@ -5,7 +5,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { RootState } from '.'
-import { modifyData } from './modifyData-temp'
+//import { modifyData } from './modifyData-temp'
 
 export type View = {
 	selectedNav: string | null
@@ -37,7 +37,7 @@ const backendInstance = axios.create({
 	baseURL: 'http://localhost:8081/api',
 	timeout: 1000,
 })
-
+/* 
 const fetchRawClusterDataThunk = createAsyncThunk(
 	'globalController/fetchData',
 	async () => {
@@ -113,7 +113,7 @@ const combineDataThunk = createAsyncThunk(
 		])
 	}
 )
-
+*/
 // eslint-disable-next-line
 const globalSlice = createSlice({
 	name: 'globalControl',
@@ -132,12 +132,12 @@ const globalSlice = createSlice({
 		setView: (state, action: PayloadAction<View>) => {
 			state.view = action.payload
 		},
-		setClusterDataTEST: (
+		/*setClusterDataTEST: (
 			state: globalState,
 			action: PayloadAction<Array<SampleCluster>>
 		) => {
 			state.clusterData = action.payload
-		},
+		},*/
 		/*
 		setEndpoint: (state: globalState, action: PayloadAction<string>) => {
 			state.endpoint = action.payload
@@ -145,7 +145,7 @@ const globalSlice = createSlice({
 		*/
 	},
 	extraReducers: (builder) => {
-		builder.addCase(fetchRawClusterDataThunk.fulfilled, (state, action) => {
+		/*builder.addCase(fetchRawClusterDataThunk.fulfilled, (state, action) => {
 			state.rawClusterData = JSON.parse(JSON.stringify(action.payload))
 		})
 		builder.addCase(fetchRawClusterDataThunk.rejected, () => {
@@ -172,7 +172,7 @@ const globalSlice = createSlice({
 		})
 		builder.addCase(fetchAllMessagesThunk.rejected, () => {
 			console.log('fetch all messages thunk failed')
-		})
+		})*/
 	},
 })
 
@@ -183,21 +183,21 @@ const selectView = (state: RootState): View => state.globalControl.view
 const selectEndpoint = (state: RootState): string =>
 	state.globalControl.endpoint
 
-const selectClusterData = (state: RootState): any =>
+/*const selectClusterData = (state: RootState): any =>
 	state.globalControl.clusterData
 
 const selectMessages = (state: RootState): any =>
 	state.globalControl.messageList
-
-export const { setNav, setView, setClusterDataTEST } = actions
+*/
+export const { setNav, setView /*, setClusterDataTEST*/ } = actions
 
 export {
 	selectEndpoint,
 	selectView,
-	selectClusterData,
+	/*selectClusterData,
 	combineDataThunk,
 	selectMessages,
-	fetchAllMessagesThunk,
+	fetchAllMessagesThunk,*/
 }
 
 export default reducer
