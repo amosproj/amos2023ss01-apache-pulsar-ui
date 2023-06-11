@@ -10,7 +10,7 @@ import {
 	selectNamespace,
 	selectTenant,
 } from '../../../store/filterSlice'
-import NamespaceView from '../../views/NamespaceView'
+import NamespaceView from './NamespaceView'
 
 interface ResponseNamespace {
 	namespaces: NamespaceInfo[]
@@ -49,19 +49,19 @@ const NamespaceGroup: React.FC = () => {
 	return (
 		<div>
 			<h2 className="dashboard-title">Available Namespaces</h2>
-			<div className="main-card">
-				{loading ? (
-					<div>Loading...</div>
-				) : error ? (
-					<div>Error: {error}</div>
-				) : (
-					<div>
-						{data.map((namespace, index) => (
+			{loading ? (
+				<div className="main-card"> Loading...</div>
+			) : error ? (
+				<div>Error: {error}</div>
+			) : (
+				<div>
+					{data.map((namespace, index) => (
+						<div className="main-card" key={index}>
 							<NamespaceView key={index} data={namespace} />
-						))}
-					</div>
-				)}
-			</div>
+						</div>
+					))}
+				</div>
+			)}
 		</div>
 	)
 }

@@ -5,7 +5,7 @@
 import React, { useEffect, useState } from 'react'
 import { useAppSelector } from '../../../store/hooks'
 import axios from 'axios'
-import ClusterView from '../../views/ClusterView'
+import ClusterView from './ClusterView'
 import { selectCluster } from '../../../store/filterSlice'
 
 interface ResponseCluster {
@@ -41,19 +41,19 @@ const ClusterGroup: React.FC = () => {
 	return (
 		<div>
 			<h2 className="dashboard-title">Available Clusters</h2>
-			<div className="main-card">
-				{loading ? (
-					<div>Loading...</div>
-				) : error ? (
-					<div>Error: {error}</div>
-				) : (
-					<div>
-						{data.map((cluster, index) => (
+			{loading ? (
+				<div className="main-card"> Loading...</div>
+			) : error ? (
+				<div>Error: {error}</div>
+			) : (
+				<div>
+					{data.map((cluster, index) => (
+						<div className="main-card" key={index}>
 							<ClusterView key={index} data={{ id: cluster }} />
-						))}
-					</div>
-				)}
-			</div>
+						</div>
+					))}
+				</div>
+			)}
 		</div>
 	)
 }
