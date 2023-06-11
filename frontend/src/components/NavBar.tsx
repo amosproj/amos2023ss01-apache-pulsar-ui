@@ -19,6 +19,7 @@ import { selectView, setNav } from '../store/globalSlice'
 import logo from '../assets/images/team-logo-light.png'
 // import { Input } from '@mui/material'
 import { InfoModal } from './InfoModal'
+import { useNavigate } from 'react-router-dom'
 
 //Removed 'Message' from this array for now
 const pages = ['Cluster', 'Tenant', 'Namespace', 'Topic', 'Message']
@@ -31,6 +32,7 @@ function NavBar() {
 	}
 	const dispatch = useAppDispatch()
 	const selectedNav = useAppSelector(selectView).selectedNav
+	const navigate = useNavigate()
 
 	const handleCloseNavMenu = () => {
 		setAnchorElNav(null)
@@ -39,6 +41,7 @@ function NavBar() {
 	const handleClickOnNav = (tag: string) => {
 		tag = tag.toLowerCase()
 		dispatch(setNav(tag))
+		navigate('/' + tag)
 	}
 
 	// const handleClickOnDisconnect = () => {
