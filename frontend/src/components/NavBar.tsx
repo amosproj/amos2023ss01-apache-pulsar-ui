@@ -13,8 +13,8 @@ import MenuIcon from '@mui/icons-material/Menu'
 import Container from '@mui/material/Container'
 import Button from '@mui/material/Button'
 import MenuItem from '@mui/material/MenuItem'
-import { useAppDispatch, useAppSelector } from '../store/hooks'
-import { selectView, setNav } from '../store/globalSlice'
+import { useAppDispatch } from '../store/hooks'
+import { setNav } from '../store/globalSlice'
 // import { selectEndpoint } from '../store/globalSlice'
 import logo from '../assets/images/team-logo-light.png'
 // import { Input } from '@mui/material'
@@ -31,7 +31,7 @@ function NavBar() {
 		setAnchorElNav(event.currentTarget)
 	}
 	const dispatch = useAppDispatch()
-	const selectedNav = useAppSelector(selectView).selectedNav
+	//const selectedNav = useAppSelector(selectView).selectedNav
 	const navigate = useNavigate()
 	const location = useLocation()
 

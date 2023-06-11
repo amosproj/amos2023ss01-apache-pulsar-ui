@@ -2,10 +2,10 @@
 // SPDX-FileCopyrightText: 2010-2021 Dirk Riehle <dirk@riehle.org>
 // SPDX-FileCopyrightText: 2019 Georg Schwarz <georg.schwarz@fau.de>
 
-import React, { useEffect } from 'react'
+import React from 'react'
 import './App.css'
 import './assets/styles/styles.scss'
-import { useAppDispatch, useAppSelector } from './store/hooks'
+import { useAppSelector } from './store/hooks'
 import { selectView } from './store/globalSlice'
 import NavBar from './components/NavBar'
 import Dashboard from './components/Dashboard'
