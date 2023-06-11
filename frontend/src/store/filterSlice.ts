@@ -12,6 +12,11 @@ type FilterState = {
 	topic: string[]
 }
 
+type UpdateSingleFilter = {
+	filterName: keyof FilterState
+	query: string
+}
+
 const initialState: FilterState = {
 	cluster: [],
 	tenant: [],
@@ -35,6 +40,19 @@ const filterSlice = createSlice({
 		setTopic: (state, action: PayloadAction<string[]>) => {
 			state.topic = action.payload
 		},
+		// Adds query to one single filter (cluster, tenant, namespace, topic)
+		addFilter: (state, action: PayloadAction<UpdateSingleFilter>) => {
+			const filterName = action.payload.filterName
+			state[filterName].push(action.payload.query)
+		},
+		// Deletes query from one single filter (cluster, tenant, namespace, topic)
+		deleteFilter: (state, action: PayloadAction<UpdateSingleFilter>) => {
+			const filterName = action.payload.filterName
+			const query = action.payload.query
+			state[filterName] = state[filterName].filter((element) => {
+				return element !== query
+			})
+		},
 	},
 })
 
@@ -53,7 +71,13 @@ const selectTopic = (state: RootState): string[] => {
 }
 export { selectCluster, selectNamespace, selectTenant, selectTopic }
 
-export const { setCluster, setTenant, setNamespace, setTopic } =
-	filterSlice.actions
+export const {
+	setCluster,
+	setTenant,
+	setNamespace,
+	setTopic,
+	addFilter,
+	deleteFilter,
+} = filterSlice.actions
 
 export default filterSlice.reducer
