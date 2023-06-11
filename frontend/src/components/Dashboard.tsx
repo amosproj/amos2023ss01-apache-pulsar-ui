@@ -21,6 +21,8 @@ import {
 // 	setTenant,
 // 	setNamespace,
 // 	setTopic,
+// 	addFilter,
+// 	deleteFilter,
 // } from '../store/filterSlice'
 
 const Dashboard: React.FC<DashboardProps> = ({
