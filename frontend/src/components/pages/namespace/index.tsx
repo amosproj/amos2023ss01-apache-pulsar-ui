@@ -23,7 +23,7 @@ const NamespaceGroup: React.FC = () => {
 	const clusterFilter = useAppSelector(selectCluster)
 	const tenantFilter = useAppSelector(selectTenant)
 	const namespaceFilter = useAppSelector(selectNamespace)
-	const url = 'http://localhost:8081/api/namespace'
+	const url = 'http://localhost:8081/api/namespace/all'
 
 	useEffect(() => {
 		// Query parameters

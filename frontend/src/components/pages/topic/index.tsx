@@ -26,7 +26,7 @@ const TopicGroup: React.FC = () => {
 	const tenantFilter = useAppSelector(selectTenant)
 	const namespaceFilter = useAppSelector(selectNamespace)
 	const topicFilter = useAppSelector(selectTopic)
-	const url = 'http://localhost:8081/api/topic'
+	const url = 'http://localhost:8081/api/topic/all'
 
 	useEffect(() => {
 		// Query parameters
