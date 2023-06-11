@@ -36,6 +36,19 @@ public class TopicService {
 
     private final MessageService messageService;
 
+    public List<TopicDto> getAllForTopics(List<String> topics) {
+        return topics.stream()
+                .map(TopicDto::create)
+                .filter(this::exists)
+                .toList();
+    }
+
+    public List<TopicDto> getAllForNamespaces(List<String> namespaces) {
+        return namespaces.stream()
+                .map(this::getByNamespace)
+                .flatMap(topics -> getAllForTopics(topics).stream())
+                .toList();
+    }
 
     /**
      * @param namespace The namespace you want to get a list of all topics for.
@@ -65,15 +78,15 @@ public class TopicService {
 
     /**
      * @param topicName The Name of the Topic you want to get detailed information about
-     * @return A {@link TopicDto}'s including {@link TopicStatsDto}, List of {@link MessageDto} and
+     * @return A {@link TopicDetailDto}'s including {@link TopicStatsDto}, List of {@link MessageDto} and
      * additional metadata.
      */
-    public TopicDto getTopicDetails(String topicName) throws PulsarApiException {
+    public TopicDetailDto getTopicDetails(String topicName) throws PulsarApiException {
         try {
             List<String> subscriptions = pulsarAdmin.topics().getSubscriptions(topicName);
             List<MessageDto> messages = subscriptions.stream().
                     flatMap(sub -> messageService.peekMessages(topicName, sub).stream()).toList();
-            return TopicDto.createTopicDtoWithMessages(topicName,
+            return TopicDetailDto.createTopicDtoWithMessages(topicName,
                     getTopicStats(topicName),
                     getOwnerBroker(topicName),
                     messages);
@@ -127,5 +140,14 @@ public class TopicService {
 
         Map<Object, Boolean> seen = new ConcurrentHashMap<>();
         return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
+    }
+
+
+    private boolean exists(TopicDto topic) {
+        try {
+            return pulsarAdmin.topics().getList(topic.getNamespace()).contains(topic.getName());
+        } catch (PulsarAdminException e) {
+            return false;
+        }
     }
 }
