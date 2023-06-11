@@ -6,8 +6,8 @@ import React, { useState } from 'react'
 import { Button, CardActions, Collapse } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import ExpandLessIcon from '@mui/icons-material/ExpandLess'
-import { useAppDispatch } from '../../store/hooks'
-import { addFilter } from '../../store/filterSlice'
+import { useAppDispatch } from '../../../store/hooks'
+import { addFilter } from '../../../store/filterSlice'
 import { useNavigate } from 'react-router-dom'
 
 const ClusterView: React.FC<ClusterViewProps> = ({ data }) => {

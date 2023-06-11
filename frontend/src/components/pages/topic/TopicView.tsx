@@ -3,24 +3,34 @@
 // SPDX-FileCopyrightText: 2019 Georg Schwarz <georg. schwarz@fau.de>
 
 import React, { useState } from 'react'
+import ProducerModal from '../../modals/ProducerModal'
+import { Collapse, CardActions, Button } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import ExpandLessIcon from '@mui/icons-material/ExpandLess'
-import { Collapse, CardActions, Button } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
-import { addFilter } from '../../store/filterSlice'
-import { useAppDispatch } from '../../store/hooks'
+import { addFilter } from '../../../store/filterSlice'
+import { useAppDispatch } from '../../../store/hooks'
 
-const NamespaceView: React.FC<NamespaceViewProps> = ({ data }) => {
-	const { id, tenant }: NamespaceInfo = data
+const TopicView: React.FC<TopicViewProps> = ({ data }) => {
+	const { name, tenant, namespace }: TopicInfo = data
+
+	/*
+	const topicConsumers = data?.topicStatsDto?.subscriptions
+		.map((item: SampleSubscription) => item.consumers)
+		.filter((el: Array<string>) => el && el.length > 0)
+		.flat()
+	*/
+	//const topicProducers = data?.topicStatsDto?.producers
 
 	const [expanded, setExpanded] = useState(false)
 	const dispatch = useAppDispatch()
 	const navigate = useNavigate()
 
 	const handleDrillDown = () => {
-		dispatch(addFilter({ filterName: 'namespace', id: id }))
-		navigate('/topic')
+		dispatch(addFilter({ filterName: 'topic', id: name }))
+		navigate('/message')
 	}
+
 	const handleExpand = () => {
 		//TODO if(!data) fetch detailed data
 		setExpanded(!expanded)
@@ -28,13 +38,17 @@ const NamespaceView: React.FC<NamespaceViewProps> = ({ data }) => {
 
 	return (
 		<div className="flex flex-col card-content">
-			<h2 className="uppercase">{id}</h2>
+			<h2>{name}</h2>
 			<div className="flex card-inner">
 				<div className="flex flex-col card-col card-col-1">
 					<div className="flex flex-col card-info">
 						<p className="text-black">
 							Tenant:{' '}
 							<span className="text-blue">{tenant ? tenant : 'N/A'}</span>
+						</p>
+						<p className="text-black">
+							Namespace:{' '}
+							<span className="text-blue">{namespace ? namespace : 'N/A'}</span>
 						</p>
 					</div>
 				</div>
@@ -45,52 +59,68 @@ const NamespaceView: React.FC<NamespaceViewProps> = ({ data }) => {
 					<div className="flex flex-col card-col card-col-1">
 						{/*<div className="flex flex-col card-info">
 							<p className="text-black">
-								Bundles:{' '}
+								Producers:{' '}
 								<span className="text-blue">
-									{data?.bundlesData?.numBundles
-										? data.bundlesData?.numBundles
-										: 0}
+									{topicProducers &&
+										topicProducers.length > 0 &&
+										topicProducers.map((item: string) => (
+											<ProducerModal
+												key={'producer-' + Math.floor(Math.random() * 999999)}
+												producer={{
+													producerName: item,
+													topicList: ['SampleTopic1', 'SampleTopic2'],
+													messageList: ['SampleMessage1', 'SampleMessage2'],
+												}}
+											/>
+										))}
 								</span>
 							</p>
 							<p className="text-black">
-								Message TTL:{' '}
+								Consumers:{' '}
 								<span className="text-blue">
-									{data?.messagesTTL ? data?.messagesTTL : 'None'}
-								</span>
-							</p>
-							<p className="text-black">
-								Retention time:{' '}
-								<span className="text-blue">
-									{data?.retentionPolicies?.retentionTimeInMinutes
-										? data?.retentionPolicies.retentionTimeInMinutes +
-										  ' minutes'
-										: 'None'}
-								</span>
-							</p>
-							<p className="text-black">
-								Retention size:{' '}
-								<span className="text-blue">
-									{data?.retentionPolicies?.retentionSizeInMB
-										? data?.retentionPolicies.retentionSizeInMB + ' MB'
-										: 'None'}
+									{/*topicConsumers &&
+									topicConsumers.length > 0 &&
+									topicConsumers.map((item: string, index: number) => (
+										<ConsumerModal
+											key={'consumer-' + Math.floor(Math.random() * 999999)}
+											consumer={{
+												consumerName: item,
+												topicList: ['SampleTopic1', 'SampleTopic2'],
+												messageList: ['SampleMessage1', 'SampleMessage2'],
+											}}
+										/>
+										))
 								</span>
 							</p>
 						</div>
 						<div className="grey-line"></div>
 						<div className="flex flex-col card-info">
 							<p className="text-black">
-								Cluster:{' '}
+								Produced messages:{' '}
 								<span className="text-blue">
-									{data?.cluster ? data.cluster : 'N/A'}
+									{data?.topicStatsDto?.producedMesages
+										? data.topicStatsDto.producedMesages
+										: 0}
 								</span>
 							</p>
 							<p className="text-black">
-								Topics:{' '}
+								Average message size:{' '}
 								<span className="text-blue">
-									{data?.amountOfTopics ? data.amountOfTopics : 0}
+									{data?.topicStatsDto?.averageMessageSize
+										? data.topicStatsDto.averageMessageSize
+										: 0}
 								</span>
 							</p>
-						</div>*/}
+							<p className="text-black">
+								Storage size:{' '}
+								<span className="text-blue">
+									{data?.topicStatsDto?.storageSize
+										? data.topicStatsDto.storageSize
+										: 0}
+								</span>
+							</p>
+						</div>
+						*/}
 					</div>
 				</div>
 			</Collapse>
@@ -125,4 +155,4 @@ const NamespaceView: React.FC<NamespaceViewProps> = ({ data }) => {
 	)
 }
 
-export default NamespaceView
+export default TopicView
