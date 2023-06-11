@@ -9,20 +9,39 @@ import { Collapse, CardActions, Button } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { addFilter } from '../../../store/filterSlice'
 import { useAppDispatch } from '../../../store/hooks'
+import axios from 'axios'
 
 const TenantView: React.FC<TenantViewProps> = ({ data }) => {
 	const { name, tenantInfo }: TenantInfo = data
 
 	const [expanded, setExpanded] = useState(false)
+	const [details, setDetails] = useState<TenantDetail>()
 	const dispatch = useAppDispatch()
 	const navigate = useNavigate()
+
+	const fetchData = () => {
+		const url = 'http://localhost:8081/api/tenant/'
+
+		// Sending GET request
+		const params = {
+			tenantName: name,
+		}
+		axios
+			.get<TenantDetail>(url, { params })
+			.then((response) => {
+				setDetails(response.data)
+			})
+			.catch((error) => {
+				console.log(error)
+			})
+	}
 
 	const handleDrillDown = () => {
 		dispatch(addFilter({ filterName: 'tenant', id: name }))
 		navigate('/namespace')
 	}
 	const handleExpand = () => {
-		//TODO if(!data) fetch detailed data
+		if (!details) fetchData()
 		setExpanded(!expanded)
 	}
 
@@ -64,21 +83,20 @@ const TenantView: React.FC<TenantViewProps> = ({ data }) => {
 			<Collapse in={expanded} timeout="auto" unmountOnExit>
 				<div className="flex card-inner">
 					<div className="flex flex-col card-col card-col-1">
-						{/*<div className="flex flex-col card-info">
+						<div className="flex flex-col card-info">
 							<p className="text-black">
 								Namespaces:{' '}
-								<span className="text-blue">
-									{data?.amountOfNamespaces ? data.amountOfNamespaces : 0}
-								</span>
+								{details?.namespaces.map((item: string, index: number) => (
+									<span key={index} className="text-blue">
+										{item},{' '}
+									</span>
+								))}
 							</p>
 							<p className="text-black">
-								Topics:{' '}
-								<span className="text-blue">
-									{data?.amountOfTopics ? data.amountOfTopics : 0}
-								</span>
+								Amount of Namespaces:{' '}
+								<span className="text-blue">{details?.amountOfNamespaces}</span>
 							</p>
 						</div>
-						*/}
 					</div>
 				</div>
 			</Collapse>
