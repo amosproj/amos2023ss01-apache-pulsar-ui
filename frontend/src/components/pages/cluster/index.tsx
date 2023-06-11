@@ -9,15 +9,15 @@ import ClusterView from '../../views/ClusterView'
 import { selectCluster } from '../../../store/filterSlice'
 
 interface ResponseCluster {
-	cluster: ClusterInfo[]
+	clusters: string[]
 }
 
 const ClusterGroup: React.FC = () => {
-	const [data, setData] = useState<ClusterInfo[]>([])
+	const [data, setData] = useState<string[]>([])
 	const [error, setError] = useState<string | null>(null)
 	const [loading, setLoading] = useState<boolean>(true)
 	const clusterFilter = useAppSelector(selectCluster)
-	const url = 'http://localhost:8081/api/cluster'
+	const url = 'http://localhost:8081/api/cluster/all'
 
 	useEffect(() => {
 		// Query parameters
@@ -29,7 +29,7 @@ const ClusterGroup: React.FC = () => {
 		axios
 			.get<ResponseCluster>(url, { params })
 			.then((response) => {
-				setData(response.data.cluster)
+				setData(response.data.clusters)
 				setLoading(false)
 			})
 			.catch((error) => {
@@ -49,7 +49,7 @@ const ClusterGroup: React.FC = () => {
 				) : (
 					<div>
 						{data.map((cluster, index) => (
-							<ClusterView key={index} data={cluster} />
+							<ClusterView key={index} data={{ id: cluster }} />
 						))}
 					</div>
 				)}

@@ -12,7 +12,7 @@ import { addFilter } from '../../store/filterSlice'
 import { useAppDispatch } from '../../store/hooks'
 
 const TopicView: React.FC<TopicViewProps> = ({ data }) => {
-	const { id, localName, tenant, namespace }: TopicInfo = data
+	const { name, tenant, namespace }: TopicInfo = data
 
 	/*
 	const topicConsumers = data?.topicStatsDto?.subscriptions
@@ -27,7 +27,7 @@ const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 	const navigate = useNavigate()
 
 	const handleDrillDown = () => {
-		dispatch(addFilter({ filterName: 'topic', id: id }))
+		dispatch(addFilter({ filterName: 'topic', id: name }))
 		navigate('/message')
 	}
 
@@ -38,7 +38,7 @@ const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 
 	return (
 		<div className="flex flex-col card-content">
-			<h2>{localName}</h2>
+			<h2>{name}</h2>
 			<div className="flex card-inner">
 				<div className="flex flex-col card-col card-col-1">
 					<div className="flex flex-col card-info">

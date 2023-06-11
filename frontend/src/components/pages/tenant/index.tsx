@@ -18,7 +18,7 @@ const TenantGroup: React.FC = () => {
 	const [loading, setLoading] = useState<boolean>(true)
 	const clusterFilter = useAppSelector(selectCluster)
 	const tenantFilter = useAppSelector(selectTenant)
-	const url = 'http://localhost:8081/api/tenant'
+	const url = 'http://localhost:8081/api/tenant/all'
 
 	useEffect(() => {
 		// Query parameters
