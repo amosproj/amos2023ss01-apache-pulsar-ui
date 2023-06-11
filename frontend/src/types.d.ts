@@ -93,19 +93,72 @@ interface TopicInfo {
 	tenant: string
 }
 interface ClusterDetail {
-	detail: any
+	name: string
+	tenants: string[]
+	brokers: string[]
+	amountOfTenants: number
+	amountOfBrokers: number
+	brokerServiceUrl: string
+	serviceUrl: string
 }
 
 interface TenantDetail {
-	detail: any
+	name: string
+	namespaces: string[]
+	amountOfNamespaces: number
+	tenantInfo: {
+		adminRoles: string[]
+		allowedClusters: string[]
+	}
 }
 
 interface NamespaceDetail {
-	detail: any
+	id: string
+	topics: string[]
+	tenant: string
+	amountOfTopics: number
+	bundlesData: {
+		boundaries: string[]
+		numBundles: number
+	}
+	messagesTTL: number
+	retentionPolicies: {
+		retentionTimeInMinutes: number
+		retentionSizeInMB: number
+	}
 }
 
 interface TopicDetail {
-	detail: any
+	name: string
+	localName: string
+	namespace: string
+	tenant: string
+	ownerBroker: string
+	topicStatsDto: {
+		subscriptions: string[]
+		producers: string[]
+		numberSubscriptions: number
+		numberProducers: number
+		producedMesages: number
+		consumedMessages: number
+		averageMessageSize: number
+		storageSize: number
+	}
+	producedMessages: number
+	consumedMessages: number
+	messagesDto: [
+		{
+			messageId: string
+			topic: string
+			payload: string
+			schema: string
+			namespace: string
+			tenant: string
+			publishTime: number
+			producer: string
+		}
+	]
+	persistent: boolean
 }
 
 interface MessageStandard {
