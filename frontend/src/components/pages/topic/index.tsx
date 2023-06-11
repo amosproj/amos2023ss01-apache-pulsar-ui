@@ -11,7 +11,7 @@ import {
 	selectTenant,
 	selectTopic,
 } from '../../../store/filterSlice'
-import TopicView from '../../views/TopicView'
+import TopicView from './TopicView'
 
 interface ResponseTopic {
 	topics: TopicInfo[]
@@ -53,19 +53,19 @@ const TopicGroup: React.FC = () => {
 	return (
 		<div>
 			<h2 className="dashboard-title">Available Topics</h2>
-			<div className="main-card">
-				{loading ? (
-					<div>Loading...</div>
-				) : error ? (
-					<div>Error: {error}</div>
-				) : (
-					<div>
-						{data.map((topic, index) => (
+			{loading ? (
+				<div className="main-card"> Loading...</div>
+			) : error ? (
+				<div>Error: {error}</div>
+			) : (
+				<div>
+					{data.map((topic, index) => (
+						<div className="main-card" key={index}>
 							<TopicView key={index} data={topic} />
-						))}
-					</div>
-				)}
-			</div>
+						</div>
+					))}
+				</div>
+			)}
 		</div>
 	)
 }

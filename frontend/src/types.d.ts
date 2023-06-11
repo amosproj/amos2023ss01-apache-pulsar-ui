@@ -17,11 +17,11 @@ interface Message {
 // Component Prop Interfaces
 interface CardProps {
 	data:
-	| SampleCluster
-	| SampleTenant
-	| SampleNamespace
-	| SampleTopic
-	| SampleMessage
+		| SampleCluster
+		| SampleTenant
+		| SampleNamespace
+		| SampleTopic
+		| SampleMessage
 	handleClick: (
 		e: React.MouseEvent<HTMLElement>,
 		currentEl: SampleCluster | SampleTenant | SampleNamespace | SampleTopic
@@ -33,13 +33,13 @@ interface DashboardProps {
 	completeMessages: Array<SampleMessage>
 	children: ReactNode
 	view?:
-	| 'cluster'
-	| 'tenant'
-	| 'namespace'
-	| 'topic'
-	| 'message'
-	| string
-	| null
+		| 'cluster'
+		| 'tenant'
+		| 'namespace'
+		| 'topic'
+		| 'message'
+		| string
+		| null
 }
 
 interface CustomAccordionProps {
@@ -76,7 +76,10 @@ interface ClusterInfo {
 
 interface TenantInfo {
 	name: string
-	adminRoles: string[]
+	tenantInfo: {
+		adminRoles: string[]
+		allowedClusters: string[]
+	}
 }
 
 interface NamespaceInfo {
@@ -142,14 +145,14 @@ interface CustomFilterProps {
 		filterName: 'cluster' | 'tenant' | 'namespace' | 'topic' | 'message'
 	) => void
 	currentView:
-	| 'cluster'
-	| 'tenant'
-	| 'namespace'
-	| 'topic'
-	| 'message'
-	| undefined
-	| null
-	| string
+		| 'cluster'
+		| 'tenant'
+		| 'namespace'
+		| 'topic'
+		| 'message'
+		| undefined
+		| null
+		| string
 }
 
 interface CustomSearchProps {

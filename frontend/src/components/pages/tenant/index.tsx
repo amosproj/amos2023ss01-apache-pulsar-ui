@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react'
 import { useAppSelector } from '../../../store/hooks'
 import axios from 'axios'
 import { selectCluster, selectTenant } from '../../../store/filterSlice'
-import TenantView from '../../views/TenantView'
+import TenantView from './TenantView'
 
 interface ResponseTenant {
 	tenants: TenantInfo[]
@@ -43,19 +43,19 @@ const TenantGroup: React.FC = () => {
 	return (
 		<div>
 			<h2 className="dashboard-title">Available Tenants</h2>
-			<div className="main-card">
-				{loading ? (
-					<div>Loading...</div>
-				) : error ? (
-					<div>Error: {error}</div>
-				) : (
-					<div>
-						{data.map((tenant, index) => (
+			{loading ? (
+				<div className="main-card"> Loading...</div>
+			) : error ? (
+				<div>Error: {error}</div>
+			) : (
+				<div>
+					{data.map((tenant, index) => (
+						<div className="main-card" key={index}>
 							<TenantView key={index} data={tenant} />
-						))}
-					</div>
-				)}
-			</div>
+						</div>
+					))}
+				</div>
+			)}
 		</div>
 	)
 }

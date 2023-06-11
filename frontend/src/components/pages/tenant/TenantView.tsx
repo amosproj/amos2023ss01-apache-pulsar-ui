@@ -7,11 +7,11 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import { Collapse, CardActions, Button } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
-import { addFilter } from '../../store/filterSlice'
-import { useAppDispatch } from '../../store/hooks'
+import { addFilter } from '../../../store/filterSlice'
+import { useAppDispatch } from '../../../store/hooks'
 
 const TenantView: React.FC<TenantViewProps> = ({ data }) => {
-	const { name, adminRoles }: TenantInfo = data
+	const { name, tenantInfo }: TenantInfo = data
 
 	const [expanded, setExpanded] = useState(false)
 	const dispatch = useAppDispatch()
@@ -35,11 +35,25 @@ const TenantView: React.FC<TenantViewProps> = ({ data }) => {
 						<p className="text-black">
 							Admin Roles:{' '}
 							<span className="text-blue">
-								{adminRoles &&
-									adminRoles.length > 0 &&
-									adminRoles.map((item: string, index: number) => (
+								{tenantInfo.adminRoles && tenantInfo.adminRoles.length > 0 ? (
+									tenantInfo.adminRoles.map((item: string, index: number) => (
 										<span key={index}>{item}, </span>
-									))}
+									))
+								) : (
+									<span>N/A </span>
+								)}
+							</span>
+						</p>
+						<p className="text-black">
+							Allowed Clusters:{' '}
+							<span className="text-blue">
+								{tenantInfo.allowedClusters &&
+									tenantInfo.allowedClusters.length > 0 &&
+									tenantInfo.allowedClusters.map(
+										(item: string, index: number) => (
+											<span key={index}>{item}, </span>
+										)
+									)}
 							</span>
 						</p>
 					</div>
