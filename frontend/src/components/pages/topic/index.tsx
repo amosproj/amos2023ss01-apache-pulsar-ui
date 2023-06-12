@@ -31,10 +31,10 @@ const TopicGroup: React.FC = () => {
 	useEffect(() => {
 		// Query parameters
 		const params = {
-			cluster: clusterFilter,
-			tenant: tenantFilter,
-			namespace: namespaceFilter,
-			topic: topicFilter,
+			//clusters: clusterFilter,
+			tenants: tenantFilter.toString().replace(/,/g, '&'),
+			namespaces: namespaceFilter.toString().replace(/,/g, '&'),
+			topics: topicFilter.toString().replace(/,/g, '&'),
 		}
 
 		// Sending GET request
