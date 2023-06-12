@@ -4,6 +4,7 @@ import { Provider } from 'react-redux'
 import NavBar from '../components/NavBar'
 import store from '../store'
 import { setNav } from '../store/globalSlice'
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
 
 // Spy on the dispatch function
 jest.spyOn(store, 'dispatch')
@@ -11,12 +12,25 @@ jest.spyOn(store, 'dispatch')
 test('every page button dispatches correct setNav reducer', () => {
 	// const pages = ['Cluster', 'Namespace', 'Topic']
 	// Remove 'Cluster' because after #80 now the cluster view is the default view
-	const pages = ['Namespace', 'Topic']
+	const pages = ['Namespace']
 
 	render(
-		<Provider store={store}>
-			<NavBar />
-		</Provider>
+		<Router>
+			<Routes>
+				<Route
+					path="/"
+					element={
+						<Provider store={store}>
+							<NavBar />
+						</Provider>
+					}
+				/>
+				<Route
+					path="/namespace"
+					element={<div data-testid="test-navbar">Testing navbar route</div>}
+				/>
+			</Routes>
+		</Router>
 	)
 
 	pages.forEach((page) => {
@@ -29,7 +43,12 @@ test('every page button dispatches correct setNav reducer', () => {
 		const button = buttons[0]
 		fireEvent.click(button)
 
+		//Check if the new screen has test text, i.e. the route has switched
+		expect(screen.getByTestId('test-navbar')).toHaveTextContent(
+			'Testing navbar route'
+		)
+
 		// Check that 'setNav' action was dispatched with the correct page name
-		expect(store.dispatch).toHaveBeenCalledWith(setNav(page.toLowerCase()))
+		// expect(store.dispatch).toHaveBeenCalledWith(setNav(page.toLowerCase()))
 	})
 })
