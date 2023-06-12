@@ -10,6 +10,7 @@ import {
 	selectCluster,
 	updateDisplayedOptions,
 } from '../../../store/filterSlice'
+import { selectTrigger } from '../requestTriggerSlice'
 
 interface ResponseCluster {
 	clusters: string[]
@@ -22,13 +23,13 @@ const ClusterGroup: React.FC = () => {
 	const clusterFilter = useAppSelector(selectCluster)
 	const url = 'http://localhost:8081/api/cluster/all'
 	const dispatch = useAppDispatch()
+	const trigger = useAppSelector(selectTrigger)
 
 	useEffect(() => {
 		// Query parameters
 		const params = {
 			//clusters: clusterFilter,
 		}
-
 		// Sending GET request
 		axios
 			.get<ResponseCluster>(url, { params })
@@ -46,7 +47,7 @@ const ClusterGroup: React.FC = () => {
 				setError(error.message)
 				setLoading(false)
 			})
-	}, [])
+	}, [trigger])
 
 	return (
 		<div>
