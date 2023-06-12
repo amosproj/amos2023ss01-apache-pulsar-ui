@@ -9,6 +9,7 @@ package de.amos.apachepulsarui.service;
 import de.amos.apachepulsarui.dto.MessageDto;
 import de.amos.apachepulsarui.dto.ProducerDto;
 import de.amos.apachepulsarui.dto.SubscriptionDto;
+import de.amos.apachepulsarui.dto.TopicDetailDto;
 import de.amos.apachepulsarui.dto.TopicDto;
 import de.amos.apachepulsarui.dto.TopicStatsDto;
 import de.amos.apachepulsarui.exception.PulsarApiException;
