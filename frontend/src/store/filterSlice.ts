@@ -55,6 +55,16 @@ const filterSlice = createSlice({
 				return element !== query
 			})
 		},
+		addFilterByDrillDown: (
+			state,
+			action: PayloadAction<UpdateSingleFilter>
+		) => {
+			const filterName = action.payload.filterName
+			const query = action.payload.id
+			state[filterName] = state[filterName].filter((element) => {
+				return element === query
+			})
+		},
 		resetAllFilters: (state) => {
 			state = initialState
 		},
@@ -83,6 +93,7 @@ export const {
 	setTopic,
 	addFilter,
 	deleteFilter,
+	addFilterByDrillDown,
 	resetAllFilters,
 } = filterSlice.actions
 

@@ -7,7 +7,7 @@ import { Button, CardActions, Collapse } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import { useAppDispatch } from '../../../store/hooks'
-import { addFilter } from '../../../store/filterSlice'
+import { addFilterByDrillDown } from '../../../store/filterSlice'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
@@ -20,7 +20,7 @@ const ClusterView: React.FC<ClusterViewProps> = ({ data }) => {
 	const navigate = useNavigate()
 
 	const handleDrillDown = () => {
-		dispatch(addFilter({ filterName: 'cluster', id: id }))
+		dispatch(addFilterByDrillDown({ filterName: 'cluster', id: id }))
 		navigate('/tenant')
 	}
 
