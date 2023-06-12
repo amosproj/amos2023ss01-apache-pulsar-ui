@@ -13,6 +13,7 @@ import {
 	updateDisplayedOptions,
 } from '../../../store/filterSlice'
 import TopicView from './TopicView'
+import { selectTrigger } from '../requestTriggerSlice'
 
 interface ResponseTopic {
 	topics: TopicInfo[]
@@ -29,6 +30,7 @@ const TopicGroup: React.FC = () => {
 	const topicFilter = useAppSelector(selectTopic)
 	const url = 'http://localhost:8081/api/topic/all'
 	const dispatch = useAppDispatch()
+	const trigger = useAppSelector(selectTrigger)
 
 	useEffect(() => {
 		// Query parameters
@@ -56,7 +58,7 @@ const TopicGroup: React.FC = () => {
 				setError(error.message)
 				setLoading(false)
 			})
-	}, [])
+	}, [trigger])
 
 	return (
 		<div>

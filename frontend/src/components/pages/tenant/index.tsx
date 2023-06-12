@@ -11,6 +11,7 @@ import {
 	updateDisplayedOptions,
 } from '../../../store/filterSlice'
 import TenantView from './TenantView'
+import { selectTrigger } from '../requestTriggerSlice'
 
 interface ResponseTenant {
 	tenants: TenantInfo[]
@@ -24,6 +25,7 @@ const TenantGroup: React.FC = () => {
 	const tenantFilter = useAppSelector(selectTenant)
 	const url = 'http://localhost:8081/api/tenant/all'
 	const dispatch = useAppDispatch()
+	const trigger = useAppSelector(selectTrigger)
 
 	useEffect(() => {
 		// Query parameters
@@ -49,7 +51,7 @@ const TenantGroup: React.FC = () => {
 				setError(error.message)
 				setLoading(false)
 			})
-	}, [])
+	}, [trigger])
 
 	return (
 		<div>

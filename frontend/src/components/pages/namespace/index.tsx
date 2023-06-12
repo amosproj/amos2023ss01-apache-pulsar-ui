@@ -12,6 +12,7 @@ import {
 	updateDisplayedOptions,
 } from '../../../store/filterSlice'
 import NamespaceView from './NamespaceView'
+import { selectTrigger } from '../requestTriggerSlice'
 
 interface ResponseNamespace {
 	namespaces: NamespaceInfo[]
@@ -26,6 +27,7 @@ const NamespaceGroup: React.FC = () => {
 	const namespaceFilter = useAppSelector(selectNamespace)
 	const url = 'http://localhost:8081/api/namespace/all/'
 	const dispatch = useAppDispatch()
+	const trigger = useAppSelector(selectTrigger)
 
 	useEffect(() => {
 		// Query parameters
@@ -52,7 +54,7 @@ const NamespaceGroup: React.FC = () => {
 				setError(error.message)
 				setLoading(false)
 			})
-	}, [])
+	}, [trigger])
 
 	return (
 		<div>
