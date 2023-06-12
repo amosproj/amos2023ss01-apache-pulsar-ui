@@ -24,79 +24,32 @@ const CustomFilter: React.FC<CustomFilterProps> = ({
 	const [topicSearchQuery, setTopicSearchQuery] = useState('')
 	const [messageSearchQuery, setMessageSearchQuery] = useState('')
 
-	/*
-	function instanceOfSampleMessage(
-		object:
-			| SampleCluster
-			| SampleTenant
-			| SampleNamespace
-			| SampleTopic
-			| SampleMessage
-	): object is SampleMessage {
-		return 'payload' in object
+	const filteredCheckboxes = (searchQuery: string, completeArray: string[]) => {
+		let filteredArr = []
+		filteredArr = completeArray.filter((item: string) => {
+			return item.includes(searchQuery)
+		})
+		return filteredArr
 	}
 
-	function instanceOfSampleTopic(
-		object:
-			| SampleCluster
-			| SampleTenant
-			| SampleNamespace
-			| SampleTopic
-			| SampleMessage
-	): object is SampleTopic {
-		return 'topicStatsDto' in object
-	}
-	*/
-	/*
-	const allTenants = options.allTenants
-
-	const allNamespaces = options.allNamespaces
-
-	const allTopics = options.allTopics
-
-	const filteredCheckboxes = (
-		searchQuery: string,
-		completeArray:
-			| Array<SampleMessage>
-			| Array<SampleCluster>
-			| Array<SampleTenant>
-			| Array<SampleNamespace>
-			| Array<SampleTopic>
-			| any
-	) => {
-		if (searchQuery === '') {
-			return completeArray
-		} else {
-			let filteredArr = []
-			filteredArr = completeArray.filter(
-				(
-					d:
-						| SampleCluster
-						| SampleTenant
-						| SampleNamespace
-						| SampleTopic
-						| SampleMessage
-				) => {
-					if (instanceOfSampleMessage(d)) {
-						return d.payload.includes(searchQuery)
-					} else if (instanceOfSampleTopic(d)) {
-						return d.localName.includes(searchQuery)
-					} else return d.id.includes(searchQuery)
-				}
-			)
-			return filteredArr
-		}
-	}
-
-	const filteredClusters = filteredCheckboxes(clusterSearchQuery, data)
-	const filteredTenants = filteredCheckboxes(tenantSearchQuery, allTenants)
+	const filteredClusters = filteredCheckboxes(
+		clusterSearchQuery,
+		options.allClusters
+	)
+	const filteredTenants = filteredCheckboxes(
+		tenantSearchQuery,
+		options.allTenants
+	)
 	const filteredNamespaces = filteredCheckboxes(
 		namespaceSearchQuery,
-		allNamespaces
+		options.allNamespaces
 	)
-	const filteredTopics = filteredCheckboxes(topicSearchQuery, allTopics)
-	const filteredMessages = filteredCheckboxes(messageSearchQuery, messages)
-	*/
+	const filteredTopics = filteredCheckboxes(topicSearchQuery, options.allTopics)
+	const filteredMessages = filteredCheckboxes(
+		messageSearchQuery,
+		options.allMessages
+	)
+
 	const viewLevelOne = currentView === 'topic' || currentView === 'message'
 	const viewLevelTwo =
 		currentView === 'namespace' ||
@@ -123,9 +76,9 @@ const CustomFilter: React.FC<CustomFilterProps> = ({
 						setSearchQuery={setClusterSearchQuery}
 					></CustomSearchbar>
 					<div className="flex flex-col mt-4">
-						{options.allClusters &&
-							options.allClusters.length > 0 &&
-							options.allClusters.map((item: string, index: number) => (
+						{filteredClusters &&
+							filteredClusters.length > 0 &&
+							filteredClusters.map((item: string, index: number) => (
 								<CustomCheckbox
 									key={'checkbox-cluster' + Math.floor(Math.random() * 999999)}
 									text={item}
@@ -151,9 +104,9 @@ const CustomFilter: React.FC<CustomFilterProps> = ({
 							setSearchQuery={setTenantSearchQuery}
 						></CustomSearchbar>
 						<div className="flex flex-col mt-4">
-							{options.allTenants &&
-								options.allTenants.length > 0 &&
-								options.allTenants.map((item: string) => (
+							{filteredTenants &&
+								filteredTenants.length > 0 &&
+								filteredTenants.map((item: string) => (
 									<CustomCheckbox
 										key={'checkbox-tenant' + Math.floor(Math.random() * 999999)}
 										text={item}
@@ -180,9 +133,9 @@ const CustomFilter: React.FC<CustomFilterProps> = ({
 							setSearchQuery={setNamespaceSearchQuery}
 						></CustomSearchbar>
 						<div className="flex flex-col mt-4">
-							{options.allNamespaces &&
-								options.allNamespaces.length > 0 &&
-								options.allNamespaces.map((item: string) => (
+							{filteredNamespaces &&
+								filteredNamespaces.length > 0 &&
+								filteredNamespaces.map((item: string) => (
 									<CustomCheckbox
 										key={
 											'checkbox-namespace' + Math.floor(Math.random() * 999999)
@@ -211,9 +164,9 @@ const CustomFilter: React.FC<CustomFilterProps> = ({
 							setSearchQuery={setTopicSearchQuery}
 						></CustomSearchbar>
 						<div className="flex flex-col mt-4">
-							{options.allTopics &&
-								options.allTopics.length > 0 &&
-								options.allTopics.map((item: string) => (
+							{filteredTopics &&
+								filteredTopics.length > 0 &&
+								filteredTopics.map((item: string) => (
 									<CustomCheckbox
 										key={'checkbox-topic' + Math.floor(Math.random() * 999999)}
 										text={item}
@@ -240,9 +193,9 @@ const CustomFilter: React.FC<CustomFilterProps> = ({
 							setSearchQuery={setMessageSearchQuery}
 						></CustomSearchbar>
 						<div className="flex flex-col mt-4">
-							{options.allMessages &&
-								options.allMessages.length > 0 &&
-								options.allMessages.map((item: string) => (
+							{filteredMessages &&
+								filteredMessages.length > 0 &&
+								filteredMessages.map((item: string) => (
 									<CustomCheckbox
 										key={
 											'checkbox-message' + Math.floor(Math.random() * 999999)
