@@ -9,24 +9,22 @@ import AccordionDetails from '@mui/material/AccordionDetails'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import CustomCheckbox from './CustomCheckbox'
 import CustomSearchbar from './CustomSearchbar'
+import { useAppSelector } from '../../store/hooks'
+import { selectAllFilters, selectOptions } from '../../store/filterSlice'
 
 const CustomFilter: React.FC<CustomFilterProps> = ({
-	data,
-	handleChange,
-	selectedClusters,
-	selectedTenants,
-	selectedNamespaces,
-	selectedTopics,
-	selectedMessages,
 	messages,
 	currentView,
 }) => {
+	const options = useAppSelector(selectOptions)
+	const filters = useAppSelector(selectAllFilters)
 	const [clusterSearchQuery, setClusterSearchQuery] = useState('')
 	const [namespaceSearchQuery, setNamespaceSearchQuery] = useState('')
 	const [tenantSearchQuery, setTenantSearchQuery] = useState('')
 	const [topicSearchQuery, setTopicSearchQuery] = useState('')
 	const [messageSearchQuery, setMessageSearchQuery] = useState('')
 
+	/*
 	function instanceOfSampleMessage(
 		object:
 			| SampleCluster
@@ -48,21 +46,13 @@ const CustomFilter: React.FC<CustomFilterProps> = ({
 	): object is SampleTopic {
 		return 'topicStatsDto' in object
 	}
+	*/
+	/*
+	const allTenants = options.allTenants
 
-	const allTenants = data
-		.map((item) => item.tenants)
-		.filter((el) => el.length > 0)
-		.flat()
+	const allNamespaces = options.allNamespaces
 
-	const allNamespaces = allTenants
-		.map((tenant) => tenant.namespaces)
-		.filter((el) => el.length > 0)
-		.flat()
-
-	const allTopics = allNamespaces
-		.map((namespace) => namespace.topics)
-		.filter((el) => el.length > 0)
-		.flat()
+	const allTopics = options.allTopics
 
 	const filteredCheckboxes = (
 		searchQuery: string,
@@ -106,7 +96,7 @@ const CustomFilter: React.FC<CustomFilterProps> = ({
 	)
 	const filteredTopics = filteredCheckboxes(topicSearchQuery, allTopics)
 	const filteredMessages = filteredCheckboxes(messageSearchQuery, messages)
-
+	*/
 	const viewLevelOne = currentView === 'topic' || currentView === 'message'
 	const viewLevelTwo =
 		currentView === 'namespace' ||
@@ -133,16 +123,15 @@ const CustomFilter: React.FC<CustomFilterProps> = ({
 						setSearchQuery={setClusterSearchQuery}
 					></CustomSearchbar>
 					<div className="flex flex-col mt-4">
-						{filteredClusters &&
-							filteredClusters.length > 0 &&
-							filteredClusters.map((item: SampleCluster) => (
+						{options.allClusters &&
+							options.allClusters.length > 0 &&
+							options.allClusters.map((item: string, index: number) => (
 								<CustomCheckbox
 									key={'checkbox-cluster' + Math.floor(Math.random() * 999999)}
-									text={item.id}
-									id={item.id}
+									text={item}
+									id={item}
 									typology={'cluster'}
-									changeFunc={handleChange}
-									selected={selectedClusters.includes(item.id) ? true : false}
+									selected={filters.cluster.includes(item) ? true : false}
 								></CustomCheckbox>
 							))}
 					</div>
@@ -162,16 +151,15 @@ const CustomFilter: React.FC<CustomFilterProps> = ({
 							setSearchQuery={setTenantSearchQuery}
 						></CustomSearchbar>
 						<div className="flex flex-col mt-4">
-							{filteredTenants &&
-								filteredTenants.length > 0 &&
-								filteredTenants.map((item: SampleTenant) => (
+							{options.allTenants &&
+								options.allTenants.length > 0 &&
+								options.allTenants.map((item: string) => (
 									<CustomCheckbox
 										key={'checkbox-tenant' + Math.floor(Math.random() * 999999)}
-										text={item.id}
-										id={item.id}
+										text={item}
+										id={item}
 										typology={'tenant'}
-										changeFunc={handleChange}
-										selected={selectedTenants.includes(item.id) ? true : false}
+										selected={filters.tenant.includes(item) ? true : false}
 									></CustomCheckbox>
 								))}
 						</div>
@@ -192,20 +180,17 @@ const CustomFilter: React.FC<CustomFilterProps> = ({
 							setSearchQuery={setNamespaceSearchQuery}
 						></CustomSearchbar>
 						<div className="flex flex-col mt-4">
-							{filteredNamespaces &&
-								filteredNamespaces.length > 0 &&
-								filteredNamespaces.map((item: SampleNamespace) => (
+							{options.allNamespaces &&
+								options.allNamespaces.length > 0 &&
+								options.allNamespaces.map((item: string) => (
 									<CustomCheckbox
 										key={
 											'checkbox-namespace' + Math.floor(Math.random() * 999999)
 										}
-										text={item.id}
-										id={item.id}
+										text={item}
+										id={item}
 										typology={'namespace'}
-										changeFunc={handleChange}
-										selected={
-											selectedNamespaces.includes(item.id) ? true : false
-										}
+										selected={filters.namespace.includes(item) ? true : false}
 									></CustomCheckbox>
 								))}
 						</div>
@@ -226,18 +211,15 @@ const CustomFilter: React.FC<CustomFilterProps> = ({
 							setSearchQuery={setTopicSearchQuery}
 						></CustomSearchbar>
 						<div className="flex flex-col mt-4">
-							{filteredTopics &&
-								filteredTopics.length > 0 &&
-								filteredTopics.map((item: SampleTopic) => (
+							{options.allTopics &&
+								options.allTopics.length > 0 &&
+								options.allTopics.map((item: string) => (
 									<CustomCheckbox
 										key={'checkbox-topic' + Math.floor(Math.random() * 999999)}
-										text={item.localName}
-										id={item.localName}
+										text={item}
+										id={item}
 										typology={'topic'}
-										changeFunc={handleChange}
-										selected={
-											selectedTopics.includes(item.localName) ? true : false
-										}
+										selected={filters.topic.includes(item) ? true : false}
 									></CustomCheckbox>
 								))}
 						</div>
@@ -258,18 +240,17 @@ const CustomFilter: React.FC<CustomFilterProps> = ({
 							setSearchQuery={setMessageSearchQuery}
 						></CustomSearchbar>
 						<div className="flex flex-col mt-4">
-							{filteredMessages &&
-								filteredMessages.length > 0 &&
-								filteredMessages.map((item: SampleMessage) => (
+							{options.allMessages &&
+								options.allMessages.length > 0 &&
+								options.allMessages.map((item: string) => (
 									<CustomCheckbox
 										key={
 											'checkbox-message' + Math.floor(Math.random() * 999999)
 										}
-										text={item.payload}
-										id={item.payload}
+										text={item}
+										id={item}
 										typology={'message'}
-										changeFunc={handleChange}
-										selected={selectedMessages.includes(item.id) ? true : false}
+										selected={filters.message.includes(item) ? true : false}
 									></CustomCheckbox>
 								))}
 						</div>

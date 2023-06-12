@@ -101,11 +101,7 @@ function App() {
 			<Router>
 				<div className="dashboard-container">
 					<NavBar />
-					<Dashboard
-						completeData={allData}
-						completeMessages={allMessages}
-						view={view.selectedNav}
-					>
+					<Dashboard completeMessages={allMessages} view={view.selectedNav}>
 						<Routes>
 							<Route path="/" element={<ClusterGroup />}></Route>
 							<Route path="/cluster" element={<ClusterGroup />}></Route>

@@ -3,9 +3,13 @@
 // SPDX-FileCopyrightText: 2019 Georg Schwarz <georg. schwarz@fau.de>
 
 import React, { useEffect, useState } from 'react'
-import { useAppSelector } from '../../../store/hooks'
+import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import axios from 'axios'
-import { selectCluster, selectTenant } from '../../../store/filterSlice'
+import {
+	selectCluster,
+	selectTenant,
+	updateDisplayedOptions,
+} from '../../../store/filterSlice'
 import TenantView from './TenantView'
 
 interface ResponseTenant {
@@ -19,6 +23,7 @@ const TenantGroup: React.FC = () => {
 	const clusterFilter = useAppSelector(selectCluster)
 	const tenantFilter = useAppSelector(selectTenant)
 	const url = 'http://localhost:8081/api/tenant/all'
+	const dispatch = useAppDispatch()
 
 	useEffect(() => {
 		// Query parameters
@@ -33,6 +38,12 @@ const TenantGroup: React.FC = () => {
 			.then((response) => {
 				setData(response.data.tenants)
 				setLoading(false)
+				dispatch(
+					updateDisplayedOptions({
+						topologyLevel: 'tenant',
+						options: response.data.tenants.map((tenant) => tenant.name),
+					})
+				)
 			})
 			.catch((error) => {
 				setError(error.message)

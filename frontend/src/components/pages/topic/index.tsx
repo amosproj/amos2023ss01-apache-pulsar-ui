@@ -3,13 +3,14 @@
 // SPDX-FileCopyrightText: 2019 Georg Schwarz <georg. schwarz@fau.de>
 
 import React, { useEffect, useState } from 'react'
-import { useAppSelector } from '../../../store/hooks'
+import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import axios from 'axios'
 import {
 	selectCluster,
 	selectNamespace,
 	selectTenant,
 	selectTopic,
+	updateDisplayedOptions,
 } from '../../../store/filterSlice'
 import TopicView from './TopicView'
 
@@ -27,6 +28,7 @@ const TopicGroup: React.FC = () => {
 	const namespaceFilter = useAppSelector(selectNamespace)
 	const topicFilter = useAppSelector(selectTopic)
 	const url = 'http://localhost:8081/api/topic/all'
+	const dispatch = useAppDispatch()
 
 	useEffect(() => {
 		// Query parameters
@@ -43,6 +45,12 @@ const TopicGroup: React.FC = () => {
 			.then((response) => {
 				setData(response.data.topics)
 				setLoading(false)
+				dispatch(
+					updateDisplayedOptions({
+						topologyLevel: 'topic',
+						options: response.data.topics.map((topic) => topic.name),
+					})
+				)
 			})
 			.catch((error) => {
 				setError(error.message)

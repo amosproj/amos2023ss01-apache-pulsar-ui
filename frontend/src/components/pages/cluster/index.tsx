@@ -3,10 +3,13 @@
 // SPDX-FileCopyrightText: 2019 Georg Schwarz <georg. schwarz@fau.de>
 
 import React, { useEffect, useState } from 'react'
-import { useAppSelector } from '../../../store/hooks'
+import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import axios from 'axios'
 import ClusterView from './ClusterView'
-import { selectCluster } from '../../../store/filterSlice'
+import {
+	selectCluster,
+	updateDisplayedOptions,
+} from '../../../store/filterSlice'
 
 interface ResponseCluster {
 	clusters: string[]
@@ -18,6 +21,7 @@ const ClusterGroup: React.FC = () => {
 	const [loading, setLoading] = useState<boolean>(true)
 	const clusterFilter = useAppSelector(selectCluster)
 	const url = 'http://localhost:8081/api/cluster/all'
+	const dispatch = useAppDispatch()
 
 	useEffect(() => {
 		// Query parameters
@@ -31,6 +35,12 @@ const ClusterGroup: React.FC = () => {
 			.then((response) => {
 				setData(response.data.clusters)
 				setLoading(false)
+				dispatch(
+					updateDisplayedOptions({
+						topologyLevel: 'cluster',
+						options: response.data.clusters,
+					})
+				)
 			})
 			.catch((error) => {
 				setError(error.message)
