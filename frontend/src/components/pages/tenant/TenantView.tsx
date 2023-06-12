@@ -7,7 +7,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import { Collapse, CardActions, Button } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
-import { addFilter } from '../../../store/filterSlice'
+import { addFilterByDrillDown } from '../../../store/filterSlice'
 import { useAppDispatch } from '../../../store/hooks'
 import axios from 'axios'
 
@@ -37,7 +37,7 @@ const TenantView: React.FC<TenantViewProps> = ({ data }) => {
 	}
 
 	const handleDrillDown = () => {
-		dispatch(addFilter({ filterName: 'tenant', id: name }))
+		dispatch(addFilterByDrillDown({ filterName: 'tenant', id: name }))
 		navigate('/namespace')
 	}
 	const handleExpand = () => {
