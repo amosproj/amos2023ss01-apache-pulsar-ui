@@ -8,7 +8,7 @@ import { Collapse, CardActions, Button } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import { useNavigate } from 'react-router-dom'
-import { addFilter } from '../../../store/filterSlice'
+import { addFilterByDrillDown } from '../../../store/filterSlice'
 import { useAppDispatch } from '../../../store/hooks'
 import axios from 'axios'
 import ConsumerModal from '../../modals/ConsumerModal'
@@ -37,7 +37,7 @@ const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 			})
 	}
 	const handleDrillDown = () => {
-		dispatch(addFilter({ filterName: 'topic', id: name }))
+		dispatch(addFilterByDrillDown({ filterName: 'topic', id: name }))
 		navigate('/message')
 	}
 
