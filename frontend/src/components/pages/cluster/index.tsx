@@ -22,7 +22,7 @@ const ClusterGroup: React.FC = () => {
 	useEffect(() => {
 		// Query parameters
 		const params = {
-			cluster: clusterFilter,
+			//clusters: clusterFilter,
 		}
 
 		// Sending GET request

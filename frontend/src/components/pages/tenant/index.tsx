@@ -23,8 +23,8 @@ const TenantGroup: React.FC = () => {
 	useEffect(() => {
 		// Query parameters
 		const params = {
-			cluster: clusterFilter,
-			tenant: tenantFilter,
+			//clusters: clusterFilter.toString().replace(/,/g, '&'),
+			tenants: tenantFilter.toString().replace(/,/g, '&'),
 		}
 
 		// Sending GET request
