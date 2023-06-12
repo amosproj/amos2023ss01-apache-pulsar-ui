@@ -20,17 +20,18 @@ import { addFilter, resetAllFilters } from '../store/filterSlice'
 // } from '../store/filterSlice'
 
 const Dashboard: React.FC<DashboardProps> = ({
-	completeData,
 	completeMessages,
 	view,
 	children,
 }) => {
 	const [searchQuery, setSearchQuery] = useState('')
+	/*	
 	const [clusterQuery, setClusterQuery] = useState<string[]>([])
 	const [tenantQuery, setTenantQuery] = useState<string[]>([])
 	const [namespaceQuery, setNamespaceQuery] = useState<string[]>([])
 	const [topicQuery, setTopicQuery] = useState<string[]>([])
-	const [messageQuery, setMessageQuery] = useState<string[]>([])
+	const [messageQuery, setMessageQuery] = useState<string[]>([]) 
+	*/
 	const dispatch = useAppDispatch()
 	const navigate = useNavigate()
 
@@ -257,14 +258,6 @@ const Dashboard: React.FC<DashboardProps> = ({
 		}
 	}
 */
-	//This function adds the selected id to the query state variables, in this way
-	//we keep track on what's included in the filter
-	const handleChange = (
-		id: string,
-		filterName: 'cluster' | 'tenant' | 'namespace' | 'topic' | 'message'
-	) => {
-		dispatch(addFilter({ filterName: filterName, id: id }))
-	}
 
 	const resetFilters = () => {
 		dispatch(resetAllFilters())
@@ -341,14 +334,7 @@ const Dashboard: React.FC<DashboardProps> = ({
 					<FilterListIcon style={{ fill: '#A4A4A4' }} />
 				</div>
 				<CustomFilter
-					selectedClusters={clusterQuery}
-					selectedTenants={tenantQuery}
-					selectedNamespaces={namespaceQuery}
-					selectedTopics={topicQuery}
-					selectedMessages={messageQuery}
 					messages={completeMessages}
-					data={completeData}
-					handleChange={handleChange}
 					currentView={location.pathname.slice(1)}
 				/>
 			</div>

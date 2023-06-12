@@ -29,7 +29,6 @@ interface CardProps {
 }
 
 interface DashboardProps {
-	completeData: Array<SampleCluster>
 	completeMessages: Array<SampleMessage>
 	children: ReactNode
 	view?:
@@ -58,10 +57,6 @@ interface CustomCheckboxProps {
 	id: string
 	text: string
 	typology: 'cluster' | 'tenant' | 'namespace' | 'topic' | 'message'
-	changeFunc: (
-		id: string,
-		element: 'cluster' | 'tenant' | 'namespace' | 'topic' | 'message'
-	) => void
 	selected: boolean
 }
 
@@ -186,17 +181,7 @@ interface MessageViewProps {
 }
 
 interface CustomFilterProps {
-	selectedClusters: string[]
-	selectedTenants: string[]
-	selectedNamespaces: string[]
-	selectedTopics: string[]
-	selectedMessages: string[]
-	data: Array<SampleCluster>
 	messages: Array<SampleMessage>
-	handleChange: (
-		id: string,
-		filterName: 'cluster' | 'tenant' | 'namespace' | 'topic' | 'message'
-	) => void
 	currentView:
 		| 'cluster'
 		| 'tenant'

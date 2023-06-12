@@ -3,12 +3,13 @@
 // SPDX-FileCopyrightText: 2019 Georg Schwarz <georg. schwarz@fau.de>
 
 import React, { useEffect, useState } from 'react'
-import { useAppSelector } from '../../../store/hooks'
+import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import axios from 'axios'
 import {
 	selectCluster,
 	selectNamespace,
 	selectTenant,
+	updateDisplayedOptions,
 } from '../../../store/filterSlice'
 import NamespaceView from './NamespaceView'
 
@@ -24,6 +25,7 @@ const NamespaceGroup: React.FC = () => {
 	const tenantFilter = useAppSelector(selectTenant)
 	const namespaceFilter = useAppSelector(selectNamespace)
 	const url = 'http://localhost:8081/api/namespace/all/'
+	const dispatch = useAppDispatch()
 
 	useEffect(() => {
 		// Query parameters
@@ -39,6 +41,12 @@ const NamespaceGroup: React.FC = () => {
 			.then((response) => {
 				setData(response.data.namespaces)
 				setLoading(false)
+				dispatch(
+					updateDisplayedOptions({
+						topologyLevel: 'namespace',
+						options: response.data.namespaces.map((namespace) => namespace.id),
+					})
+				)
 			})
 			.catch((error) => {
 				setError(error.message)
