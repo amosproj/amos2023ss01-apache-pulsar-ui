@@ -107,11 +107,6 @@ const filterSlice = createSlice({
 							action.payload.id
 					)
 			}
-			const filterName = action.payload.filterName
-			const query = action.payload.id
-			state[filterName] = state[filterName].filter((element) => {
-				return element === query
-			})
 		},
 		resetAllFilters: (state) => {
 			//to not accidently delete the displayed options:
