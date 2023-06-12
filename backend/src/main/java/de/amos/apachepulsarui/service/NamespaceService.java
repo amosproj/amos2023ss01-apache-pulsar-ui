@@ -5,7 +5,6 @@
 
 package de.amos.apachepulsarui.service;
 
-import de.amos.apachepulsarui.controller.exception.PulsarApiException;
 import de.amos.apachepulsarui.dto.NamespaceDetailDto;
 import de.amos.apachepulsarui.dto.NamespaceDto;
 import de.amos.apachepulsarui.exception.PulsarApiException;
