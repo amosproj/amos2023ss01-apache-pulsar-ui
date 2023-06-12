@@ -53,33 +53,104 @@ public class TopicControllerTest {
     private PublisherStats publisherStats;
 
     @Test
-    void returnAllTopicNames() throws Exception {
+    void getAll_withoutParameters_returnsAllTopics() throws Exception {
 
-        List<String> topics = List.of(
-                "persistent://public/default/tatooine",
-                "non-persistent://public/default/naboo",
-                "persistent://public/default/coruscant"
-        );
+        List<String> tenants = List.of("tenant1", "tenant2");
+        List<String> namespaces = List.of("tenant1/namespace1", "tenant2/namespace1");
 
-        List<String> tenants = List.of("public");
-        List<String> namespaces = List.of("public/default");
+        List<TopicDto> topics = List.of(
+                TopicDto.create("persistent://tenant1/namespace1/topic1"),
+                TopicDto.create("persistent://tenant2/namespace1/topic1"));
+
         when(tenantService.getAllNames()).thenReturn(tenants);
-        when(namespaceService.getAllNames(tenants)).thenReturn(namespaces);
-        when(topicService.getAllByNamespace(namespaces.get(0))).thenReturn(topics);
+        when(namespaceService.getNamespaceNamesForTenants(tenants)).thenReturn(namespaces);
+        when(topicService.getAllForNamespaces(namespaces)).thenReturn(topics);
 
         mockMvc.perform(get("/topic/all")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.topics[0]", equalTo(topics.get(0))))
-                .andExpect(jsonPath("$.topics[1]", equalTo(topics.get(1))))
-                .andExpect(jsonPath("$.topics[2]", equalTo(topics.get(2))));
+                .andExpect(jsonPath("$.topics[0].name", equalTo(topics.get(0).getName())))
+                .andExpect(jsonPath("$.topics[0].namespace", equalTo(topics.get(0).getNamespace())))
+                .andExpect(jsonPath("$.topics[0].tenant", equalTo(topics.get(0).getTenant())))
+                .andExpect(jsonPath("$.topics[1].name", equalTo(topics.get(1).getName())))
+                .andExpect(jsonPath("$.topics[1].namespace", equalTo(topics.get(1).getNamespace())))
+                .andExpect(jsonPath("$.topics[1].tenant", equalTo(topics.get(1).getTenant())));
     }
 
     @Test
-    void returnTopicByName() throws Exception {
+    void getAll_withTenants_returnsAllTopicsForTenants() throws Exception {
+
+        List<String> tenants = List.of("tenant1", "tenant2");
+        List<String> namespaces = List.of("tenant1/namespace1", "tenant2/namespace1");
+
+        List<TopicDto> topics = List.of(
+                TopicDto.create("persistent://tenant1/namespace1/topic1"),
+                TopicDto.create("persistent://tenant2/namespace1/topic1"));
+
+        when(namespaceService.getNamespaceNamesForTenants(tenants)).thenReturn(namespaces);
+        when(topicService.getAllForNamespaces(namespaces)).thenReturn(topics);
+
+        mockMvc.perform(get("/topic/all?tenants=tenant1,tenant2")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.topics[0].name", equalTo(topics.get(0).getName())))
+                .andExpect(jsonPath("$.topics[0].namespace", equalTo(topics.get(0).getNamespace())))
+                .andExpect(jsonPath("$.topics[0].tenant", equalTo(topics.get(0).getTenant())))
+                .andExpect(jsonPath("$.topics[1].name", equalTo(topics.get(1).getName())))
+                .andExpect(jsonPath("$.topics[1].namespace", equalTo(topics.get(1).getNamespace())))
+                .andExpect(jsonPath("$.topics[1].tenant", equalTo(topics.get(1).getTenant())));
+    }
+
+    @Test
+    void getAll_withNamespaces_returnsAllTopicsForNamespaces() throws Exception {
+
+        List<String> namespaces = List.of("tenant1/namespace1", "tenant2/namespace1");
+
+        List<TopicDto> topics = List.of(
+                TopicDto.create("persistent://tenant1/namespace1/topic1"),
+                TopicDto.create("persistent://tenant2/namespace1/topic1"));
+
+        when(topicService.getAllForNamespaces(namespaces)).thenReturn(topics);
+
+        mockMvc.perform(get("/topic/all?namespaces=tenant1/namespace1,tenant2/namespace1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.topics[0].name", equalTo(topics.get(0).getName())))
+                .andExpect(jsonPath("$.topics[0].namespace", equalTo(topics.get(0).getNamespace())))
+                .andExpect(jsonPath("$.topics[0].tenant", equalTo(topics.get(0).getTenant())))
+                .andExpect(jsonPath("$.topics[1].name", equalTo(topics.get(1).getName())))
+                .andExpect(jsonPath("$.topics[1].namespace", equalTo(topics.get(1).getNamespace())))
+                .andExpect(jsonPath("$.topics[1].tenant", equalTo(topics.get(1).getTenant())));
+    }
+
+    @Test
+    void getAll_withTopics_returnsTopics() throws Exception {
+
+        List<String> topicNames = List.of("persistent://tenant1/namespace1/topic1",
+                "persistent://tenant2/namespace1/topic1");
+
+        List<TopicDto> topics = List.of(
+                TopicDto.create("persistent://tenant1/namespace1/topic1"),
+                TopicDto.create("persistent://tenant2/namespace1/topic1"));
+
+        when(topicService.getAllForTopics(topicNames)).thenReturn(topics);
+
+        mockMvc.perform(get("/topic/all?topics=persistent://tenant1/namespace1/topic1,persistent://tenant2/namespace1/topic1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.topics[0].name", equalTo(topics.get(0).getName())))
+                .andExpect(jsonPath("$.topics[0].namespace", equalTo(topics.get(0).getNamespace())))
+                .andExpect(jsonPath("$.topics[0].tenant", equalTo(topics.get(0).getTenant())))
+                .andExpect(jsonPath("$.topics[1].name", equalTo(topics.get(1).getName())))
+                .andExpect(jsonPath("$.topics[1].namespace", equalTo(topics.get(1).getNamespace())))
+                .andExpect(jsonPath("$.topics[1].tenant", equalTo(topics.get(1).getTenant())));
+    }
+
+    @Test
+    void getTopicDetails() throws Exception {
         String name = "grogu";
         String fullTopic = "persistent://public/default/grogu";
-        TopicDto topic = TopicDto.createTopicDto(name, topicStats, RandomString.make(1));
+        TopicDetailDto topic = TopicDetailDto.create(name, topicStats, RandomString.make(1));
 
         when(topicService.getTopicDetails(fullTopic)).thenReturn(topic);
 

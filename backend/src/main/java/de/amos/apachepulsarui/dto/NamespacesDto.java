@@ -15,5 +15,5 @@ import java.util.List;
 @Data
 public class NamespacesDto {
 
-    private List<String> namespaces;
+    private List<NamespaceDto> namespaces;
 }

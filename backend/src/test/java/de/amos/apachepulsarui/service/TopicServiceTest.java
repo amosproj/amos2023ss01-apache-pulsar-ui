@@ -6,7 +6,7 @@
 
 package de.amos.apachepulsarui.service;
 
-import de.amos.apachepulsarui.dto.TopicDto;
+import de.amos.apachepulsarui.dto.TopicDetailDto;
 import org.apache.pulsar.client.admin.Lookup;
 import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.apache.pulsar.client.admin.PulsarAdminException;
@@ -46,7 +46,7 @@ class TopicServiceTest {
 
     @InjectMocks
     private TopicService topicService;
-    MockedStatic<TopicDto> topicDtoMockedStatic;
+    MockedStatic<TopicDetailDto> topicDtoMockedStatic;
     MockedStatic<TopicName> topicNameMockedStatic;
     private static final String BROKER = "Broker";
     private static final String NAMESPACE = "public/default";
@@ -54,7 +54,7 @@ class TopicServiceTest {
 
     @BeforeEach
     public void beforeEach() {
-        topicDtoMockedStatic = Mockito.mockStatic(TopicDto.class);
+        topicDtoMockedStatic = Mockito.mockStatic(TopicDetailDto.class);
         topicNameMockedStatic = Mockito.mockStatic(TopicName.class);
     }
 
@@ -104,7 +104,7 @@ class TopicServiceTest {
         topicService.getTopicDetails(TOPIC_NAME);
 
         topicDtoMockedStatic.verify(
-                () -> TopicDto.createTopicDtoWithMessages(TOPIC_NAME, topicStats, BROKER, List.of()),
+                () -> TopicDetailDto.createTopicDtoWithMessages(TOPIC_NAME, topicStats, BROKER, List.of()),
                 times(1)
         );
     }
