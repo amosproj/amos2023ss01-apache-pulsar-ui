@@ -27,21 +27,30 @@ const TopicGroup: React.FC = () => {
 	const tenantFilter = useAppSelector(selectTenant)
 	const namespaceFilter = useAppSelector(selectNamespace)
 	const topicFilter = useAppSelector(selectTopic)
-	const url = 'http://localhost:8081/api/topic/all'
+	const baseURL = 'http://localhost:8081/api/topic/all'
 	const trigger = useAppSelector(selectTrigger)
 
 	useEffect(() => {
 		// Query parameters
-		const params = {
-			//clusters: clusterFilter,
-			tenants: tenantFilter.toString().replace(/,/g, '&'),
-			namespaces: namespaceFilter.toString().replace(/,/g, '&'),
-			topics: topicFilter.toString().replace(/,/g, '&'),
-		}
+		const clusterQuery = clusterFilter
+			.map((cluster) => `clusters=${cluster}`)
+			.join('&')
+		const tenantQuery = tenantFilter
+			.map((tenant) => `tenants=${tenant}`)
+			.join('&')
+		const namespaceQuery = namespaceFilter
+			.map((namespace) => `namespaces=${namespace}`)
+			.join('&')
+		const topicQuery = topicFilter.map((topic) => `topics=${topic}`).join('&')
 
+		// Joining all query parameters
+		const query = [clusterQuery, tenantQuery, namespaceQuery, topicQuery]
+			.filter((q) => q)
+			.join('&')
+		const url = `${baseURL}?${query}`
 		// Sending GET request
 		axios
-			.get<ResponseTopic>(url, { params })
+			.get<ResponseTopic>(url)
 			.then((response) => {
 				setData(response.data.topics)
 				setLoading(false)
