@@ -10,12 +10,11 @@ import {
 	selectNamespace,
 	selectTenant,
 	selectTopic,
-	updateDisplayedOptions,
 } from '../../../store/filterSlice'
 import TopicView from './TopicView'
 import { selectTrigger } from '../requestTriggerSlice'
 
-interface ResponseTopic {
+export interface ResponseTopic {
 	topics: TopicInfo[]
 }
 
@@ -29,7 +28,6 @@ const TopicGroup: React.FC = () => {
 	const namespaceFilter = useAppSelector(selectNamespace)
 	const topicFilter = useAppSelector(selectTopic)
 	const url = 'http://localhost:8081/api/topic/all'
-	const dispatch = useAppDispatch()
 	const trigger = useAppSelector(selectTrigger)
 
 	useEffect(() => {
@@ -47,12 +45,6 @@ const TopicGroup: React.FC = () => {
 			.then((response) => {
 				setData(response.data.topics)
 				setLoading(false)
-				dispatch(
-					updateDisplayedOptions({
-						topologyLevel: 'topic',
-						options: response.data.topics.map((topic) => topic.name),
-					})
-				)
 			})
 			.catch((error) => {
 				setError(error.message)

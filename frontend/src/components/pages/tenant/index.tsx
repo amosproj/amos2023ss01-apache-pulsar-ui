@@ -5,15 +5,11 @@
 import React, { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import axios from 'axios'
-import {
-	selectCluster,
-	selectTenant,
-	updateDisplayedOptions,
-} from '../../../store/filterSlice'
+import { selectCluster, selectTenant } from '../../../store/filterSlice'
 import TenantView from './TenantView'
 import { selectTrigger } from '../requestTriggerSlice'
 
-interface ResponseTenant {
+export interface ResponseTenant {
 	tenants: TenantInfo[]
 }
 
@@ -24,7 +20,6 @@ const TenantGroup: React.FC = () => {
 	const clusterFilter = useAppSelector(selectCluster)
 	const tenantFilter = useAppSelector(selectTenant)
 	const url = 'http://localhost:8081/api/tenant/all'
-	const dispatch = useAppDispatch()
 	const trigger = useAppSelector(selectTrigger)
 
 	useEffect(() => {
@@ -40,12 +35,6 @@ const TenantGroup: React.FC = () => {
 			.then((response) => {
 				setData(response.data.tenants)
 				setLoading(false)
-				dispatch(
-					updateDisplayedOptions({
-						topologyLevel: 'tenant',
-						options: response.data.tenants.map((tenant) => tenant.name),
-					})
-				)
 			})
 			.catch((error) => {
 				setError(error.message)

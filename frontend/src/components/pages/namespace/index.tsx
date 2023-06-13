@@ -9,12 +9,11 @@ import {
 	selectCluster,
 	selectNamespace,
 	selectTenant,
-	updateDisplayedOptions,
 } from '../../../store/filterSlice'
 import NamespaceView from './NamespaceView'
 import { selectTrigger } from '../requestTriggerSlice'
 
-interface ResponseNamespace {
+export interface ResponseNamespace {
 	namespaces: NamespaceInfo[]
 }
 
@@ -26,7 +25,6 @@ const NamespaceGroup: React.FC = () => {
 	const tenantFilter = useAppSelector(selectTenant)
 	const namespaceFilter = useAppSelector(selectNamespace)
 	const url = 'http://localhost:8081/api/namespace/all/'
-	const dispatch = useAppDispatch()
 	const trigger = useAppSelector(selectTrigger)
 
 	useEffect(() => {
@@ -43,12 +41,6 @@ const NamespaceGroup: React.FC = () => {
 			.then((response) => {
 				setData(response.data.namespaces)
 				setLoading(false)
-				dispatch(
-					updateDisplayedOptions({
-						topologyLevel: 'namespace',
-						options: response.data.namespaces.map((namespace) => namespace.id),
-					})
-				)
 			})
 			.catch((error) => {
 				setError(error.message)

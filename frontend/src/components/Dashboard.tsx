@@ -9,7 +9,11 @@ import CustomFilter from './custom/CustomFilter'
 import { useAppDispatch } from '../store/hooks'
 import { useNavigate } from 'react-router-dom'
 
-import { addFilter, resetAllFilters } from '../store/filterSlice'
+import {
+	addFilter,
+	fetchOptionsThunk,
+	resetAllFilters,
+} from '../store/filterSlice'
 // import {
 // 	setCluster,
 // 	setTenant,
@@ -38,6 +42,7 @@ const Dashboard: React.FC<DashboardProps> = ({
 	//used to navigate directly to /cluster instead of /
 	useEffect(() => {
 		if (location.pathname === '/') navigate('/cluster')
+		dispatch(fetchOptionsThunk())
 	}, [])
 
 	/*
