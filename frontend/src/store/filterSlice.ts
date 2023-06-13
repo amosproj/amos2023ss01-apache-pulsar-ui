@@ -2,8 +2,13 @@
 // SPDX-FileCopyrightText: 2010-2021 Dirk Riehle <dirk@riehle.org
 // SPDX-FileCopyrightText: 2019 Georg Schwarz <georg. schwarz@fau.de>
 
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { RootState } from '.'
+import axios from 'axios'
+import { ResponseCluster } from '../components/pages/cluster'
+import { ResponseTenant } from '../components/pages/tenant'
+import { ResponseNamespace } from '../components/pages/namespace'
+import { ResponseTopic } from '../components/pages/topic'
 
 export type FilterState = {
 	cluster: string[]
@@ -45,6 +50,53 @@ const initialState: FilterState = {
 	},
 }
 
+const backendInstance = axios.create({
+	baseURL: 'http://localhost:8081/api',
+	timeout: 1000,
+})
+
+const clusterOptionThunk = createAsyncThunk(
+	'filterController/clusterOption',
+	async () => {
+		const response = await backendInstance.get('/cluster/all')
+		return response.data
+	}
+)
+const tenantOptionThunk = createAsyncThunk(
+	'filterController/tenantOption',
+	async () => {
+		const response = await backendInstance.get('/tenant/all')
+		return response.data
+	}
+)
+const namespaceOptionThunk = createAsyncThunk(
+	'filterController/namespaceOption',
+	async () => {
+		const response = await backendInstance.get('/namespace/all')
+		return response.data
+	}
+)
+const topicOptionThunk = createAsyncThunk(
+	'filterController/topicOption',
+	async () => {
+		const response = await backendInstance.get('/topic/all')
+		return response.data
+	}
+)
+const fetchOptionsThunk = createAsyncThunk(
+	'filterController/fetchOptions',
+	async (_, thunkAPI) => {
+		const { dispatch } = thunkAPI
+		// dispatch both thunks and wait for them to complete
+		await Promise.all([
+			dispatch(clusterOptionThunk()),
+			dispatch(tenantOptionThunk()),
+			dispatch(namespaceOptionThunk()),
+			dispatch(topicOptionThunk()),
+		])
+	}
+)
+
 const filterSlice = createSlice({
 	name: 'filterControl',
 	initialState,
@@ -81,23 +133,23 @@ const filterSlice = createSlice({
 			switch (action.payload.filterName) {
 				case 'cluster':
 					state.cluster = initialState.cluster
-					state.cluster.push(action.payload.id)
+					state.cluster = [action.payload.id]
 					break
 				case 'tenant':
 					state.tenant = initialState.tenant
-					state.tenant.push(action.payload.id)
+					state.tenant = [action.payload.id]
 					break
 				case 'namespace':
 					state.namespace = initialState.namespace
-					state.namespace.push(action.payload.id)
+					state.namespace = [action.payload.id]
 					break
 				case 'topic':
 					state.topic = initialState.topic
-					state.topic.push(action.payload.id)
+					state.topic = [action.payload.id]
 					break
 				case 'message':
 					state.message = initialState.message
-					state.message.push(action.payload.id)
+					state.message = [action.payload.id]
 					break
 				default:
 					console.log(
@@ -116,35 +168,31 @@ const filterSlice = createSlice({
 			state.topic = initialState.topic
 			state.message = initialState.message
 		},
-		updateDisplayedOptions: (
-			state,
-			action: PayloadAction<UpdateDisplayedOptions>
-		) => {
-			switch (action.payload.topologyLevel) {
-				case 'cluster':
-					state.displayedOptions.allClusters = action.payload.options
-					break
-				case 'tenant':
-					state.displayedOptions.allTenants = action.payload.options
-					break
-				case 'namespace':
-					state.displayedOptions.allNamespaces = action.payload.options
-					break
-				case 'topic':
-					state.displayedOptions.allTopics = action.payload.options
-					break
-				case 'message':
-					state.displayedOptions.allMessages = action.payload.options
-					break
-				default:
-					console.log(
-						'wrong type for updateDisplayedOptions with' +
-							action.payload.topologyLevel +
-							' ' +
-							action.payload.options
-					)
-			}
-		},
+	},
+	extraReducers(builder) {
+		builder.addCase(clusterOptionThunk.fulfilled, (state, action) => {
+			const data: ResponseCluster = JSON.parse(JSON.stringify(action.payload))
+			console.log(data.clusters)
+			state.displayedOptions.allClusters = data.clusters
+			console.log('moin' + state.displayedOptions.allClusters)
+		})
+		builder.addCase(tenantOptionThunk.fulfilled, (state, action) => {
+			const data: ResponseTenant = JSON.parse(JSON.stringify(action.payload))
+			state.displayedOptions.allTenants = data.tenants.map((item) => item.name)
+		})
+		builder.addCase(namespaceOptionThunk.fulfilled, (state, action) => {
+			const data: ResponseNamespace = JSON.parse(JSON.stringify(action.payload))
+			state.displayedOptions.allNamespaces = data.namespaces.map(
+				(item) => item.id
+			)
+		})
+		builder.addCase(topicOptionThunk.fulfilled, (state, action) => {
+			const data: ResponseTopic = JSON.parse(JSON.stringify(action.payload))
+			state.displayedOptions.allTopics = data.topics.map((item) => item.name)
+		})
+		builder.addCase(fetchOptionsThunk.fulfilled, (state) => {
+			console.log('fetchOptions thunk worked')
+		})
 	},
 })
 
@@ -199,6 +247,7 @@ export {
 	selectTopic,
 	selectOptions,
 	selectAllFilters,
+	fetchOptionsThunk,
 }
 
 export const {
@@ -210,7 +259,6 @@ export const {
 	deleteFilter,
 	addFilterByDrillDown,
 	resetAllFilters,
-	updateDisplayedOptions,
 } = filterSlice.actions
 
 export default filterSlice.reducer
