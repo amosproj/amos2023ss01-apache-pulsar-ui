@@ -160,7 +160,10 @@ public class TopicService {
         try {
             return pulsarAdmin.topics().getList(topic.getNamespace()).contains(topic.getName());
         } catch (PulsarAdminException e) {
-            return false;
+            throw new PulsarApiException(
+                    "Could not check if topic %s is part of namespace %s".formatted(topic.getName(), topic.getNamespace()),
+                    e
+            );
         }
     }
 }
