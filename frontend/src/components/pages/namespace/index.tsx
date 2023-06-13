@@ -24,20 +24,29 @@ const NamespaceGroup: React.FC = () => {
 	const clusterFilter = useAppSelector(selectCluster)
 	const tenantFilter = useAppSelector(selectTenant)
 	const namespaceFilter = useAppSelector(selectNamespace)
-	const url = 'http://localhost:8081/api/namespace/all/'
+	const baseURL = 'http://localhost:8081/api/namespace/all/'
 	const trigger = useAppSelector(selectTrigger)
 
 	useEffect(() => {
 		// Query parameters
-		const params = {
-			//clusters: clusterFilter,
-			tenants: tenantFilter.toString().replace(/,/g, '&'),
-			namespaces: namespaceFilter.toString().replace(/,/g, '&'),
-		}
+		const clusterQuery = clusterFilter
+			.map((cluster) => `clusters=${cluster}`)
+			.join('&')
+		const tenantQuery = tenantFilter
+			.map((tenant) => `tenants=${tenant}`)
+			.join('&')
+		const namespaceQuery = namespaceFilter
+			.map((namespace) => `namespaces=${namespace}`)
+			.join('&')
 
+		// Joining all query parameters
+		const query = [clusterQuery, tenantQuery, namespaceQuery]
+			.filter((q) => q)
+			.join('&')
+		const url = `${baseURL}?${query}`
 		// Sending GET request
 		axios
-			.get<ResponseNamespace>(url, { params })
+			.get<ResponseNamespace>(url)
 			.then((response) => {
 				setData(response.data.namespaces)
 				setLoading(false)

@@ -172,9 +172,7 @@ const filterSlice = createSlice({
 	extraReducers(builder) {
 		builder.addCase(clusterOptionThunk.fulfilled, (state, action) => {
 			const data: ResponseCluster = JSON.parse(JSON.stringify(action.payload))
-			console.log(data.clusters)
 			state.displayedOptions.allClusters = data.clusters
-			console.log('moin' + state.displayedOptions.allClusters)
 		})
 		builder.addCase(tenantOptionThunk.fulfilled, (state, action) => {
 			const data: ResponseTenant = JSON.parse(JSON.stringify(action.payload))

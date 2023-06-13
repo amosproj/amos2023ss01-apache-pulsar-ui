@@ -19,19 +19,24 @@ const TenantGroup: React.FC = () => {
 	const [loading, setLoading] = useState<boolean>(true)
 	const clusterFilter = useAppSelector(selectCluster)
 	const tenantFilter = useAppSelector(selectTenant)
-	const url = 'http://localhost:8081/api/tenant/all'
+	const baseURL = 'http://localhost:8081/api/tenant/all'
 	const trigger = useAppSelector(selectTrigger)
 
 	useEffect(() => {
 		// Query parameters
-		const params = {
-			//clusters: clusterFilter.toString().replace(/,/g, '&'),
-			tenants: tenantFilter.toString().replace(/,/g, '&'),
-		}
+		const clusterQuery = clusterFilter
+			.map((cluster) => `clusters=${cluster}`)
+			.join('&')
+		const tenantQuery = tenantFilter
+			.map((tenant) => `tenants=${tenant}`)
+			.join('&')
 
+		// Joining all query parameters
+		const query = [clusterQuery, tenantQuery].filter((q) => q).join('&')
+		const url = `${baseURL}?${query}`
 		// Sending GET request
 		axios
-			.get<ResponseTenant>(url, { params })
+			.get<ResponseTenant>(url)
 			.then((response) => {
 				setData(response.data.tenants)
 				setLoading(false)
