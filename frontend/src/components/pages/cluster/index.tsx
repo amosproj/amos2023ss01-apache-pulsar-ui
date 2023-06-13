@@ -17,18 +17,13 @@ const ClusterGroup: React.FC = () => {
 	const [data, setData] = useState<string[]>([])
 	const [error, setError] = useState<string | null>(null)
 	const [loading, setLoading] = useState<boolean>(true)
-	const clusterFilter = useAppSelector(selectCluster)
 	const url = 'http://localhost:8081/api/cluster/all'
 	const trigger = useAppSelector(selectTrigger)
 
 	useEffect(() => {
-		// Query parameters
-		const params = {
-			//clusters: clusterFilter,
-		}
 		// Sending GET request
 		axios
-			.get<ResponseCluster>(url, { params })
+			.get<ResponseCluster>(url)
 			.then((response) => {
 				setData(response.data.clusters)
 				setLoading(false)
