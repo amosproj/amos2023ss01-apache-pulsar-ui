@@ -151,9 +151,6 @@ public class TopicService {
         return ConsumerDto.create(consumerStats);
     }
 
-
-
-
     private boolean exists(TopicDto topic) {
         try {
             return pulsarAdmin.topics().getList(topic.getNamespace()).contains(topic.getName());

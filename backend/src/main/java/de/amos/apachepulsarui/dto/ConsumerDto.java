@@ -25,6 +25,7 @@ public class ConsumerDto {
     private long messageOutCounter;
     private int unackedMessages;
     private boolean blockedConsumerOnUnackedMsgs;
+
     public static ConsumerDto create(ConsumerStats consumerStats) {
         return ConsumerDto.builder()
                 .name(consumerStats.getConsumerName())
@@ -40,7 +41,4 @@ public class ConsumerDto {
                 .blockedConsumerOnUnackedMsgs(consumerStats.isBlockedConsumerOnUnackedMsgs())
                 .build();
     }
-
-
-
 }

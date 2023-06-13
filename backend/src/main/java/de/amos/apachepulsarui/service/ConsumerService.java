@@ -14,12 +14,10 @@ public class ConsumerService {
 
     public ConsumerStats getConsumerStatsByTopic(TopicStats topicStats, String consumer) {
         return topicStats.getSubscriptions()
-                .values()
-                .stream().flatMap(
-                        subscriptionStats -> subscriptionStats.getConsumers().stream()
-                )
+                .values().stream()
+                .flatMap(subscriptionStats -> subscriptionStats.getConsumers().stream())
                 .filter(c -> c.getConsumerName().equals(consumer))
                 .findFirst()
-                .orElseThrow();
+                .orElseThrow(() -> new RuntimeException("No ConsumerStats found for " + consumer));
     }
 }
