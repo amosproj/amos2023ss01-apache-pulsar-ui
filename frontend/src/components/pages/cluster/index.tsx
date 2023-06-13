@@ -6,13 +6,10 @@ import React, { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import axios from 'axios'
 import ClusterView from './ClusterView'
-import {
-	selectCluster,
-	updateDisplayedOptions,
-} from '../../../store/filterSlice'
+import { selectCluster } from '../../../store/filterSlice'
 import { selectTrigger } from '../requestTriggerSlice'
 
-interface ResponseCluster {
+export interface ResponseCluster {
 	clusters: string[]
 }
 
@@ -22,7 +19,6 @@ const ClusterGroup: React.FC = () => {
 	const [loading, setLoading] = useState<boolean>(true)
 	const clusterFilter = useAppSelector(selectCluster)
 	const url = 'http://localhost:8081/api/cluster/all'
-	const dispatch = useAppDispatch()
 	const trigger = useAppSelector(selectTrigger)
 
 	useEffect(() => {
@@ -36,12 +32,6 @@ const ClusterGroup: React.FC = () => {
 			.then((response) => {
 				setData(response.data.clusters)
 				setLoading(false)
-				dispatch(
-					updateDisplayedOptions({
-						topologyLevel: 'cluster',
-						options: response.data.clusters,
-					})
-				)
 			})
 			.catch((error) => {
 				setError(error.message)
