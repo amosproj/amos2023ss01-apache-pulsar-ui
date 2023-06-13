@@ -20,6 +20,10 @@ import logo from '../assets/images/team-logo-light.png'
 // import { Input } from '@mui/material'
 import { InfoModal } from './InfoModal'
 import { useLocation, useNavigate } from 'react-router-dom'
+import {
+	updateFilterAccordingToNav,
+	HierarchyInPulsar,
+} from '../store/filterSlice'
 
 //Removed 'Message' from this array for now
 const pages = ['Cluster', 'Tenant', 'Namespace', 'Topic', 'Message']
@@ -142,6 +146,11 @@ function NavBar() {
 								disabled={page.toLowerCase() == location.pathname.slice(1)}
 								onClick={() => {
 									handleClickOnNav(page)
+									dispatch(
+										updateFilterAccordingToNav(
+											page.toLowerCase() as HierarchyInPulsar
+										)
+									)
 								}}
 								sx={{ my: 2, color: 'white', display: 'block' }}
 							>
