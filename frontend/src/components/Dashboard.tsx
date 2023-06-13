@@ -14,6 +14,7 @@ import {
 	fetchOptionsThunk,
 	resetAllFilters,
 } from '../store/filterSlice'
+import { triggerRequest } from './pages/requestTriggerSlice'
 // import {
 // 	setCluster,
 // 	setTenant,
@@ -266,6 +267,7 @@ const Dashboard: React.FC<DashboardProps> = ({
 
 	const resetFilters = () => {
 		dispatch(resetAllFilters())
+		dispatch(triggerRequest())
 	}
 
 	/*
