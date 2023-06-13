@@ -6,6 +6,7 @@
 
 package de.amos.apachepulsarui.service;
 
+import de.amos.apachepulsarui.dto.ConsumerDto;
 import de.amos.apachepulsarui.dto.MessageDto;
 import de.amos.apachepulsarui.dto.ProducerDto;
 import de.amos.apachepulsarui.dto.SubscriptionDto;
