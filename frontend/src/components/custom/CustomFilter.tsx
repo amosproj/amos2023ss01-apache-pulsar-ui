@@ -16,7 +16,9 @@ const CustomFilter: React.FC<CustomFilterProps> = ({
 	messages,
 	currentView,
 }) => {
+	// Options are what we've got from apis so far.
 	const options = useAppSelector(selectOptions)
+	// filters are displayed in filters.
 	const filters = useAppSelector(selectAllFilters)
 	const [clusterSearchQuery, setClusterSearchQuery] = useState('')
 	const [namespaceSearchQuery, setNamespaceSearchQuery] = useState('')

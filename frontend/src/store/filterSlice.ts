@@ -10,6 +10,13 @@ import { ResponseTenant } from '../components/pages/tenant'
 import { ResponseNamespace } from '../components/pages/namespace'
 import { ResponseTopic } from '../components/pages/topic'
 
+export type HierarchyInPulsar =
+	| 'cluster'
+	| 'tenant'
+	| 'namespace'
+	| 'topic'
+	| 'message'
+
 export type FilterState = {
 	cluster: string[]
 	tenant: string[]
@@ -23,15 +30,17 @@ export type FilterState = {
 		allTopics: string[]
 		allMessages: string[]
 	}
+	view: UpdateSingleFilter['filterName']
 }
 
-type UpdateSingleFilter = {
-	filterName: 'cluster' | 'tenant' | 'namespace' | 'topic' | 'message'
+export type UpdateSingleFilter = {
+	filterName: HierarchyInPulsar
 	id: string
 }
 
 type UpdateDisplayedOptions = {
-	topologyLevel: 'cluster' | 'tenant' | 'namespace' | 'topic' | 'message'
+	// topologyLevel: 'cluster' | 'tenant' | 'namespace' | 'topic' | 'message'
+	topologyLevel: HierarchyInPulsar
 	options: string[]
 }
 
@@ -48,6 +57,7 @@ const initialState: FilterState = {
 		allTopics: [],
 		allMessages: [],
 	},
+	view: 'cluster',
 }
 
 const backendInstance = axios.create({
@@ -168,6 +178,35 @@ const filterSlice = createSlice({
 			state.topic = initialState.topic
 			state.message = initialState.message
 		},
+		// the filtering of lower views do not apply to higher views,
+		// those filters shall be reset when the user "goes up".
+		updateFilterAccordingToNav: (
+			state,
+			action: PayloadAction<UpdateSingleFilter['filterName']>
+		) => {
+			const lastView = state.view
+			const currentView = action.payload
+			const pulsarHierarchyArr: UpdateSingleFilter['filterName'][] = [
+				'cluster',
+				'tenant',
+				'namespace',
+				'topic',
+				'message',
+			]
+			const currentViewLevel = pulsarHierarchyArr.indexOf(currentView)
+			const lastViewLevel = pulsarHierarchyArr.indexOf(lastView)
+			// If the user goes to upper level in the pulasr hierarchy,
+			// reset all filters below that "upper level".
+			if (currentViewLevel < lastViewLevel) {
+				const filtersToReset = pulsarHierarchyArr.slice(currentViewLevel + 1)
+				// Resets all filters bellow the current view level.
+				filtersToReset.forEach((filterName) => {
+					console.log(filterName)
+					state[filterName] = initialState[filterName]
+				})
+			}
+			state.view = currentView
+		},
 	},
 	extraReducers(builder) {
 		builder.addCase(clusterOptionThunk.fulfilled, (state, action) => {
@@ -257,6 +296,7 @@ export const {
 	deleteFilter,
 	addFilterByDrillDown,
 	resetAllFilters,
+	updateFilterAccordingToNav,
 } = filterSlice.actions
 
 export default filterSlice.reducer
