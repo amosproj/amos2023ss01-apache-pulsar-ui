@@ -10,6 +10,7 @@ import de.amos.apachepulsarui.dto.TopicDto;
 import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.apache.pulsar.client.admin.PulsarAdminException;
 import org.apache.pulsar.client.api.*;
+import org.apache.pulsar.common.policies.data.TopicStats;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -39,27 +40,31 @@ public class TopicServiceIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void getAllForNamespaces_returnsTopics() {
+    void getAllForNamespaces_returnsTopics() throws PulsarAdminException {
         List<String> namespaces = List.of("public/namespace1", "public/namespace2");
         topicService.createNewTopic("persistent://public/namespace1/topic1");
         topicService.createNewTopic("persistent://public/namespace2/topic1");
+        TopicStats topicstats1 = pulsarAdmin.topics().getStats("persistent://public/namespace1/topic1");
+        TopicStats topicstats2 = pulsarAdmin.topics().getStats("persistent://public/namespace2/topic1");
 
         List<TopicDto> expectedTopics = List.of(
-                TopicDto.create("persistent://public/namespace1/topic1"),
-                TopicDto.create("persistent://public/namespace2/topic1"));
+                TopicDto.create("persistent://public/namespace1/topic1", topicstats1),
+                TopicDto.create("persistent://public/namespace2/topic1", topicstats2));
 
         List<TopicDto> topics = topicService.getAllForNamespaces(namespaces);
         Assertions.assertThat(topics).containsExactlyInAnyOrderElementsOf(expectedTopics);
     }
 
     @Test
-    void getAllForTopics_returnsExistingTopics() {
+    void getAllForTopics_returnsExistingTopics() throws PulsarAdminException {
         List<String> topicNames = List.of("persistent://public/namespace1/topic3",
                 "persistent://public/namespace2/topic4");
 
         topicService.createNewTopic("persistent://public/namespace1/topic3");
+        TopicStats topicstats3 = pulsarAdmin.topics().getStats("persistent://public/namespace1/topic3");
 
-        TopicDto expectedTopic = TopicDto.create("persistent://public/namespace1/topic3");
+
+        TopicDto expectedTopic = TopicDto.create("persistent://public/namespace1/topic3", topicstats3);
 
         List<TopicDto> topics = topicService.getAllForTopics(topicNames);
         Assertions.assertThat(topics).containsExactly(expectedTopic);
