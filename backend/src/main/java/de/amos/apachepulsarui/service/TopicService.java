@@ -47,7 +47,7 @@ public class TopicService {
 
     public List<TopicDto> getAllForTopics(List<String> topics) {
         return topics.stream()
-                .map(TopicDto::create)
+                .map(topic -> TopicDto.create(topic, getTopicStats(topic)))
                 .filter(this::exists)
                 .toList();
     }

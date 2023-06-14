@@ -53,7 +53,7 @@ public class TopicStatsDto {
 
     }
 
-    public static List<String> getProducers(TopicStats topicStats) {
+    private static List<String> getProducers(TopicStats topicStats) {
         List<PublisherStats> publisherStats = new ArrayList<>(topicStats.getPublishers());
         return publisherStats.stream()
                 .map(PublisherStats::getProducerName)
