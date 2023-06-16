@@ -36,12 +36,13 @@ public class MessageControllerTest {
     @Test
     void getMessages_returnsMessages() throws Exception {
         List<MessageDto> messageDtos = List.of(
-                aMessage("topic-1", "Nebuchadnezzar"),
-                aMessage("topic-2", "Serenity")
+                aMessage("persistent://public/default/spaceships", "Nebuchadnezzar"),
+                aMessage("persistent://public/default/spaceships", "Serenity")
         );
-        Mockito.when(messageService.peekMessages("spaceships", "nasa-subscription")).thenReturn(messageDtos);
+        Mockito.when(messageService.getNumberOfLatestMessagesFromTopic("persistent://public/default/spaceships", 5))
+                .thenReturn(messageDtos);
 
-        mockMvc.perform(get("/messages?topic=spaceships&subscription=nasa-subscription")
+        mockMvc.perform(get("/messages?topic=persistent://public/default/spaceships&numOfLatestMsgs=5")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.messages", hasSize(2)))

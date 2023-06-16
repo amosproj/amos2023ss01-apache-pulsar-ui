@@ -26,9 +26,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class TopicServiceTest {
@@ -104,7 +102,7 @@ class TopicServiceTest {
         topicService.getTopicDetails(TOPIC_NAME);
 
         topicDtoMockedStatic.verify(
-                () -> TopicDetailDto.createTopicDtoWithMessages(TOPIC_NAME, topicStats, BROKER, List.of()),
+                () -> TopicDetailDto.create(TOPIC_NAME, topicStats, BROKER),
                 times(1)
         );
     }

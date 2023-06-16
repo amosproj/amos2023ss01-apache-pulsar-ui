@@ -27,7 +27,7 @@ public class MessageServiceTest {
 
     @Test
     void isValidMessage_forMessageWithValidTopic_returnsTrue() {
-        MessageService messageService = new MessageService(pulsarClient, pulsarAdmin);
+        MessageService messageService = new MessageService(pulsarAdmin, pulsarClient);
         String validTopicName = "persistent://public/default/test-topic";
         MessageDto message = MessageDto.create(validTopicName, "hello");
 
@@ -36,7 +36,7 @@ public class MessageServiceTest {
 
     @Test
     void isValidMessage_forMessageWithInvalidTopic_returnsFalse() {
-        MessageService messageService = new MessageService(pulsarClient, pulsarAdmin);
+        MessageService messageService = new MessageService(pulsarAdmin, pulsarClient);
         String invalidTopicName = "bla//blub";
         MessageDto message = MessageDto.create(invalidTopicName, "hello");
 
@@ -45,7 +45,7 @@ public class MessageServiceTest {
 
     @Test
     void isValidMessage_forMessageWithEmptyTopic_returnsFalse() {
-        MessageService messageService = new MessageService(pulsarClient, pulsarAdmin);
+        MessageService messageService = new MessageService(pulsarAdmin, pulsarClient);
         String emptyTopicName = "";
         MessageDto message = MessageDto.create(emptyTopicName, "hello");
 

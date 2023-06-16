@@ -168,9 +168,8 @@ public class TopicControllerTest {
     void getSubscriptionByNameAndTopic() throws Exception {
         String subscription = "R2D2";
         String topic = "persistent://public/default/droide";
-        List<MessageDto> messages = List.of();
 
-        SubscriptionDto subscriptionDto = SubscriptionDto.create(subscriptionStats, messages ,subscription);
+        SubscriptionDto subscriptionDto = SubscriptionDto.create(subscriptionStats, subscription);
 
 
         when(topicService.getSubscriptionByTopic(topic, subscription)).thenReturn(subscriptionDto);
@@ -186,10 +185,9 @@ public class TopicControllerTest {
     void getProducerByNameAndTopic() throws Exception {
         String producer = "C3PO";
         String topic = "persistent://public/default/droide";
-        List<MessageDto> messages = List.of();
         when(publisherStats.getProducerName()).thenReturn(producer);
 
-        ProducerDto dto = ProducerDto.create(publisherStats, messages);
+        ProducerDto dto = ProducerDto.create(publisherStats);
 
         when(topicService.getProducerByTopic(topic, producer)).thenReturn(dto);
 
