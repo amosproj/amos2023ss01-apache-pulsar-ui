@@ -12,6 +12,7 @@ import org.apache.pulsar.common.naming.TopicName;
 import org.apache.pulsar.common.policies.data.TopicStats;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Data
@@ -51,6 +52,11 @@ public class TopicDetailDto {
 		topicDetailDto.ownerBroker = ownerBroker;
 
 		topicDetailDto.setTopicStatsDto(TopicStatsDto.createTopicStatsDto(topicStats));
+
+		// we want to put the latest schema version on top of the list
+		if (!schemaInfos.isEmpty()) {
+			schemaInfos.sort(Comparator.comparingLong(SchemaInfoDto::getVersion));
+		}
 		topicDetailDto.setSchemaInfos(schemaInfos);
 
 		return topicDetailDto;
