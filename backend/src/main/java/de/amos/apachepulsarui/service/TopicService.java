@@ -22,6 +22,7 @@ import org.apache.pulsar.client.admin.PulsarAdminException;
 import org.apache.pulsar.common.policies.data.ConsumerStats;
 import org.apache.pulsar.common.policies.data.PublisherStats;
 import org.apache.pulsar.common.policies.data.TopicStats;
+import org.apache.pulsar.common.schema.SchemaInfo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -116,10 +117,24 @@ public class TopicService {
     private List<SchemaInfoDto> getSchemasOfTopic(String topicName) {
         try {
             return pulsarAdmin.schemas().getAllSchemas(topicName).stream()
-                    .map(SchemaInfoDto::create)
+                    .map(schemaInfo -> {
+                        Long versionBySchemaInfo = getVersionBySchemaInfo(topicName, schemaInfo);
+                        return SchemaInfoDto.create(schemaInfo, versionBySchemaInfo);
+                    })
                     .toList();
         } catch (PulsarAdminException e) {
             throw new PulsarApiException("Could not fetch all schemas for topic %s".formatted(topicName), e);
+        }
+    }
+
+    private Long getVersionBySchemaInfo(String topicName, SchemaInfo schemaInfo) {
+        try {
+            return pulsarAdmin.schemas().getVersionBySchema(topicName, schemaInfo);
+        } catch (PulsarAdminException e) {
+            throw new PulsarApiException(
+                    "Could not fetch version by schema info %s for topic %s".formatted(schemaInfo.getName(), topicName),
+                    e
+            );
         }
     }
 

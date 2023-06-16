@@ -18,14 +18,16 @@ import java.util.Map;
 public class SchemaInfoDto {
 
     String name;
+    long version;
     SchemaType type;
     Map<String, String> properties;
     String schemaDefinition;
     Timestamp timestamp;
 
-    public static SchemaInfoDto create(SchemaInfo schemaInfo) {
+    public static SchemaInfoDto create(SchemaInfo schemaInfo, Long version) {
         return SchemaInfoDto.builder()
                 .name(schemaInfo.getName())
+                .version(version)
                 .type(schemaInfo.getType())
                 .properties(schemaInfo.getProperties())
                 .schemaDefinition(schemaInfo.getSchemaDefinition())
