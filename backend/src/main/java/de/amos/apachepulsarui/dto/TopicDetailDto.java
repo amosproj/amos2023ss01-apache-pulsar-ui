@@ -57,13 +57,4 @@ public class TopicDetailDto {
 
 		return topicDetailDto;
     }
-
-	public static TopicDetailDto createTopicDtoWithMessages(String completeTopicName, TopicStats topicStats, String ownerBroker, List<MessageDto> messages) {
-		TopicDetailDto topicDto = create(completeTopicName, topicStats, ownerBroker);
-		topicDto.setMessagesDto(messages);
-		return topicDto;
-	}
-
-
-
 }

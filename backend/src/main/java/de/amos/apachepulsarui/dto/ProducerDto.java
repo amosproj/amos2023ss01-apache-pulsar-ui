@@ -11,8 +11,6 @@ import lombok.Builder;
 import lombok.Data;
 import org.apache.pulsar.common.policies.data.PublisherStats;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @Builder(access = AccessLevel.PRIVATE)
@@ -22,9 +20,8 @@ public class ProducerDto {
 
     private String name;
 
-    private List<MessageDto> messagesDto;
-
-    private long amountOfMessages;
+    //todo figure out how to get the amount of messages
+    //private long amountOfMessages;
 
     private String address;
 
@@ -34,12 +31,11 @@ public class ProducerDto {
 
     private String connectedSince;
 
-    public static ProducerDto create(PublisherStats publisherStats, List<MessageDto> messages) {
+    public static ProducerDto create(PublisherStats publisherStats) {
         return ProducerDto.builder()
                 .id(publisherStats.getProducerId())
                 .name(publisherStats.getProducerName())
-                .messagesDto(messages)
-                .amountOfMessages(messages.size())
+                //.amountOfMessages(numOfMsgs)
                 .connectedSince(publisherStats.getConnectedSince())
                 .address(publisherStats.getAddress())
                 .averageMsgSize(publisherStats.getAverageMsgSize())
