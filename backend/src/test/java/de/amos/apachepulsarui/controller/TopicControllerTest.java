@@ -154,7 +154,12 @@ public class TopicControllerTest {
     void getTopicDetails() throws Exception {
         String name = "grogu";
         String fullTopic = "persistent://public/default/grogu";
-        TopicDetailDto topic = TopicDetailDto.create(name, topicStats, RandomString.make(1));
+        TopicDetailDto topic = TopicDetailDto.create(
+                name,
+                topicStats,
+                RandomString.make(1),
+                List.of()
+        );
 
         when(topicService.getTopicDetails(fullTopic)).thenReturn(topic);
 

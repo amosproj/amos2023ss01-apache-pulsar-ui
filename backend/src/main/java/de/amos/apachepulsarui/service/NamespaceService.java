@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.pulsar.client.admin.Namespaces;
 import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.apache.pulsar.client.admin.PulsarAdminException;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -46,10 +47,12 @@ public class NamespaceService {
                 .toList();
     }
 
+    @Cacheable("namespace.detail")
     public NamespaceDetailDto getNamespaceDetails(String namespaceName) {
         return enrichWithNamespaceData(NamespaceDetailDto.fromString(namespaceName));
     }
 
+    @Cacheable("namespace.allNames")
     public List<String> getAllOfTenant(String tenantName) throws PulsarApiException {
         try {
             return pulsarAdmin.namespaces().getNamespaces(tenantName);
