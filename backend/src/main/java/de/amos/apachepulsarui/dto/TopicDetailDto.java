@@ -60,10 +60,7 @@ public class TopicDetailDto {
                     .sorted(Comparator.comparing(SchemaInfoDto::getVersion, Collections.reverseOrder()))
                     .toList();
             topicDetailDto.setSchemaInfos(schemaInfosSorted);
-        } else {
-			topicDetailDto.setSchemaInfos(schemaInfos);
         }
-
 
         return topicDetailDto;
     }
