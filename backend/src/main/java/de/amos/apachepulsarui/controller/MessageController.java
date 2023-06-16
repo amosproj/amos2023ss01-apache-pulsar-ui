@@ -8,15 +8,15 @@ package de.amos.apachepulsarui.controller;
 
 import de.amos.apachepulsarui.dto.MessageDto;
 import de.amos.apachepulsarui.dto.MessagesDto;
-import de.amos.apachepulsarui.exception.BadRequestException;
 import de.amos.apachepulsarui.service.MessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -27,21 +27,9 @@ public class MessageController {
     private final MessageService messageService;
 
     @GetMapping
-    public ResponseEntity<MessagesDto> getMessages(@RequestParam String topic, @RequestParam String subscription) {
-        List<MessageDto> messageDtos = messageService.peekMessages(topic, subscription);
+    public ResponseEntity<MessagesDto> getMessages(@RequestParam String topic,
+                                                   @RequestParam(required = false, defaultValue = "10") Integer numOfLatestMsgs) {
+        List<MessageDto> messageDtos = messageService.getNumberOfLatestMessagesFromTopic(topic, numOfLatestMsgs);
         return new ResponseEntity<>(new MessagesDto(messageDtos), HttpStatus.OK);
     }
-
-    @PostMapping(
-            value = "/send",
-            consumes = {MediaType.APPLICATION_JSON_VALUE}
-    )
-    public ResponseEntity<Void> sendMessage(@RequestBody @Valid MessageDto messageDto) {
-        if (messageService.inValidTopicName(messageDto)) {
-            throw new BadRequestException.InvalidTopicName();
-        }
-        messageService.sendMessage(messageDto);
-        return new ResponseEntity<>(HttpStatus.CREATED);
-    }
-
 }
