@@ -86,6 +86,8 @@ interface TopicInfo {
 	name: string
 	namespace: string
 	tenant: string
+	subscriptions: string[]
+	producers: string[]
 }
 interface ClusterDetail {
 	name: string
@@ -130,8 +132,8 @@ interface TopicDetail {
 	tenant: string
 	ownerBroker: string
 	topicStatsDto: {
-		subscriptions: string[]
-		producers: string[]
+		//subscriptions: string[]
+		//producers: string[]
 		numberSubscriptions: number
 		numberProducers: number
 		producedMesages: number
