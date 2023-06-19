@@ -50,6 +50,9 @@
 	}
 
 	p {
+		max-width: 225px;
+		word-break: break-all;
+		white-space: normal;
 		font-weight: 400;
 		font-size: $font-small;
 		line-height: 19px;

@@ -70,7 +70,7 @@ const initialState: FilterState = {
 
 const backendInstance = axios.create({
 	baseURL: 'http://localhost:8081/api',
-	timeout: 1000,
+	timeout: 5000,
 })
 
 const clusterOptionThunk = createAsyncThunk(
@@ -241,7 +241,7 @@ const filterSlice = createSlice({
 		})
 		builder.addCase(topicOptionThunk.fulfilled, (state, action) => {
 			const data: ResponseTopic = JSON.parse(JSON.stringify(action.payload))
-			const producers: string[] = data.topics
+			/*const producers: string[] = data.topics
 				.flatMap((item) => item.producers)
 				.flat()
 				.filter((element, index) => {
@@ -252,10 +252,33 @@ const filterSlice = createSlice({
 				.flat()
 				.filter((element, index) => {
 					return producers.indexOf(element) === index
-				})
+				})*/
+			data.topics.forEach((topic) => {
+				if (topic.producers) {
+					state.displayedOptions.allProducers.push(...topic.producers)
+					state.displayedOptions.allProducers =
+						state.displayedOptions.allProducers
+							.filter((e) => e !== 'undefined')
+							.filter((element, index) => {
+								return (
+									state.displayedOptions.allProducers.indexOf(element) === index
+								)
+							})
+				}
+				if (topic.subscriptions) {
+					state.displayedOptions.allSubscriptions.push(...topic.subscriptions)
+					state.displayedOptions.allSubscriptions =
+						state.displayedOptions.allSubscriptions
+							.filter((e) => e !== 'undefined')
+							.filter((element, index) => {
+								return (
+									state.displayedOptions.allSubscriptions.indexOf(element) ===
+									index
+								)
+							})
+				}
+			})
 			state.displayedOptions.allTopics = data.topics.map((item) => item.name)
-			state.displayedOptions.allProducers = producers
-			state.displayedOptions.allSubscriptions = subscriptions
 		})
 		builder.addCase(fetchOptionsThunk.fulfilled, (state) => {
 			console.log('fetchOptions thunk worked')
