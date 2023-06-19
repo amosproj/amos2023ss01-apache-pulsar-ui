@@ -16,6 +16,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.Matchers.equalTo;
@@ -48,6 +49,22 @@ public class MessageControllerTest {
                 .andExpect(jsonPath("$.messages", hasSize(2)))
                 .andExpect(jsonPath("$.messages[0].payload", equalTo("Nebuchadnezzar")))
                 .andExpect(jsonPath("$.messages[1].payload", equalTo("Serenity")));
+    }
+
+    @Test
+    void getMessages_withoutNumMessages_returns10Messages() throws Exception {
+        var messageDtos = new ArrayList<MessageDto>();
+        for (int i = 0; i < 10; i++) {
+            messageDtos.add(aMessage("persistent://public/default/test", "Test" + i));
+        }
+
+        Mockito.when(messageService.getLatestMessagesOfTopic("persistent://public/default/test", 10))
+                .thenReturn(messageDtos);
+
+        mockMvc.perform(get("/messages?topic=persistent://public/default/test")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.messages", hasSize(10)));
     }
 
     @NotNull
