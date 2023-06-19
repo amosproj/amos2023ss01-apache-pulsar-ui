@@ -42,7 +42,7 @@ public class MessageControllerTest {
         Mockito.when(messageService.getLatestMessagesOfTopic("persistent://public/default/spaceships", 5))
                 .thenReturn(messageDtos);
 
-        mockMvc.perform(get("/messages?topic=persistent://public/default/spaceships&numOfLatestMsgs=5")
+        mockMvc.perform(get("/messages?topic=persistent://public/default/spaceships&numMessages=5")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.messages", hasSize(2)))
