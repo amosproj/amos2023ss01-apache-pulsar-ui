@@ -21,7 +21,7 @@ public class ClusterService {
     private final PulsarAdmin pulsarAdmin;
     private final TenantService tenantService;
 
-    @Cacheable("cluster.all")
+    @Cacheable("cluster.allNames")
     public List<String> getAllNames() {
         try {
             return pulsarAdmin.clusters().getClusters();

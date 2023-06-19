@@ -9,6 +9,7 @@ package de.amos.apachepulsarui.service;
 import de.amos.apachepulsarui.dto.ConsumerDto;
 import de.amos.apachepulsarui.dto.MessageDto;
 import de.amos.apachepulsarui.dto.ProducerDto;
+import de.amos.apachepulsarui.dto.SchemaInfoDto;
 import de.amos.apachepulsarui.dto.SubscriptionDto;
 import de.amos.apachepulsarui.dto.TopicDetailDto;
 import de.amos.apachepulsarui.dto.TopicDto;
@@ -22,7 +23,7 @@ import org.apache.pulsar.common.naming.TopicName;
 import org.apache.pulsar.common.policies.data.ConsumerStats;
 import org.apache.pulsar.common.policies.data.PublisherStats;
 import org.apache.pulsar.common.policies.data.TopicStats;
-import org.springframework.cache.annotation.Cacheable;
+import org.apache.pulsar.common.schema.SchemaInfo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -64,7 +65,6 @@ public class TopicService {
      * @param namespace The namespace you want to get a list of all topics for.
      * @return A list of topics (their fully qualified names).
      */
-    @Cacheable("topic.allNamesByNamespace")
     public List<String> getAllByNamespace(String namespace) {
         return getByNamespace(namespace);
     }
@@ -73,7 +73,7 @@ public class TopicService {
         try {
             return pulsarAdmin.topics().getList(namespace);
         } catch (PulsarAdminException e) {
-           throw new PulsarApiException("Could not fetch topics of namespace '%s'".formatted(namespace), e);
+            throw new PulsarApiException("Could not fetch topics of namespace '%s'".formatted(namespace), e);
         }
     }
 
@@ -91,18 +91,12 @@ public class TopicService {
      * additional metadata.
      */
     public TopicDetailDto getTopicDetails(String topicName) throws PulsarApiException {
-        try {
-            List<String> subscriptions = pulsarAdmin.topics().getSubscriptions(topicName);
-            List<MessageDto> messages = subscriptions.stream().
-                    flatMap(sub -> messageService.peekMessages(topicName, sub).stream()).toList();
-            return TopicDetailDto.createTopicDtoWithMessages(topicName,
-                    getTopicStats(topicName),
-                    getOwnerBroker(topicName),
-                    messages);
-
-        } catch (PulsarAdminException e) {
-            throw new PulsarApiException("Could not fetch topic details for topic '%s'".formatted(topicName), e);
-        }
+        return TopicDetailDto.create(
+                topicName,
+                getTopicStats(topicName),
+                getOwnerBroker(topicName),
+                getSchemasOfTopic(topicName)
+        );
     }
 
     private TopicStats getTopicStats(String topicName) throws PulsarApiException {
@@ -121,6 +115,30 @@ public class TopicService {
         }
     }
 
+    private List<SchemaInfoDto> getSchemasOfTopic(String topicName) {
+        try {
+            return pulsarAdmin.schemas().getAllSchemas(topicName).stream()
+                    .map(schemaInfo -> {
+                        Long versionBySchemaInfo = getVersionBySchemaInfo(topicName, schemaInfo);
+                        return SchemaInfoDto.create(schemaInfo, versionBySchemaInfo);
+                    })
+                    .toList();
+        } catch (PulsarAdminException e) {
+            throw new PulsarApiException("Could not fetch all schemas for topic %s".formatted(topicName), e);
+        }
+    }
+
+    private Long getVersionBySchemaInfo(String topicName, SchemaInfo schemaInfo) {
+        try {
+            return pulsarAdmin.schemas().getVersionBySchema(topicName, schemaInfo);
+        } catch (PulsarAdminException e) {
+            throw new PulsarApiException(
+                    "Could not fetch version by schema info %s for topic %s".formatted(schemaInfo.getName(), topicName),
+                    e
+            );
+        }
+    }
+
     public ProducerDto getProducerByTopic(String topic, String producer) {
         TopicStats topicStats = getTopicStats(topic);
         PublisherStats publisherStats = topicStats.getPublishers().stream()
@@ -128,7 +146,6 @@ public class TopicService {
                 .findFirst().orElseThrow();
         return create(publisherStats, getMessagesByProducer(topic, topicStats.getSubscriptions().keySet(), producer));
     }
-
 
     private List<MessageDto> getMessagesByProducer(String topic, Set<String> subscriptions, String producer) {
         return subscriptions.stream()
