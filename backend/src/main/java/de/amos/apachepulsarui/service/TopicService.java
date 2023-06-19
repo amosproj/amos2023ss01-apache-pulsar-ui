@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.apache.pulsar.client.admin.PulsarAdminException;
+import org.apache.pulsar.common.naming.TopicName;
 import org.apache.pulsar.common.policies.data.ConsumerStats;
 import org.apache.pulsar.common.policies.data.PublisherStats;
 import org.apache.pulsar.common.policies.data.TopicStats;
@@ -48,8 +49,8 @@ public class TopicService {
 
     public List<TopicDto> getAllForTopics(List<String> topics) {
         return topics.stream()
-                .map(TopicDto::create)
                 .filter(this::exists)
+                .map(topic -> TopicDto.create(topic, getTopicStats(topic)))
                 .toList();
     }
 
@@ -173,12 +174,13 @@ public class TopicService {
         return ConsumerDto.create(consumerStats);
     }
 
-    private boolean exists(TopicDto topic) {
+    private boolean exists(String topic) {
+        TopicName topicName = TopicName.get(topic);
         try {
-            return pulsarAdmin.topics().getList(topic.getNamespace()).contains(topic.getName());
+            return pulsarAdmin.topics().getList(topicName.getNamespace()).contains(topicName.toString());
         } catch (PulsarAdminException e) {
             throw new PulsarApiException(
-                    "Could not check if topic %s is part of namespace %s".formatted(topic.getName(), topic.getNamespace()),
+                    "Could not check if topic %s is part of namespace %s".formatted(topicName.toString(), topicName.getNamespace()),
                     e
             );
         }

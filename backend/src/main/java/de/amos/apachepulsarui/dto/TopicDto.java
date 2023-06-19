@@ -5,28 +5,48 @@
 
 package de.amos.apachepulsarui.dto;
 
-import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.apache.pulsar.common.naming.TopicName;
+import org.apache.pulsar.common.policies.data.PublisherStats;
+import org.apache.pulsar.common.policies.data.TopicStats;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 @Data
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder
 public class TopicDto {
 
     private String name;
 
-	private String namespace;
+    private String namespace;
 
-	private String tenant;
+    private String tenant;
 
-    public static TopicDto create(String completeTopicName) {
+    private Set<String> subscriptions;
+
+    private List<String> producers;
+
+    public static TopicDto create(String completeTopicName, TopicStats topicStats) {
+        Set<String> subscriptions = topicStats.getSubscriptions().keySet();
+        List<String> producers = getProducers(topicStats);
+
         TopicName topicName = TopicName.get(completeTopicName);
-		TopicDto topicDetailDto = new TopicDto();
-		topicDetailDto.name = topicName.toString();
-		topicDetailDto.namespace = topicName.getNamespace();
-		topicDetailDto.tenant = topicName.getTenant();
+        return TopicDto.builder()
+                .name(topicName.toString())
+                .namespace(topicName.getNamespace())
+                .tenant(topicName.getTenant())
+                .producers(producers)
+                .subscriptions(subscriptions)
+                .build();
+    }
 
-		return topicDetailDto;
+    private static List<String> getProducers(TopicStats topicStats) {
+        List<PublisherStats> publisherStats = new ArrayList<>(topicStats.getPublishers());
+        return publisherStats.stream()
+                .map(PublisherStats::getProducerName)
+                .toList();
     }
 }
