@@ -39,7 +39,11 @@ const ProducerModal: React.FC<ProducerModalProps> = ({ producer }) => {
 
 	return (
 		<>
-			<span onClick={handleOpen} style={{ cursor: 'pointer' }}>
+			<span
+				className="text-blue"
+				onClick={handleOpen}
+				style={{ cursor: 'pointer' }}
+			>
 				{producer.producerName},{' '}
 			</span>
 			<Modal open={open} onClose={handleClose}>

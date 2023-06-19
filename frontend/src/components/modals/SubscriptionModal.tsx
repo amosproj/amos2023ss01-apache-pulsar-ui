@@ -13,9 +13,9 @@ Nr of Messages:
 List of Messages: []
 */
 
-interface ConsumerModalProps {
-	consumer: {
-		consumerName: string
+interface SubscriptionModalProps {
+	subscription: {
+		subscriptionName: string
 		topicAmount?: number
 		topicList: [] | Array<string>
 		messageAmount?: number
@@ -23,7 +23,9 @@ interface ConsumerModalProps {
 	}
 }
 
-const ConsumerModal: React.FC<ConsumerModalProps> = ({ consumer }) => {
+const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
+	subscription,
+}) => {
 	const [open, setOpen] = useState(false)
 
 	const handleOpen = () => {
@@ -34,13 +36,17 @@ const ConsumerModal: React.FC<ConsumerModalProps> = ({ consumer }) => {
 		setOpen(false)
 	}
 
-	consumer.topicAmount = consumer.topicList.length
-	consumer.messageAmount = consumer.messageList.length
+	subscription.topicAmount = subscription.topicList.length
+	subscription.messageAmount = subscription.messageList.length
 
 	return (
 		<>
-			<span onClick={handleOpen} style={{ cursor: 'pointer' }}>
-				{consumer.consumerName},{' '}
+			<span
+				className="text-blue"
+				onClick={handleOpen}
+				style={{ cursor: 'pointer' }}
+			>
+				{subscription.subscriptionName},{' '}
 			</span>
 			<Modal open={open} onClose={handleClose}>
 				<Box
@@ -71,25 +77,25 @@ const ConsumerModal: React.FC<ConsumerModalProps> = ({ consumer }) => {
 						<CloseIcon />
 					</IconButton>
 					<Typography variant="h5" component="h2" gutterBottom>
-						Consumer Name: {consumer.consumerName}
+						Subscription Name: {subscription.subscriptionName}
 					</Typography>
 					<Typography variant="body1" gutterBottom>
-						Nr of Topics registered: {consumer.topicAmount}
+						Nr of Topics registered: {subscription.topicAmount}
 					</Typography>
 					<Typography variant="body1" gutterBottom>
 						List of Topics:{' '}
-						{consumer.topicList.map((item: string, index: number) => (
+						{subscription.topicList.map((item: string, index: number) => (
 							<span key={index} className="text-blue">
 								{item},{' '}
 							</span>
 						))}
 					</Typography>
 					<Typography variant="body1" gutterBottom>
-						Nr of Messages: {consumer.topicAmount}
+						Nr of Messages: {subscription.topicAmount}
 					</Typography>
 					<Typography variant="body1" gutterBottom>
 						List of Messages:{' '}
-						{consumer.messageList.map((item: string, index: number) => (
+						{subscription.messageList.map((item: string, index: number) => (
 							<span key={index} className="text-blue">
 								{item},{' '}
 							</span>
@@ -101,4 +107,4 @@ const ConsumerModal: React.FC<ConsumerModalProps> = ({ consumer }) => {
 	)
 }
 
-export default ConsumerModal
+export default SubscriptionModal

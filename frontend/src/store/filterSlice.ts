@@ -16,6 +16,8 @@ export type HierarchyInPulsar =
 	| 'namespace'
 	| 'topic'
 	| 'message'
+	| 'producer'
+	| 'subscription'
 
 export type FilterState = {
 	cluster: string[]
@@ -140,6 +142,12 @@ const filterSlice = createSlice({
 		// Adds query to one single filter (cluster, tenant, namespace, topic)
 		addFilter: (state, action: PayloadAction<UpdateSingleFilter>) => {
 			const filterName = action.payload.filterName
+			state[filterName].push(action.payload.id)
+		},
+		// Adds query to one single
+		addFilterWithRadio: (state, action: PayloadAction<UpdateSingleFilter>) => {
+			const filterName = action.payload.filterName
+			state[filterName] = []
 			state[filterName].push(action.payload.id)
 		},
 		// Deletes query from one single filter (cluster, tenant, namespace, topic)
@@ -364,6 +372,7 @@ export const {
 	setProducer,
 	setSubscription,
 	addFilter,
+	addFilterWithRadio,
 	deleteFilter,
 	addFilterByDrillDown,
 	resetAllFilters,

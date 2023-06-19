@@ -56,7 +56,14 @@ interface CustomSelectProps<T> {
 interface CustomCheckboxProps {
 	id: string
 	text: string
-	typology: 'cluster' | 'tenant' | 'namespace' | 'topic' | 'message'
+	typology:
+		| 'cluster'
+		| 'tenant'
+		| 'namespace'
+		| 'topic'
+		| 'message'
+		| 'producer'
+		| 'subscription'
 	selected: boolean
 }
 

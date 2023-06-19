@@ -45,9 +45,9 @@ const TopicGroup: React.FC = () => {
 		const namespaceQuery = namespaceFilter
 			.map((namespace) => `namespaces=${namespace}`)
 			.join('&')
-		const producerQuery = producerFilter
-			.map((producer) => `producers=${producer}`)
-			.join('&')
+		const producerQuery = producerFilter.map(
+			(producer) => `producer=${producer}`
+		)
 		const subscriptionQuery = subscriptionFilter
 			.map((subscription) => `subscriptions=${subscription}`)
 			.join('&')
@@ -59,8 +59,8 @@ const TopicGroup: React.FC = () => {
 			tenantQuery,
 			namespaceQuery,
 			topicQuery,
-			producerFilter,
-			subscriptionFilter,
+			producerQuery,
+			subscriptionQuery,
 		]
 			.filter((q) => q)
 			.join('&')

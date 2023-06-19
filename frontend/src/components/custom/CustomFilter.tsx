@@ -8,6 +8,7 @@ import AccordionSummary from '@mui/material/AccordionSummary'
 import AccordionDetails from '@mui/material/AccordionDetails'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import CustomCheckbox from './CustomCheckbox'
+import CustomRadio from './CustomRadio'
 import CustomSearchbar from './CustomSearchbar'
 import { useAppSelector } from '../../store/hooks'
 import { selectAllFilters, selectOptions } from '../../store/filterSlice'
@@ -203,21 +204,21 @@ const CustomFilter: React.FC<CustomFilterProps> = ({
 						<AccordionDetails>
 							<CustomSearchbar
 								placeholder={'Search Producers'}
-								setSearchQuery={setTopicSearchQuery}
+								setSearchQuery={setProducerSearchQuery}
 							></CustomSearchbar>
 							<div className="flex flex-col mt-4">
 								{filteredProducers &&
 									filteredProducers.length > 0 &&
 									filteredProducers.map((item: string) => (
-										<CustomCheckbox
+										<CustomRadio
 											key={
 												'checkbox-topic' + Math.floor(Math.random() * 999999)
 											}
 											text={item}
 											id={item}
-											typology={'topic'}
+											typology={'producer'}
 											selected={filters.producer.includes(item) ? true : false}
-										></CustomCheckbox>
+										></CustomRadio>
 									))}
 							</div>
 						</AccordionDetails>
@@ -232,7 +233,7 @@ const CustomFilter: React.FC<CustomFilterProps> = ({
 						<AccordionDetails>
 							<CustomSearchbar
 								placeholder={'Search Subscriptions'}
-								setSearchQuery={setTopicSearchQuery}
+								setSearchQuery={setSubscriptionSearchQuery}
 							></CustomSearchbar>
 							<div className="flex flex-col mt-4">
 								{filteredSubscriptions &&
@@ -244,7 +245,7 @@ const CustomFilter: React.FC<CustomFilterProps> = ({
 											}
 											text={item}
 											id={item}
-											typology={'topic'}
+											typology={'subscription'}
 											selected={
 												filters.subscription.includes(item) ? true : false
 											}
