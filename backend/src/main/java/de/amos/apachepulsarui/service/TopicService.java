@@ -6,16 +6,24 @@
 
 package de.amos.apachepulsarui.service;
 
-import de.amos.apachepulsarui.dto.*;
+import de.amos.apachepulsarui.dto.ConsumerDto;
+import de.amos.apachepulsarui.dto.MessageDto;
+import de.amos.apachepulsarui.dto.ProducerDto;
+import de.amos.apachepulsarui.dto.SchemaInfoDto;
+import de.amos.apachepulsarui.dto.SubscriptionDto;
+import de.amos.apachepulsarui.dto.TopicDetailDto;
+import de.amos.apachepulsarui.dto.TopicDto;
+import de.amos.apachepulsarui.dto.TopicStatsDto;
 import de.amos.apachepulsarui.exception.PulsarApiException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.apache.pulsar.client.admin.PulsarAdminException;
+import org.apache.pulsar.common.naming.TopicName;
 import org.apache.pulsar.common.policies.data.ConsumerStats;
 import org.apache.pulsar.common.policies.data.PublisherStats;
 import org.apache.pulsar.common.policies.data.TopicStats;
-import org.springframework.cache.annotation.Cacheable;
+import org.apache.pulsar.common.schema.SchemaInfo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,8 +48,8 @@ public class TopicService {
 
     public List<TopicDto> getAllForTopics(List<String> topics) {
         return topics.stream()
-                .map(TopicDto::create)
                 .filter(this::exists)
+                .map(topic -> TopicDto.create(topic, getTopicStats(topic)))
                 .toList();
     }
 
@@ -56,7 +64,6 @@ public class TopicService {
      * @param namespace The namespace you want to get a list of all topics for.
      * @return A list of topics (their fully qualified names).
      */
-    @Cacheable("topic.allNamesByNamespace")
     public List<String> getAllByNamespace(String namespace) {
         return getByNamespace(namespace);
     }
@@ -65,7 +72,7 @@ public class TopicService {
         try {
             return pulsarAdmin.topics().getList(namespace);
         } catch (PulsarAdminException e) {
-           throw new PulsarApiException("Could not fetch topics of namespace '%s'".formatted(namespace), e);
+            throw new PulsarApiException("Could not fetch topics of namespace '%s'".formatted(namespace), e);
         }
     }
 
@@ -82,10 +89,13 @@ public class TopicService {
      * @return A {@link TopicDetailDto}'s including {@link TopicStatsDto} and
      * additional metadata.
      */
-    public TopicDetailDto getTopicDetails(String topicName) {
-        return TopicDetailDto.create(topicName,
+    public TopicDetailDto getTopicDetails(String topicName) throws PulsarApiException {
+        return TopicDetailDto.create(
+                topicName,
                 getTopicStats(topicName),
-                getOwnerBroker(topicName));
+                getOwnerBroker(topicName),
+                getSchemasOfTopic(topicName)
+        );
     }
 
     private TopicStats getTopicStats(String topicName) throws PulsarApiException {
@@ -101,6 +111,30 @@ public class TopicService {
             return pulsarAdmin.lookups().lookupTopic(topicName);
         } catch (PulsarAdminException e) {
             throw new PulsarApiException("Could not fetch owner broker for topic '%s'".formatted(topicName), e);
+        }
+    }
+
+    private List<SchemaInfoDto> getSchemasOfTopic(String topicName) {
+        try {
+            return pulsarAdmin.schemas().getAllSchemas(topicName).stream()
+                    .map(schemaInfo -> {
+                        Long versionBySchemaInfo = getVersionBySchemaInfo(topicName, schemaInfo);
+                        return SchemaInfoDto.create(schemaInfo, versionBySchemaInfo);
+                    })
+                    .toList();
+        } catch (PulsarAdminException e) {
+            throw new PulsarApiException("Could not fetch all schemas for topic %s".formatted(topicName), e);
+        }
+    }
+
+    private Long getVersionBySchemaInfo(String topicName, SchemaInfo schemaInfo) {
+        try {
+            return pulsarAdmin.schemas().getVersionBySchema(topicName, schemaInfo);
+        } catch (PulsarAdminException e) {
+            throw new PulsarApiException(
+                    "Could not fetch version by schema info %s for topic %s".formatted(schemaInfo.getName(), topicName),
+                    e
+            );
         }
     }
 
@@ -142,12 +176,13 @@ public class TopicService {
         return ConsumerDto.create(consumerStats);
     }
 
-    private boolean exists(TopicDto topic) {
+    private boolean exists(String topic) {
+        TopicName topicName = TopicName.get(topic);
         try {
-            return pulsarAdmin.topics().getList(topic.getNamespace()).contains(topic.getName());
+            return pulsarAdmin.topics().getList(topicName.getNamespace()).contains(topicName.toString());
         } catch (PulsarAdminException e) {
             throw new PulsarApiException(
-                    "Could not check if topic %s is part of namespace %s".formatted(topic.getName(), topic.getNamespace()),
+                    "Could not check if topic %s is part of namespace %s".formatted(topicName.toString(), topicName.getNamespace()),
                     e
             );
         }

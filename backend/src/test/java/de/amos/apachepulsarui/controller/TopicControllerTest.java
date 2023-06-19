@@ -63,8 +63,8 @@ public class TopicControllerTest {
         List<String> namespaces = List.of("tenant1/namespace1", "tenant2/namespace1");
 
         List<TopicDto> topics = List.of(
-                TopicDto.create("persistent://tenant1/namespace1/topic1"),
-                TopicDto.create("persistent://tenant2/namespace1/topic1"));
+                TopicDto.create("persistent://tenant1/namespace1/topic1", topicStats),
+                TopicDto.create("persistent://tenant2/namespace1/topic1", topicStats));
 
         when(tenantService.getAllNames()).thenReturn(tenants);
         when(namespaceService.getNamespaceNamesForTenants(tenants)).thenReturn(namespaces);
@@ -88,8 +88,8 @@ public class TopicControllerTest {
         List<String> namespaces = List.of("tenant1/namespace1", "tenant2/namespace1");
 
         List<TopicDto> topics = List.of(
-                TopicDto.create("persistent://tenant1/namespace1/topic1"),
-                TopicDto.create("persistent://tenant2/namespace1/topic1"));
+                TopicDto.create("persistent://tenant1/namespace1/topic1", topicStats),
+                TopicDto.create("persistent://tenant2/namespace1/topic1", topicStats));
 
         when(namespaceService.getNamespaceNamesForTenants(tenants)).thenReturn(namespaces);
         when(topicService.getAllForNamespaces(namespaces)).thenReturn(topics);
@@ -111,8 +111,8 @@ public class TopicControllerTest {
         List<String> namespaces = List.of("tenant1/namespace1", "tenant2/namespace1");
 
         List<TopicDto> topics = List.of(
-                TopicDto.create("persistent://tenant1/namespace1/topic1"),
-                TopicDto.create("persistent://tenant2/namespace1/topic1"));
+                TopicDto.create("persistent://tenant1/namespace1/topic1", topicStats),
+                TopicDto.create("persistent://tenant2/namespace1/topic1", topicStats));
 
         when(topicService.getAllForNamespaces(namespaces)).thenReturn(topics);
 
@@ -134,8 +134,8 @@ public class TopicControllerTest {
                 "persistent://tenant2/namespace1/topic1");
 
         List<TopicDto> topics = List.of(
-                TopicDto.create("persistent://tenant1/namespace1/topic1"),
-                TopicDto.create("persistent://tenant2/namespace1/topic1"));
+                TopicDto.create("persistent://tenant1/namespace1/topic1", topicStats),
+                TopicDto.create("persistent://tenant2/namespace1/topic1", topicStats));
 
         when(topicService.getAllForTopics(topicNames)).thenReturn(topics);
 
@@ -154,7 +154,12 @@ public class TopicControllerTest {
     void getTopicDetails() throws Exception {
         String name = "grogu";
         String fullTopic = "persistent://public/default/grogu";
-        TopicDetailDto topic = TopicDetailDto.create(name, topicStats, RandomString.make(1));
+        TopicDetailDto topic = TopicDetailDto.create(
+                name,
+                topicStats,
+                RandomString.make(1),
+                List.of()
+        );
 
         when(topicService.getTopicDetails(fullTopic)).thenReturn(topic);
 
