@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom'
 import { addFilterByDrillDown } from '../../../store/filterSlice'
 import { useAppDispatch } from '../../../store/hooks'
 import axios from 'axios'
-import ConsumerModal from '../../modals/SubscriptionModal'
+import SubscriptionModal from '../../modals/SubscriptionModal'
 
 const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 	const { name, tenant, namespace, producers, subscriptions }: TopicInfo = data
@@ -80,7 +80,7 @@ const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 							Subscriptions:{' '}
 							{subscriptions.length > 0 ? (
 								subscriptions.map((item: string, index: number) => (
-									<ConsumerModal
+									<SubscriptionModal
 										key={index}
 										subscription={{
 											subscriptionName: item,

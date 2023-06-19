@@ -188,6 +188,20 @@ interface MessageDto {
 	producer: string
 }
 
+interface ConsumerDetails {
+	name: string
+	address: string
+	availablePermits: number
+	bytesOutCounter: number
+	clientVersion: string
+	connectedSince: string
+	lastAckedTimestamp: number
+	lastConsumedTimestamp: number
+	messageOutCounter: number
+	unackedMessages: number
+	blockedConsumerOnUnackedMsgs: boolean
+}
+
 interface MessageStandard {
 	id: string
 }
