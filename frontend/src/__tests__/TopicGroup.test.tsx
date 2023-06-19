@@ -11,7 +11,7 @@ const dataTest: Array<TopicInfo> = [
 		namespace: 'amos-namespace-2',
 		tenant: 'amos-tenant-2',
 		producers: ['test-producer'],
-		subscriptions: ['test-subscription']
+		subscriptions: ['test-subscription'],
 	},
 ]
 
