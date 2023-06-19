@@ -39,7 +39,7 @@ public class MessageControllerTest {
                 aMessage("persistent://public/default/spaceships", "Nebuchadnezzar"),
                 aMessage("persistent://public/default/spaceships", "Serenity")
         );
-        Mockito.when(messageService.getNumberOfLatestMessagesFromTopic("persistent://public/default/spaceships", 5))
+        Mockito.when(messageService.getLatestMessagesOfTopic("persistent://public/default/spaceships", 5))
                 .thenReturn(messageDtos);
 
         mockMvc.perform(get("/messages?topic=persistent://public/default/spaceships&numOfLatestMsgs=5")

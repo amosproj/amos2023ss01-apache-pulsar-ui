@@ -13,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.apache.pulsar.client.admin.PulsarAdminException;
 import org.apache.pulsar.client.api.Message;
-import org.apache.pulsar.client.api.PulsarClient;
 import org.apache.pulsar.common.api.proto.CommandSubscribe;
 import org.apache.pulsar.common.naming.TopicName;
 import org.springframework.stereotype.Service;
@@ -27,17 +26,14 @@ import java.util.List;
 public class MessageService {
     private final PulsarAdmin pulsarAdmin;
 
-    private final PulsarClient pulsarClient;
-
-    public List<MessageDto> getNumberOfLatestMessagesFromTopic(String topic, Integer numOfLatestMsgs) {
+    public List<MessageDto> getLatestMessagesOfTopic(String topic, Integer numMessages) {
         var schema = getSchemaIfExists(topic);
-       //var schema = "";
         try {
             var messages = new ArrayList<Message<byte[]>>();
 
-            // impede a look up of more messages than there were produced until now
+            // ensure that we don't look up more messages than exist
             var producedMessagesUntilNow = pulsarAdmin.topics().getStats(topic).getMsgInCounter();
-            var numLookUpMessages = Math.min(producedMessagesUntilNow, numOfLatestMsgs);
+            var numLookUpMessages = Math.min(producedMessagesUntilNow, numMessages);
 
             for (int i = 0; i < numLookUpMessages; i++) {
                 messages.add(
@@ -49,7 +45,7 @@ public class MessageService {
                     .toList();
         } catch (PulsarAdminException e) {
             throw new PulsarApiException(
-                    "Could not examine the amount of '%d' messages for topic '%s'".formatted(numOfLatestMsgs, topic),
+                    "Could not examine the amount of '%d' messages for topic '%s'".formatted(numMessages, topic),
                     e
             );
         }

@@ -47,7 +47,7 @@ public class MessageServiceIntegrationTest extends AbstractIntegrationTest {
 
             producer.send(messageToSend.getPayload().getBytes(StandardCharsets.UTF_8));
         }
-        var messages = messageService.getNumberOfLatestMessagesFromTopic(topicName, 1);
+        var messages = messageService.getLatestMessagesOfTopic(topicName, 1);
 
         MessageDto messageReceived = messages.get(0);
         assertThat(messageReceived.getMessageId()).isNotEmpty(); // generated
@@ -73,7 +73,7 @@ public class MessageServiceIntegrationTest extends AbstractIntegrationTest {
 
             producer.send(new TestSchema("Keks", 3));
         }
-        var messages = messageService.getNumberOfLatestMessagesFromTopic(topicName, 1);
+        var messages = messageService.getLatestMessagesOfTopic(topicName, 1);
 
         MessageDto messageReceived = messages.get(0);
         assertThat(messageReceived.getSchema()).isEqualTo(schema.getSchemaInfo().getSchemaDefinition());
