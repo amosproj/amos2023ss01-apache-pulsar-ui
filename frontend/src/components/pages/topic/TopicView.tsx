@@ -68,8 +68,7 @@ const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 										key={index}
 										producer={{
 											producerName: item,
-											topicList: ['SampleTopic1', 'SampleTopic2'],
-											messageList: ['SampleMessage1', 'SampleMessage2'],
+											topicName: name,
 										}}
 									/>
 								))

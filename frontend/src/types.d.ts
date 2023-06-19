@@ -96,6 +96,7 @@ interface TopicInfo {
 	subscriptions: string[]
 	producers: string[]
 }
+
 interface ClusterDetail {
 	name: string
 	tenants: string[]
@@ -139,8 +140,8 @@ interface TopicDetail {
 	tenant: string
 	ownerBroker: string
 	topicStatsDto: {
-		//subscriptions: string[]
-		//producers: string[]
+		subscriptions: string[]
+		producers: string[]
 		numberSubscriptions: number
 		numberProducers: number
 		producedMesages: number
@@ -163,6 +164,28 @@ interface TopicDetail {
 		}
 	]
 	persistent: boolean
+}
+
+interface ProducerDetails {
+	id: number
+	name: string
+	messagesDto: MessageDto[]
+	amountOfMessages: number
+	address: string
+	averageMsgSize: number
+	clientVersion: string
+	connectedSince: string
+}
+
+interface MessageDto {
+	messageId: string
+	topic: string
+	payload: string
+	schema: string
+	namespace: string
+	tenant: string
+	publishTime: number
+	producer: string
 }
 
 interface MessageStandard {
