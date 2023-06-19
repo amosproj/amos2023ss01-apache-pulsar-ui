@@ -14,7 +14,7 @@ import org.apache.pulsar.common.policies.data.TopicStats;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
+ import java.util.List;
 
 @Data
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -64,5 +64,4 @@ public class TopicDetailDto {
 
         return topicDetailDto;
     }
-
 }

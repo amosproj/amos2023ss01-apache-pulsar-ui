@@ -29,7 +29,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -87,7 +86,7 @@ public class TopicService {
 
     /**
      * @param topicName The Name of the Topic you want to get detailed information about
-     * @return A {@link TopicDetailDto}'s including {@link TopicStatsDto}, List of {@link MessageDto} and
+     * @return A {@link TopicDetailDto}'s including {@link TopicStatsDto} and
      * additional metadata.
      */
     public TopicDetailDto getTopicDetails(String topicName) throws PulsarApiException {
@@ -144,20 +143,23 @@ public class TopicService {
         PublisherStats publisherStats = topicStats.getPublishers().stream()
                 .filter(ps -> Objects.equals(ps.getProducerName(), producer))
                 .findFirst().orElseThrow();
-        return create(publisherStats, getMessagesByProducer(topic, topicStats.getSubscriptions().keySet(), producer));
+
+        return create(publisherStats);
     }
 
-    private List<MessageDto> getMessagesByProducer(String topic, Set<String> subscriptions, String producer) {
-        return subscriptions.stream()
-                .flatMap(s -> messageService.peekMessages(topic, s).stream())
-                .filter(distinctByKey(MessageDto::getMessageId))
-                .filter(message -> Objects.equals(message.getProducer(), producer))
-                .toList();
-    }
+// Todo: will there be an extra call to get the producer messages?
+// if not needed, this can be thrown away, but I will leave it here until we know for sure
+
+//    private List<MessageDto> getMessagesByProducer(String topic, Set<String> subscriptions, String producer) {
+//        return subscriptions.stream()
+//                .flatMap(s -> messageService.peekMessages(topic, s).stream())
+//                .filter(distinctByKey(MessageDto::getMessageId))
+//                .filter(message -> Objects.equals(message.getProducer(), producer))
+//                .toList();
+//    }
 
     public SubscriptionDto getSubscriptionByTopic(String topic, String subscription) {
-        List<MessageDto> messages = messageService.peekMessages(topic, subscription);
-        return SubscriptionDto.create(getTopicStats(topic).getSubscriptions().get(subscription), messages, subscription);
+        return SubscriptionDto.create(getTopicStats(topic).getSubscriptions().get(subscription), subscription);
     }
 
     //source: https://www.baeldung.com/java-streams-distinct-by

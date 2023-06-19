@@ -9,8 +9,6 @@ import de.amos.apachepulsarui.dto.MessageDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.apache.pulsar.client.admin.PulsarAdmin;
-import org.apache.pulsar.client.admin.PulsarAdminException;
-import org.apache.pulsar.client.api.MessageId;
 import org.apache.pulsar.client.api.Producer;
 import org.apache.pulsar.client.api.PulsarClient;
 import org.apache.pulsar.client.api.Schema;
@@ -18,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -30,7 +29,6 @@ public class MessageServiceIntegrationTest extends AbstractIntegrationTest {
     @Autowired
     private TopicService topicService;
 
-    //ToDo replace with a service to create subscriptions?
     @Autowired
     private PulsarAdmin pulsarAdmin;
 
@@ -38,15 +36,18 @@ public class MessageServiceIntegrationTest extends AbstractIntegrationTest {
     private PulsarClient pulsarClient;
 
     @Test
-    void peekMessages_returnsSentMessages() throws PulsarAdminException {
+    void getNumberOfLatestMessagesFromTopic_returnsMessages() throws Exception {
         topicService.createNewTopic("messageToSend-service-integration-test");
         String topicName = "persistent://public/default/messageToSend-service-integration-test";
-        pulsarAdmin.topics().createSubscription(topicName, "getGreatMessages", MessageId.latest);
 
         MessageDto messageToSend = aMessage(topicName, "Hello World");
         Long timeBeforeSend = Instant.now().getEpochSecond();
-        messageService.sendMessage(messageToSend);
-        var messages = messageService.peekMessages(topicName, "getGreatMessages");
+        try (Producer<byte[]> producer = pulsarClient.newProducer()
+                .topic(topicName).create()) {
+
+            producer.send(messageToSend.getPayload().getBytes(StandardCharsets.UTF_8));
+        }
+        var messages = messageService.getLatestMessagesOfTopic(topicName, 1);
 
         MessageDto messageReceived = messages.get(0);
         assertThat(messageReceived.getMessageId()).isNotEmpty(); // generated
@@ -60,10 +61,9 @@ public class MessageServiceIntegrationTest extends AbstractIntegrationTest {
 
 
     @Test
-    void peekMessages_forMessageWithSchema_returnsSchema() throws Exception {
+    void getNumberOfLatestMessagesFromTopic_forMessageWithSchema_returnsSchema() throws Exception {
         topicService.createNewTopic("messageToSend-schema-service-integration-test");
         String topicName = "persistent://public/default/messageToSend-schema-service-integration-test";
-        pulsarAdmin.topics().createSubscription(topicName, "getSchemaMessages", MessageId.latest);
 
         Schema<TestSchema> schema = Schema.JSON(TestSchema.class);
         pulsarAdmin.schemas().createSchema(topicName, schema.getSchemaInfo());
@@ -73,7 +73,7 @@ public class MessageServiceIntegrationTest extends AbstractIntegrationTest {
 
             producer.send(new TestSchema("Keks", 3));
         }
-        var messages = messageService.peekMessages(topicName, "getSchemaMessages");
+        var messages = messageService.getLatestMessagesOfTopic(topicName, 1);
 
         MessageDto messageReceived = messages.get(0);
         assertThat(messageReceived.getSchema()).isEqualTo(schema.getSchemaInfo().getSchemaDefinition());
