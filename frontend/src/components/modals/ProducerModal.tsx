@@ -97,27 +97,19 @@ const ProducerModal: React.FC<ProducerModalProps> = ({ producer }) => {
 						Producer name: {producer.producerName}
 					</Typography>
 					<Typography variant="body1" gutterBottom>
-						Producer ID: {producerDetails?.id ? producerDetails.id : 'N/A'}
+						Producer ID: {producerDetails?.id}
 					</Typography>
 					<Typography variant="body1" gutterBottom>
-						Address:{' '}
-						{producerDetails?.address ? producerDetails.address : 'N/A'}
+						Address: {producerDetails?.address}
 					</Typography>
 					<Typography variant="body1" gutterBottom>
-						Average message size:{' '}
-						{producerDetails?.averageMsgSize ? producerDetails.address : 'N/A'}
+						Average message size: {producerDetails?.averageMsgSize}
 					</Typography>
 					<Typography variant="body1" gutterBottom>
-						Client version:{' '}
-						{producerDetails?.clientVersion
-							? producerDetails.clientVersion
-							: 'N/A'}
+						Client version: {producerDetails?.clientVersion}
 					</Typography>
 					<Typography variant="body1" gutterBottom>
-						Connected since:{' '}
-						{producerDetails?.connectedSince
-							? producerDetails.connectedSince
-							: 'N/A'}
+						Connected since: {producerDetails?.connectedSince}
 					</Typography>
 				</Box>
 			</Modal>
