@@ -29,7 +29,7 @@ const ConsumerAccordion: React.FC<ConsumerAccordionProps> = ({
 		isExpanded: boolean
 	): void => {
 		setExpanded(isExpanded)
-		if (isExpanded) {
+		if (isExpanded && consumerName) {
 			fetchData()
 		}
 	}
