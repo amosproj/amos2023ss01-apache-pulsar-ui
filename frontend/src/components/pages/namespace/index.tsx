@@ -17,6 +17,11 @@ export interface ResponseNamespace {
 	namespaces: NamespaceInfo[]
 }
 
+/**
+ * Card group component for the namespace type.
+ * Displays the NamespaceView cards, title, loading window and network error.
+ * @returns Rendered namespace view cards for the dashboard component
+ */
 const NamespaceGroup: React.FC = () => {
 	const [data, setData] = useState<NamespaceInfo[]>([])
 	const [error, setError] = useState<string | null>(null)
@@ -27,6 +32,7 @@ const NamespaceGroup: React.FC = () => {
 	const baseURL = 'http://localhost:8081/api/namespace/all/'
 	const trigger = useAppSelector(selectTrigger)
 
+	// Sends get request to /namespace/all for general information everytime the trigger value changes
 	useEffect(() => {
 		// Query parameters
 		const clusterQuery = clusterFilter
