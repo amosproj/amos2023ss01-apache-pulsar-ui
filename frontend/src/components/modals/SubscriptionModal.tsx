@@ -3,9 +3,10 @@
 // SPDX-FileCopyrightText: 2019 Georg Schwarz <georg. schwarz@fau.de>
 
 import React, { useEffect, useState } from 'react'
-import { Modal, Box, Typography, IconButton } from '@mui/material'
+import { Modal, Box, Typography, IconButton, Container } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import axios from 'axios'
+import ConsumerAccordion from './ConsumerAccordion'
 
 export interface ResponseSubscription {
 	name: string
@@ -48,6 +49,7 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
 	const baseURL = 'http://localhost:8081/api/topic/subscription/'
 
 	const handleOpen = () => {
+		fetchData()
 		setOpen(true)
 	}
 
@@ -55,7 +57,25 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
 		setOpen(false)
 	}
 
-	useEffect(() => {
+	// useEffect(() => {
+	// 	// Query parameters
+	// 	const topicQuery = `topic=${topic}`
+
+	// 	// Joining all query parameters
+	// 	const query = [topicQuery]
+	// 	const url = `${baseURL + subscription}?${query}`
+	// 	// Sending GET request
+	// 	axios
+	// 		.get<ResponseSubscription>(url)
+	// 		.then((response) => {
+	// 			setData(response.data)
+	// 		})
+	// 		.catch((error) => {
+	// 			setError(error.message)
+	// 		})
+	// }, [])
+
+	const fetchData = () => {
 		// Query parameters
 		const topicQuery = `topic=${topic}`
 
@@ -71,7 +91,7 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
 			.catch((error) => {
 				setError(error.message)
 			})
-	}, [])
+	}
 
 	return (
 		<>
@@ -113,9 +133,13 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
 					<Typography variant="h5" component="h2" gutterBottom>
 						Subscription: {subscription}
 					</Typography>
-					<Typography variant="body1" gutterBottom>
-						Consumers: {data?.activeConsumer}
-					</Typography>
+					<div>
+						Consumers:
+						<ConsumerAccordion
+							consumerName={data?.activeConsumer}
+							topicName={topic}
+						/>
+					</div>
 					<Typography variant="body1" gutterBottom>
 						Nr of Consumers: {data?.numberConsumers}
 					</Typography>
