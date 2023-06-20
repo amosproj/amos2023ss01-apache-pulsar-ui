@@ -11,10 +11,10 @@ import { useNavigate } from 'react-router-dom'
 import { addFilterByDrillDown } from '../../../store/filterSlice'
 import { useAppDispatch } from '../../../store/hooks'
 import axios from 'axios'
-import ConsumerModal from '../../modals/ConsumerModal'
+import SubscriptionModal from '../../modals/SubscriptionModal'
 
 const TopicView: React.FC<TopicViewProps> = ({ data }) => {
-	const { name, tenant, namespace }: TopicInfo = data
+	const { name, tenant, namespace, producers, subscriptions }: TopicInfo = data
 	const [expanded, setExpanded] = useState(false)
 	const [details, setDetails] = useState<TopicDetail>()
 	const dispatch = useAppDispatch()
@@ -60,6 +60,39 @@ const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 							Namespace:{' '}
 							<span className="text-blue">{namespace ? namespace : 'N/A'}</span>
 						</p>
+						<p className="text-black">
+							Producers:{' '}
+							{producers.length > 0 ? (
+								producers.map((item: string, index: number) => (
+									<ProducerModal
+										key={index}
+										producer={{
+											producerName: item,
+											topicName: name,
+										}}
+									/>
+								))
+							) : (
+								<span className="text-blue">None</span>
+							)}
+						</p>
+						<p className="text-black">
+							Subscriptions:{' '}
+							{subscriptions.length > 0 ? (
+								subscriptions.map((item: string, index: number) => (
+									<SubscriptionModal
+										key={index}
+										subscription={{
+											subscriptionName: item,
+											topicList: ['SampleTopic1', 'SampleTopic2'],
+											messageList: ['SampleMessage1', 'SampleMessage2'],
+										}}
+									/>
+								))
+							) : (
+								<span className="text-blue">None</span>
+							)}
+						</p>
 					</div>
 				</div>
 			</div>
@@ -73,44 +106,6 @@ const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 								<span className="text-blue">
 									{details?.ownerBroker ? details.ownerBroker : 'N/A'}
 								</span>
-							</p>
-							<p className="text-black">
-								Producers:{' '}
-								{details && details.topicStatsDto.producers.length > 0 ? (
-									details.topicStatsDto.producers.map(
-										(item: string, index: number) => (
-											<ProducerModal
-												key={index}
-												producer={{
-													producerName: item,
-													topicList: ['SampleTopic1', 'SampleTopic2'],
-													messageList: ['SampleMessage1', 'SampleMessage2'],
-												}}
-											/>
-										)
-									)
-								) : (
-									<span className="text-blue">None</span>
-								)}
-							</p>
-							<p className="text-black">
-								Subscriptions:{' '}
-								{details && details.topicStatsDto.subscriptions.length > 0 ? (
-									details.topicStatsDto.subscriptions.map(
-										(item: string, index: number) => (
-											<ConsumerModal
-												key={index}
-												consumer={{
-													consumerName: item,
-													topicList: ['SampleTopic1', 'SampleTopic2'],
-													messageList: ['SampleMessage1', 'SampleMessage2'],
-												}}
-											/>
-										)
-									)
-								) : (
-									<span className="text-blue">None</span>
-								)}
 							</p>
 						</div>
 						<div className="grey-line"></div>

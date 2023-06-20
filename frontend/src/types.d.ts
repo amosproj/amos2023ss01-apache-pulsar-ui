@@ -56,7 +56,14 @@ interface CustomSelectProps<T> {
 interface CustomCheckboxProps {
 	id: string
 	text: string
-	typology: 'cluster' | 'tenant' | 'namespace' | 'topic' | 'message'
+	typology:
+		| 'cluster'
+		| 'tenant'
+		| 'namespace'
+		| 'topic'
+		| 'message'
+		| 'producer'
+		| 'subscription'
 	selected: boolean
 }
 
@@ -86,7 +93,10 @@ interface TopicInfo {
 	name: string
 	namespace: string
 	tenant: string
+	subscriptions: string[]
+	producers: string[]
 }
+
 interface ClusterDetail {
 	name: string
 	tenants: string[]
@@ -154,6 +164,42 @@ interface TopicDetail {
 		}
 	]
 	persistent: boolean
+}
+
+interface ProducerDetails {
+	id: number
+	name: string
+	messagesDto: MessageDto[]
+	amountOfMessages: number
+	address: string
+	averageMsgSize: number
+	clientVersion: string
+	connectedSince: string
+}
+
+interface MessageDto {
+	messageId: string
+	topic: string
+	payload: string
+	schema: string
+	namespace: string
+	tenant: string
+	publishTime: number
+	producer: string
+}
+
+interface ConsumerDetails {
+	name: string
+	address: string
+	availablePermits: number
+	bytesOutCounter: number
+	clientVersion: string
+	connectedSince: string
+	lastAckedTimestamp: number
+	lastConsumedTimestamp: number
+	messageOutCounter: number
+	unackedMessages: number
+	blockedConsumerOnUnackedMsgs: boolean
 }
 
 interface MessageStandard {

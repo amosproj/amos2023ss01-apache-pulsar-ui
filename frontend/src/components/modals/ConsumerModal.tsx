@@ -5,28 +5,39 @@
 import React, { useState } from 'react'
 import { Modal, Box, Typography, IconButton } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
+import axios from 'axios'
 
-/*
-Nr of Topics used:
-List of Topics: [Topic_2]
-Nr of Messages:
-List of Messages: []
+/** 
+The following information is shown in the consumer information popup:
+
+address: Address of this consumer
+availablePermits: Number of available message permits for the consumer
+BytesOutCounter: Total bytes delivered to consumer (bytes)
+ClientVersion: Client library version
+ConnectedSince: Timestamp of connection
+ConsumerName: Name of the consumer
+LastAckedTimestamp:
+LastConsumedTimestamp:
+MessageOutConter: Total messages delivered to consumer (msg).
+UnackedMessages: Number of unacknowledged messages for the consumer, where an unacknowledged message is one that has been sent to the consumer but not yet acknowledged
+isBlockedConsumerOnUnackedMsgs: Flag to verify if consumer is blocked due to reaching threshold of unacked messages
 */
 
 interface ConsumerModalProps {
 	consumer: {
+		topicName: string
 		consumerName: string
-		topicAmount?: number
-		topicList: [] | Array<string>
-		messageAmount?: number
-		messageList: [] | Array<string>
 	}
 }
 
 const ConsumerModal: React.FC<ConsumerModalProps> = ({ consumer }) => {
+	const { topicName, consumerName } = consumer
+
 	const [open, setOpen] = useState(false)
+	const [consumerDetails, setConsumerDetails] = useState<ConsumerDetails>()
 
 	const handleOpen = () => {
+		fetchData()
 		setOpen(true)
 	}
 
@@ -34,12 +45,30 @@ const ConsumerModal: React.FC<ConsumerModalProps> = ({ consumer }) => {
 		setOpen(false)
 	}
 
-	consumer.topicAmount = consumer.topicList.length
-	consumer.messageAmount = consumer.messageList.length
+	const fetchData = () => {
+		const url = `http://localhost:8081/api/topic/consumer/${consumerName}`
+
+		// Sending GET request
+		const params = {
+			topic: topicName,
+		}
+		axios
+			.get<ConsumerDetails>(url, { params })
+			.then((response) => {
+				setConsumerDetails(response.data)
+			})
+			.catch((error) => {
+				console.log(error)
+			})
+	}
 
 	return (
 		<>
-			<span onClick={handleOpen} style={{ cursor: 'pointer' }}>
+			<span
+				className="text-blue"
+				onClick={handleOpen}
+				style={{ cursor: 'pointer' }}
+			>
 				{consumer.consumerName},{' '}
 			</span>
 			<Modal open={open} onClose={handleClose}>
@@ -74,26 +103,64 @@ const ConsumerModal: React.FC<ConsumerModalProps> = ({ consumer }) => {
 						Consumer Name: {consumer.consumerName}
 					</Typography>
 					<Typography variant="body1" gutterBottom>
-						Nr of Topics registered: {consumer.topicAmount}
+						Address:{' '}
+						{consumerDetails?.address ? consumerDetails.address : 'N/A'}
 					</Typography>
 					<Typography variant="body1" gutterBottom>
-						List of Topics:{' '}
-						{consumer.topicList.map((item: string, index: number) => (
-							<span key={index} className="text-blue">
-								{item},{' '}
-							</span>
-						))}
+						Available permits:{' '}
+						{consumerDetails?.availablePermits
+							? consumerDetails.availablePermits
+							: 'N/A'}
 					</Typography>
 					<Typography variant="body1" gutterBottom>
-						Nr of Messages: {consumer.topicAmount}
+						Bytes out counter:{' '}
+						{consumerDetails?.bytesOutCounter
+							? consumerDetails.bytesOutCounter
+							: 'N/A'}
 					</Typography>
 					<Typography variant="body1" gutterBottom>
-						List of Messages:{' '}
-						{consumer.messageList.map((item: string, index: number) => (
-							<span key={index} className="text-blue">
-								{item},{' '}
-							</span>
-						))}
+						Client version:{' '}
+						{consumerDetails?.clientVersion
+							? consumerDetails.clientVersion
+							: 'N/A'}
+					</Typography>
+					<Typography variant="body1" gutterBottom>
+						Connected since:{' '}
+						{consumerDetails?.connectedSince
+							? consumerDetails.connectedSince
+							: 'N/A'}
+					</Typography>
+					<Typography variant="body1" gutterBottom>
+						Last acked timestamp:{' '}
+						{consumerDetails?.lastAckedTimestamp
+							? consumerDetails.lastAckedTimestamp
+							: 'N/A'}
+					</Typography>
+					<Typography variant="body1" gutterBottom>
+						Last consumed timestamp:{' '}
+						{consumerDetails?.lastConsumedTimestamp
+							? consumerDetails.lastConsumedTimestamp
+							: 'N/A'}
+					</Typography>
+					<Typography variant="body1" gutterBottom>
+						Message out counter:{' '}
+						{consumerDetails?.messageOutCounter
+							? consumerDetails.messageOutCounter
+							: 'N/A'}
+					</Typography>
+					<Typography variant="body1" gutterBottom>
+						Unacked messages:{' '}
+						{consumerDetails?.unackedMessages
+							? consumerDetails.unackedMessages
+							: 'N/A'}
+					</Typography>
+					<Typography variant="body1" gutterBottom>
+						Blocked consumer on unacked msgs:{' '}
+						{consumerDetails?.blockedConsumerOnUnackedMsgs
+							? consumerDetails.blockedConsumerOnUnackedMsgs
+								? 'true'
+								: 'false'
+							: 'N/A'}
 					</Typography>
 				</Box>
 			</Modal>

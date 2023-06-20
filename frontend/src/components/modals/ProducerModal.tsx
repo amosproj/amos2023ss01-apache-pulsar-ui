@@ -5,28 +5,33 @@
 import React, { useState } from 'react'
 import { Modal, Box, Typography, IconButton } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
+import axios from 'axios'
 
-/*
-Nr of Topics used:
-List of Topics: [Topic_2]
-Nr of Messages:
-List of Messages: []
+/**
+The following information is shown in the producer information popup:
+Address: Address of this publisher.
+AverageMsgSize: Average message size published by this publisher.
+ClientVersion: Client library version.
+ConnectedSince: Timestamp of connection.
+ProducerId: Id of this publisher.
+ProducerName: Producer name.
 */
 
 interface ProducerModalProps {
 	producer: {
 		producerName: string
-		topicAmount?: number
-		topicList: [] | Array<string>
-		messageAmount?: number
-		messageList: [] | Array<string>
+		topicName: string
 	}
 }
 
 const ProducerModal: React.FC<ProducerModalProps> = ({ producer }) => {
+	const { producerName, topicName } = producer
+
 	const [open, setOpen] = useState(false)
+	const [producerDetails, setProducerDetails] = useState<ProducerDetails>()
 
 	const handleOpen = () => {
+		fetchData()
 		setOpen(true)
 	}
 
@@ -34,12 +39,30 @@ const ProducerModal: React.FC<ProducerModalProps> = ({ producer }) => {
 		setOpen(false)
 	}
 
-	producer.topicAmount = producer.topicList.length
-	producer.messageAmount = producer.messageList.length
+	const fetchData = () => {
+		const url = `http://localhost:8081/api/topic/producer/${producerName}`
+
+		// Sending GET request
+		const params = {
+			topic: topicName,
+		}
+		axios
+			.get<ProducerDetails>(url, { params })
+			.then((response) => {
+				setProducerDetails(response.data)
+			})
+			.catch((error) => {
+				console.log(error)
+			})
+	}
 
 	return (
 		<>
-			<span onClick={handleOpen} style={{ cursor: 'pointer' }}>
+			<span
+				className="text-blue"
+				onClick={handleOpen}
+				style={{ cursor: 'pointer' }}
+			>
 				{producer.producerName},{' '}
 			</span>
 			<Modal open={open} onClose={handleClose}>
@@ -71,29 +94,30 @@ const ProducerModal: React.FC<ProducerModalProps> = ({ producer }) => {
 						<CloseIcon />
 					</IconButton>
 					<Typography variant="h5" component="h2" gutterBottom>
-						Producer Name: {producer.producerName}
+						Producer name: {producer.producerName}
 					</Typography>
 					<Typography variant="body1" gutterBottom>
-						Nr of Topics used: {producer.topicAmount}
+						Producer ID: {producerDetails?.id ? producerDetails.id : 'N/A'}
 					</Typography>
 					<Typography variant="body1" gutterBottom>
-						List of Topics:{' '}
-						{producer.topicList.map((item: string, index: number) => (
-							<span key={index} className="text-blue">
-								{item},{' '}
-							</span>
-						))}
+						Address:{' '}
+						{producerDetails?.address ? producerDetails.address : 'N/A'}
 					</Typography>
 					<Typography variant="body1" gutterBottom>
-						Nr of Messages: {producer.topicAmount}
+						Average message size:{' '}
+						{producerDetails?.averageMsgSize ? producerDetails.address : 'N/A'}
 					</Typography>
 					<Typography variant="body1" gutterBottom>
-						List of Messages:{' '}
-						{producer.messageList.map((item: string, index: number) => (
-							<span key={index} className="text-blue">
-								{item},{' '}
-							</span>
-						))}
+						Client version:{' '}
+						{producerDetails?.clientVersion
+							? producerDetails.clientVersion
+							: 'N/A'}
+					</Typography>
+					<Typography variant="body1" gutterBottom>
+						Connected since:{' '}
+						{producerDetails?.connectedSince
+							? producerDetails.connectedSince
+							: 'N/A'}
 					</Typography>
 				</Box>
 			</Modal>

@@ -7,6 +7,7 @@
 package de.amos.apachepulsarui.service;
 
 import de.amos.apachepulsarui.dto.TopicDetailDto;
+import de.amos.apachepulsarui.dto.TopicDto;
 import org.apache.pulsar.client.admin.Lookup;
 import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.apache.pulsar.client.admin.PulsarAdminException;
@@ -24,11 +25,10 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class TopicServiceTest {
@@ -108,4 +108,28 @@ class TopicServiceTest {
                 times(1)
         );
     }
+
+
+    @Test
+    void getTopicByProducer() {
+        TopicDto topicDto = TopicDto.builder().build();
+        topicDto.setProducers(List.of("wantedProducer"));
+        TopicDto topicDto1 = TopicDto.builder().build();
+        topicDto1.setProducers(List.of("unWantedProducer"));
+        List<TopicDto> topics = List.of(topicDto, topicDto1);
+
+        assertEquals(topicService.getTopicForProducer(topics, "wantedProducer").size() , 1);
+    }
+
+    @Test
+    void getTopicBySubscription() {
+        TopicDto topicDto = TopicDto.builder().build();
+        topicDto.setSubscriptions(Set.of("wantedSubscription"));
+        TopicDto topicDto1 = TopicDto.builder().build();
+        topicDto1.setSubscriptions(Set.of("unWantedSubscription"));
+        List<TopicDto> topics = List.of(topicDto, topicDto1);
+
+        assertEquals(topicService.getAllForSubscriptions(topics, List.of("wantedSubscription")).size() , 1);
+    }
+
 }
