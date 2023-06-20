@@ -10,19 +10,12 @@ import { useAppDispatch } from '../store/hooks'
 import { useNavigate } from 'react-router-dom'
 
 import {
-	addFilter,
 	fetchOptionsThunk,
 	resetAllFilters,
+	updateFilterAccordingToNav,
+	HierarchyInPulsar,
 } from '../store/filterSlice'
 import { triggerRequest } from './pages/requestTriggerSlice'
-// import {
-// 	setCluster,
-// 	setTenant,
-// 	setNamespace,
-// 	setTopic,
-// 	addFilter,
-// 	deleteFilter,
-// } from '../store/filterSlice'
 
 const Dashboard: React.FC<DashboardProps> = ({
 	completeMessages,
@@ -44,6 +37,7 @@ const Dashboard: React.FC<DashboardProps> = ({
 	useEffect(() => {
 		if (location.pathname === '/') navigate('/cluster')
 		dispatch(fetchOptionsThunk())
+		dispatch(updateFilterAccordingToNav(location.pathname as HierarchyInPulsar))
 	}, [])
 
 	/*

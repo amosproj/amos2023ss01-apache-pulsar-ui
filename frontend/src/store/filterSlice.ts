@@ -216,6 +216,8 @@ const filterSlice = createSlice({
 				'namespace',
 				'topic',
 				'message',
+				'producer',
+				'subscription',
 			]
 			const currentViewLevel = pulsarHierarchyArr.indexOf(currentView)
 			const lastViewLevel = pulsarHierarchyArr.indexOf(lastView)
@@ -225,7 +227,6 @@ const filterSlice = createSlice({
 				const filtersToReset = pulsarHierarchyArr.slice(currentViewLevel + 1)
 				// Resets all filters bellow the current view level.
 				filtersToReset.forEach((filterName) => {
-					console.log(filterName)
 					state[filterName] = initialState[filterName]
 				})
 			}
