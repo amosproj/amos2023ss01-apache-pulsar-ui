@@ -34,19 +34,32 @@ public class TopicController {
     @GetMapping("/all")
     public ResponseEntity<TopicsDto> getAll(@RequestParam(required = false, defaultValue = "") List<String> tenants,
                                             @RequestParam(required = false, defaultValue = "") List<String> namespaces,
-                                            @RequestParam(required = false, defaultValue = "") List<String> topics) {
+                                            @RequestParam(required = false, defaultValue = "") List<String> topics,
+                                            @RequestParam(required = false, defaultValue = "") String producer,
+                                            @RequestParam(required = false, defaultValue = "") List<String> subscriptions) {
+
+        List<TopicDto> topicsToReturn;
+
         if (!topics.isEmpty()) {
-            return wrapInEntity(getAllForTopics(topics));
+            topicsToReturn = getAllForTopics(topics);
         } else if (!namespaces.isEmpty()) {
-            return wrapInEntity(getAllForNamespaces(namespaces));
+            topicsToReturn = getAllForNamespaces(namespaces);
         } else {
-            return wrapInEntity(getAllForTenants(tenants));
+            topicsToReturn = getAllForTenants(tenants);
         }
+
+        if (!producer.isEmpty()) {
+            topicsToReturn = topicService.getTopicForProducer(topicsToReturn, producer);
+        }
+        if (!subscriptions.isEmpty()) {
+            topicsToReturn = topicService.getAllForSubscriptions(topicsToReturn, subscriptions);
+        }
+        return wrapInEntity(topicsToReturn);
     }
 
     @GetMapping
     public ResponseEntity<TopicDetailDto> getTopicDetails(@RequestParam String name) {
-       return new ResponseEntity<>(topicService.getTopicDetails(name), HttpStatus.OK);
+        return new ResponseEntity<>(topicService.getTopicDetails(name), HttpStatus.OK);
     }
 
     @GetMapping("/subscription/{subscription}")

@@ -10,6 +10,8 @@ const dataTest: Array<TopicInfo> = [
 		name: 'amos-topic-1',
 		namespace: 'amos-namespace-2',
 		tenant: 'amos-tenant-2',
+		producers: ['test-producer'],
+		subscriptions: ['test-subscription'],
 	},
 ]
 
@@ -47,5 +49,11 @@ test('should check if data is being displayed in the TopicGroup', async () => {
 	)
 	expect(screen.getByTestId('main-topicgroup')).toHaveTextContent(
 		'Tenant: amos-tenant-2'
+	)
+	expect(screen.getByTestId('main-topicgroup')).toHaveTextContent(
+		'Producers: test-producer'
+	)
+	expect(screen.getByTestId('main-topicgroup')).toHaveTextContent(
+		'Subscriptions: test-subscription'
 	)
 })

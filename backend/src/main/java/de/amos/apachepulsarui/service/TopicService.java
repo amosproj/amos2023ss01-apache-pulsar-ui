@@ -6,13 +6,7 @@
 
 package de.amos.apachepulsarui.service;
 
-import de.amos.apachepulsarui.dto.ConsumerDto;
-import de.amos.apachepulsarui.dto.MessageDto;
-import de.amos.apachepulsarui.dto.ProducerDto;
-import de.amos.apachepulsarui.dto.SubscriptionDto;
-import de.amos.apachepulsarui.dto.TopicDetailDto;
-import de.amos.apachepulsarui.dto.TopicDto;
-import de.amos.apachepulsarui.dto.TopicStatsDto;
+import de.amos.apachepulsarui.dto.*;
 import de.amos.apachepulsarui.exception.PulsarApiException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -73,7 +67,7 @@ public class TopicService {
         try {
             return pulsarAdmin.topics().getList(namespace);
         } catch (PulsarAdminException e) {
-           throw new PulsarApiException("Could not fetch topics of namespace '%s'".formatted(namespace), e);
+            throw new PulsarApiException("Could not fetch topics of namespace '%s'".formatted(namespace), e);
         }
     }
 
@@ -168,4 +162,17 @@ public class TopicService {
             );
         }
     }
+
+    public List<TopicDto> getTopicForProducer(List<TopicDto> topics, String producer) {
+        return topics.stream()
+                .filter(topicDto -> topicDto.getProducers().contains(producer))
+                .toList();
+    }
+
+    public List<TopicDto> getAllForSubscriptions(List<TopicDto> topics, List<String> subscriptions) {
+        return topics.stream()
+                .filter(topic -> topic.getSubscriptions().stream().anyMatch(subscriptions::contains))
+                .toList();
+    }
+
 }
