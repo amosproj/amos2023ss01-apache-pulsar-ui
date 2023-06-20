@@ -8,6 +8,8 @@ import axios from 'axios'
 import {
 	selectCluster,
 	selectNamespace,
+	selectProducer,
+	selectSubscription,
 	selectTenant,
 	selectTopic,
 } from '../../../store/filterSlice'
@@ -31,6 +33,8 @@ const TopicGroup: React.FC = () => {
 	const clusterFilter = useAppSelector(selectCluster)
 	const tenantFilter = useAppSelector(selectTenant)
 	const namespaceFilter = useAppSelector(selectNamespace)
+	const producerFilter = useAppSelector(selectProducer)
+	const subscriptionFilter = useAppSelector(selectSubscription)
 	const topicFilter = useAppSelector(selectTopic)
 	const baseURL = 'http://localhost:8081/api/topic/all'
 	const trigger = useAppSelector(selectTrigger)
@@ -47,10 +51,23 @@ const TopicGroup: React.FC = () => {
 		const namespaceQuery = namespaceFilter
 			.map((namespace) => `namespaces=${namespace}`)
 			.join('&')
+		const producerQuery = producerFilter.map(
+			(producer) => `producer=${producer}`
+		)
+		const subscriptionQuery = subscriptionFilter
+			.map((subscription) => `subscriptions=${subscription}`)
+			.join('&')
 		const topicQuery = topicFilter.map((topic) => `topics=${topic}`).join('&')
 
 		// Joining all query parameters
-		const query = [clusterQuery, tenantQuery, namespaceQuery, topicQuery]
+		const query = [
+			clusterQuery,
+			tenantQuery,
+			namespaceQuery,
+			topicQuery,
+			producerQuery,
+			subscriptionQuery,
+		]
 			.filter((q) => q)
 			.join('&')
 		const url = `${baseURL}?${query}`

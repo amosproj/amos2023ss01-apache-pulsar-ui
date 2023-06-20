@@ -32,6 +32,12 @@
 	}
 
 	.secondary-dashboard {
+		flex: 0 0 25%;
+		max-width: 25%;
+		padding-right: 38px;
+		display: flex;
+		flex-direction: column;
+		
 		.MuiCollapse-wrapper.MuiCollapse-vertical .MuiAccordionDetails-root {
 			padding: 0px;
 			padding-bottom: 4px;

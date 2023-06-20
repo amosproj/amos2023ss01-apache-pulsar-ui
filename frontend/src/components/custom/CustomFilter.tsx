@@ -8,6 +8,7 @@ import AccordionSummary from '@mui/material/AccordionSummary'
 import AccordionDetails from '@mui/material/AccordionDetails'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import CustomCheckbox from './CustomCheckbox'
+import CustomRadio from './CustomRadio'
 import CustomSearchbar from './CustomSearchbar'
 import { useAppSelector } from '../../store/hooks'
 import { selectAllFilters, selectOptions } from '../../store/filterSlice'
@@ -24,6 +25,8 @@ const CustomFilter: React.FC<CustomFilterProps> = ({
 	const [namespaceSearchQuery, setNamespaceSearchQuery] = useState('')
 	const [tenantSearchQuery, setTenantSearchQuery] = useState('')
 	const [topicSearchQuery, setTopicSearchQuery] = useState('')
+	const [producerSearchQuery, setProducerSearchQuery] = useState('')
+	const [subscriptionSearchQuery, setSubscriptionSearchQuery] = useState('')
 	const [messageSearchQuery, setMessageSearchQuery] = useState('')
 
 	const filteredCheckboxes = (searchQuery: string, completeArray: string[]) => {
@@ -47,6 +50,14 @@ const CustomFilter: React.FC<CustomFilterProps> = ({
 		options.allNamespaces
 	)
 	const filteredTopics = filteredCheckboxes(topicSearchQuery, options.allTopics)
+	const filteredProducers = filteredCheckboxes(
+		producerSearchQuery,
+		options.allProducers
+	)
+	const filteredSubscriptions = filteredCheckboxes(
+		subscriptionSearchQuery,
+		options.allSubscriptions
+	)
 	const filteredMessages = filteredCheckboxes(
 		messageSearchQuery,
 		options.allMessages
@@ -153,33 +164,97 @@ const CustomFilter: React.FC<CustomFilterProps> = ({
 				</Accordion>
 			)}
 			{viewLevelOne && (
-				<Accordion>
-					<AccordionSummary
-						expandIcon={<ExpandMoreIcon />}
-						aria-controls="panel1a-content"
-					>
-						<h3 className="filter-title">Topics</h3>
-					</AccordionSummary>
-					<AccordionDetails>
-						<CustomSearchbar
-							placeholder={'Search Topics'}
-							setSearchQuery={setTopicSearchQuery}
-						></CustomSearchbar>
-						<div className="flex flex-col mt-4">
-							{filteredTopics &&
-								filteredTopics.length > 0 &&
-								filteredTopics.map((item: string) => (
-									<CustomCheckbox
-										key={'checkbox-topic' + Math.floor(Math.random() * 999999)}
-										text={item}
-										id={item}
-										typology={'topic'}
-										selected={filters.topic.includes(item) ? true : false}
-									></CustomCheckbox>
-								))}
-						</div>
-					</AccordionDetails>
-				</Accordion>
+				<>
+					<Accordion>
+						<AccordionSummary
+							expandIcon={<ExpandMoreIcon />}
+							aria-controls="panel1a-content"
+						>
+							<h3 className="filter-title">Topics</h3>
+						</AccordionSummary>
+						<AccordionDetails>
+							<CustomSearchbar
+								placeholder={'Search Topics'}
+								setSearchQuery={setTopicSearchQuery}
+							></CustomSearchbar>
+							<div className="flex flex-col mt-4">
+								{filteredTopics &&
+									filteredTopics.length > 0 &&
+									filteredTopics.map((item: string) => (
+										<CustomCheckbox
+											key={
+												'checkbox-topic' + Math.floor(Math.random() * 999999)
+											}
+											text={item}
+											id={item}
+											typology={'topic'}
+											selected={filters.topic.includes(item) ? true : false}
+										></CustomCheckbox>
+									))}
+							</div>
+						</AccordionDetails>
+					</Accordion>
+					<Accordion>
+						<AccordionSummary
+							expandIcon={<ExpandMoreIcon />}
+							aria-controls="panel1a-content"
+						>
+							<h3 className="filter-title">Producers</h3>
+						</AccordionSummary>
+						<AccordionDetails>
+							<CustomSearchbar
+								placeholder={'Search Producers'}
+								setSearchQuery={setProducerSearchQuery}
+							></CustomSearchbar>
+							<div className="flex flex-col mt-4">
+								{filteredProducers &&
+									filteredProducers.length > 0 &&
+									filteredProducers.map((item: string) => (
+										<CustomRadio
+											key={
+												'checkbox-topic' + Math.floor(Math.random() * 999999)
+											}
+											text={item}
+											id={item}
+											typology={'producer'}
+											selected={filters.producer.includes(item) ? true : false}
+										></CustomRadio>
+									))}
+							</div>
+						</AccordionDetails>
+					</Accordion>
+					<Accordion>
+						<AccordionSummary
+							expandIcon={<ExpandMoreIcon />}
+							aria-controls="panel1a-content"
+						>
+							<h3 className="filter-title">Subscriptions</h3>
+						</AccordionSummary>
+						<AccordionDetails>
+							<CustomSearchbar
+								placeholder={'Search Subscriptions'}
+								setSearchQuery={setSubscriptionSearchQuery}
+							></CustomSearchbar>
+							<div className="flex flex-col mt-4">
+								{filteredSubscriptions &&
+									filteredSubscriptions.length > 0 &&
+									filteredSubscriptions.map((item: string) => (
+										<CustomCheckbox
+											key={
+												'checkbox-topic' + Math.floor(Math.random() * 999999)
+											}
+											text={item}
+											id={item}
+											typology={'subscription'}
+											selected={
+												filters.subscription.includes(item) ? true : false
+											}
+										></CustomCheckbox>
+									))}
+							</div>
+						</AccordionDetails>
+					</Accordion>
+				</>
 			)}
 			{currentView === 'message' && (
 				<Accordion>

@@ -22,6 +22,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
+import java.util.Set;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.when;
@@ -81,6 +82,53 @@ public class TopicControllerTest {
                 .andExpect(jsonPath("$.topics[1].tenant", equalTo(topics.get(1).getTenant())));
     }
 
+    @Test
+    void getAll_withProducer_returnsSpecifiyTopic() throws Exception {
+
+        List<String> tenants = List.of("tenant1", "tenant2");
+        List<String> namespaces = List.of("tenant1/namespace1", "tenant2/namespace1");
+
+        TopicDto topicDto = TopicDto.create("persistent://tenant1/namespace1/topic1", topicStats);
+        topicDto.setProducers(List.of("Producer"));
+        List<TopicDto> topics = List.of(topicDto);
+
+        when(tenantService.getAllNames()).thenReturn(tenants);
+        when(namespaceService.getNamespaceNamesForTenants(tenants)).thenReturn(namespaces);
+        when(topicService.getAllForNamespaces(namespaces)).thenReturn(topics);
+        when(topicService.getTopicForProducer(topics, "Producer")).thenReturn(topics);
+
+
+        mockMvc.perform(get("/topic/all?producer=Producer")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.topics[0].name", equalTo(topics.get(0).getName())))
+                .andExpect(jsonPath("$.topics[0].namespace", equalTo(topics.get(0).getNamespace())))
+                .andExpect(jsonPath("$.topics[0].tenant", equalTo(topics.get(0).getTenant())));
+    }
+
+    @Test
+    void getAll_withSubscription_returnsSpecifiyTopic() throws Exception {
+
+        List<String> tenants = List.of("tenant1", "tenant2");
+        List<String> namespaces = List.of("tenant1/namespace1", "tenant2/namespace1");
+
+        TopicDto topicDto = TopicDto.create("persistent://tenant1/namespace1/topic1", topicStats);
+        topicDto.setSubscriptions(Set.of("Subscription"));
+        List<TopicDto> topics = List.of(topicDto);
+
+        when(tenantService.getAllNames()).thenReturn(tenants);
+        when(namespaceService.getNamespaceNamesForTenants(tenants)).thenReturn(namespaces);
+        when(topicService.getAllForNamespaces(namespaces)).thenReturn(topics);
+        when(topicService.getAllForSubscriptions(topics, List.of("Subscription"))).thenReturn(topics);
+
+
+        mockMvc.perform(get("/topic/all?subscriptions=Subscription")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.topics[0].name", equalTo(topics.get(0).getName())))
+                .andExpect(jsonPath("$.topics[0].namespace", equalTo(topics.get(0).getNamespace())))
+                .andExpect(jsonPath("$.topics[0].tenant", equalTo(topics.get(0).getTenant())));
+    }
     @Test
     void getAll_withTenants_returnsAllTopicsForTenants() throws Exception {
 

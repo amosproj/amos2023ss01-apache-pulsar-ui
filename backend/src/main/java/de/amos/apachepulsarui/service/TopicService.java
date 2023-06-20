@@ -7,7 +7,6 @@
 package de.amos.apachepulsarui.service;
 
 import de.amos.apachepulsarui.dto.ConsumerDto;
-import de.amos.apachepulsarui.dto.MessageDto;
 import de.amos.apachepulsarui.dto.ProducerDto;
 import de.amos.apachepulsarui.dto.SchemaInfoDto;
 import de.amos.apachepulsarui.dto.SubscriptionDto;
@@ -187,4 +186,17 @@ public class TopicService {
             );
         }
     }
+
+    public List<TopicDto> getTopicForProducer(List<TopicDto> topics, String producer) {
+        return topics.stream()
+                .filter(topicDto -> topicDto.getProducers().contains(producer))
+                .toList();
+    }
+
+    public List<TopicDto> getAllForSubscriptions(List<TopicDto> topics, List<String> subscriptions) {
+        return topics.stream()
+                .filter(topic -> topic.getSubscriptions().stream().anyMatch(subscriptions::contains))
+                .toList();
+    }
+
 }

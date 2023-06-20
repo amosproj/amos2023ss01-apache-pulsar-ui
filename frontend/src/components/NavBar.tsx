@@ -126,6 +126,9 @@ function NavBar() {
 									disabled={page.toLowerCase() == location.pathname.slice(1)}
 									onClick={() => {
 										handleClickOnNav(page)
+										updateFilterAccordingToNav(
+											page.toLowerCase() as HierarchyInPulsar
+										)
 									}}
 								>
 									<Typography textAlign="center">{page}</Typography>
