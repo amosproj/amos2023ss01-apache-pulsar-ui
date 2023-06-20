@@ -13,6 +13,11 @@ export interface ResponseTenant {
 	tenants: TenantInfo[]
 }
 
+/**
+ * Card group component for the tenant type.
+ * Displays the TenantView cards, title, loading window and network error.
+ * @returns Rendered tenant view cards for the dashboard component
+ */
 const TenantGroup: React.FC = () => {
 	const [data, setData] = useState<TenantInfo[]>([])
 	const [error, setError] = useState<string | null>(null)
@@ -22,6 +27,7 @@ const TenantGroup: React.FC = () => {
 	const baseURL = 'http://localhost:8081/api/tenant/all'
 	const trigger = useAppSelector(selectTrigger)
 
+	// Sends get request to /cluster/all for general information everytime the trigger value changes
 	useEffect(() => {
 		// Query parameters
 		const clusterQuery = clusterFilter

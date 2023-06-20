@@ -202,7 +202,12 @@ public class TopicControllerTest {
     void getTopicDetails() throws Exception {
         String name = "grogu";
         String fullTopic = "persistent://public/default/grogu";
-        TopicDetailDto topic = TopicDetailDto.create(name, topicStats, RandomString.make(1));
+        TopicDetailDto topic = TopicDetailDto.create(
+                name,
+                topicStats,
+                RandomString.make(1),
+                List.of()
+        );
 
         when(topicService.getTopicDetails(fullTopic)).thenReturn(topic);
 
@@ -216,9 +221,8 @@ public class TopicControllerTest {
     void getSubscriptionByNameAndTopic() throws Exception {
         String subscription = "R2D2";
         String topic = "persistent://public/default/droide";
-        List<MessageDto> messages = List.of();
 
-        SubscriptionDto subscriptionDto = SubscriptionDto.create(subscriptionStats, messages ,subscription);
+        SubscriptionDto subscriptionDto = SubscriptionDto.create(subscriptionStats, subscription);
 
 
         when(topicService.getSubscriptionByTopic(topic, subscription)).thenReturn(subscriptionDto);
@@ -234,10 +238,9 @@ public class TopicControllerTest {
     void getProducerByNameAndTopic() throws Exception {
         String producer = "C3PO";
         String topic = "persistent://public/default/droide";
-        List<MessageDto> messages = List.of();
         when(publisherStats.getProducerName()).thenReturn(producer);
 
-        ProducerDto dto = ProducerDto.create(publisherStats, messages);
+        ProducerDto dto = ProducerDto.create(publisherStats);
 
         when(topicService.getProducerByTopic(topic, producer)).thenReturn(dto);
 

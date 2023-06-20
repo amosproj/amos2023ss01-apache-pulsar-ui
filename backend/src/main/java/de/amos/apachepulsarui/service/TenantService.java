@@ -21,6 +21,7 @@ public class TenantService {
     private final PulsarAdmin pulsarAdmin;
     private final NamespaceService namespaceService;
 
+    @Cacheable("tenants.allNames")
     public List<String> getAllNames() throws PulsarApiException {
         try {
             return pulsarAdmin.tenants().getTenants();
@@ -29,7 +30,7 @@ public class TenantService {
         }
     }
 
-    @Cacheable("tenats.getAll")
+    @Cacheable("tenants.allFiltered")
     public List<TenantDto> getAllFiltered(List<String> tenants) throws PulsarApiException {
         try {
             List<String> tenantNames = pulsarAdmin.tenants().getTenants();

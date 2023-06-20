@@ -6,7 +6,13 @@
 
 package de.amos.apachepulsarui.service;
 
-import de.amos.apachepulsarui.dto.*;
+import de.amos.apachepulsarui.dto.ConsumerDto;
+import de.amos.apachepulsarui.dto.ProducerDto;
+import de.amos.apachepulsarui.dto.SchemaInfoDto;
+import de.amos.apachepulsarui.dto.SubscriptionDto;
+import de.amos.apachepulsarui.dto.TopicDetailDto;
+import de.amos.apachepulsarui.dto.TopicDto;
+import de.amos.apachepulsarui.dto.TopicStatsDto;
 import de.amos.apachepulsarui.exception.PulsarApiException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,13 +22,12 @@ import org.apache.pulsar.common.naming.TopicName;
 import org.apache.pulsar.common.policies.data.ConsumerStats;
 import org.apache.pulsar.common.policies.data.PublisherStats;
 import org.apache.pulsar.common.policies.data.TopicStats;
-import org.springframework.cache.annotation.Cacheable;
+import org.apache.pulsar.common.schema.SchemaInfo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -58,7 +63,6 @@ public class TopicService {
      * @param namespace The namespace you want to get a list of all topics for.
      * @return A list of topics (their fully qualified names).
      */
-    @Cacheable("topic.allNamesByNamespace")
     public List<String> getAllByNamespace(String namespace) {
         return getByNamespace(namespace);
     }
@@ -81,22 +85,16 @@ public class TopicService {
 
     /**
      * @param topicName The Name of the Topic you want to get detailed information about
-     * @return A {@link TopicDetailDto}'s including {@link TopicStatsDto}, List of {@link MessageDto} and
+     * @return A {@link TopicDetailDto}'s including {@link TopicStatsDto} and
      * additional metadata.
      */
     public TopicDetailDto getTopicDetails(String topicName) throws PulsarApiException {
-        try {
-            List<String> subscriptions = pulsarAdmin.topics().getSubscriptions(topicName);
-            List<MessageDto> messages = subscriptions.stream().
-                    flatMap(sub -> messageService.peekMessages(topicName, sub).stream()).toList();
-            return TopicDetailDto.createTopicDtoWithMessages(topicName,
-                    getTopicStats(topicName),
-                    getOwnerBroker(topicName),
-                    messages);
-
-        } catch (PulsarAdminException e) {
-            throw new PulsarApiException("Could not fetch topic details for topic '%s'".formatted(topicName), e);
-        }
+        return TopicDetailDto.create(
+                topicName,
+                getTopicStats(topicName),
+                getOwnerBroker(topicName),
+                getSchemasOfTopic(topicName)
+        );
     }
 
     private TopicStats getTopicStats(String topicName) throws PulsarApiException {
@@ -115,26 +113,52 @@ public class TopicService {
         }
     }
 
+    private List<SchemaInfoDto> getSchemasOfTopic(String topicName) {
+        try {
+            return pulsarAdmin.schemas().getAllSchemas(topicName).stream()
+                    .map(schemaInfo -> {
+                        Long versionBySchemaInfo = getVersionBySchemaInfo(topicName, schemaInfo);
+                        return SchemaInfoDto.create(schemaInfo, versionBySchemaInfo);
+                    })
+                    .toList();
+        } catch (PulsarAdminException e) {
+            throw new PulsarApiException("Could not fetch all schemas for topic %s".formatted(topicName), e);
+        }
+    }
+
+    private Long getVersionBySchemaInfo(String topicName, SchemaInfo schemaInfo) {
+        try {
+            return pulsarAdmin.schemas().getVersionBySchema(topicName, schemaInfo);
+        } catch (PulsarAdminException e) {
+            throw new PulsarApiException(
+                    "Could not fetch version by schema info %s for topic %s".formatted(schemaInfo.getName(), topicName),
+                    e
+            );
+        }
+    }
+
     public ProducerDto getProducerByTopic(String topic, String producer) {
         TopicStats topicStats = getTopicStats(topic);
         PublisherStats publisherStats = topicStats.getPublishers().stream()
                 .filter(ps -> Objects.equals(ps.getProducerName(), producer))
                 .findFirst().orElseThrow();
-        return create(publisherStats, getMessagesByProducer(topic, topicStats.getSubscriptions().keySet(), producer));
+
+        return create(publisherStats);
     }
 
+// Todo: will there be an extra call to get the producer messages?
+// if not needed, this can be thrown away, but I will leave it here until we know for sure
 
-    private List<MessageDto> getMessagesByProducer(String topic, Set<String> subscriptions, String producer) {
-        return subscriptions.stream()
-                .flatMap(s -> messageService.peekMessages(topic, s).stream())
-                .filter(distinctByKey(MessageDto::getMessageId))
-                .filter(message -> Objects.equals(message.getProducer(), producer))
-                .toList();
-    }
+//    private List<MessageDto> getMessagesByProducer(String topic, Set<String> subscriptions, String producer) {
+//        return subscriptions.stream()
+//                .flatMap(s -> messageService.peekMessages(topic, s).stream())
+//                .filter(distinctByKey(MessageDto::getMessageId))
+//                .filter(message -> Objects.equals(message.getProducer(), producer))
+//                .toList();
+//    }
 
     public SubscriptionDto getSubscriptionByTopic(String topic, String subscription) {
-        List<MessageDto> messages = messageService.peekMessages(topic, subscription);
-        return SubscriptionDto.create(getTopicStats(topic).getSubscriptions().get(subscription), messages, subscription);
+        return SubscriptionDto.create(getTopicStats(topic).getSubscriptions().get(subscription), subscription);
     }
 
     //source: https://www.baeldung.com/java-streams-distinct-by

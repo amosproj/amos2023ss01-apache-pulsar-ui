@@ -11,6 +11,7 @@ import de.amos.apachepulsarui.dto.TopicDto;
 import org.apache.pulsar.client.admin.Lookup;
 import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.apache.pulsar.client.admin.PulsarAdminException;
+import org.apache.pulsar.client.admin.Schemas;
 import org.apache.pulsar.client.admin.Topics;
 import org.apache.pulsar.common.naming.TopicName;
 import org.apache.pulsar.common.policies.data.TopicStats;
@@ -35,6 +36,8 @@ class TopicServiceTest {
 
     @Mock
     private Topics topics;
+    @Mock
+    private Schemas schemas;
     @Mock
     private PulsarAdmin pulsarAdmin;
     @Mock
@@ -87,6 +90,11 @@ class TopicServiceTest {
         when(pulsarAdmin.lookups().lookupTopic(TOPIC_NAME)).thenReturn(BROKER);
     }
 
+    private void whenSchemas() throws PulsarAdminException {
+        when(pulsarAdmin.schemas()).thenReturn(schemas);
+        when(pulsarAdmin.schemas().getAllSchemas(TOPIC_NAME)).thenReturn(List.of());
+    }
+
     @Test
     void createNewTopic() throws PulsarAdminException {
         when(pulsarAdmin.topics()).thenReturn(topics);
@@ -97,14 +105,15 @@ class TopicServiceTest {
     }
 
     @Test
-    void getTopicWithMessagesByName() throws PulsarAdminException {
+    void getTopicDetails() throws PulsarAdminException {
         whenTopicStats();
         whenOwnerBroker();
+        whenSchemas();
 
         topicService.getTopicDetails(TOPIC_NAME);
 
         topicDtoMockedStatic.verify(
-                () -> TopicDetailDto.createTopicDtoWithMessages(TOPIC_NAME, topicStats, BROKER, List.of()),
+                () -> TopicDetailDto.create(TOPIC_NAME, topicStats, BROKER, List.of()),
                 times(1)
         );
     }

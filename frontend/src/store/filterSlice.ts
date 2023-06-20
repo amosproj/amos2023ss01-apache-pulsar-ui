@@ -20,6 +20,7 @@ export type HierarchyInPulsar =
 	| 'subscription'
 
 export type FilterState = {
+	// used to keep track of what curently is filtered and what not:
 	cluster: string[]
 	tenant: string[]
 	namespace: string[]
@@ -27,6 +28,7 @@ export type FilterState = {
 	producer: string[]
 	subscription: string[]
 	message: string[]
+	// used for displaying the options in the filter dropdowns:
 	displayedOptions: {
 		allClusters: string[]
 		allTenants: string[]
@@ -75,6 +77,10 @@ const backendInstance = axios.create({
 	timeout: 5000,
 })
 
+/**
+ * Fetches the general cluster information of cluster/all for filter options
+ * @returns {ResponseCluster} - unedited data from endpoint
+ */
 const clusterOptionThunk = createAsyncThunk(
 	'filterController/clusterOption',
 	async () => {
@@ -82,6 +88,11 @@ const clusterOptionThunk = createAsyncThunk(
 		return response.data
 	}
 )
+
+/**
+ * Fetches the general tenant information of tenant/all for filter options
+ * @returns {ResponseTenant} - unedited data from endpoint
+ */
 const tenantOptionThunk = createAsyncThunk(
 	'filterController/tenantOption',
 	async () => {
@@ -89,6 +100,11 @@ const tenantOptionThunk = createAsyncThunk(
 		return response.data
 	}
 )
+
+/**
+ * Fetches the general namespace information of namespace/all for filter options
+ * @returns {ResponseNamespace} - unedited data from endpoint
+ */
 const namespaceOptionThunk = createAsyncThunk(
 	'filterController/namespaceOption',
 	async () => {
@@ -96,6 +112,11 @@ const namespaceOptionThunk = createAsyncThunk(
 		return response.data
 	}
 )
+
+/**
+ * Fetches the general topic information of topic/all for filter options
+ * @returns {ResponseTopic} - unedited data from endpoint
+ */
 const topicOptionThunk = createAsyncThunk(
 	'filterController/topicOption',
 	async () => {
@@ -103,6 +124,10 @@ const topicOptionThunk = createAsyncThunk(
 		return response.data
 	}
 )
+
+/**
+ * Dispatches all option thunks to fill the filter option arrays with information
+ */
 const fetchOptionsThunk = createAsyncThunk(
 	'filterController/fetchOptions',
 	async (_, thunkAPI) => {
@@ -139,7 +164,7 @@ const filterSlice = createSlice({
 		setSubscription: (state, action: PayloadAction<string[]>) => {
 			state.subscription = action.payload
 		},
-		// Adds query to one single filter (cluster, tenant, namespace, topic)
+		// Adds an Id to one single filter array (cluster, tenant, namespace, topic)
 		addFilter: (state, action: PayloadAction<UpdateSingleFilter>) => {
 			const filterName = action.payload.filterName
 			state[filterName].push(action.payload.id)
@@ -150,7 +175,7 @@ const filterSlice = createSlice({
 			state[filterName] = []
 			state[filterName].push(action.payload.id)
 		},
-		// Deletes query from one single filter (cluster, tenant, namespace, topic)
+		// Deletes Id from one single filter array (cluster, tenant, namespace, topic)
 		deleteFilter: (state, action: PayloadAction<UpdateSingleFilter>) => {
 			const filterName = action.payload.filterName
 			const query = action.payload.id
@@ -158,6 +183,7 @@ const filterSlice = createSlice({
 				return element !== query
 			})
 		},
+		// Adds Id to a filter array while resetting all other Id's in it. Specifically needed for Drill Down Buttons
 		addFilterByDrillDown: (
 			state,
 			action: PayloadAction<UpdateSingleFilter>
@@ -192,8 +218,9 @@ const filterSlice = createSlice({
 					)
 			}
 		},
+		// Resets all filter arrays / applied filters to initial state
 		resetAllFilters: (state) => {
-			//to not accidently delete the displayed options:
+			// only the filter arrays are affected
 			state.cluster = initialState.cluster
 			state.tenant = initialState.tenant
 			state.namespace = initialState.namespace
@@ -202,7 +229,7 @@ const filterSlice = createSlice({
 			state.subscription = initialState.subscription
 			state.message = initialState.message
 		},
-		// the filtering of lower views do not apply to higher views,
+		// the filtering of lower views does not apply to higher views,
 		// those filters shall be reset when the user "goes up".
 		updateFilterAccordingToNav: (
 			state,

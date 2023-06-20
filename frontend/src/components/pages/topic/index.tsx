@@ -20,6 +20,11 @@ export interface ResponseTopic {
 	topics: TopicInfo[]
 }
 
+/**
+ * Card group component for the topic type.
+ * Displays the TopicView cards, title, loading window and network error.
+ * @returns Rendered topic view cards for the dashboard component
+ */
 const TopicGroup: React.FC = () => {
 	const [data, setData] = useState<TopicInfo[]>([])
 	const [error, setError] = useState<string | null>(null)
@@ -34,6 +39,7 @@ const TopicGroup: React.FC = () => {
 	const baseURL = 'http://localhost:8081/api/topic/all'
 	const trigger = useAppSelector(selectTrigger)
 
+	// Sends get request to /cluster/all for general information everytime the trigger value changes
 	useEffect(() => {
 		// Query parameters
 		const clusterQuery = clusterFilter
