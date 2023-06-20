@@ -47,6 +47,14 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
 	const [error, setError] = useState<string | null>(null)
 	const baseURL = 'http://localhost:8081/api/topic/subscription/'
 
+	const handleOpen = () => {
+		setOpen(true)
+	}
+
+	const handleClose = () => {
+		setOpen(false)
+	}
+
 	useEffect(() => {
 		// Query parameters
 		const topicQuery = `topic=${topic}`

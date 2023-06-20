@@ -82,11 +82,8 @@ const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 								subscriptions.map((item: string, index: number) => (
 									<SubscriptionModal
 										key={index}
-										subscription={{
-											subscriptionName: item,
-											topicList: ['SampleTopic1', 'SampleTopic2'],
-											messageList: ['SampleMessage1', 'SampleMessage2'],
-										}}
+										subscription={item}
+										topic={name}
 									/>
 								))
 							) : (
