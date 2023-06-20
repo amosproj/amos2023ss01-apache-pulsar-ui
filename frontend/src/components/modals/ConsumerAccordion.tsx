@@ -90,11 +90,7 @@ const ConsumerAccordion: React.FC<ConsumerAccordionProps> = ({
 				</Typography>
 				<Typography variant="body1" gutterBottom>
 					Blocked consumer on unacked msgs:{' '}
-					{consumerDetails?.blockedConsumerOnUnackedMsgs
-						? consumerDetails.blockedConsumerOnUnackedMsgs
-							? 'true'
-							: 'false'
-						: 'N/A'}
+					{consumerDetails?.blockedConsumerOnUnackedMsgs.toString()}
 				</Typography>
 			</AccordionDetails>
 		</Accordion>
