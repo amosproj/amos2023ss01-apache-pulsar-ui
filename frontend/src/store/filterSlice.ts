@@ -16,18 +16,26 @@ export type HierarchyInPulsar =
 	| 'namespace'
 	| 'topic'
 	| 'message'
+	| 'producer'
+	| 'subscription'
 
 export type FilterState = {
+	// used to keep track of what curently is filtered and what not:
 	cluster: string[]
 	tenant: string[]
 	namespace: string[]
 	topic: string[]
+	producer: string[]
+	subscription: string[]
 	message: string[]
+	// used for displaying the options in the filter dropdowns:
 	displayedOptions: {
 		allClusters: string[]
 		allTenants: string[]
 		allNamespaces: string[]
 		allTopics: string[]
+		allProducers: string[]
+		allSubscriptions: string[]
 		allMessages: string[]
 	}
 	view: UpdateSingleFilter['filterName']
@@ -49,12 +57,16 @@ const initialState: FilterState = {
 	tenant: [],
 	namespace: [],
 	topic: [],
+	producer: [],
+	subscription: [],
 	message: [],
 	displayedOptions: {
 		allClusters: [],
 		allTenants: [],
 		allNamespaces: [],
 		allTopics: [],
+		allProducers: [],
+		allSubscriptions: [],
 		allMessages: [],
 	},
 	view: 'cluster',
@@ -62,9 +74,13 @@ const initialState: FilterState = {
 
 const backendInstance = axios.create({
 	baseURL: 'http://localhost:8081/api',
-	timeout: 1000,
+	timeout: 5000,
 })
 
+/**
+ * Fetches the general cluster information of cluster/all for filter options
+ * @returns {ResponseCluster} - unedited data from endpoint
+ */
 const clusterOptionThunk = createAsyncThunk(
 	'filterController/clusterOption',
 	async () => {
@@ -72,6 +88,11 @@ const clusterOptionThunk = createAsyncThunk(
 		return response.data
 	}
 )
+
+/**
+ * Fetches the general tenant information of tenant/all for filter options
+ * @returns {ResponseTenant} - unedited data from endpoint
+ */
 const tenantOptionThunk = createAsyncThunk(
 	'filterController/tenantOption',
 	async () => {
@@ -79,6 +100,11 @@ const tenantOptionThunk = createAsyncThunk(
 		return response.data
 	}
 )
+
+/**
+ * Fetches the general namespace information of namespace/all for filter options
+ * @returns {ResponseNamespace} - unedited data from endpoint
+ */
 const namespaceOptionThunk = createAsyncThunk(
 	'filterController/namespaceOption',
 	async () => {
@@ -86,6 +112,11 @@ const namespaceOptionThunk = createAsyncThunk(
 		return response.data
 	}
 )
+
+/**
+ * Fetches the general topic information of topic/all for filter options
+ * @returns {ResponseTopic} - unedited data from endpoint
+ */
 const topicOptionThunk = createAsyncThunk(
 	'filterController/topicOption',
 	async () => {
@@ -93,6 +124,10 @@ const topicOptionThunk = createAsyncThunk(
 		return response.data
 	}
 )
+
+/**
+ * Dispatches all option thunks to fill the filter option arrays with information
+ */
 const fetchOptionsThunk = createAsyncThunk(
 	'filterController/fetchOptions',
 	async (_, thunkAPI) => {
@@ -123,12 +158,24 @@ const filterSlice = createSlice({
 		setTopic: (state, action: PayloadAction<string[]>) => {
 			state.topic = action.payload
 		},
-		// Adds query to one single filter (cluster, tenant, namespace, topic)
+		setProducer: (state, action: PayloadAction<string[]>) => {
+			state.producer = action.payload
+		},
+		setSubscription: (state, action: PayloadAction<string[]>) => {
+			state.subscription = action.payload
+		},
+		// Adds an Id to one single filter array (cluster, tenant, namespace, topic)
 		addFilter: (state, action: PayloadAction<UpdateSingleFilter>) => {
 			const filterName = action.payload.filterName
 			state[filterName].push(action.payload.id)
 		},
-		// Deletes query from one single filter (cluster, tenant, namespace, topic)
+		// Adds query to one single
+		addFilterWithRadio: (state, action: PayloadAction<UpdateSingleFilter>) => {
+			const filterName = action.payload.filterName
+			state[filterName] = []
+			state[filterName].push(action.payload.id)
+		},
+		// Deletes Id from one single filter array (cluster, tenant, namespace, topic)
 		deleteFilter: (state, action: PayloadAction<UpdateSingleFilter>) => {
 			const filterName = action.payload.filterName
 			const query = action.payload.id
@@ -136,6 +183,7 @@ const filterSlice = createSlice({
 				return element !== query
 			})
 		},
+		// Adds Id to a filter array while resetting all other Id's in it. Specifically needed for Drill Down Buttons
 		addFilterByDrillDown: (
 			state,
 			action: PayloadAction<UpdateSingleFilter>
@@ -170,15 +218,18 @@ const filterSlice = createSlice({
 					)
 			}
 		},
+		// Resets all filter arrays / applied filters to initial state
 		resetAllFilters: (state) => {
-			//to not accidently delete the displayed options:
+			// only the filter arrays are affected
 			state.cluster = initialState.cluster
 			state.tenant = initialState.tenant
 			state.namespace = initialState.namespace
 			state.topic = initialState.topic
+			state.producer = initialState.producer
+			state.subscription = initialState.subscription
 			state.message = initialState.message
 		},
-		// the filtering of lower views do not apply to higher views,
+		// the filtering of lower views does not apply to higher views,
 		// those filters shall be reset when the user "goes up".
 		updateFilterAccordingToNav: (
 			state,
@@ -192,6 +243,8 @@ const filterSlice = createSlice({
 				'namespace',
 				'topic',
 				'message',
+				'producer',
+				'subscription',
 			]
 			const currentViewLevel = pulsarHierarchyArr.indexOf(currentView)
 			const lastViewLevel = pulsarHierarchyArr.indexOf(lastView)
@@ -201,7 +254,6 @@ const filterSlice = createSlice({
 				const filtersToReset = pulsarHierarchyArr.slice(currentViewLevel + 1)
 				// Resets all filters bellow the current view level.
 				filtersToReset.forEach((filterName) => {
-					console.log(filterName)
 					state[filterName] = initialState[filterName]
 				})
 			}
@@ -225,6 +277,43 @@ const filterSlice = createSlice({
 		})
 		builder.addCase(topicOptionThunk.fulfilled, (state, action) => {
 			const data: ResponseTopic = JSON.parse(JSON.stringify(action.payload))
+			/*const producers: string[] = data.topics
+				.flatMap((item) => item.producers)
+				.flat()
+				.filter((element, index) => {
+					return producers.indexOf(element) === index
+				})
+			const subscriptions: string[] = data.topics
+				.flatMap((item) => item.subscriptions)
+				.flat()
+				.filter((element, index) => {
+					return producers.indexOf(element) === index
+				})*/
+			data.topics.forEach((topic) => {
+				if (topic.producers) {
+					state.displayedOptions.allProducers.push(...topic.producers)
+					state.displayedOptions.allProducers =
+						state.displayedOptions.allProducers
+							.filter((e) => e !== 'undefined')
+							.filter((element, index) => {
+								return (
+									state.displayedOptions.allProducers.indexOf(element) === index
+								)
+							})
+				}
+				if (topic.subscriptions) {
+					state.displayedOptions.allSubscriptions.push(...topic.subscriptions)
+					state.displayedOptions.allSubscriptions =
+						state.displayedOptions.allSubscriptions
+							.filter((e) => e !== 'undefined')
+							.filter((element, index) => {
+								return (
+									state.displayedOptions.allSubscriptions.indexOf(element) ===
+									index
+								)
+							})
+				}
+			})
 			state.displayedOptions.allTopics = data.topics.map((item) => item.name)
 		})
 		builder.addCase(fetchOptionsThunk.fulfilled, (state) => {
@@ -247,6 +336,14 @@ const selectTopic = (state: RootState): string[] => {
 	return state.filterControl.topic
 }
 
+const selectProducer = (state: RootState): string[] => {
+	return state.filterControl.producer
+}
+
+const selectSubscription = (state: RootState): string[] => {
+	return state.filterControl.subscription
+}
+
 const selectOptions = (
 	state: RootState
 ): {
@@ -254,6 +351,8 @@ const selectOptions = (
 	allTenants: string[]
 	allNamespaces: string[]
 	allTopics: string[]
+	allProducers: string[]
+	allSubscriptions: string[]
 	allMessages: string[]
 } => {
 	return state.filterControl.displayedOptions
@@ -266,6 +365,8 @@ const selectAllFilters = (
 	tenant: string[]
 	namespace: string[]
 	topic: string[]
+	producer: string[]
+	subscription: string[]
 	message: string[]
 } => {
 	return {
@@ -273,6 +374,8 @@ const selectAllFilters = (
 		tenant: state.filterControl.tenant,
 		namespace: state.filterControl.namespace,
 		topic: state.filterControl.topic,
+		producer: state.filterControl.producer,
+		subscription: state.filterControl.subscription,
 		message: state.filterControl.message,
 	}
 }
@@ -282,6 +385,8 @@ export {
 	selectNamespace,
 	selectTenant,
 	selectTopic,
+	selectProducer,
+	selectSubscription,
 	selectOptions,
 	selectAllFilters,
 	fetchOptionsThunk,
@@ -292,7 +397,10 @@ export const {
 	setTenant,
 	setNamespace,
 	setTopic,
+	setProducer,
+	setSubscription,
 	addFilter,
+	addFilterWithRadio,
 	deleteFilter,
 	addFilterByDrillDown,
 	resetAllFilters,

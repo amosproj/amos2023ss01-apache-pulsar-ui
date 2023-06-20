@@ -24,8 +24,6 @@ public class SubscriptionDto {
 
     private List<String> inactiveConsumers;
 
-    private List<MessageDto> messages;
-
     private long numberConsumers;
 
     private double msgAckRate;
@@ -42,7 +40,7 @@ public class SubscriptionDto {
 
     private String type;
 
-    public static SubscriptionDto create(SubscriptionStats subscriptionStats, List<MessageDto> messages, String name) {
+    public static SubscriptionDto create(SubscriptionStats subscriptionStats, String name) {
         List<String> consumers = getConsumers(subscriptionStats);
         String active = consumers.stream()
                 .filter(c -> Objects.equals(c, subscriptionStats.getActiveConsumerName()))
@@ -53,7 +51,6 @@ public class SubscriptionDto {
                 .toList();
         return SubscriptionDto.builder()
                 .name(name)
-                .messages(messages)
                 .activeConsumer(active)
                 .inactiveConsumers(inactive)
                 .msgAckRate(subscriptionStats.getMessageAckRate())

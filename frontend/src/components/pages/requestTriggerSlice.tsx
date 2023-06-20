@@ -13,6 +13,8 @@ const initialState: RequestTriggerState = {
 	trigger: false,
 }
 
+// Slice is mainly used to trigger the reload of the pages.
+// Separated from the other Slices to specifically avoid any sudden state changes by other reducers etc that would mess with the reload.
 const requestTriggerSlice = createSlice({
 	name: 'triggerControl',
 	initialState,

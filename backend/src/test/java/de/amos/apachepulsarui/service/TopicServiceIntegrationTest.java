@@ -10,6 +10,7 @@ import de.amos.apachepulsarui.dto.TopicDto;
 import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.apache.pulsar.client.admin.PulsarAdminException;
 import org.apache.pulsar.client.api.*;
+import org.apache.pulsar.common.policies.data.TopicStats;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -18,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class TopicServiceIntegrationTest extends AbstractIntegrationTest {
@@ -39,27 +39,31 @@ public class TopicServiceIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void getAllForNamespaces_returnsTopics() {
+    void getAllForNamespaces_returnsTopics() throws PulsarAdminException {
         List<String> namespaces = List.of("public/namespace1", "public/namespace2");
         topicService.createNewTopic("persistent://public/namespace1/topic1");
         topicService.createNewTopic("persistent://public/namespace2/topic1");
+        TopicStats topicstats1 = pulsarAdmin.topics().getStats("persistent://public/namespace1/topic1");
+        TopicStats topicstats2 = pulsarAdmin.topics().getStats("persistent://public/namespace2/topic1");
 
         List<TopicDto> expectedTopics = List.of(
-                TopicDto.create("persistent://public/namespace1/topic1"),
-                TopicDto.create("persistent://public/namespace2/topic1"));
+                TopicDto.create("persistent://public/namespace1/topic1", topicstats1),
+                TopicDto.create("persistent://public/namespace2/topic1", topicstats2));
 
         List<TopicDto> topics = topicService.getAllForNamespaces(namespaces);
         Assertions.assertThat(topics).containsExactlyInAnyOrderElementsOf(expectedTopics);
     }
 
     @Test
-    void getAllForTopics_returnsExistingTopics() {
+    void getAllForTopics_returnsExistingTopics() throws PulsarAdminException {
         List<String> topicNames = List.of("persistent://public/namespace1/topic3",
                 "persistent://public/namespace2/topic4");
 
         topicService.createNewTopic("persistent://public/namespace1/topic3");
+        TopicStats topicstats3 = pulsarAdmin.topics().getStats("persistent://public/namespace1/topic3");
 
-        TopicDto expectedTopic = TopicDto.create("persistent://public/namespace1/topic3");
+
+        TopicDto expectedTopic = TopicDto.create("persistent://public/namespace1/topic3", topicstats3);
 
         List<TopicDto> topics = topicService.getAllForTopics(topicNames);
         Assertions.assertThat(topics).containsExactly(expectedTopic);
@@ -79,25 +83,22 @@ public class TopicServiceIntegrationTest extends AbstractIntegrationTest {
         topicService.createNewTopic(topicName);
         var message = "hello world".getBytes(StandardCharsets.UTF_8);
         try (Producer<byte[]> producer = pulsarClient.newProducer().topic(topicName).create();
-             Consumer<byte[]> consumer = pulsarClient.newConsumer().topic(topicName).subscriptionName("TestSubscriber").subscribe()) {
-            // receive needs to happen before send, but we don't want to block -> async
-            // after the message was sent, we need to ensure it was received -> .get()
-            CompletableFuture<Message<byte[]>> consume1 = consumer.receiveAsync();
-            producer.sendAsync(message);
-            consume1.get();
-
-            CompletableFuture<Message<byte[]>> consume2 = consumer.receiveAsync();
-            producer.sendAsync(message);
-            consume2.get();
-
+             Consumer<byte[]> consumer = pulsarClient.newConsumer().topic(topicName).subscriptionName("TestSubscriber").subscribe())
+        {
             producer.send(message);
+            producer.send(message);
+            producer.send(message);
+
+            consumer.receive();
+            consumer.receive();
+
             consumer.close();
             producer.close();
         }
         TopicDetailDto topic = topicService.getTopicDetails(topicName);
         // it seems there is no exactly once guarantees in pulsar which made the test flaky -> use greaterThan instead of equals
-        Assertions.assertThat(topic.getProducedMessages()).isGreaterThanOrEqualTo(3);
-        Assertions.assertThat(topic.getConsumedMessages()).isGreaterThanOrEqualTo(2);
+        Assertions.assertThat(topic.getTopicStatsDto().getProducedMesages()).isGreaterThanOrEqualTo(3);
+        Assertions.assertThat(topic.getTopicStatsDto().getConsumedMessages()).isGreaterThanOrEqualTo(2);
     }
 
     @Test

@@ -10,19 +10,12 @@ import { useAppDispatch } from '../store/hooks'
 import { useNavigate } from 'react-router-dom'
 
 import {
-	addFilter,
 	fetchOptionsThunk,
 	resetAllFilters,
+	updateFilterAccordingToNav,
+	HierarchyInPulsar,
 } from '../store/filterSlice'
 import { triggerRequest } from './pages/requestTriggerSlice'
-// import {
-// 	setCluster,
-// 	setTenant,
-// 	setNamespace,
-// 	setTopic,
-// 	addFilter,
-// 	deleteFilter,
-// } from '../store/filterSlice'
 
 const Dashboard: React.FC<DashboardProps> = ({
 	completeMessages,
@@ -40,10 +33,12 @@ const Dashboard: React.FC<DashboardProps> = ({
 	const dispatch = useAppDispatch()
 	const navigate = useNavigate()
 
-	//used to navigate directly to /cluster instead of /
 	useEffect(() => {
+		// used to navigate directly from / to /cluster
 		if (location.pathname === '/') navigate('/cluster')
+		// fetch all filter options once beforehand
 		dispatch(fetchOptionsThunk())
+		dispatch(updateFilterAccordingToNav(location.pathname as HierarchyInPulsar))
 	}, [])
 
 	/*
@@ -264,7 +259,9 @@ const Dashboard: React.FC<DashboardProps> = ({
 		}
 	}
 */
-
+	/**
+	 * Resets all filters and triggers another page request to update the currently displayed cards
+	 */
 	const resetFilters = () => {
 		dispatch(resetAllFilters())
 		dispatch(triggerRequest())

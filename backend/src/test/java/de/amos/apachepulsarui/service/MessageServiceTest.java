@@ -8,7 +8,6 @@ package de.amos.apachepulsarui.service;
 
 import de.amos.apachepulsarui.dto.MessageDto;
 import org.apache.pulsar.client.admin.PulsarAdmin;
-import org.apache.pulsar.client.api.PulsarClient;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -22,12 +21,9 @@ public class MessageServiceTest {
     @Mock
     private PulsarAdmin pulsarAdmin;
 
-    @Mock
-    private PulsarClient pulsarClient;
-
     @Test
     void isValidMessage_forMessageWithValidTopic_returnsTrue() {
-        MessageService messageService = new MessageService(pulsarClient, pulsarAdmin);
+        MessageService messageService = new MessageService(pulsarAdmin);
         String validTopicName = "persistent://public/default/test-topic";
         MessageDto message = MessageDto.create(validTopicName, "hello");
 
@@ -36,7 +32,7 @@ public class MessageServiceTest {
 
     @Test
     void isValidMessage_forMessageWithInvalidTopic_returnsFalse() {
-        MessageService messageService = new MessageService(pulsarClient, pulsarAdmin);
+        MessageService messageService = new MessageService(pulsarAdmin);
         String invalidTopicName = "bla//blub";
         MessageDto message = MessageDto.create(invalidTopicName, "hello");
 
@@ -45,7 +41,7 @@ public class MessageServiceTest {
 
     @Test
     void isValidMessage_forMessageWithEmptyTopic_returnsFalse() {
-        MessageService messageService = new MessageService(pulsarClient, pulsarAdmin);
+        MessageService messageService = new MessageService(pulsarAdmin);
         String emptyTopicName = "";
         MessageDto message = MessageDto.create(emptyTopicName, "hello");
 

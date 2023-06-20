@@ -13,6 +13,11 @@ export interface ResponseCluster {
 	clusters: string[]
 }
 
+/**
+ * Card group component for the cluster type.
+ * Displays the ClusterView cards, title, loading window and network error.
+ * @returns Rendered cluster view cards for the dashboard component
+ */
 const ClusterGroup: React.FC = () => {
 	const [data, setData] = useState<string[]>([])
 	const [error, setError] = useState<string | null>(null)
@@ -20,6 +25,7 @@ const ClusterGroup: React.FC = () => {
 	const url = 'http://localhost:8081/api/cluster/all'
 	const trigger = useAppSelector(selectTrigger)
 
+	//Sends get request to /cluster/all for general information everytime the trigger value changes
 	useEffect(() => {
 		// Sending GET request
 		axios
