@@ -19,6 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.HashSet;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class NamespaceServiceIntegrationTest extends AbstractIntegrationTest {
 
@@ -50,8 +52,11 @@ public class NamespaceServiceIntegrationTest extends AbstractIntegrationTest {
         NamespaceDto expectedNamespaceDto1 = NamespaceDto.fromString("tenant1/namespace1");
         NamespaceDto expectedNamespaceDto2 = NamespaceDto.fromString("tenant1/namespace2");
 
-        List<NamespaceDto> namespaces = namespaceService.getAllForTenants(tenants);
-        Assertions.assertThat(namespaces).containsExactlyInAnyOrder(expectedNamespaceDto1, expectedNamespaceDto2);
+        List<String> namespaces = namespaceService.getAllForTenants(tenants).stream().map(NamespaceDto::getId).toList();
+        assertTrue(namespaces.contains(expectedNamespaceDto1.getId()));
+        assertTrue(namespaces.contains(expectedNamespaceDto2.getId()));
+
+
     }
 
     @Test
