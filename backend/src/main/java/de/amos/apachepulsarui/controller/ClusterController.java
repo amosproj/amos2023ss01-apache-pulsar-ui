@@ -1,6 +1,6 @@
 package de.amos.apachepulsarui.controller;
 
-import de.amos.apachepulsarui.dto.ClusterDto;
+import de.amos.apachepulsarui.dto.ClusterDetailDto;
 import de.amos.apachepulsarui.dto.ClustersDto;
 import de.amos.apachepulsarui.service.ClusterService;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ public class ClusterController {
     private final ClusterService clusterService;
 
     @GetMapping()
-    public ResponseEntity<ClusterDto> getClusterDetails(@RequestParam String clusterName) {
+    public ResponseEntity<ClusterDetailDto> getClusterDetails(@RequestParam String clusterName) {
         return new ResponseEntity<>(clusterService.getClusterDetails(clusterName), HttpStatus.OK);
     }
 

@@ -1,7 +1,7 @@
 package de.amos.apachepulsarui.service;
 
-import de.amos.apachepulsarui.dto.TenantDto;
 import de.amos.apachepulsarui.dto.TenantDetailsDto;
+import de.amos.apachepulsarui.dto.TenantDto;
 import de.amos.apachepulsarui.exception.PulsarApiException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,16 +34,17 @@ public class TenantService {
     public List<TenantDto> getAllFiltered(List<String> tenants) throws PulsarApiException {
         try {
             List<String> tenantNames = pulsarAdmin.tenants().getTenants();
-
             if (tenants.isEmpty()) {
                 return tenantNames.stream()
                         .map(name -> TenantDto.create(getTenantInfo(name), name))
+                        .map(this::enrichWithCardDetails)
                         .toList();
             }
 
             return tenantNames.stream()
                     .filter(tenants::contains)
                     .map(name -> TenantDto.create(getTenantInfo(name), name))
+                    .map(this::enrichWithCardDetails)
                     .toList();
 
         } catch (PulsarAdminException e) {
@@ -71,4 +72,26 @@ public class TenantService {
         }
     }
 
+
+    private TenantDto enrichWithCardDetails(TenantDto tenantDto) {
+        try {
+            List<String> namespaces = pulsarAdmin.namespaces().getNamespaces(tenantDto.getName());
+            long numberOfTopics = namespaces.stream().mapToLong(n -> getNumberOfTopicsForNamespace(n).size()).sum();
+            tenantDto.setNumberOfTopics(numberOfTopics);
+            tenantDto.setNumberOfNamespaces(namespaces.size());
+            return tenantDto;
+        } catch (PulsarAdminException e) {
+            throw new PulsarApiException(
+                    "Could not fetch tenant data of tenant '%s'".formatted(tenantDto.getName()), e
+            );
+        }
+    }
+
+    private List<String> getNumberOfTopicsForNamespace(String namespace) {
+        try {
+            return pulsarAdmin.namespaces().getTopics(namespace);
+        } catch (PulsarAdminException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
