@@ -16,7 +16,6 @@ import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.testcontainers.containers.PulsarContainer;
-import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.utility.DockerImageName;
 
 import java.util.Objects;
@@ -32,7 +31,7 @@ public class AbstractIntegrationTest {
     @Autowired
     private CacheManager cacheManager;
 
-    private static final PulsarContainer pulsar = new PulsarContainer(DockerImageName.parse("apachepulsar/pulsar:3.0.0")).waitingFor(Wait.forHealthcheck());
+    private static final PulsarContainer pulsar = new PulsarContainer(DockerImageName.parse("apachepulsar/pulsar:3.0.0"));
 
     static {
         // singleton containers that are re-used across sub-classes
