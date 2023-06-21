@@ -14,6 +14,6 @@ import java.util.List;
 @AllArgsConstructor
 public class ClustersDto {
 
-    private List<String> clusters;
+    private List<ClusterDto> clusters;
 
 }

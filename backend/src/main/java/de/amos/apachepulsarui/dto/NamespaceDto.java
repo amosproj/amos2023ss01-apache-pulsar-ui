@@ -18,6 +18,8 @@ public class NamespaceDto {
 
 	private String tenant;
 
+	private long numberOfTopics;
+
 	public static NamespaceDto fromString(String namespaceId) {
 		NamespaceDto namespaceDto = new NamespaceDto();
 		namespaceDto.setId(namespaceId);
