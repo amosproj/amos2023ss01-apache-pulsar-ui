@@ -1,5 +1,31 @@
 version: '3'
 services:
+
+  backend:
+    image: apachepulsarui/backend
+    profiles:
+      - backend
+    build: ./backend
+    ports:
+      - "8081:8081"
+    environment:
+      - "PULSAR_CONSUMER_URL=pulsar://pulsar:6650"
+      - "PULSAR_ADMIN_URL=http://pulsar:8080"
+    depends_on:
+      pulsar:
+        condition: service_healthy
+
+  frontend:
+    image: apachepulsarui/frontend
+    profiles:
+      - frontend
+    build: ./frontend
+    ports:
+      - "8082:8082"
+    depends_on:
+      backend:
+        condition: service_started
+
   pulsar:
     image: 'apachepulsar/pulsar:3.0.0'
     ports:
@@ -15,6 +41,7 @@ services:
       interval: 5s
       timeout: 10s
       retries: 10
+
   setup-topology:
     image: pulsarui/setuptopology
     profiles: 
@@ -41,6 +68,7 @@ services:
     depends_on:
       pulsar:
         condition: service_healthy
+
   demo-producer-consumer:
     image: pulsarui/demoproducerconsumer
     profiles: 
@@ -54,16 +82,3 @@ services:
     depends_on:
       setup-topology:
         condition: service_completed_successfully
-  backend:
-    image: apachepulsarui/backend
-    profiles: 
-      - backend
-    build: ./backend
-    ports:
-      - "8081:8081"
-    environment:
-      - "PULSAR_CONSUMER_URL=pulsar://pulsar:6650"
-      - "PULSAR_ADMIN_URL=http://pulsar:8080"
-    depends_on:
-      pulsar:
-        condition: service_healthy

@@ -21,7 +21,7 @@ const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 	const navigate = useNavigate()
 
 	const fetchData = () => {
-		const url = 'http://localhost:8081/api/topic/'
+		const url = 'http://backend:8081/api/topic/'
 
 		// Sending GET request
 		const params = {

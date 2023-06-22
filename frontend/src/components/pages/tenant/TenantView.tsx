@@ -20,7 +20,7 @@ const TenantView: React.FC<TenantViewProps> = ({ data }) => {
 	const navigate = useNavigate()
 
 	const fetchData = () => {
-		const url = 'http://localhost:8081/api/tenant/'
+		const url = 'http://backend:8081/api/tenant/'
 
 		// Sending GET request
 		const params = {

@@ -40,7 +40,7 @@ const ProducerModal: React.FC<ProducerModalProps> = ({ producer }) => {
 	}
 
 	const fetchData = () => {
-		const url = `http://localhost:8081/api/topic/producer/${producerName}`
+		const url = `http://backend:8081/api/topic/producer/${producerName}`
 
 		// Sending GET request
 		const params = {

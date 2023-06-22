@@ -35,7 +35,7 @@ const ConsumerAccordion: React.FC<ConsumerAccordionProps> = ({
 	}
 
 	const fetchData = () => {
-		const url = `http://localhost:8081/api/topic/consumer/${consumerName}`
+		const url = `http://backend:8081/api/topic/consumer/${consumerName}`
 
 		// Sending GET request
 		const params = {

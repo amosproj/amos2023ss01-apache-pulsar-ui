@@ -36,7 +36,7 @@ const TopicGroup: React.FC = () => {
 	const producerFilter = useAppSelector(selectProducer)
 	const subscriptionFilter = useAppSelector(selectSubscription)
 	const topicFilter = useAppSelector(selectTopic)
-	const baseURL = 'http://localhost:8081/api/topic/all'
+	const baseURL = 'http://backend:8081/api/topic/all'
 	const trigger = useAppSelector(selectTrigger)
 
 	// Sends get request to /cluster/all for general information everytime the trigger value changes

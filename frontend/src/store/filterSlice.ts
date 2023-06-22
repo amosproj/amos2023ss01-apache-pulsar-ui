@@ -73,7 +73,7 @@ const initialState: FilterState = {
 }
 
 const backendInstance = axios.create({
-	baseURL: 'http://localhost:8081/api',
+	baseURL: 'http://backend:8081/api',
 	timeout: 5000,
 })
 

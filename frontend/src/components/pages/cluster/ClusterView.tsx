@@ -25,7 +25,7 @@ const ClusterView: React.FC<ClusterViewProps> = ({ data }) => {
 	}
 
 	const fetchData = () => {
-		const url = 'http://localhost:8081/api/cluster/'
+		const url = 'http://backend:8081/api/cluster/'
 
 		// Sending GET request
 		const params = {

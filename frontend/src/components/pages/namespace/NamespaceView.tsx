@@ -20,7 +20,7 @@ const NamespaceView: React.FC<NamespaceViewProps> = ({ data }) => {
 	const navigate = useNavigate()
 
 	const fetchData = () => {
-		const url = 'http://localhost:8081/api/namespace/'
+		const url = 'http://backend:8081/api/namespace/'
 
 		// Sending GET request
 		const params = {

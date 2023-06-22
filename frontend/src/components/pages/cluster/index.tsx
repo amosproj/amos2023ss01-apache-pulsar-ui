@@ -22,7 +22,7 @@ const ClusterGroup: React.FC = () => {
 	const [data, setData] = useState<string[]>([])
 	const [error, setError] = useState<string | null>(null)
 	const [loading, setLoading] = useState<boolean>(true)
-	const url = 'http://localhost:8081/api/cluster/all'
+	const url = 'http://backend:8081/api/cluster/all'
 	const trigger = useAppSelector(selectTrigger)
 
 	//Sends get request to /cluster/all for general information everytime the trigger value changes

@@ -29,7 +29,7 @@ const NamespaceGroup: React.FC = () => {
 	const clusterFilter = useAppSelector(selectCluster)
 	const tenantFilter = useAppSelector(selectTenant)
 	const namespaceFilter = useAppSelector(selectNamespace)
-	const baseURL = 'http://localhost:8081/api/namespace/all/'
+	const baseURL = 'http://backend:8081/api/namespace/all/'
 	const trigger = useAppSelector(selectTrigger)
 
 	// Sends get request to /namespace/all for general information everytime the trigger value changes

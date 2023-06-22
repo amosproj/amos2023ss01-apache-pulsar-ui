@@ -46,7 +46,7 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
 	const [open, setOpen] = useState(false)
 	const [data, setData] = useState<ResponseSubscription>()
 	const [error, setError] = useState<string | null>(null)
-	const baseURL = 'http://localhost:8081/api/topic/subscription/'
+	const baseURL = 'http://backend:8081/api/topic/subscription/'
 
 	const handleOpen = () => {
 		fetchData()
