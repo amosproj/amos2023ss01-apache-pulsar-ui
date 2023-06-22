@@ -5,6 +5,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { RootState } from '.'
+import config from '../config'
 //import { modifyData } from './modifyData-temp'
 
 export type View = {
@@ -34,7 +35,7 @@ const initialState: globalState = {
 }
 
 const backendInstance = axios.create({
-	baseURL: 'http://backend:8081/api',
+	baseURL: config.backendUrl + '/api',
 	timeout: 1000,
 })
 /* 

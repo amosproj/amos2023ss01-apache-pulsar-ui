@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom'
 import { addFilterByDrillDown } from '../../../store/filterSlice'
 import { useAppDispatch } from '../../../store/hooks'
 import axios from 'axios'
+import config from '../../../config'
 
 const NamespaceView: React.FC<NamespaceViewProps> = ({ data }) => {
 	const { id, tenant }: NamespaceInfo = data
@@ -20,7 +21,7 @@ const NamespaceView: React.FC<NamespaceViewProps> = ({ data }) => {
 	const navigate = useNavigate()
 
 	const fetchData = () => {
-		const url = 'http://backend:8081/api/namespace/'
+		const url = config.backendUrl + '/api/namespace/'
 
 		// Sending GET request
 		const params = {

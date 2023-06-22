@@ -9,6 +9,7 @@ import { ResponseCluster } from '../components/pages/cluster'
 import { ResponseTenant } from '../components/pages/tenant'
 import { ResponseNamespace } from '../components/pages/namespace'
 import { ResponseTopic } from '../components/pages/topic'
+import config from '../config'
 
 export type HierarchyInPulsar =
 	| 'cluster'
@@ -73,7 +74,7 @@ const initialState: FilterState = {
 }
 
 const backendInstance = axios.create({
-	baseURL: 'http://backend:8081/api',
+	baseURL: config.backendUrl + '/api',
 	timeout: 5000,
 })
 

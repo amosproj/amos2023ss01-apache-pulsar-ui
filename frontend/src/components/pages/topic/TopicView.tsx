@@ -12,6 +12,7 @@ import { addFilterByDrillDown } from '../../../store/filterSlice'
 import { useAppDispatch } from '../../../store/hooks'
 import axios from 'axios'
 import SubscriptionModal from '../../modals/SubscriptionModal'
+import config from '../../../config'
 
 const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 	const { name, tenant, namespace, producers, subscriptions }: TopicInfo = data
@@ -21,7 +22,7 @@ const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 	const navigate = useNavigate()
 
 	const fetchData = () => {
-		const url = 'http://backend:8081/api/topic/'
+		const url = config.backendUrl + '/api/topic/'
 
 		// Sending GET request
 		const params = {

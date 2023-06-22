@@ -8,6 +8,7 @@ import axios from 'axios'
 import ClusterView from './ClusterView'
 import { selectCluster } from '../../../store/filterSlice'
 import { selectTrigger } from '../requestTriggerSlice'
+import config from '../../../config'
 
 export interface ResponseCluster {
 	clusters: string[]
@@ -22,7 +23,7 @@ const ClusterGroup: React.FC = () => {
 	const [data, setData] = useState<string[]>([])
 	const [error, setError] = useState<string | null>(null)
 	const [loading, setLoading] = useState<boolean>(true)
-	const url = 'http://backend:8081/api/cluster/all'
+	const url = config.backendUrl + '/api/cluster/all'
 	const trigger = useAppSelector(selectTrigger)
 
 	//Sends get request to /cluster/all for general information everytime the trigger value changes

@@ -6,6 +6,7 @@ import React, { useState } from 'react'
 import { Modal, Box, Typography, IconButton } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import axios from 'axios'
+import config from '../../config'
 
 /**
 The following information is shown in the producer information popup:
@@ -40,7 +41,7 @@ const ProducerModal: React.FC<ProducerModalProps> = ({ producer }) => {
 	}
 
 	const fetchData = () => {
-		const url = `http://backend:8081/api/topic/producer/${producerName}`
+		const url = config.backendUrl + `/api/topic/producer/${producerName}`
 
 		// Sending GET request
 		const params = {
