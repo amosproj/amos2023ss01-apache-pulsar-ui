@@ -16,24 +16,59 @@
 			color: $primary-blue;
 		}
 
+		.card-buttons-container {
+			.MuiCardActions-root {
+				display: flex;
+				justify-content: space-between;
+				width: 100%;
+				padding: 0px;
+				margin-top: 18px;
+	
+				.MuiButtonBase-root.MuiButton-root.MuiButton-contained {
+					display: flex;
+					justify-content: center;
+					align-items: center;
+					width: 35%;
+					min-width: 120px;
+					height: 44px;
+					padding: 20px;
+					background: $gradient-blue;
+					border-radius: $primary-radius;
+					font-weight: 500;
+					font-size: $font-small;
+					line-height: 150%;
+					color: $primary-white;
+					text-transform: unset;
+					box-shadow: none;
+
+					&.outlined-button {
+						background: transparent;
+						border: 1px solid $primary-blue;
+						color: $primary-blue;
+					}
+				}
+			}
+		}
+
 		.card-inner {
 			.card-col {
-				flex: 0 0 33%;
-				max-width: 33%;
-
+				width: 100%;
 				.card-info {
 					margin: 18px 0px;
 					font-size: $font-small;
-				}
+					display: flex;
+					width: 100%;
+					justify-content: space-between;
+					flex-wrap: wrap;
+					p {
+						flex: 0 0 25%;
+						max-width: 25%;
+					}
 
-				&.card-col-2,
-				&.card-col-3 {
-					padding: 18px 0px;
-				}
-
-				&.card-col-2 {
-					padding-left: 38px;
-					padding-right: 38px;
+					.items-list {
+						flex: 0 0 75%;
+						max-width: 75%;
+					}
 				}
 			}
 		}

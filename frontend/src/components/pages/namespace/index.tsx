@@ -71,7 +71,7 @@ const NamespaceGroup: React.FC = () => {
 			) : error ? (
 				<div>Error: {error}</div>
 			) : (
-				<div>
+				<div className="main-card-wrapper">
 					{data.map((namespace, index) => (
 						<div className="main-card" key={index}>
 							<NamespaceView key={index} data={namespace} />

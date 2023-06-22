@@ -1,0 +1,109 @@
+@media only screen and (min-width: $screen-xl-min) {
+    .dashboard-container {
+        header {
+            .MuiContainer-maxWidthXl {
+                max-width: 100%;
+            }
+        }
+        .primary-dashboard {
+            .main-card-wrapper {
+                display: flex;
+                justify-content: space-between;
+                flex-wrap: wrap;
+                .main-card {
+                    flex: 0 0 48%;
+                    max-width: 48%;
+                    &.single-card {
+                        flex: 0 0 100%;
+                        max-width: 100%;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: $screen-md-max) {
+    .dashboard-container {
+        margin: 18px;
+        header{
+            .home-logo + .MuiBox-root {
+                order: 1;
+                .MuiButtonBase-root {
+                    padding-right: 0px;
+                }
+            }
+            .info-modal-wrapper {
+                width: 100%;
+                order: 0;
+            }
+        }
+        .main-dashboard {
+            flex-direction: column;
+            padding: 18px;
+            margin-top: 32px;
+            gap: 18px;
+            .primary-dashboard {
+                order: 1;
+                .main-card {
+                    padding: 18px;
+                    .card-content {
+                        h2 {
+                            font-size: $font-medium;
+                        }
+                        .card-buttons-container {
+                            .MuiCardActions-root {
+                                gap: 10px;
+                                .MuiButtonBase-root.MuiButton-root.MuiButton-contained {
+                                    width: 100%;
+                                    font-size: $font-small;
+                                    padding: 8px;
+                                    span {
+                                        display: none;
+                                    }
+                                }
+                            }
+                        }
+                        .card-col {
+                            .card-info {
+                                p {
+                                    flex: 0 0 50%;
+                                    max-width: 50%;
+                                }
+                                .items-list {
+                                    flex: 0 0 100%;
+                                    max-width: 100%;
+                                    padding-bottom: 4px;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            .secondary-dashboard {
+                .filters-wrapper {
+                    display: none;
+                    margin: 18px 0px;
+                    &.filters-wrapper-mobile {
+                        display: block;
+                        width: 100%;
+                    }
+                    svg {
+                        margin: auto;
+                    }
+                }
+                .reset-all-filter-button {
+                    margin: 18px 0px;
+                }
+                .desktop-filters {
+                    display: none;
+                }
+            }
+            .primary-dashboard, .secondary-dashboard {
+                max-width: 100%;
+                flex: 0 0 100%;
+                padding: 0px;
+            }
+        }
+    }
+}

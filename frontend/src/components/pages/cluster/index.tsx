@@ -48,9 +48,14 @@ const ClusterGroup: React.FC = () => {
 			) : error ? (
 				<div>Error: {error}</div>
 			) : (
-				<div>
+				<div className="main-card-wrapper">
 					{data.map((cluster, index) => (
-						<div className="main-card" key={index}>
+						<div
+							className={
+								data.length === 1 ? 'single-card main-card' : 'main-card'
+							}
+							key={index}
+						>
 							<ClusterView key={index} data={{ id: cluster }} />
 						</div>
 					))}

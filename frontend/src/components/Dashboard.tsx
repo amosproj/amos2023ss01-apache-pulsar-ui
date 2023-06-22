@@ -8,6 +8,10 @@ import FilterListIcon from '@mui/icons-material/FilterList'
 import CustomFilter from './custom/CustomFilter'
 import { useAppDispatch } from '../store/hooks'
 import { useNavigate } from 'react-router-dom'
+import Accordion from '@mui/material/Accordion'
+import AccordionSummary from '@mui/material/AccordionSummary'
+import AccordionDetails from '@mui/material/AccordionDetails'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
 import {
 	fetchOptionsThunk,
@@ -337,10 +341,30 @@ const Dashboard: React.FC<DashboardProps> = ({
 					<h2 className="dashboard-title">Filters</h2>
 					<FilterListIcon style={{ fill: '#A4A4A4' }} />
 				</div>
-				<CustomFilter
-					messages={completeMessages}
-					currentView={location.pathname.slice(1)}
-				/>
+				<div className="filters-wrapper filters-wrapper-mobile">
+					<Accordion>
+						<AccordionSummary
+							expandIcon={<ExpandMoreIcon />}
+							aria-controls="panel1a-content"
+						>
+							<h3 className="filter-title">Filters</h3>
+						</AccordionSummary>
+						<AccordionDetails>
+							<div className="flex flex-col mt-4">
+								<CustomFilter
+									messages={completeMessages}
+									currentView={location.pathname.slice(1)}
+								/>
+							</div>
+						</AccordionDetails>
+					</Accordion>
+				</div>
+				<div className="desktop-filters">
+					<CustomFilter
+						messages={completeMessages}
+						currentView={location.pathname.slice(1)}
+					/>
+				</div>
 			</div>
 		</div>
 	)
