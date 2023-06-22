@@ -49,3 +49,11 @@ To start the tests use:
 The backend is running on Port 8081 and the prefix of the REST endpoint is `/api`. A complete documentation can
 be found here:
 http://localhost:8081/api/swagger-ui/index.html
+
+
+### Testing on AWS
+
+For testing the scalability of our project, we want to test it on AWS with a bigger topology.
+We created a separate setup-topology for that - To start the backend using this, you need to run the following command:
+
+```docker-compose --profile demodata-aws --profile backend up --build```
