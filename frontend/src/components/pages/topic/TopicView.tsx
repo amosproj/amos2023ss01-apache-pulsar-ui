@@ -7,6 +7,7 @@ import ProducerModal from '../../modals/ProducerModal'
 import { Collapse, CardActions, Button } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import ExpandLessIcon from '@mui/icons-material/ExpandLess'
+import ChevronRight from '@mui/icons-material/ChevronRight'
 import { useNavigate } from 'react-router-dom'
 import { addFilterByDrillDown } from '../../../store/filterSlice'
 import { useAppDispatch } from '../../../store/hooks'
@@ -50,18 +51,18 @@ const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 		<div className="flex flex-col card-content">
 			<h2>{name}</h2>
 			<div className="flex card-inner">
-				<div className="flex flex-col card-col card-col-1">
-					<div className="flex flex-col card-info">
+				<div className="flex flex-col card-col">
+					<div className="flex card-info">
 						<p className="text-black">
-							Tenant:{' '}
+							Tenant:<br></br>
 							<span className="text-blue">{tenant ? tenant : 'N/A'}</span>
 						</p>
 						<p className="text-black">
-							Namespace:{' '}
+							Namespace:<br></br>
 							<span className="text-blue">{namespace ? namespace : 'N/A'}</span>
 						</p>
 						<p className="text-black">
-							Producers:{' '}
+							Producers:<br></br>
 							{producers.length > 0 ? (
 								producers.map((item: string, index: number) => (
 									<ProducerModal
@@ -77,7 +78,7 @@ const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 							)}
 						</p>
 						<p className="text-black">
-							Subscriptions:{' '}
+							Subscriptions:<br></br>
 							{subscriptions.length > 0 ? (
 								subscriptions.map((item: string, index: number) => (
 									<SubscriptionModal
@@ -96,19 +97,19 @@ const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 			<div className="grey-line"></div>
 			<Collapse in={expanded} timeout="auto" unmountOnExit>
 				<div className="flex card-inner">
-					<div className="flex flex-col card-col card-col-1">
-						<div className="flex flex-col card-info">
+					<div className="flex flex-col card-col">
+						<div className="flex card-info">
 							<p className="text-black">
-								Owner Broker:{' '}
+								Owner Broker:<br></br>
 								<span className="text-blue">
 									{details?.ownerBroker ? details.ownerBroker : 'N/A'}
 								</span>
 							</p>
 						</div>
 						<div className="grey-line"></div>
-						<div className="flex flex-col card-info">
+						<div className="flex card-info">
 							<p className="text-black">
-								Produced messages:{' '}
+								Produced messages:<br></br>
 								<span className="text-blue">
 									{details?.topicStatsDto.producedMesages
 										? details?.topicStatsDto.producedMesages
@@ -116,7 +117,7 @@ const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 								</span>
 							</p>
 							<p className="text-black">
-								Consumed messages:{' '}
+								Consumed messages:<br></br>
 								<span className="text-blue">
 									{details?.topicStatsDto.consumedMessages
 										? details?.topicStatsDto.consumedMessages
@@ -124,7 +125,7 @@ const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 								</span>
 							</p>
 							<p className="text-black">
-								Average message size:{' '}
+								Average message size:<br></br>
 								<span className="text-blue">
 									{details?.topicStatsDto?.averageMessageSize
 										? details.topicStatsDto.averageMessageSize
@@ -133,7 +134,7 @@ const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 								</span>
 							</p>
 							<p className="text-black">
-								Storage size:{' '}
+								Storage size:<br></br>
 								<span className="text-blue">
 									{details?.topicStatsDto?.storageSize
 										? details.topicStatsDto.storageSize
@@ -151,7 +152,7 @@ const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 					{expanded ? (
 						<Button
 							variant={'contained'}
-							style={{ marginRight: '10px' }}
+							className="outlined-button"
 							onClick={handleExpand}
 							endIcon={<ExpandLessIcon />}
 						>
@@ -159,16 +160,20 @@ const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 						</Button>
 					) : (
 						<Button
+							className="outlined-button"
 							variant={'contained'}
-							style={{ marginRight: '10px' }}
 							onClick={handleExpand}
 							endIcon={<ExpandMoreIcon />}
 						>
-							show details
+							Show details
 						</Button>
 					)}
-					<Button variant={'contained'} onClick={handleDrillDown}>
-						drill down
+					<Button
+						endIcon={<ChevronRight />}
+						variant={'contained'}
+						onClick={handleDrillDown}
+					>
+						Drill down
 					</Button>
 				</CardActions>
 			</div>

@@ -13,6 +13,14 @@ html {
 	@apply h-full;
 }
 
+p, a {
+	hyphens: auto;
+}
+
+h3, h2 {
+	word-break: break-all;
+}
+
 .grey-line {
 	height: 1px;
 	background-color: $primary-grey;
@@ -22,26 +30,4 @@ html {
 
 .dashboard-container {
 	margin: 64px;
-}
-
-.card-buttons-container .MuiCardActions-root {
-	padding-left: 0px;
-	padding-top: 0px;
-	margin-top: 18px;
-}
-
-.card-buttons-container .MuiCardActions-root .MuiButtonBase-root.MuiButton-root.MuiButton-contained, .primary-button {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	width: 100%;
-	min-width: 260px;
-	height: 61px;
-	padding: 11px;
-	background: $gradient-blue;
-	border-radius: $primary-radius;
-	font-weight: 500;
-	font-size: $font-small;
-	line-height: 150%;
-	color: $primary-white;
 }

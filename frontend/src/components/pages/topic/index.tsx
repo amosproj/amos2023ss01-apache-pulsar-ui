@@ -92,7 +92,7 @@ const TopicGroup: React.FC = () => {
 			) : error ? (
 				<div>Error: {error}</div>
 			) : (
-				<div>
+				<div className="main-card-wrapper">
 					{data.map((topic, index) => (
 						<div className="main-card" key={index}>
 							<TopicView key={index} data={topic} />

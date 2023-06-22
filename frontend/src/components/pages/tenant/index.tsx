@@ -61,7 +61,7 @@ const TenantGroup: React.FC = () => {
 			) : error ? (
 				<div>Error: {error}</div>
 			) : (
-				<div>
+				<div className="main-card-wrapper">
 					{data.map((tenant, index) => (
 						<div className="main-card" key={index}>
 							<TenantView key={index} data={tenant} />

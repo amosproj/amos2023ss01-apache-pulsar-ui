@@ -5,6 +5,7 @@
 import React, { useState } from 'react'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import ExpandLessIcon from '@mui/icons-material/ExpandLess'
+import ChevronRight from '@mui/icons-material/ChevronRight'
 import { Collapse, CardActions, Button } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { addFilterByDrillDown } from '../../../store/filterSlice'
@@ -49,10 +50,10 @@ const TenantView: React.FC<TenantViewProps> = ({ data }) => {
 		<div className="flex flex-col card-content">
 			<h2 className="uppercase">{name}</h2>
 			<div className="flex card-inner">
-				<div className="flex flex-col card-col card-col-1">
-					<div className="flex flex-col card-info">
+				<div className="flex flex-col card-col">
+					<div className="flex card-info">
 						<p className="text-black">
-							Admin Roles:{' '}
+							Admin Roles:<br></br>
 							<span className="text-blue">
 								{tenantInfo.adminRoles && tenantInfo.adminRoles.length > 0 ? (
 									tenantInfo.adminRoles.map((item: string, index: number) => (
@@ -64,7 +65,7 @@ const TenantView: React.FC<TenantViewProps> = ({ data }) => {
 							</span>
 						</p>
 						<p className="text-black">
-							Allowed Clusters:{' '}
+							Allowed Clusters:<br></br>
 							<span className="text-blue">
 								{tenantInfo.allowedClusters &&
 									tenantInfo.allowedClusters.length > 0 &&
@@ -82,10 +83,10 @@ const TenantView: React.FC<TenantViewProps> = ({ data }) => {
 			<div className="grey-line"></div>
 			<Collapse in={expanded} timeout="auto" unmountOnExit>
 				<div className="flex card-inner">
-					<div className="flex flex-col card-col card-col-1">
-						<div className="flex flex-col card-info">
+					<div className="flex flex-col card-col">
+						<div className="flex card-info">
 							<p className="text-black">
-								Namespaces:{' '}
+								Namespaces:<br></br>
 								{details?.namespaces.map((item: string, index: number) => (
 									<span key={index} className="text-blue">
 										{item},{' '}
@@ -93,7 +94,7 @@ const TenantView: React.FC<TenantViewProps> = ({ data }) => {
 								))}
 							</p>
 							<p className="text-black">
-								Amount of Namespaces:{' '}
+								Amount of Namespaces:<br></br>
 								<span className="text-blue">{details?.amountOfNamespaces}</span>
 							</p>
 						</div>
@@ -106,7 +107,7 @@ const TenantView: React.FC<TenantViewProps> = ({ data }) => {
 					{expanded ? (
 						<Button
 							variant={'contained'}
-							style={{ marginRight: '10px' }}
+							className="outlined-button"
 							onClick={handleExpand}
 							endIcon={<ExpandLessIcon />}
 						>
@@ -114,16 +115,20 @@ const TenantView: React.FC<TenantViewProps> = ({ data }) => {
 						</Button>
 					) : (
 						<Button
+							className="outlined-button"
 							variant={'contained'}
-							style={{ marginRight: '10px' }}
 							onClick={handleExpand}
 							endIcon={<ExpandMoreIcon />}
 						>
-							show details
+							Show details
 						</Button>
 					)}
-					<Button variant={'contained'} onClick={handleDrillDown}>
-						drill down
+					<Button
+						endIcon={<ChevronRight />}
+						variant={'contained'}
+						onClick={handleDrillDown}
+					>
+						Drill down
 					</Button>
 				</CardActions>
 			</div>
