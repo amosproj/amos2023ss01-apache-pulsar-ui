@@ -156,7 +156,7 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
 						MsgOutCounter: {data?.msgOutCounter}
 					</Typography>
 					<Typography variant="body1" gutterBottom>
-						isReplicated: {data?.replicated}
+						isReplicated: {data?.replicated.toString()}
 					</Typography>
 					<Typography variant="body1" gutterBottom>
 						Type: {data?.type}
