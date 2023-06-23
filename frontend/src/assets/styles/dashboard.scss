@@ -3,8 +3,10 @@
 .dashboard-container {
 	header {
 		background: $primary-black;
+		position: absolute;
+		left: 0;
+		top: 0;
 		box-shadow: 10px 10px 100px 10px rgba(0, 0, 0, 0.25);
-		border-radius: $primary-radius;
 		.MuiButtonBase-root.Mui-disabled {
 			color: $primary-blue;
 		}
@@ -13,7 +15,7 @@
 	.main-dashboard {
 		display: flex;
 		gap: 38px;
-		margin: 64px 0px;
+		margin: 100px 0px;
 		position: relative;
 		background-color: $primary-white;
 		box-shadow: $primary-shadow;
@@ -70,7 +72,7 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		margin: 38px 0px;
+		margin: 0px 0px 38px 0px;
 		&.filters-wrapper-mobile {
 			display: none;
 		}

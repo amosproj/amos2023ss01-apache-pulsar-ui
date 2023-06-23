@@ -11,8 +11,9 @@
                 justify-content: space-between;
                 flex-wrap: wrap;
                 .main-card {
-                    flex: 0 0 48%;
-                    max-width: 48%;
+                    flex: 0 0 48.5%;
+                    max-width: 48.5%;
+                    margin: 1.1rem 0;
                     &.single-card {
                         flex: 0 0 100%;
                         max-width: 100%;
@@ -41,7 +42,6 @@
         .main-dashboard {
             flex-direction: column;
             padding: 18px;
-            margin-top: 32px;
             gap: 18px;
             .primary-dashboard {
                 order: 1;
@@ -54,6 +54,7 @@
                         .card-buttons-container {
                             .MuiCardActions-root {
                                 gap: 10px;
+                                margin-top: 18px;
                                 .MuiButtonBase-root.MuiButton-root.MuiButton-contained {
                                     width: 100%;
                                     font-size: $font-small;
