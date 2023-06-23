@@ -2,11 +2,11 @@
 	position: relative;
 	background-color: $primary-white;
 	box-shadow: $primary-shadow;
-	border-radius: $primary-radius;
+	border-radius: 38px;
 	height: fit-content;
 	width: 100%;
-	padding: 38px;
-	margin: 2rem 0;
+	padding: 24px;
+	margin: 1.8rem 0;
 
 	.card-content {
 		h2 {
@@ -22,7 +22,7 @@
 				justify-content: space-between;
 				width: 100%;
 				padding: 0px;
-				margin-top: 18px;
+				margin-top: 22px;
 	
 				.MuiButtonBase-root.MuiButton-root.MuiButton-contained {
 					display: flex;
