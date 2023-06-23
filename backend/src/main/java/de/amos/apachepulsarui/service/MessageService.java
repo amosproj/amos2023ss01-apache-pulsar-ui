@@ -18,6 +18,7 @@ import org.apache.pulsar.common.naming.TopicName;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -48,8 +49,11 @@ public class MessageService {
 
     private List<String> peekMessageIds(String topic, String subscription, Integer numMessages) {
         try {
-            return pulsarAdmin.topics().peekMessages(topic, subscription, numMessages).stream()
-                    .map(m -> m.getMessageId().toString()).toList();
+            if (pulsarAdmin.topics().getSubscriptions(topic).contains(subscription)) {
+                return pulsarAdmin.topics().peekMessages(topic, subscription, numMessages).stream()
+                        .map(m -> m.getMessageId().toString()).toList();
+            }
+            return Collections.emptyList();
         } catch (PulsarAdminException e) {
             throw new RuntimeException(e);
         }
