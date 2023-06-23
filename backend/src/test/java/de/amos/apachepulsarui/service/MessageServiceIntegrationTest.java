@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MessageServiceIntegrationTest extends AbstractIntegrationTest {
 
-    private static final String TOPICNAME = "messageToSend-service-integration-test";
+    private static final String TOPICNAME = "persistent://public/default/messageToSend-service-integration-test";
 
     @Autowired
     private MessageService messageService;
@@ -47,7 +47,7 @@ public class MessageServiceIntegrationTest extends AbstractIntegrationTest {
 
     @BeforeEach
     void createTopic() throws PulsarAdminException {
-        pulsarAdmin.topics().createNonPartitionedTopic(TOPICNAME);
+        pulsarAdmin.topics().createNonPartitionedTopic("messageToSend-service-integration-test");
     }
 
     @AfterEach
@@ -64,6 +64,7 @@ public class MessageServiceIntegrationTest extends AbstractIntegrationTest {
                 .topic(TOPICNAME).create()) {
 
             producer.send(messageToSend.getPayload().getBytes(StandardCharsets.UTF_8));
+            producer.close();
         }
         var messages = messageService.getLatestMessagesFiltered(TOPICNAME, 1, emptyList(), emptyList());
 
@@ -89,6 +90,7 @@ public class MessageServiceIntegrationTest extends AbstractIntegrationTest {
                 .topic(TOPICNAME).create()) {
 
             producer.send(messageToSend.getPayload().getBytes(StandardCharsets.UTF_8));
+            producer.close();
         }
         var messages = messageService.getLatestMessagesFiltered(TOPICNAME, 1, List.of(producerName), emptyList());
 
@@ -112,6 +114,7 @@ public class MessageServiceIntegrationTest extends AbstractIntegrationTest {
                 .topic(TOPICNAME).create()) {
 
             producer.send(messageToSend.getPayload().getBytes(StandardCharsets.UTF_8));
+            producer.close();
         }
         var messages = messageService.getLatestMessagesFiltered(TOPICNAME, 1, List.of(notTheProducerName), emptyList());
 
@@ -174,6 +177,8 @@ public class MessageServiceIntegrationTest extends AbstractIntegrationTest {
                 .create()) {
 
             producer.send(new TestSchema("Keks", 3));
+            producer.close();
+
         }
         var messages = messageService.getLatestMessagesFiltered(TOPICNAME, 1, emptyList(), emptyList());
 
