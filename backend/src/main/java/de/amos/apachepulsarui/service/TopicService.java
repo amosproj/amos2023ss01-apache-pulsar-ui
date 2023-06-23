@@ -41,8 +41,6 @@ public class TopicService {
 
     private final PulsarAdmin pulsarAdmin;
 
-    private final MessageService messageService;
-
     private final ConsumerService consumerService;
 
     public List<TopicDto> getAllForTopics(List<String> topics) {

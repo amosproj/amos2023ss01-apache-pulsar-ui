@@ -41,6 +41,7 @@ services:
     environment:
       - 'PULSAR_PREFIX_topicLevelPoliciesEnabled=true'
       - 'PULSAR_PREFIX_systemTopicEnabled=true'
+      - 'PULSAR_PREFIX_brokerDeleteInactiveTopicsEnabled=false'
     healthcheck:
       test: ["CMD", "bin/pulsar-admin", "brokers", "healthcheck"]
       interval: 5s
@@ -60,6 +61,7 @@ services:
     depends_on:
       pulsar:
         condition: service_healthy
+
   setup-topology-aws:
     image: pulsarui/setuptopology
     profiles: 
