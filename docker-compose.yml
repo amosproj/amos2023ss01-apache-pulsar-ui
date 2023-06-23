@@ -21,10 +21,12 @@ services:
     container_name: frontend
     profiles:
       - frontend
+    env_file:
+      - .env
     build:
       context: ./frontend
       args:
-        - "BACKEND_URL=http://16.16.200.255:8081"
+        - "BACKEND_URL=http://${BACKEND_IP}:8081"
     ports:
       - "8082:8082"
     depends_on:

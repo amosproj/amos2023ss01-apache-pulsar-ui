@@ -18,11 +18,11 @@ First, build the application JAR from the `backend` directory with:
 
 `./mvnw package -DskipTests`
 
-
 Then, start Docker Desktop and create the pulsar setup from the root-directory with:
 
 ```bash
-docker-compose --profile demodata --profile backend --profile frontend up --build --detached
+echo BACKEND_IP=localhost >> .env
+docker-compose --profile demodata --profile backend --profile frontend up --build -d
 ```
 
 Notes: 
@@ -55,11 +55,14 @@ be found here:
 http://localhost:8081/api/swagger-ui/index.html
 
 
-### Testing on AWS
+### Running on AWS
 
 For testing the scalability of our project, we want to test it on AWS with a bigger topology.
-We created a separate setup-topology for that - To start the backend using this, you need to run the following command:
+We created a separate setup-topology for that - To start the backend using this, you need to run the following command.
+Each time the EC2 instance is started again, it will be assigned a new IP address,
+so you need to pass it to the `docker-compose` via `-e` flag.
 
 ```bash
+echo BACKEND_IP=${EC2_IP_ADDRESS} >> .env
 docker-compose --profile demodata-aws --profile backend --profile frontend up --build -d
 ```
