@@ -3,7 +3,6 @@
 // SPDX-FileCopyrightText: 2019 Georg Schwarz <georg. schwarz@fau.de>
 
 import React, { useEffect, useState } from 'react'
-import CustomSearchbar from './custom/CustomSearchbar'
 import FilterListIcon from '@mui/icons-material/FilterList'
 import CustomFilter from './custom/CustomFilter'
 import { useAppDispatch } from '../store/hooks'
@@ -327,10 +326,10 @@ const Dashboard: React.FC<DashboardProps> = ({
 		<div data-testid="main-dashboard" className="main-dashboard">
 			<div className="primary-dashboard">{children}</div>
 			<div className="secondary-dashboard">
-				<CustomSearchbar
+				{/* <CustomSearchbar
 					placeholder={'Search'}
 					setSearchQuery={setSearchQuery}
-				/>
+				/> */}
 				<span
 					className="reset-all-filter-button"
 					onClick={() => resetFilters()}
