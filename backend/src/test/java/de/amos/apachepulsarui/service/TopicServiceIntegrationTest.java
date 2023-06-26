@@ -7,6 +7,7 @@ package de.amos.apachepulsarui.service;
 
 import de.amos.apachepulsarui.dto.TopicDetailDto;
 import de.amos.apachepulsarui.dto.TopicDto;
+import de.amos.apachepulsarui.exception.PulsarApiException;
 import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.apache.pulsar.client.admin.PulsarAdminException;
 import org.apache.pulsar.client.api.*;
@@ -41,8 +42,8 @@ public class TopicServiceIntegrationTest extends AbstractIntegrationTest {
     @Test
     void getAllForNamespaces_returnsTopics() throws PulsarAdminException {
         List<String> namespaces = List.of("public/namespace1", "public/namespace2");
-        topicService.createNewTopic("persistent://public/namespace1/topic1");
-        topicService.createNewTopic("persistent://public/namespace2/topic1");
+        createNewTopic("persistent://public/namespace1/topic1");
+        createNewTopic("persistent://public/namespace2/topic1");
         TopicStats topicstats1 = pulsarAdmin.topics().getStats("persistent://public/namespace1/topic1");
         TopicStats topicstats2 = pulsarAdmin.topics().getStats("persistent://public/namespace2/topic1");
 
@@ -59,7 +60,7 @@ public class TopicServiceIntegrationTest extends AbstractIntegrationTest {
         List<String> topicNames = List.of("persistent://public/namespace1/topic3",
                 "persistent://public/namespace2/topic4");
 
-        topicService.createNewTopic("persistent://public/namespace1/topic3");
+        createNewTopic("persistent://public/namespace1/topic3");
         TopicStats topicstats3 = pulsarAdmin.topics().getStats("persistent://public/namespace1/topic3");
 
 
@@ -72,7 +73,7 @@ public class TopicServiceIntegrationTest extends AbstractIntegrationTest {
     @Test
     void getAllByNamespace_returnsTopics() {
         String topicName = "persistent://public/default/topic1";
-        topicService.createNewTopic(topicName);
+        createNewTopic(topicName);
         List<String> topics = topicService.getAllByNamespace("public/default");
         Assertions.assertThat(topics).containsExactly(topicName);
     }
@@ -80,7 +81,7 @@ public class TopicServiceIntegrationTest extends AbstractIntegrationTest {
     @Test
     void getTopicDetails_returnsMessageCount() throws Exception {
         String topicName = "persistent://public/default/topic-service-integration-test";
-        topicService.createNewTopic(topicName);
+        createNewTopic(topicName);
         var message = "hello world".getBytes(StandardCharsets.UTF_8);
         try (Producer<byte[]> producer = pulsarClient.newProducer().topic(topicName).create();
              Consumer<byte[]> consumer = pulsarClient.newConsumer().topic(topicName).subscriptionName("TestSubscriber").subscribe())
@@ -104,7 +105,7 @@ public class TopicServiceIntegrationTest extends AbstractIntegrationTest {
     @Test
     void getSubscriptionsByTopic () throws PulsarClientException {
         String topicName = "persistent://public/default/topic-service-integration-test";
-        topicService.createNewTopic(topicName);
+        createNewTopic(topicName);
         Consumer<byte[]> consumer = pulsarClient.newConsumer().topic(topicName).subscriptionName("TestSubscriber").subscribe();
 
         consumer.close();
@@ -115,7 +116,7 @@ public class TopicServiceIntegrationTest extends AbstractIntegrationTest {
     @Test
     void getProducerByTopic () throws Exception {
         String topicName = "persistent://public/default/topic-service-integration-test";
-        topicService.createNewTopic(topicName);
+        createNewTopic(topicName);
         var message = "hello world".getBytes(StandardCharsets.UTF_8);
         try (Producer<byte[]> producer = pulsarClient.newProducer().producerName("Producer").topic(topicName).create()) {
 
@@ -129,12 +130,20 @@ public class TopicServiceIntegrationTest extends AbstractIntegrationTest {
     @Test
     void getConsumerByTopic () throws Exception {
         String topicName = "persistent://public/default/topic-service-integration-test";
-        topicService.createNewTopic(topicName);
+        createNewTopic(topicName);
         var message = "hello world".getBytes(StandardCharsets.UTF_8);
         try (Consumer<byte[]> consumer = pulsarClient.newConsumer().consumerName("consumer").topic(topicName).subscriptionName("subscription").subscribe()) {
             Assertions.assertThat(topicService.getConsumerByTopic(topicName,"consumer").getName()).isEqualTo("consumer");
         }
 
+    }
+
+    private void createNewTopic(String topic) throws PulsarApiException {
+        try {
+            pulsarAdmin.topics().createNonPartitionedTopic(topic);
+        } catch (PulsarAdminException e) {
+            throw new PulsarApiException("Could not create new topic '%s'".formatted(topic), e);
+        }
     }
 
 }

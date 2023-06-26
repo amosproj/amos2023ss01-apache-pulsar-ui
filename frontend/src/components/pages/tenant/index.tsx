@@ -8,6 +8,7 @@ import axios from 'axios'
 import { selectCluster, selectTenant } from '../../../store/filterSlice'
 import TenantView from './TenantView'
 import { selectTrigger } from '../requestTriggerSlice'
+import config from '../../../config'
 import { Masonry } from 'react-plock'
 
 export interface ResponseTenant {
@@ -25,7 +26,7 @@ const TenantGroup: React.FC = () => {
 	const [loading, setLoading] = useState<boolean>(true)
 	const clusterFilter = useAppSelector(selectCluster)
 	const tenantFilter = useAppSelector(selectTenant)
-	const baseURL = 'http://localhost:8081/api/tenant/all'
+	const baseURL = config.backendUrl + '/api/tenant/all'
 	const trigger = useAppSelector(selectTrigger)
 
 	// Sends get request to /cluster/all for general information everytime the trigger value changes

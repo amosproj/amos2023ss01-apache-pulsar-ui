@@ -11,6 +11,7 @@ import {
 } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import axios from 'axios'
+import config from '../../config'
 
 interface ConsumerAccordionProps {
 	consumerName: string | undefined
@@ -35,7 +36,7 @@ const ConsumerAccordion: React.FC<ConsumerAccordionProps> = ({
 	}
 
 	const fetchData = () => {
-		const url = `http://localhost:8081/api/topic/consumer/${consumerName}`
+		const url = config.backendUrl + `/api/topic/consumer/${consumerName}`
 
 		// Sending GET request
 		const params = {

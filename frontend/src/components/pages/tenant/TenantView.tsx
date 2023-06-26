@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom'
 import { addFilterByDrillDown } from '../../../store/filterSlice'
 import { useAppDispatch } from '../../../store/hooks'
 import axios from 'axios'
+import config from '../../../config'
 
 const TenantView: React.FC<TenantViewProps> = ({ data }) => {
 	const { name, tenantInfo }: TenantInfo = data
@@ -21,7 +22,7 @@ const TenantView: React.FC<TenantViewProps> = ({ data }) => {
 	const navigate = useNavigate()
 
 	const fetchData = () => {
-		const url = 'http://localhost:8081/api/tenant/'
+		const url = config.backendUrl + '/api/tenant/'
 
 		// Sending GET request
 		const params = {

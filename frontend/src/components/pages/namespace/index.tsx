@@ -12,6 +12,7 @@ import {
 } from '../../../store/filterSlice'
 import NamespaceView from './NamespaceView'
 import { selectTrigger } from '../requestTriggerSlice'
+import config from '../../../config'
 import { Masonry } from 'react-plock'
 
 export interface ResponseNamespace {
@@ -30,7 +31,7 @@ const NamespaceGroup: React.FC = () => {
 	const clusterFilter = useAppSelector(selectCluster)
 	const tenantFilter = useAppSelector(selectTenant)
 	const namespaceFilter = useAppSelector(selectNamespace)
-	const baseURL = 'http://localhost:8081/api/namespace/all/'
+	const baseURL = config.backendUrl + '/api/namespace/all/'
 	const trigger = useAppSelector(selectTrigger)
 
 	// Sends get request to /namespace/all for general information everytime the trigger value changes

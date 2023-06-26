@@ -1,5 +1,38 @@
 version: '3'
 services:
+
+  backend:
+    image: apachepulsarui/backend
+    container_name: backend
+    profiles:
+      - backend
+    build: ./backend
+    ports:
+      - "8081:8081"
+    environment:
+      - "PULSAR_CONSUMER_URL=pulsar://pulsar:6650"
+      - "PULSAR_ADMIN_URL=http://pulsar:8080"
+    depends_on:
+      pulsar:
+        condition: service_healthy
+
+  frontend:
+    image: apachepulsarui/frontend
+    container_name: frontend
+    profiles:
+      - frontend
+    env_file:
+      - .env
+    build:
+      context: ./frontend
+      args:
+        - "BACKEND_URL=http://${BACKEND_IP}:8081"
+    ports:
+      - "8082:8082"
+    depends_on:
+      backend:
+        condition: service_started
+
   pulsar:
     image: 'apachepulsar/pulsar:3.0.0'
     ports:
@@ -10,11 +43,13 @@ services:
     environment:
       - 'PULSAR_PREFIX_topicLevelPoliciesEnabled=true'
       - 'PULSAR_PREFIX_systemTopicEnabled=true'
+      - 'PULSAR_PREFIX_brokerDeleteInactiveTopicsEnabled=false'
     healthcheck:
       test: ["CMD", "bin/pulsar-admin", "brokers", "healthcheck"]
       interval: 5s
       timeout: 10s
       retries: 10
+
   setup-topology:
     image: pulsarui/setuptopology
     profiles: 
@@ -24,9 +59,25 @@ services:
       dockerfile: Dockerfile
     environment:
         - 'PULSAR_ADMIN_URL=http://pulsar:8080'
+        - 'USE_AWS=false'
     depends_on:
       pulsar:
         condition: service_healthy
+
+  setup-topology-aws:
+    image: pulsarui/setuptopology
+    profiles: 
+      - demodata-aws
+    build:
+      context: demodata/setup-topology
+      dockerfile: Dockerfile
+    environment:
+        - 'PULSAR_ADMIN_URL=http://pulsar:8080'
+        - 'USE_AWS=true'
+    depends_on:
+      pulsar:
+        condition: service_healthy
+
   demo-producer-consumer:
     image: pulsarui/demoproducerconsumer
     profiles: 
@@ -40,16 +91,3 @@ services:
     depends_on:
       setup-topology:
         condition: service_completed_successfully
-  backend:
-    image: apachepulsarui/backend
-    profiles: 
-      - backend
-    build: ./backend
-    ports:
-      - "8081:8081"
-    environment:
-      - "PULSAR_CONSUMER_URL=pulsar://pulsar:6650"
-      - "PULSAR_ADMIN_URL=http://pulsar:8080"
-    depends_on:
-      pulsar:
-        condition: service_healthy

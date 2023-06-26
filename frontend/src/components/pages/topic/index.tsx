@@ -15,6 +15,7 @@ import {
 } from '../../../store/filterSlice'
 import TopicView from './TopicView'
 import { selectTrigger } from '../requestTriggerSlice'
+import config from '../../../config'
 import { Masonry } from 'react-plock'
 
 export interface ResponseTopic {
@@ -37,7 +38,7 @@ const TopicGroup: React.FC = () => {
 	const producerFilter = useAppSelector(selectProducer)
 	const subscriptionFilter = useAppSelector(selectSubscription)
 	const topicFilter = useAppSelector(selectTopic)
-	const baseURL = 'http://localhost:8081/api/topic/all'
+	const baseURL = config.backendUrl + '/api/topic/all'
 	const trigger = useAppSelector(selectTrigger)
 
 	// Sends get request to /cluster/all for general information everytime the trigger value changes
