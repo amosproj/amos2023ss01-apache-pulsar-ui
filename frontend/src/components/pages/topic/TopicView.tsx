@@ -144,8 +144,8 @@ const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 							</p>
 						</div>
 						{details?.schemaInfos[0] ? (
-							details?.schemaInfos.map((schema: SchemaInfo) => (
-								<>
+							details?.schemaInfos.map((schema: SchemaInfo, index: number) => (
+								<div key={index}>
 									<div className="grey-line"></div>
 									<div className="flex card-info">
 										<p className="text-black">
@@ -195,7 +195,7 @@ const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 											<span className="text-blue">{schema.timestamp}</span>
 										</p>
 									</div>
-								</>
+								</div>
 							))
 						) : (
 							<>
