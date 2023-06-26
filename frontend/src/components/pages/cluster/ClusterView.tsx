@@ -14,7 +14,7 @@ import axios from 'axios'
 import config from '../../../config'
 
 const ClusterView: React.FC<ClusterViewProps> = ({ data }) => {
-	const { name }: ClusterInfo = data
+	const { name, numberOfNamespces, numberOfTenants }: ClusterInfo = data
 	const [expanded, setExpanded] = useState(false)
 	const [details, setDetails] = useState<ClusterDetail>()
 
@@ -51,8 +51,15 @@ const ClusterView: React.FC<ClusterViewProps> = ({ data }) => {
 			<h2 className="uppercase">{name}</h2>
 			<div className="flex card-inner">
 				<div className="flex flex-col card-col">
-					<div className="flex flex-col card-info">
-						<p className="text-black"></p>
+					<div className="flex card-info">
+						<p className="text-black">
+							Number of Tenants:{' '}
+							<span className="text-blue">{numberOfTenants}</span>
+						</p>
+						<p className="text-black">
+							Number of Namespaces:{' '}
+							<span className="text-blue">{numberOfNamespces}</span>
+						</p>
 					</div>
 				</div>
 			</div>

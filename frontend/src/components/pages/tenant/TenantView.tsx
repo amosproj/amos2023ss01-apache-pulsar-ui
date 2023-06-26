@@ -15,7 +15,8 @@ import { addCommaSeparator } from '../../../Helpers'
 import config from '../../../config'
 
 const TenantView: React.FC<TenantViewProps> = ({ data }) => {
-	const { name, tenantInfo }: TenantInfo = data
+	const { name, tenantInfo, numberOfNamespaces, numberOfTopics }: TenantInfo =
+		data
 
 	const [expanded, setExpanded] = useState(false)
 	const [details, setDetails] = useState<TenantDetail>()
@@ -89,6 +90,14 @@ const TenantView: React.FC<TenantViewProps> = ({ data }) => {
 										)
 									)}
 							</span>
+						</p>
+						<p className="text-black">
+							Number of Namespaces:{' '}
+							<span className="text-blue">{numberOfNamespaces}</span>
+						</p>
+						<p className="text-black">
+							Number of Topics:{' '}
+							<span className="text-blue">{numberOfTopics}</span>
 						</p>
 					</div>
 					<div className="grey-line"></div>

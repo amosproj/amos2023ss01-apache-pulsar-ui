@@ -15,7 +15,7 @@ import { addCommaSeparator } from '../../../Helpers'
 import config from '../../../config'
 
 const NamespaceView: React.FC<NamespaceViewProps> = ({ data }) => {
-	const { id, tenant }: NamespaceInfo = data
+	const { id, tenant, numberOfTopics }: NamespaceInfo = data
 
 	const [expanded, setExpanded] = useState(false)
 	const [details, setDetails] = useState<NamespaceDetail>()
@@ -53,10 +53,14 @@ const NamespaceView: React.FC<NamespaceViewProps> = ({ data }) => {
 			<h2 className="uppercase">{id}</h2>
 			<div className="flex card-inner">
 				<div className="flex flex-col card-col">
-					<div className="flex flex-col card-info">
+					<div className="flex card-info">
 						<p className="text-black">
 							Tenant:<br></br>
 							<span className="text-blue">{tenant ? tenant : 'N/A'}</span>
+						</p>
+						<p className="text-black">
+							Number of Topics:{' '}
+							<span className="text-blue">{numberOfTopics}</span>
 						</p>
 					</div>
 				</div>
