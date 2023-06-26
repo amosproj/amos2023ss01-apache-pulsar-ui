@@ -143,6 +143,81 @@ const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 								</span>
 							</p>
 						</div>
+						{details?.schemaInfos[0] ? (
+							details?.schemaInfos.map((schema: SchemaInfo) => (
+								<>
+									<div className="grey-line"></div>
+									<div className="flex card-info">
+										<p className="text-black">
+											Schema:<br></br>
+											<span className="text-blue">{schema.name}</span>
+										</p>
+										<p className="text-black">
+											Version:<br></br>
+											<span className="text-blue">{schema.version}</span>
+										</p>
+										<p className="text-black">
+											Type:<br></br>
+											<span className="text-blue">{schema.type}</span>
+										</p>
+										<p className="text-black">
+											Props:<br></br>
+											<span className="text-blue">
+												{schema.properties.additionalProp1
+													? schema.properties.additionalProp1
+													: 'N/A'}
+											</span>
+											<span className="text-blue">
+												{schema.properties.additionalProp2
+													? ', ' + schema.properties.additionalProp2
+													: ''}
+											</span>
+											<span className="text-blue">
+												{schema.properties.additionalProp3
+													? ', ' + schema.properties.additionalProp3
+													: ''}
+											</span>
+										</p>
+										<p className="text-black">
+											Schema Definition:<br></br>
+											<span className="text-blue">
+												<div
+													style={{
+														maxHeight: '250px',
+														overflowY: 'auto',
+														border: '1px solid #ccc',
+														padding: '10px',
+														width: '250px',
+													}}
+												>
+													<pre style={{ fontSize: '11px' }}>
+														{JSON.stringify(
+															JSON.parse(schema.schemaDefinition),
+															null,
+															2
+														)}
+													</pre>
+												</div>
+											</span>
+										</p>
+										<p className="text-black">
+											Timestamp:<br></br>
+											<span className="text-blue">{schema.timestamp}</span>
+										</p>
+									</div>
+								</>
+							))
+						) : (
+							<>
+								<div className="grey-line"></div>
+								<div className="flex card-info">
+									<p className="text-black">
+										Schema:<br></br>
+										<span className="text-blue">N/A</span>
+									</p>
+								</div>
+							</>
+						)}
 					</div>
 				</div>
 			</Collapse>
