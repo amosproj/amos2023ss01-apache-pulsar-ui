@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom'
 import { addFilterByDrillDown } from '../../../store/filterSlice'
 import { useAppDispatch } from '../../../store/hooks'
 import axios from 'axios'
+import { addCommaSeparator } from '../../../Helpers'
 import config from '../../../config'
 
 const NamespaceView: React.FC<NamespaceViewProps> = ({ data }) => {
@@ -70,7 +71,11 @@ const NamespaceView: React.FC<NamespaceViewProps> = ({ data }) => {
 								{details?.bundlesData.boundaries.map(
 									(item: string, index: number) => (
 										<span key={index} className="text-blue">
-											{item},{' '}
+											{item}
+											{addCommaSeparator(
+												index,
+												details.bundlesData.boundaries.length
+											)}
 										</span>
 									)
 								)}

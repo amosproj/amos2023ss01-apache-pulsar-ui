@@ -6,6 +6,7 @@ import React, { useState } from 'react'
 import { Modal, Box, Typography, IconButton } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import axios from 'axios'
+import ModalInfo from './ModalInfo'
 import config from '../../config'
 
 /**
@@ -64,7 +65,7 @@ const ProducerModal: React.FC<ProducerModalProps> = ({ producer }) => {
 				onClick={handleOpen}
 				style={{ cursor: 'pointer' }}
 			>
-				{producer.producerName},{' '}
+				{producer.producerName}
 			</span>
 			<Modal open={open} onClose={handleClose}>
 				<Box
@@ -80,6 +81,7 @@ const ProducerModal: React.FC<ProducerModalProps> = ({ producer }) => {
 						width: '100%',
 						maxHeight: '80vh',
 						overflowY: 'auto',
+						borderRadius: '20px',
 					}}
 				>
 					<IconButton
@@ -94,24 +96,26 @@ const ProducerModal: React.FC<ProducerModalProps> = ({ producer }) => {
 					>
 						<CloseIcon />
 					</IconButton>
-					<Typography variant="h5" component="h2" gutterBottom>
-						Producer name: {producer.producerName}
+					<Typography variant="h5" gutterBottom>
+						Producer: {producer.producerName}
 					</Typography>
-					<Typography variant="body1" gutterBottom>
-						Producer ID: {producerDetails?.id}
-					</Typography>
-					<Typography variant="body1" gutterBottom>
-						Address: {producerDetails?.address}
-					</Typography>
-					<Typography variant="body1" gutterBottom>
-						Average message size: {producerDetails?.averageMsgSize}
-					</Typography>
-					<Typography variant="body1" gutterBottom>
-						Client version: {producerDetails?.clientVersion}
-					</Typography>
-					<Typography variant="body1" gutterBottom>
-						Connected since: {producerDetails?.connectedSince}
-					</Typography>
+					<ModalInfo title={'Producer ID'} detailedInfo={producerDetails?.id} />
+					<ModalInfo
+						title={'Address'}
+						detailedInfo={producerDetails?.address}
+					/>
+					<ModalInfo
+						title={'Average message size'}
+						detailedInfo={producerDetails?.averageMsgSize}
+					/>
+					<ModalInfo
+						title={'Client version'}
+						detailedInfo={producerDetails?.clientVersion}
+					/>
+					<ModalInfo
+						title={'Connected since'}
+						detailedInfo={producerDetails?.connectedSince}
+					/>
 				</Box>
 			</Modal>
 		</>

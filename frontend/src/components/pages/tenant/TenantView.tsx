@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom'
 import { addFilterByDrillDown } from '../../../store/filterSlice'
 import { useAppDispatch } from '../../../store/hooks'
 import axios from 'axios'
+import { addCommaSeparator } from '../../../Helpers'
 import config from '../../../config'
 
 const TenantView: React.FC<TenantViewProps> = ({ data }) => {
@@ -58,7 +59,13 @@ const TenantView: React.FC<TenantViewProps> = ({ data }) => {
 							<span className="text-blue">
 								{tenantInfo.adminRoles && tenantInfo.adminRoles.length > 0 ? (
 									tenantInfo.adminRoles.map((item: string, index: number) => (
-										<span key={index}>{item}, </span>
+										<span key={index}>
+											{item}
+											{addCommaSeparator(
+												index,
+												tenantInfo.adminRoles.length
+											)}{' '}
+										</span>
 									))
 								) : (
 									<span>N/A </span>
@@ -72,7 +79,13 @@ const TenantView: React.FC<TenantViewProps> = ({ data }) => {
 									tenantInfo.allowedClusters.length > 0 &&
 									tenantInfo.allowedClusters.map(
 										(item: string, index: number) => (
-											<span key={index}>{item}, </span>
+											<span key={index}>
+												{item}
+												{addCommaSeparator(
+													index,
+													tenantInfo.allowedClusters.length
+												)}{' '}
+											</span>
 										)
 									)}
 							</span>
@@ -90,7 +103,8 @@ const TenantView: React.FC<TenantViewProps> = ({ data }) => {
 								Namespaces:<br></br>
 								{details?.namespaces.map((item: string, index: number) => (
 									<span key={index} className="text-blue">
-										{item},{' '}
+										{item}
+										{addCommaSeparator(index, details.namespaces.length)}
 									</span>
 								))}
 							</p>
