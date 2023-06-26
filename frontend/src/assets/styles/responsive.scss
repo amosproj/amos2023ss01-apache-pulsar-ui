@@ -58,12 +58,12 @@
                                     span {
                                         padding-right: 16px;
                                     }
-                                    &.schema-box-wrapper, &.timestamp-wrapper {
-                                        flex: 0 0 100%;
-                                        max-width: 100%;
-                                        span {
-                                            padding-right: 0px;
-                                        }
+                                }
+                                .schema-box-wrapper, .timestamp-wrapper {
+                                    flex: 0 0 100%;
+                                    max-width: 100%;
+                                    span {
+                                        padding-right: 0px;
                                     }
                                 }
                                 .items-list {
