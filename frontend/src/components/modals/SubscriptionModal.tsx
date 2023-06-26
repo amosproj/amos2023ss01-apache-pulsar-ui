@@ -101,7 +101,7 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
 				onClick={handleOpen}
 				style={{ cursor: 'pointer' }}
 			>
-				{subscription},{' '}
+				{subscription}
 			</span>
 			<Modal open={open} onClose={handleClose}>
 				<Box

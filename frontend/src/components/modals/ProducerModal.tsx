@@ -64,7 +64,7 @@ const ProducerModal: React.FC<ProducerModalProps> = ({ producer }) => {
 				onClick={handleOpen}
 				style={{ cursor: 'pointer' }}
 			>
-				{producer.producerName},{' '}
+				{producer.producerName}
 			</span>
 			<Modal open={open} onClose={handleClose}>
 				<Box
