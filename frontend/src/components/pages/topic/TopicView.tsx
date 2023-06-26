@@ -181,7 +181,23 @@ const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 										<p className="text-black">
 											Schema Definition:<br></br>
 											<span className="text-blue">
-												{schema.schemaDefinition}
+												<div
+													style={{
+														maxHeight: '250px',
+														overflowY: 'auto',
+														border: '1px solid #ccc',
+														padding: '10px',
+														width: '250px',
+													}}
+												>
+													<pre style={{ fontSize: '11px' }}>
+														{JSON.stringify(
+															JSON.parse(schema.schemaDefinition),
+															null,
+															2
+														)}
+													</pre>
+												</div>
 											</span>
 										</p>
 										<p className="text-black">
