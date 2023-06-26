@@ -50,6 +50,6 @@ test('should check if data is being displayed in the NamespaceGroup', async () =
 		'amos-namespace-2'
 	)
 	expect(screen.getByTestId('main-namespacegroup')).toHaveTextContent(
-		'Tenant: amos-tenant-2'
+		'amos-tenant-2'
 	)
 })

@@ -163,7 +163,21 @@ interface TopicDetail {
 			producer: string
 		}
 	]
+	schemaInfos: SchemaInfo[]
 	persistent: boolean
+}
+
+interface SchemaInfo {
+	name: string
+	version: number
+	type: string
+	properties: {
+		additionalProp1: string
+		additionalProp2: string
+		additionalProp3: string
+	}
+	schemaDefinition: string
+	timestamp: string
 }
 
 interface ProducerDetails {

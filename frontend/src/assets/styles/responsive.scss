@@ -1,0 +1,108 @@
+@media only screen and (min-width: $screen-xl-min) {
+    .dashboard-container {
+        header {
+            .MuiContainer-maxWidthXl {
+                max-width: 100%;
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: $screen-md-max) {
+    .dashboard-container {
+        margin: 18px;
+        header{
+            .home-logo + .MuiBox-root {
+                order: 1;
+                .MuiButtonBase-root {
+                    padding-right: 0px;
+                }
+            }
+            .info-modal-wrapper {
+                width: 100%;
+                order: 0;
+            }
+        }
+        .main-dashboard {
+            flex-direction: column;
+            padding: 18px;
+            gap: 18px;
+            .primary-dashboard {
+                order: 1;
+                .main-card {
+                    padding: 18px;
+                    .card-content {
+                        h2 {
+                            font-size: $font-medium;
+                        }
+                        .card-buttons-container {
+                            .MuiCardActions-root {
+                                gap: 10px;
+                                margin-top: 18px;
+                                .MuiButtonBase-root.MuiButton-root.MuiButton-contained {
+                                    width: 100%;
+                                    font-size: $font-small;
+                                    padding: 8px;
+                                    span {
+                                        display: none;
+                                    }
+                                }
+                            }
+                        }
+                        .card-col {
+                            .card-info {
+                                row-gap: 16px;
+                                p {
+                                    flex: 0 0 50%;
+                                    max-width: 50%;
+                                    span {
+                                        padding-right: 16px;
+                                    }
+                                }
+                                .schema-box-wrapper, .timestamp-wrapper {
+                                    flex: 0 0 100%;
+                                    max-width: 100%;
+                                    span {
+                                        padding-right: 0px;
+                                    }
+                                }
+                                .items-list {
+                                    flex: 0 0 100%;
+                                    max-width: 100%;
+                                    padding-bottom: 4px;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            .secondary-dashboard {
+                .filters-wrapper {
+                    display: none;
+                    margin: 18px 0px;
+                    &.filters-wrapper-mobile {
+                        display: block;
+                        width: 100%;
+                    }
+                    svg {
+                        margin: auto;
+                    }
+                }
+                .reset-all-filter-button {
+                    margin: 18px 0px;
+                }
+                .desktop-filters {
+                    display: none;
+                }
+            }
+            .primary-dashboard, .secondary-dashboard {
+                max-width: 100%;
+                flex: 0 0 100%;
+                padding: 0px;
+            }
+            .dashboard-title {
+                margin-bottom: 18px;
+            }
+        }
+    }
+}

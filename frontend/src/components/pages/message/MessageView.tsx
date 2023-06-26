@@ -20,60 +20,54 @@ const MessageView: React.FC<MessageViewProps> = ({ data }) => {
 			<h2 className="uppercase">{data?.payload}</h2>
 			<div className="grey-line"></div>
 			<div className="flex card-inner">
-				<div className="flex flex-col card-col card-col-1">
-					<div className="flex flex-col card-info">
-						<p className="text-black">
-							Cluster:{' '}
-							<span className="text-blue">
-								{data?.cluster ? data.cluster : 'N/A'}
-							</span>
-						</p>
-						<p className="text-black">
-							Tenant:{' '}
-							<span className="text-blue">
-								{data?.tenant ? data.tenant : 'N/A'}
-							</span>
-						</p>
-						<p className="text-black">
-							Namespace:{' '}
-							<span className="text-blue">
-								{data?.namespace ? data.namespace : 'N/A'}
-							</span>
-						</p>
-						<p className="text-black">
-							Topic:{' '}
-							<span className="text-blue">
-								{data?.topic ? data.topic : 'N/A'}
-							</span>
-						</p>
-					</div>
+				<div className="flex flex-col card-col">
+					<p className="text-black">
+						Cluster:{' '}
+						<span className="text-blue">
+							{data?.cluster ? data.cluster : 'N/A'}
+						</span>
+					</p>
+					<p className="text-black">
+						Tenant:{' '}
+						<span className="text-blue">
+							{data?.tenant ? data.tenant : 'N/A'}
+						</span>
+					</p>
+					<p className="text-black">
+						Namespace:{' '}
+						<span className="text-blue">
+							{data?.namespace ? data.namespace : 'N/A'}
+						</span>
+					</p>
+					<p className="text-black">
+						Topic:{' '}
+						<span className="text-blue">
+							{data?.topic ? data.topic : 'N/A'}
+						</span>
+					</p>
 				</div>
 			</div>
 			<Collapse in={expanded} timeout="auto" unmountOnExit>
 				<div className="flex card-inner">
-					<div className="flex flex-col card-col card-col-1">
+					<div className="flex flex-col card-col">
+						<div className="grey-line"></div>
 						<div className="flex flex-col card-info">
-							<div className="grey-line"></div>
-							<div className="flex flex-col card-info">
-								<p className="text-black">
-									Schema:{' '}
-									<span className="text-blue">
-										{data?.schema ? data.schema : 'N/A'}
-									</span>
-								</p>
-								<p className="text-black">
-									Message ID:{' '}
-									<span className="text-blue">
-										{data?.id ? data.id : 'N/A'}
-									</span>
-								</p>
-								<p className="text-black">
-									Publish time:{' '}
-									<span className="text-blue">
-										{data?.publishTime ? data.publishTime : 'N/A'}
-									</span>
-								</p>
-							</div>
+							<p className="text-black">
+								Schema:{' '}
+								<span className="text-blue">
+									{data?.schema ? data.schema : 'N/A'}
+								</span>
+							</p>
+							<p className="text-black">
+								Message ID:{' '}
+								<span className="text-blue">{data?.id ? data.id : 'N/A'}</span>
+							</p>
+							<p className="text-black">
+								Publish time:{' '}
+								<span className="text-blue">
+									{data?.publishTime ? data.publishTime : 'N/A'}
+								</span>
+							</p>
 						</div>
 					</div>
 				</div>

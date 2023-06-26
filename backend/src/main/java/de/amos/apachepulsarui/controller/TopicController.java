@@ -6,14 +6,23 @@
 
 package de.amos.apachepulsarui.controller;
 
-import de.amos.apachepulsarui.dto.*;
+import de.amos.apachepulsarui.dto.ConsumerDto;
+import de.amos.apachepulsarui.dto.ProducerDto;
+import de.amos.apachepulsarui.dto.SubscriptionDto;
+import de.amos.apachepulsarui.dto.TopicDetailDto;
+import de.amos.apachepulsarui.dto.TopicDto;
+import de.amos.apachepulsarui.dto.TopicsDto;
 import de.amos.apachepulsarui.service.NamespaceService;
 import de.amos.apachepulsarui.service.TenantService;
 import de.amos.apachepulsarui.service.TopicService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
