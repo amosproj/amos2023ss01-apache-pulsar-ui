@@ -36,9 +36,6 @@ public class MessageServiceIntegrationTest extends AbstractIntegrationTest {
     private MessageService messageService;
 
     @Autowired
-    private TopicService topicService;
-
-    @Autowired
     private PulsarAdmin pulsarAdmin;
 
     @Autowired
