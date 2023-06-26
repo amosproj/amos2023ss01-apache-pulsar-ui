@@ -1,5 +1,6 @@
 package de.amos.apachepulsarui.service;
 
+import de.amos.apachepulsarui.dto.ClusterDetailDto;
 import de.amos.apachepulsarui.dto.ClusterDto;
 import de.amos.apachepulsarui.exception.PulsarApiException;
 import lombok.RequiredArgsConstructor;
@@ -20,24 +21,28 @@ public class ClusterService {
 
     private final PulsarAdmin pulsarAdmin;
     private final TenantService tenantService;
+    private final NamespaceService namespaceService;
 
     @Cacheable("cluster.allNames")
-    public List<String> getAllNames() {
+    public List<ClusterDto> getAllNames() {
         try {
-            return pulsarAdmin.clusters().getClusters();
+            return pulsarAdmin.clusters().getClusters()
+                    .stream().map(ClusterDto::create)
+                    .map(this::enrichWithCardDetails)
+                    .toList();
         } catch (PulsarAdminException e) {
             throw new PulsarApiException("Could not fetch list a list of all clusters", e);
         }
     }
 
     @Cacheable("cluster.detail")
-    public ClusterDto getClusterDetails(String clusterName) {
+    public ClusterDetailDto getClusterDetails(String clusterName) {
 
         ClusterData clusterData = getClusterData(clusterName);
         List<String> activeBrokers = getActiveBrokers(clusterName);
         List<String> tenantsAllowedForCluster = getTenantsAllowedForCluster(clusterName);
 
-        return ClusterDto.builder()
+        return ClusterDetailDto.builder()
                 .name(clusterName)
                 .serviceUrl(clusterData.getServiceUrl())
                 .brokerServiceUrl(clusterData.getBrokerServiceUrl())
@@ -83,6 +88,14 @@ public class ClusterService {
                     }
                 })
                 .toList();
+    }
+
+    private ClusterDto enrichWithCardDetails(ClusterDto clusterDto) {
+        List<String> tenats = getTenantsAllowedForCluster(clusterDto.getName());
+        long numberOfNamespaces = tenats.stream().mapToLong(t -> namespaceService.getAllOfTenant(t).size()).sum();
+        clusterDto.setNumberOfTenants(tenats.size());
+        clusterDto.setNumberOfNamespces(numberOfNamespaces);
+        return clusterDto;
     }
 
 }

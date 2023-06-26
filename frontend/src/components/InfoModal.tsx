@@ -32,7 +32,7 @@ export function InfoModal() {
 		'Our mission consists of building a Web-UI that can easily be used by users that have some experience with managing and maintaining Apache Pulsar installations to understand and work on their infrastructure...'
 
 	return (
-		<div>
+		<div className="info-modal-wrapper">
 			<Button onClick={handleClickOpen} style={{ color: 'white' }}>
 				info
 			</Button>

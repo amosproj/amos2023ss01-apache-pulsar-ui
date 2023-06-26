@@ -45,15 +45,15 @@ test('should check if data is being displayed in the TopicGroup', async () => {
 		'amos-topic-1'
 	)
 	expect(screen.getByTestId('main-topicgroup')).toHaveTextContent(
-		'Namespace: amos-namespace-2'
+		'amos-namespace-2'
 	)
 	expect(screen.getByTestId('main-topicgroup')).toHaveTextContent(
-		'Tenant: amos-tenant-2'
+		'amos-tenant-2'
 	)
 	expect(screen.getByTestId('main-topicgroup')).toHaveTextContent(
-		'Producers: test-producer'
+		'test-producer'
 	)
 	expect(screen.getByTestId('main-topicgroup')).toHaveTextContent(
-		'Subscriptions: test-subscription'
+		'test-subscription'
 	)
 })

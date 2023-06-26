@@ -29,6 +29,8 @@ public class TopicDto {
 
     private List<String> producers;
 
+    private long messagesSendToTopic;
+
     public static TopicDto create(String completeTopicName, TopicStats topicStats) {
         Set<String> subscriptions = topicStats.getSubscriptions().keySet();
         List<String> producers = getProducers(topicStats);
@@ -40,6 +42,7 @@ public class TopicDto {
                 .tenant(topicName.getTenant())
                 .producers(producers)
                 .subscriptions(subscriptions)
+                .messagesSendToTopic(topicStats.getMsgInCounter())
                 .build();
     }
 

@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.util.Collections.emptyList;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -40,7 +41,7 @@ public class MessageControllerTest {
                 aMessage("persistent://public/default/spaceships", "Nebuchadnezzar"),
                 aMessage("persistent://public/default/spaceships", "Serenity")
         );
-        Mockito.when(messageService.getLatestMessagesOfTopic("persistent://public/default/spaceships", 5))
+        Mockito.when(messageService.getLatestMessagesFiltered("persistent://public/default/spaceships", 5, emptyList(), emptyList()))
                 .thenReturn(messageDtos);
 
         mockMvc.perform(get("/messages?topic=persistent://public/default/spaceships&numMessages=5")
@@ -58,7 +59,7 @@ public class MessageControllerTest {
             messageDtos.add(aMessage("persistent://public/default/test", "Test" + i));
         }
 
-        Mockito.when(messageService.getLatestMessagesOfTopic("persistent://public/default/test", 10))
+        Mockito.when(messageService.getLatestMessagesFiltered("persistent://public/default/test", 10,emptyList(),emptyList()))
                 .thenReturn(messageDtos);
 
         mockMvc.perform(get("/messages?topic=persistent://public/default/test")
@@ -67,9 +68,36 @@ public class MessageControllerTest {
                 .andExpect(jsonPath("$.messages", hasSize(10)));
     }
 
-    @NotNull
-    private static MessageDto aMessage(String topic, String payload) {
-        return MessageDto.create(topic, payload);
+    @Test
+    void getMessages_withProducer_returns10Messages() throws Exception {
+        var messageDtos = new ArrayList<MessageDto>();
+        for (int i = 0; i < 10; i++) {
+            messageDtos.add(aMessage("persistent://public/default/test", "Test" + i));
+        }
+
+        Mockito.when(messageService.getLatestMessagesFiltered("persistent://public/default/test", 10,List.of("pro"),emptyList()))
+                .thenReturn(messageDtos);
+
+        mockMvc.perform(get("/messages?topic=persistent://public/default/test&producers=pro")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.messages", hasSize(10)));
+    }
+
+    @Test
+    void getMessages_withSubscription_returns10Messages() throws Exception {
+        var messageDtos = new ArrayList<MessageDto>();
+        for (int i = 0; i < 10; i++) {
+            messageDtos.add(aMessage("persistent://public/default/test", "Test" + i));
+        }
+
+        Mockito.when(messageService.getLatestMessagesFiltered("persistent://public/default/test", 10,emptyList(),List.of("sub")))
+                .thenReturn(messageDtos);
+
+        mockMvc.perform(get("/messages?topic=persistent://public/default/test&subscriptions=sub")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.messages", hasSize(10)));
     }
 
     @Test
@@ -78,4 +106,11 @@ public class MessageControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
+
+    @NotNull
+    private static MessageDto aMessage(String topic, String payload) {
+        return MessageDto.create(topic, payload);
+    }
+
+
 }

@@ -13,6 +13,7 @@ import {
 import NamespaceView from './NamespaceView'
 import { selectTrigger } from '../requestTriggerSlice'
 import config from '../../../config'
+import { Masonry } from 'react-plock'
 
 export interface ResponseNamespace {
 	namespaces: NamespaceInfo[]
@@ -72,13 +73,20 @@ const NamespaceGroup: React.FC = () => {
 			) : error ? (
 				<div>Error: {error}</div>
 			) : (
-				<div>
-					{data.map((namespace, index) => (
+				<Masonry
+					className="main-card-wrapper"
+					items={data}
+					config={{
+						columns: [1, 2],
+						gap: [34, 34],
+						media: [1619, 1620],
+					}}
+					render={(namespace, index) => (
 						<div className="main-card" key={index}>
 							<NamespaceView key={index} data={namespace} />
 						</div>
-					))}
-				</div>
+					)}
+				/>
 			)}
 		</div>
 	)
