@@ -5,6 +5,7 @@ else
 
   echo "Setting up topology."
   x=0
+  y=0
 
   for i in {1..10}; do
 
@@ -13,14 +14,15 @@ else
 
     for j in {1..20}; do
 
-      echo "Creating tenant-$i/namespace-$j"
-      bin/pulsar-admin --admin-url "$PULSAR_ADMIN_URL" namespaces create "tenant-$i/namespace-$j"
+      x=$((x + 1))
+      echo "Creating tenant-$i/namespace-$x"
+      bin/pulsar-admin --admin-url "$PULSAR_ADMIN_URL" namespaces create "tenant-$i/namespace-$x"
 
       for k in {1..25}; do
 
-        x=$((x + 1))
-        echo "Creating tenant-$i/namespace-$j/topic-$x"
-        bin/pulsar-admin --admin-url "$PULSAR_ADMIN_URL" topics create "tenant-$i/namespace-$j/topic-$x"
+        y=$((y + 1))
+        echo "Creating tenant-$i/namespace-$x/topic-$y"
+        bin/pulsar-admin --admin-url "$PULSAR_ADMIN_URL" topics create "tenant-$i/namespace-$x/topic-$y"
 
       done
 
