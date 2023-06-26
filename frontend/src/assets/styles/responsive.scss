@@ -5,22 +5,6 @@
                 max-width: 100%;
             }
         }
-        .primary-dashboard {
-            .main-card-wrapper {
-                display: flex;
-                justify-content: space-between;
-                flex-wrap: wrap;
-                .main-card {
-                    flex: 0 0 48.5%;
-                    max-width: 48.5%;
-                    margin: 1.1rem 0;
-                    &.single-card {
-                        flex: 0 0 100%;
-                        max-width: 100%;
-                    }
-                }
-            }
-        }
     }
 }
 
@@ -67,9 +51,20 @@
                         }
                         .card-col {
                             .card-info {
+                                row-gap: 16px;
                                 p {
                                     flex: 0 0 50%;
                                     max-width: 50%;
+                                    span {
+                                        padding-right: 16px;
+                                    }
+                                    &.schema-box-wrapper, &.timestamp-wrapper {
+                                        flex: 0 0 100%;
+                                        max-width: 100%;
+                                        span {
+                                            padding-right: 0px;
+                                        }
+                                    }
                                 }
                                 .items-list {
                                     flex: 0 0 100%;
@@ -104,6 +99,9 @@
                 max-width: 100%;
                 flex: 0 0 100%;
                 padding: 0px;
+            }
+            .dashboard-title {
+                margin-bottom: 18px;
             }
         }
     }

@@ -8,6 +8,7 @@ import axios from 'axios'
 import ClusterView from './ClusterView'
 import { selectCluster } from '../../../store/filterSlice'
 import { selectTrigger } from '../requestTriggerSlice'
+import { Masonry } from 'react-plock'
 
 export interface ResponseCluster {
 	clusters: string[]
@@ -48,8 +49,15 @@ const ClusterGroup: React.FC = () => {
 			) : error ? (
 				<div>Error: {error}</div>
 			) : (
-				<div className="main-card-wrapper">
-					{data.map((cluster, index) => (
+				<Masonry
+					className="main-card-wrapper"
+					items={data}
+					config={{
+						columns: [1, 2],
+						gap: [34, 34],
+						media: [1619, 1620],
+					}}
+					render={(cluster, index) => (
 						<div
 							className={
 								data.length === 1 ? 'single-card main-card' : 'main-card'
@@ -58,8 +66,8 @@ const ClusterGroup: React.FC = () => {
 						>
 							<ClusterView key={index} data={{ id: cluster }} />
 						</div>
-					))}
-				</div>
+					)}
+				/>
 			)}
 		</div>
 	)

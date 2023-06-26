@@ -15,6 +15,7 @@ import {
 } from '../../../store/filterSlice'
 import TopicView from './TopicView'
 import { selectTrigger } from '../requestTriggerSlice'
+import { Masonry } from 'react-plock'
 
 export interface ResponseTopic {
 	topics: TopicInfo[]
@@ -92,13 +93,20 @@ const TopicGroup: React.FC = () => {
 			) : error ? (
 				<div>Error: {error}</div>
 			) : (
-				<div className="main-card-wrapper">
-					{data.map((topic, index) => (
+				<Masonry
+					className="main-card-wrapper"
+					items={data}
+					config={{
+						columns: [1, 2],
+						gap: [34, 34],
+						media: [1619, 1620],
+					}}
+					render={(topic, index) => (
 						<div className="main-card" key={index}>
 							<TopicView key={index} data={topic} />
 						</div>
-					))}
-				</div>
+					)}
+				/>
 			)}
 		</div>
 	)
