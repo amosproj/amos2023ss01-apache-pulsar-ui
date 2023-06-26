@@ -80,13 +80,7 @@ public class NamespaceService {
     }
 
     private NamespaceDto enrichWithCardDetails(NamespaceDto namespace) {
-        try {
-            namespace.setNumberOfTopics(pulsarAdmin.namespaces().getTopics(namespace.getId()).size());
+            namespace.setNumberOfTopics(topicService.getAllByNamespace(namespace.getId()).size());
             return namespace;
-        } catch (PulsarAdminException e) {
-            throw new PulsarApiException(
-                    "Could not fetch namespace data of namespace '%s'".formatted(namespace.getId()), e
-            );
-        }
     }
 }

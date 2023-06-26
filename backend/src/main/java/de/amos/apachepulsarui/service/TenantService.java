@@ -20,6 +20,7 @@ public class TenantService {
 
     private final PulsarAdmin pulsarAdmin;
     private final NamespaceService namespaceService;
+    private final TopicService topicService;
 
     @Cacheable("tenants.allNames")
     public List<String> getAllNames() throws PulsarApiException {
@@ -76,7 +77,7 @@ public class TenantService {
     private TenantDto enrichWithCardDetails(TenantDto tenantDto) {
         try {
             List<String> namespaces = pulsarAdmin.namespaces().getNamespaces(tenantDto.getName());
-            long numberOfTopics = namespaces.stream().mapToLong(n -> getNumberOfTopicsForNamespace(n).size()).sum();
+            long numberOfTopics = namespaces.stream().mapToLong(n -> topicService.getAllByNamespace(n).size()).sum();
             tenantDto.setNumberOfTopics(numberOfTopics);
             tenantDto.setNumberOfNamespaces(namespaces.size());
             return tenantDto;
@@ -84,14 +85,6 @@ public class TenantService {
             throw new PulsarApiException(
                     "Could not fetch tenant data of tenant '%s'".formatted(tenantDto.getName()), e
             );
-        }
-    }
-
-    private List<String> getNumberOfTopicsForNamespace(String namespace) {
-        try {
-            return pulsarAdmin.namespaces().getTopics(namespace);
-        } catch (PulsarAdminException e) {
-            throw new RuntimeException(e);
         }
     }
 }
