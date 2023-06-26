@@ -21,6 +21,7 @@ public class ClusterService {
 
     private final PulsarAdmin pulsarAdmin;
     private final TenantService tenantService;
+    private final NamespaceService namespaceService;
 
     @Cacheable("cluster.allNames")
     public List<ClusterDto> getAllNames() {
@@ -91,18 +92,10 @@ public class ClusterService {
 
     private ClusterDto enrichWithCardDetails(ClusterDto clusterDto) {
         List<String> tenats = getTenantsAllowedForCluster(clusterDto.getName());
-        long numberOfNamespaces = tenats.stream().mapToLong(this::getNumberOfNamespacesForTenant).sum();
+        long numberOfNamespaces = tenats.stream().mapToLong(t -> namespaceService.getAllOfTenant(t).size()).sum();
         clusterDto.setNumberOfTenants(tenats.size());
         clusterDto.setNumberOfNamespces(numberOfNamespaces);
         return clusterDto;
-    }
-
-    private long getNumberOfNamespacesForTenant(String tenant) {
-        try {
-            return pulsarAdmin.namespaces().getNamespaces(tenant).size();
-        } catch (PulsarAdminException e) {
-            throw new RuntimeException(e);
-        }
     }
 
 }
