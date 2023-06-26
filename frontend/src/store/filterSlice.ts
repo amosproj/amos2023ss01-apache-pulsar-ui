@@ -264,7 +264,9 @@ const filterSlice = createSlice({
 	extraReducers(builder) {
 		builder.addCase(clusterOptionThunk.fulfilled, (state, action) => {
 			const data: ResponseCluster = JSON.parse(JSON.stringify(action.payload))
-			state.displayedOptions.allClusters = data.clusters
+			state.displayedOptions.allClusters = data.clusters.map(
+				(cluster) => cluster.name
+			)
 		})
 		builder.addCase(tenantOptionThunk.fulfilled, (state, action) => {
 			const data: ResponseTenant = JSON.parse(JSON.stringify(action.payload))

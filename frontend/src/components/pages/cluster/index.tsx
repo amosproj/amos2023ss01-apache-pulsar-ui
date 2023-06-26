@@ -12,7 +12,7 @@ import config from '../../../config'
 import { Masonry } from 'react-plock'
 
 export interface ResponseCluster {
-	clusters: string[]
+	clusters: ClusterInfo[]
 }
 
 /**
@@ -21,7 +21,7 @@ export interface ResponseCluster {
  * @returns Rendered cluster view cards for the dashboard component
  */
 const ClusterGroup: React.FC = () => {
-	const [data, setData] = useState<string[]>([])
+	const [data, setData] = useState<ClusterInfo[]>([])
 	const [error, setError] = useState<string | null>(null)
 	const [loading, setLoading] = useState<boolean>(true)
 	const url = config.backendUrl + '/api/cluster/all'
@@ -65,7 +65,7 @@ const ClusterGroup: React.FC = () => {
 							}
 							key={index}
 						>
-							<ClusterView key={index} data={{ id: cluster }} />
+							<ClusterView key={index} data={cluster} />
 						</div>
 					)}
 				/>

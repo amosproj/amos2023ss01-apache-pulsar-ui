@@ -14,7 +14,7 @@ import axios from 'axios'
 import config from '../../../config'
 
 const ClusterView: React.FC<ClusterViewProps> = ({ data }) => {
-	const { id }: ClusterInfo = data
+	const { name }: ClusterInfo = data
 	const [expanded, setExpanded] = useState(false)
 	const [details, setDetails] = useState<ClusterDetail>()
 
@@ -22,7 +22,7 @@ const ClusterView: React.FC<ClusterViewProps> = ({ data }) => {
 	const navigate = useNavigate()
 
 	const handleDrillDown = () => {
-		dispatch(addFilterByDrillDown({ filterName: 'cluster', id: id }))
+		dispatch(addFilterByDrillDown({ filterName: 'cluster', id: name }))
 		navigate('/tenant')
 	}
 
@@ -31,7 +31,7 @@ const ClusterView: React.FC<ClusterViewProps> = ({ data }) => {
 
 		// Sending GET request
 		const params = {
-			clusterName: id,
+			clusterName: name,
 		}
 		axios
 			.get<ClusterDetail>(url, { params })
@@ -48,7 +48,7 @@ const ClusterView: React.FC<ClusterViewProps> = ({ data }) => {
 	}
 	return (
 		<div className="flex flex-col card-content">
-			<h2 className="uppercase">{id}</h2>
+			<h2 className="uppercase">{name}</h2>
 			<div className="flex card-inner">
 				<div className="flex flex-col card-col">
 					<div className="flex flex-col card-info">

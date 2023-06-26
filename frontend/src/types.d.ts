@@ -73,7 +73,9 @@ interface formProps {
 }
 
 interface ClusterInfo {
-	id: string
+	name: string
+	numberOfTenants: number
+	numberOfNamespces: number
 }
 
 interface TenantInfo {
@@ -82,11 +84,14 @@ interface TenantInfo {
 		adminRoles: string[]
 		allowedClusters: string[]
 	}
+	numberOfNamespaces: number
+	numberOfTopics: number
 }
 
 interface NamespaceInfo {
 	id: string
 	tenant: string
+	numberOfTopics: number
 }
 
 interface TopicInfo {
