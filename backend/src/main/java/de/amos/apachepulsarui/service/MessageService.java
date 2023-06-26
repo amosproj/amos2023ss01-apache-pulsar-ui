@@ -55,7 +55,7 @@ public class MessageService {
             }
             return Collections.emptyList();
         } catch (PulsarAdminException e) {
-            throw new RuntimeException(e);
+            throw new PulsarApiException(String.format("Could not get Messages for subscription %s", subscription), e);
         }
     }
 
