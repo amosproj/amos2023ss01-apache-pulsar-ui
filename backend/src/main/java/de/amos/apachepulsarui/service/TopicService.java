@@ -6,12 +6,7 @@
 
 package de.amos.apachepulsarui.service;
 
-import de.amos.apachepulsarui.dto.ConsumerDto;
-import de.amos.apachepulsarui.dto.ProducerDto;
-import de.amos.apachepulsarui.dto.SchemaInfoDto;
-import de.amos.apachepulsarui.dto.SubscriptionDto;
-import de.amos.apachepulsarui.dto.TopicDetailDto;
-import de.amos.apachepulsarui.dto.TopicDto;
+import de.amos.apachepulsarui.dto.*;
 import de.amos.apachepulsarui.exception.PulsarApiException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -67,14 +62,6 @@ public class TopicService {
                 getOwnerBroker(topicName),
                 getSchemasOfTopic(topicName)
         );
-    }
-
-    public void createNewTopic(String topic) throws PulsarApiException {
-        try {
-            pulsarAdmin.topics().createNonPartitionedTopic(topic);
-        } catch (PulsarAdminException e) {
-            throw new PulsarApiException("Could not create new topic '%s'".formatted(topic), e);
-        }
     }
 
     /**

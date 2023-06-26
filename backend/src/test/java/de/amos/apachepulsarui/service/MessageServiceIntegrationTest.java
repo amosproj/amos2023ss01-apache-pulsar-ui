@@ -27,9 +27,6 @@ public class MessageServiceIntegrationTest extends AbstractIntegrationTest {
     private MessageService messageService;
 
     @Autowired
-    private TopicService topicService;
-
-    @Autowired
     private PulsarAdmin pulsarAdmin;
 
     @Autowired
@@ -37,8 +34,8 @@ public class MessageServiceIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     void getNumberOfLatestMessagesFromTopic_returnsMessages() throws Exception {
-        topicService.createNewTopic("messageToSend-service-integration-test");
         String topicName = "persistent://public/default/messageToSend-service-integration-test";
+        pulsarAdmin.topics().createNonPartitionedTopic(topicName);
 
         MessageDto messageToSend = aMessage(topicName, "Hello World");
         Long timeBeforeSend = Instant.now().getEpochSecond();
@@ -62,8 +59,8 @@ public class MessageServiceIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     void getNumberOfLatestMessagesFromTopic_forMessageWithSchema_returnsSchema() throws Exception {
-        topicService.createNewTopic("messageToSend-schema-service-integration-test");
         String topicName = "persistent://public/default/messageToSend-schema-service-integration-test";
+        pulsarAdmin.topics().createNonPartitionedTopic(topicName);
 
         Schema<TestSchema> schema = Schema.JSON(TestSchema.class);
         pulsarAdmin.schemas().createSchema(topicName, schema.getSchemaInfo());

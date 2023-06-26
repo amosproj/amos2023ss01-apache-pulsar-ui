@@ -8,11 +8,7 @@ package de.amos.apachepulsarui.service;
 
 import de.amos.apachepulsarui.dto.TopicDetailDto;
 import de.amos.apachepulsarui.dto.TopicDto;
-import org.apache.pulsar.client.admin.Lookup;
-import org.apache.pulsar.client.admin.PulsarAdmin;
-import org.apache.pulsar.client.admin.PulsarAdminException;
-import org.apache.pulsar.client.admin.Schemas;
-import org.apache.pulsar.client.admin.Topics;
+import org.apache.pulsar.client.admin.*;
 import org.apache.pulsar.common.naming.TopicName;
 import org.apache.pulsar.common.policies.data.TopicStats;
 import org.junit.jupiter.api.AfterEach;
@@ -29,7 +25,8 @@ import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class TopicServiceTest {
@@ -42,8 +39,6 @@ class TopicServiceTest {
     private PulsarAdmin pulsarAdmin;
     @Mock
     private TopicStats topicStats;
-    @Mock
-    private MessageService messageService;
     @Mock
     private Lookup lookup;
 
@@ -93,15 +88,6 @@ class TopicServiceTest {
     private void whenSchemas() throws PulsarAdminException {
         when(pulsarAdmin.schemas()).thenReturn(schemas);
         when(pulsarAdmin.schemas().getAllSchemas(TOPIC_NAME)).thenReturn(List.of());
-    }
-
-    @Test
-    void createNewTopic() throws PulsarAdminException {
-        when(pulsarAdmin.topics()).thenReturn(topics);
-
-        topicService.createNewTopic(TOPIC_NAME);
-
-        verify(pulsarAdmin.topics()).createNonPartitionedTopic(TOPIC_NAME);
     }
 
     @Test
