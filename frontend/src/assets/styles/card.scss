@@ -6,7 +6,7 @@
 	height: fit-content;
 	width: 100%;
 	padding: 24px;
-	margin: 1.8rem 0;
+	margin: 0;
 
 	.card-content {
 		h2 {
@@ -60,9 +60,38 @@
 					width: 100%;
 					justify-content: space-between;
 					flex-wrap: wrap;
+					row-gap: 18px;
 					p {
 						flex: 0 0 25%;
 						max-width: 25%;
+						span {
+							padding-right: 6px;
+							display: inline-block;
+						}
+					}
+					div {
+						flex: 0 0 25%;
+						max-width: 25%;
+						&.schema-box-wrapper {
+							flex: 0 0 70%;
+							max-width: 70%;
+							.schema-box {
+								color: $primary-blue;
+								max-height: 250px;
+								overflow-y: auto;
+								border: 1px solid #ccc;
+								padding: 10px;
+								width: 100%;
+								margin-top: 8px;
+								pre {
+									font-size: $font-xsmall;
+								}
+							}
+						}
+						span {
+							padding-right: 6px;
+							display: inline-block;
+						}
 					}
 
 					.items-list {

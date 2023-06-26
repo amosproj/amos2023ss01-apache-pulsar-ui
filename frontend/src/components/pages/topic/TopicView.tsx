@@ -144,8 +144,8 @@ const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 							</p>
 						</div>
 						{details?.schemaInfos[0] ? (
-							details?.schemaInfos.map((schema: SchemaInfo) => (
-								<>
+							details?.schemaInfos.map((schema: SchemaInfo, index: number) => (
+								<div key={index}>
 									<div className="grey-line"></div>
 									<div className="flex card-info">
 										<p className="text-black">
@@ -178,34 +178,24 @@ const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 													: ''}
 											</span>
 										</p>
-										<p className="text-black">
+										<div className="text-black schema-box-wrapper">
 											Schema Definition:<br></br>
-											<span className="text-blue">
-												<div
-													style={{
-														maxHeight: '250px',
-														overflowY: 'auto',
-														border: '1px solid #ccc',
-														padding: '10px',
-														width: '250px',
-													}}
-												>
-													<pre style={{ fontSize: '11px' }}>
-														{JSON.stringify(
-															JSON.parse(schema.schemaDefinition),
-															null,
-															2
-														)}
-													</pre>
-												</div>
+											<span className="schema-box">
+												<pre>
+													{JSON.stringify(
+														JSON.parse(schema.schemaDefinition),
+														null,
+														2
+													)}
+												</pre>
 											</span>
-										</p>
-										<p className="text-black">
+										</div>
+										<p className="text-black timestamp-wrapper">
 											Timestamp:<br></br>
 											<span className="text-blue">{schema.timestamp}</span>
 										</p>
 									</div>
-								</>
+								</div>
 							))
 						) : (
 							<>
