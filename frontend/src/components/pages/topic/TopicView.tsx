@@ -13,6 +13,7 @@ import { addFilterByDrillDown } from '../../../store/filterSlice'
 import { useAppDispatch } from '../../../store/hooks'
 import axios from 'axios'
 import SubscriptionModal from '../../modals/SubscriptionModal'
+import config from '../../../config'
 
 const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 	const { name, tenant, namespace, producers, subscriptions }: TopicInfo = data
@@ -22,7 +23,7 @@ const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 	const navigate = useNavigate()
 
 	const fetchData = () => {
-		const url = 'http://localhost:8081/api/topic/'
+		const url = config.backendUrl + '/api/topic/'
 
 		// Sending GET request
 		const params = {
@@ -143,6 +144,71 @@ const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 								</span>
 							</p>
 						</div>
+						{details?.schemaInfos[0] ? (
+							details?.schemaInfos.map((schema: SchemaInfo, index: number) => (
+								<div key={index}>
+									<div className="grey-line"></div>
+									<div className="flex card-info">
+										<p className="text-black">
+											Schema:<br></br>
+											<span className="text-blue">{schema.name}</span>
+										</p>
+										<p className="text-black">
+											Version:<br></br>
+											<span className="text-blue">{schema.version}</span>
+										</p>
+										<p className="text-black">
+											Type:<br></br>
+											<span className="text-blue">{schema.type}</span>
+										</p>
+										<p className="text-black">
+											Props:<br></br>
+											<span className="text-blue">
+												{schema.properties.additionalProp1
+													? schema.properties.additionalProp1
+													: 'N/A'}
+											</span>
+											<span className="text-blue">
+												{schema.properties.additionalProp2
+													? ', ' + schema.properties.additionalProp2
+													: ''}
+											</span>
+											<span className="text-blue">
+												{schema.properties.additionalProp3
+													? ', ' + schema.properties.additionalProp3
+													: ''}
+											</span>
+										</p>
+										<div className="text-black schema-box-wrapper">
+											Schema Definition:<br></br>
+											<span className="schema-box">
+												<pre>
+													{JSON.stringify(
+														JSON.parse(schema.schemaDefinition),
+														null,
+														2
+													)}
+												</pre>
+											</span>
+										</div>
+										<p className="text-black timestamp-wrapper">
+											Timestamp:<br></br>
+											<span className="text-blue">{schema.timestamp}</span>
+										</p>
+									</div>
+								</div>
+							))
+						) : (
+							<>
+								<div className="grey-line"></div>
+								<div className="flex card-info">
+									<p className="text-black">
+										Schema:<br></br>
+										<span className="text-blue">N/A</span>
+									</p>
+								</div>
+							</>
+						)}
 					</div>
 				</div>
 			</Collapse>

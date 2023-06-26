@@ -11,6 +11,7 @@ import { useAppDispatch } from '../../../store/hooks'
 import { addFilterByDrillDown } from '../../../store/filterSlice'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import config from '../../../config'
 
 const ClusterView: React.FC<ClusterViewProps> = ({ data }) => {
 	const { id }: ClusterInfo = data
@@ -26,7 +27,7 @@ const ClusterView: React.FC<ClusterViewProps> = ({ data }) => {
 	}
 
 	const fetchData = () => {
-		const url = 'http://localhost:8081/api/cluster/'
+		const url = config.backendUrl + '/api/cluster/'
 
 		// Sending GET request
 		const params = {

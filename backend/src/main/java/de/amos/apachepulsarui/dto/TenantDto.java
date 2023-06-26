@@ -17,6 +17,11 @@ public class TenantDto {
 
     private TenantInfo tenantInfo;
 
+    private long numberOfNamespaces;
+
+    private long numberOfTopics;
+
+
     public static TenantDto create(TenantInfo tenantInfo, String name) {
         return TenantDto.builder()
                 .name(name)

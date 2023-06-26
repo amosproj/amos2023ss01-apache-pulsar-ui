@@ -80,7 +80,7 @@ public class NamespaceService {
     }
 
     private NamespaceDto enrichWithCardDetails(NamespaceDto namespace) {
-            //TODO fill with information when given by pos
+            namespace.setNumberOfTopics(topicService.getAllByNamespace(namespace.getId()).size());
             return namespace;
     }
 }

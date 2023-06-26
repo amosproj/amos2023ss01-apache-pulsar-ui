@@ -28,8 +28,10 @@ public class MessageController {
 
     @GetMapping
     public ResponseEntity<MessagesDto> getMessages(@RequestParam String topic,
-                                                   @RequestParam(required = false, defaultValue = "10") Integer numMessages) {
-        List<MessageDto> messageDtos = messageService.getLatestMessagesOfTopic(topic, numMessages);
+                                                   @RequestParam(required = false, defaultValue = "10") Integer numMessages,
+                                                   @RequestParam(required = false, defaultValue = "") List<String> producers,
+                                                   @RequestParam(required = false, defaultValue = "") List<String> subscriptions) {
+        List<MessageDto> messageDtos = messageService.getLatestMessagesFiltered(topic, numMessages, producers, subscriptions);
         return new ResponseEntity<>(new MessagesDto(messageDtos), HttpStatus.OK);
     }
 }

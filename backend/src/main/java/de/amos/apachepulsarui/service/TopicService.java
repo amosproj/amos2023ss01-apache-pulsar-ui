@@ -12,7 +12,6 @@ import de.amos.apachepulsarui.dto.SchemaInfoDto;
 import de.amos.apachepulsarui.dto.SubscriptionDto;
 import de.amos.apachepulsarui.dto.TopicDetailDto;
 import de.amos.apachepulsarui.dto.TopicDto;
-import de.amos.apachepulsarui.dto.TopicStatsDto;
 import de.amos.apachepulsarui.exception.PulsarApiException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +22,7 @@ import org.apache.pulsar.common.policies.data.ConsumerStats;
 import org.apache.pulsar.common.policies.data.PublisherStats;
 import org.apache.pulsar.common.policies.data.TopicStats;
 import org.apache.pulsar.common.schema.SchemaInfo;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,10 +41,9 @@ public class TopicService {
 
     private final PulsarAdmin pulsarAdmin;
 
-    private final MessageService messageService;
-
     private final ConsumerService consumerService;
 
+    @Cacheable("topics.allForTopics")
     public List<TopicDto> getAllForTopics(List<String> topics) {
         return topics.stream()
                 .filter(this::exists)
@@ -52,11 +51,22 @@ public class TopicService {
                 .toList();
     }
 
+    @Cacheable("topics.allForNamespace")
     public List<TopicDto> getAllForNamespaces(List<String> namespaces) {
         return namespaces.stream()
                 .map(this::getByNamespace)
                 .flatMap(topics -> getAllForTopics(topics).stream())
                 .toList();
+    }
+
+    @Cacheable("topics.detail")
+    public TopicDetailDto getTopicDetails(String topicName) throws PulsarApiException {
+        return TopicDetailDto.create(
+                topicName,
+                getTopicStats(topicName),
+                getOwnerBroker(topicName),
+                getSchemasOfTopic(topicName)
+        );
     }
 
     /**
@@ -73,28 +83,6 @@ public class TopicService {
         } catch (PulsarAdminException e) {
             throw new PulsarApiException("Could not fetch topics of namespace '%s'".formatted(namespace), e);
         }
-    }
-
-    public void createNewTopic(String topic) throws PulsarApiException {
-        try {
-            pulsarAdmin.topics().createNonPartitionedTopic(topic);
-        } catch (PulsarAdminException e) {
-            throw new PulsarApiException("Could not create new topic '%s'".formatted(topic), e);
-        }
-    }
-
-    /**
-     * @param topicName The Name of the Topic you want to get detailed information about
-     * @return A {@link TopicDetailDto}'s including {@link TopicStatsDto} and
-     * additional metadata.
-     */
-    public TopicDetailDto getTopicDetails(String topicName) throws PulsarApiException {
-        return TopicDetailDto.create(
-                topicName,
-                getTopicStats(topicName),
-                getOwnerBroker(topicName),
-                getSchemasOfTopic(topicName)
-        );
     }
 
     private TopicStats getTopicStats(String topicName) throws PulsarApiException {

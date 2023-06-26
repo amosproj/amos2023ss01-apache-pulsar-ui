@@ -6,6 +6,7 @@ import React, { useState } from 'react'
 import { Modal, Box, Typography, IconButton } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import axios from 'axios'
+import config from '../../config'
 
 /** 
 The following information is shown in the consumer information popup:
@@ -46,7 +47,7 @@ const ConsumerModal: React.FC<ConsumerModalProps> = ({ consumer }) => {
 	}
 
 	const fetchData = () => {
-		const url = `http://localhost:8081/api/topic/consumer/${consumerName}`
+		const url = config.backendUrl + `/api/topic/consumer/${consumerName}`
 
 		// Sending GET request
 		const params = {

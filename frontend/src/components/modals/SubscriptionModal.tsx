@@ -8,6 +8,7 @@ import CloseIcon from '@mui/icons-material/Close'
 import axios from 'axios'
 import ConsumerAccordion from './ConsumerAccordion'
 import ModalInfo from './ModalInfo'
+import config from '../../config'
 
 export interface ResponseSubscription {
 	name: string
@@ -47,7 +48,7 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
 	const [open, setOpen] = useState(false)
 	const [data, setData] = useState<ResponseSubscription>()
 	const [error, setError] = useState<string | null>(null)
-	const baseURL = 'http://localhost:8081/api/topic/subscription/'
+	const baseURL = config.backendUrl + '/api/topic/subscription/'
 
 	const handleOpen = () => {
 		fetchData()
