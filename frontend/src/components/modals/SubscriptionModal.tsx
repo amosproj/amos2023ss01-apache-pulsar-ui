@@ -7,6 +7,7 @@ import { Modal, Box, Typography, IconButton } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import axios from 'axios'
 import ConsumerAccordion from './ConsumerAccordion'
+import ModalInfo from './ModalInfo'
 
 export interface ResponseSubscription {
 	name: string
@@ -116,6 +117,7 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
 						width: '100%',
 						maxHeight: '80vh',
 						overflowY: 'auto',
+						borderRadius: '20px',
 					}}
 				>
 					<IconButton
@@ -134,33 +136,27 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
 						Subscription: {subscription}
 					</Typography>
 					<div>
-						Consumers:
 						<ConsumerAccordion
 							consumerName={data?.activeConsumer}
 							topicName={topic}
 						/>
 					</div>
-					<Typography variant="body1" gutterBottom>
-						Nr of Consumers: {data?.numberConsumers}
-					</Typography>
-					<Typography variant="body1" gutterBottom>
-						BacklogSize: {data?.backlogSize} Bytes
-					</Typography>
-					<Typography variant="body1" gutterBottom>
-						MsgBacklog: {data?.msgBacklog}
-					</Typography>
-					<Typography variant="body1" gutterBottom>
-						BytesOutCounter: {data?.bytesOutCounter}
-					</Typography>
-					<Typography variant="body1" gutterBottom>
-						MsgOutCounter: {data?.msgOutCounter}
-					</Typography>
-					<Typography variant="body1" gutterBottom>
-						isReplicated: {data?.replicated.toString()}
-					</Typography>
-					<Typography variant="body1" gutterBottom>
-						Type: {data?.type}
-					</Typography>
+					<ModalInfo
+						title="Number of consumers"
+						detailedInfo={data?.numberConsumers}
+					/>
+					<ModalInfo title="Backlog size" detailedInfo={data?.backlogSize} />
+					<ModalInfo title="Message backlog" detailedInfo={data?.msgBacklog} />
+					<ModalInfo
+						title="Bytes out counter"
+						detailedInfo={data?.bytesOutCounter}
+					/>
+					<ModalInfo
+						title="Message out counter"
+						detailedInfo={data?.msgOutCounter}
+					/>
+					<ModalInfo title="Is replicated" detailedInfo={data?.replicated} />
+					<ModalInfo title="Type" detailedInfo={data?.type} />
 				</Box>
 			</Modal>
 		</>
