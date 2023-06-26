@@ -178,7 +178,7 @@ const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 													: ''}
 											</span>
 										</p>
-										<p className="text-black schema-box-wrapper">
+										<div className="text-black schema-box-wrapper">
 											Schema Definition:<br></br>
 											<span className="schema-box">
 												<pre>
@@ -189,7 +189,7 @@ const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 													)}
 												</pre>
 											</span>
-										</p>
+										</div>
 										<p className="text-black timestamp-wrapper">
 											Timestamp:<br></br>
 											<span className="text-blue">{schema.timestamp}</span>

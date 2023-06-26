@@ -64,6 +64,14 @@
 					p {
 						flex: 0 0 25%;
 						max-width: 25%;
+						span {
+							padding-right: 6px;
+							display: inline-block;
+						}
+					}
+					div {
+						flex: 0 0 25%;
+						max-width: 25%;
 						&.schema-box-wrapper {
 							flex: 0 0 70%;
 							max-width: 70%;
