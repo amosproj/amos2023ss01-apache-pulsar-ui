@@ -69,14 +69,6 @@ public class TopicService {
         );
     }
 
-    public void createNewTopic(String topic) throws PulsarApiException {
-        try {
-            pulsarAdmin.topics().createNonPartitionedTopic(topic);
-        } catch (PulsarAdminException e) {
-            throw new PulsarApiException("Could not create new topic '%s'".formatted(topic), e);
-        }
-    }
-
     /**
      * @param namespace The namespace you want to get a list of all topics for.
      * @return A list of topics (their fully qualified names).
