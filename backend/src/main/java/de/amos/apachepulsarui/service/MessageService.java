@@ -18,6 +18,7 @@ import org.apache.pulsar.common.naming.TopicName;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -26,7 +27,47 @@ import java.util.List;
 public class MessageService {
     private final PulsarAdmin pulsarAdmin;
 
-    public List<MessageDto> getLatestMessagesOfTopic(String topic, Integer numMessages) {
+    public List<MessageDto> getLatestMessagesFiltered(String topic, Integer numMessages, List<String> producers, List<String> subscriptions) {
+        List<MessageDto> messageDtos = getLatestMessagesOfTopic(topic, numMessages);
+        if (!producers.isEmpty()) {
+            messageDtos = filterByProducers(messageDtos, producers);
+        }
+        if (!subscriptions.isEmpty()) {
+            messageDtos = filterBySubscription(messageDtos, numMessages, topic, subscriptions);
+        }
+
+        return messageDtos;
+    }
+
+    private List<MessageDto> filterBySubscription(List<MessageDto> messageDtos, Integer numMessages, String topic, List<String> subscriptions) {
+        List<String> messageIds = subscriptions.stream()
+                .flatMap(s -> peekMessageIds(topic, s, numMessages).stream())
+                .toList();
+
+        return messageDtos.stream().filter(m -> messageIds.contains(m.getMessageId())).toList();
+    }
+
+    private List<String> peekMessageIds(String topic, String subscription, Integer numMessages) {
+        try {
+            if (pulsarAdmin.topics().getSubscriptions(topic).contains(subscription)) {
+                return pulsarAdmin.topics().peekMessages(topic, subscription, numMessages).stream()
+                        .map(m -> m.getMessageId().toString()).toList();
+            }
+            return Collections.emptyList();
+        } catch (PulsarAdminException e) {
+            throw new PulsarApiException(String.format("Could not get Messages for subscription %s", subscription), e);
+        }
+    }
+
+
+    private List<MessageDto> filterByProducers(List<MessageDto> messageDtos, List<String> producers) {
+        return messageDtos.stream()
+                .filter(m -> producers.contains(m.getProducer()))
+                .toList();
+
+    }
+
+    private List<MessageDto> getLatestMessagesOfTopic(String topic, Integer numMessages) {
         var schema = getSchemaIfExists(topic);
         try {
             var messages = new ArrayList<Message<byte[]>>();

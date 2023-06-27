@@ -5,8 +5,10 @@
 # Use node runtime as image
 FROM node:14-alpine
 
-# Set the working directory to /app
+# Set the working directory to /app and ENV variable for backend url
 WORKDIR /app
+ARG BACKEND_URL
+ENV REACT_APP_BACKEND_URL=$BACKEND_URL
 
 # Copy package.json and yarn.lock to the container
 COPY package.json yarn.lock ./

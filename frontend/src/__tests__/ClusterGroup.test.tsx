@@ -7,13 +7,19 @@ import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
 
 const dataTest: Array<ClusterInfo> = [
 	{
-		id: 'amos-demo-2',
+		name: 'amos-demo-2',
+		numberOfNamespces: 1,
+		numberOfTenants: 1,
 	},
 	{
-		id: 'amos-demo-3',
+		name: 'amos-demo-3',
+		numberOfNamespces: 1,
+		numberOfTenants: 1,
 	},
 	{
-		id: 'amos-demo-4',
+		name: 'amos-demo-4',
+		numberOfNamespces: 1,
+		numberOfTenants: 1,
 	},
 ]
 
@@ -32,7 +38,7 @@ test('should check if data is being displayed in the ClusterGroup', async () => 
 								<div>
 									{dataTest.map((cluster, index) => (
 										<div className="main-card" key={index}>
-											<ClusterView key={index} data={{ id: cluster.id }} />
+											<ClusterView key={index} data={cluster} />
 										</div>
 									))}
 								</div>

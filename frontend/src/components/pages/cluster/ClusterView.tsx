@@ -6,13 +6,15 @@ import React, { useState } from 'react'
 import { Button, CardActions, Collapse } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import ExpandLessIcon from '@mui/icons-material/ExpandLess'
+import ChevronRight from '@mui/icons-material/ChevronRight'
 import { useAppDispatch } from '../../../store/hooks'
 import { addFilterByDrillDown } from '../../../store/filterSlice'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import config from '../../../config'
 
 const ClusterView: React.FC<ClusterViewProps> = ({ data }) => {
-	const { id }: ClusterInfo = data
+	const { name, numberOfNamespces, numberOfTenants }: ClusterInfo = data
 	const [expanded, setExpanded] = useState(false)
 	const [details, setDetails] = useState<ClusterDetail>()
 
@@ -20,16 +22,16 @@ const ClusterView: React.FC<ClusterViewProps> = ({ data }) => {
 	const navigate = useNavigate()
 
 	const handleDrillDown = () => {
-		dispatch(addFilterByDrillDown({ filterName: 'cluster', id: id }))
+		dispatch(addFilterByDrillDown({ filterName: 'cluster', id: name }))
 		navigate('/tenant')
 	}
 
 	const fetchData = () => {
-		const url = 'http://localhost:8081/api/cluster/'
+		const url = config.backendUrl + '/api/cluster/'
 
 		// Sending GET request
 		const params = {
-			clusterName: id,
+			clusterName: name,
 		}
 		axios
 			.get<ClusterDetail>(url, { params })
@@ -46,18 +48,32 @@ const ClusterView: React.FC<ClusterViewProps> = ({ data }) => {
 	}
 	return (
 		<div className="flex flex-col card-content">
-			<h2 className="uppercase">{id}</h2>
+			<h2 className="uppercase">{name}</h2>
+			<div className="flex card-inner">
+				<div className="flex flex-col card-col">
+					<div className="flex card-info">
+						<p className="text-black">
+							Number of Tenants:<br></br>
+							<span className="text-blue">{numberOfTenants}</span>
+						</p>
+						<p className="text-black">
+							Number of Namespaces:<br></br>
+							<span className="text-blue">{numberOfNamespces}</span>
+						</p>
+					</div>
+				</div>
+			</div>
 			<div className="grey-line"></div>
 			<Collapse in={expanded} timeout="auto" unmountOnExit>
 				<div className="flex card-inner">
-					<div className="flex flex-col card-col card-col-1">
-						<div className="flex flex-col card-info">
+					<div className="flex flex-col card-col">
+						<div className="flex card-info">
 							<p className="text-black">
-								Amount of Brokers:{' '}
+								Amount of Brokers:<br></br>
 								<span className="text-blue">{details?.amountOfBrokers}</span>
 							</p>
 							<p className="text-black">
-								Brokers:{' '}
+								Brokers:<br></br>
 								{details?.brokers.map((item: string, index: number) => (
 									<span key={index} className="text-blue">
 										{item},{' '}
@@ -66,13 +82,13 @@ const ClusterView: React.FC<ClusterViewProps> = ({ data }) => {
 							</p>
 						</div>
 						<div className="grey-line"></div>
-						<div className="flex flex-col card-info">
+						<div className="flex card-info">
 							<p className="text-black">
-								Amount of Tenants:{' '}
+								Amount of Tenants:<br></br>
 								<span className="text-blue">{details?.amountOfTenants}</span>
 							</p>
 							<p className="text-black">
-								Tenants:{' '}
+								Tenants:<br></br>
 								{details?.tenants.map((item: string, index: number) => (
 									<span key={index} className="text-blue">
 										{item},{' '}
@@ -81,15 +97,15 @@ const ClusterView: React.FC<ClusterViewProps> = ({ data }) => {
 							</p>
 						</div>
 						<div className="grey-line"></div>
-						<div className="flex flex-col card-info">
+						<div className="flex card-info">
 							<p className="text-black">
-								Service URL:{' '}
+								Service URL:<br></br>
 								<span className="text-blue">
 									{details?.serviceUrl ? details.serviceUrl : 'N/A'}
 								</span>
 							</p>
 							<p className="text-black">
-								Broker Service URL:{' '}
+								Broker Service URL:<br></br>
 								<span className="text-blue">
 									{details?.brokerServiceUrl ? details.brokerServiceUrl : 'N/A'}
 								</span>
@@ -104,7 +120,7 @@ const ClusterView: React.FC<ClusterViewProps> = ({ data }) => {
 					{expanded ? (
 						<Button
 							variant={'contained'}
-							style={{ marginRight: '10px' }}
+							className="outlined-button"
 							onClick={handleExpand}
 							endIcon={<ExpandLessIcon />}
 						>
@@ -113,15 +129,19 @@ const ClusterView: React.FC<ClusterViewProps> = ({ data }) => {
 					) : (
 						<Button
 							variant={'contained'}
-							style={{ marginRight: '10px' }}
+							className="outlined-button"
 							onClick={handleExpand}
 							endIcon={<ExpandMoreIcon />}
 						>
-							show details
+							Show details
 						</Button>
 					)}
-					<Button variant={'contained'} onClick={handleDrillDown}>
-						drill down
+					<Button
+						endIcon={<ChevronRight />}
+						variant={'contained'}
+						onClick={handleDrillDown}
+					>
+						Drill down
 					</Button>
 				</CardActions>
 			</div>

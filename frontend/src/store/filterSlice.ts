@@ -9,6 +9,7 @@ import { ResponseCluster } from '../components/pages/cluster'
 import { ResponseTenant } from '../components/pages/tenant'
 import { ResponseNamespace } from '../components/pages/namespace'
 import { ResponseTopic } from '../components/pages/topic'
+import config from '../config'
 
 export type HierarchyInPulsar =
 	| 'cluster'
@@ -73,7 +74,7 @@ const initialState: FilterState = {
 }
 
 const backendInstance = axios.create({
-	baseURL: 'http://localhost:8081/api',
+	baseURL: config.backendUrl + '/api',
 	timeout: 5000,
 })
 
@@ -263,7 +264,9 @@ const filterSlice = createSlice({
 	extraReducers(builder) {
 		builder.addCase(clusterOptionThunk.fulfilled, (state, action) => {
 			const data: ResponseCluster = JSON.parse(JSON.stringify(action.payload))
-			state.displayedOptions.allClusters = data.clusters
+			state.displayedOptions.allClusters = data.clusters.map(
+				(cluster) => cluster.name
+			)
 		})
 		builder.addCase(tenantOptionThunk.fulfilled, (state, action) => {
 			const data: ResponseTenant = JSON.parse(JSON.stringify(action.payload))

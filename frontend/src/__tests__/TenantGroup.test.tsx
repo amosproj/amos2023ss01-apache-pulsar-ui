@@ -45,9 +45,9 @@ test('should check if data is being displayed in the TenantGroup', async () => {
 		'amos-tenant-2'
 	)
 	expect(screen.getByTestId('main-tenantgroup')).toHaveTextContent(
-		'Admin Roles: role1, role2'
+		'role1, role2'
 	)
 	expect(screen.getByTestId('main-tenantgroup')).toHaveTextContent(
-		'Allowed Clusters: cluster1, cluster2'
+		'cluster1, cluster2'
 	)
 })

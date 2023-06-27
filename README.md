@@ -16,24 +16,28 @@ We want to achieve this by structuring our UI according to the topology of Apach
 
 First, build the application JAR from the `backend` directory with:
 
-```./mvnw package -DskipTests```
-
+`./mvnw package -DskipTests`
 
 Then, start Docker Desktop and create the pulsar setup from the root-directory with:
 
-```docker-compose --profile demodata --profile backend up --build```
+```bash
+echo BACKEND_IP=localhost >> .env
+docker-compose --profile demodata --profile backend --profile frontend up --build -d
+```
 
 Notes: 
 * `--build` is needed for the first startup, or when the demodata docker images are changed
+* `-d` runs the container in the background, so u can close the terminal without terminating the app itself.
 * `--profile demodata` is needed when you want to create the demo topology and start the demo producers & consumers, that will continuously send and receive messages
 * `--profile backend` is needed when you want to start the backend via the docker-compose setup. See below for starting it manually.
+* `--profile frontend` is needed when you want to start the frontend via the docker-compose setup. 
 
 ### Starting the backend separately
 
 If you want to start the backend individually (e.g. during development), simply omit the `--profile backend` from the docker-compose command.
 Instead, start the application from the `backend` directory with:
 
-```./mvnw spring-boot:run```
+`./mvnw spring-boot:run`
 
 ### Tests
 
@@ -42,10 +46,23 @@ but instead use testcontainers. Therefore, docker needs to be running.
 
 To start the tests use:
 
-```./mvnw test```
+`./mvnw test`
 
 ### REST API
 
 The backend is running on Port 8081 and the prefix of the REST endpoint is `/api`. A complete documentation can
 be found here:
 http://localhost:8081/api/swagger-ui/index.html
+
+
+### Running on AWS
+
+For testing the scalability of our project, we want to test it on AWS with a bigger topology.
+We created a separate setup-topology for that - To start the backend using this, you need to run the following command.
+Each time the EC2 instance is started again, it will be assigned a new IP address,
+so you need to pass it to the `docker-compose` via `-e` flag.
+
+```bash
+echo BACKEND_IP=${EC2_IP_ADDRESS} >> .env
+docker-compose --profile demodata-aws --profile backend --profile frontend up --build -d
+```

@@ -89,3 +89,13 @@ export const flattenNamespacesToTopics = (
 		.filter((el) => el.length > 0)
 		.flat()
 }
+
+/**
+ * Helper function to add comma separator if not the last element.
+ * @param index the index of current element in array.
+ * @param length the length of array.
+ * @returns comma or null.
+ */
+export const addCommaSeparator = (index: number, length: number): string => {
+	return index !== length - 1 ? ', ' : ''
+}

@@ -2,11 +2,11 @@
 	position: relative;
 	background-color: $primary-white;
 	box-shadow: $primary-shadow;
-	border-radius: $primary-radius;
+	border-radius: 38px;
 	height: fit-content;
 	width: 100%;
-	padding: 38px;
-	margin: 2rem 0;
+	padding: 24px;
+	margin: 0;
 
 	.card-content {
 		h2 {
@@ -16,24 +16,88 @@
 			color: $primary-blue;
 		}
 
+		.card-buttons-container {
+			.MuiCardActions-root {
+				display: flex;
+				justify-content: space-between;
+				width: 100%;
+				padding: 0px;
+				margin-top: 22px;
+	
+				.MuiButtonBase-root.MuiButton-root.MuiButton-contained {
+					display: flex;
+					justify-content: center;
+					align-items: center;
+					width: 35%;
+					min-width: 120px;
+					height: 44px;
+					padding: 20px;
+					background: $gradient-blue;
+					border-radius: $primary-radius;
+					font-weight: 500;
+					font-size: $font-small;
+					line-height: 150%;
+					color: $primary-white;
+					text-transform: unset;
+					box-shadow: none;
+
+					&.outlined-button {
+						background: transparent;
+						border: 1px solid $primary-blue;
+						color: $primary-blue;
+					}
+				}
+			}
+		}
+
 		.card-inner {
 			.card-col {
-				flex: 0 0 33%;
-				max-width: 33%;
-
+				width: 100%;
 				.card-info {
 					margin: 18px 0px;
 					font-size: $font-small;
-				}
+					display: flex;
+					width: 100%;
+					justify-content: space-between;
+					flex-wrap: wrap;
+					row-gap: 18px;
+					p {
+						flex: 0 0 25%;
+						max-width: 25%;
+						span {
+							padding-right: 6px;
+							display: inline-block;
+						}
+					}
+					div {
+						flex: 0 0 25%;
+						max-width: 25%;
+						&.schema-box-wrapper {
+							flex: 0 0 70%;
+							max-width: 70%;
+							.schema-box {
+								color: $primary-blue;
+								max-height: 250px;
+								overflow-y: auto;
+								border: 1px solid #ccc;
+								padding: 10px;
+								width: 100%;
+								margin-top: 8px;
+								pre {
+									font-size: $font-xsmall;
+								}
+							}
+						}
+						span {
+							padding-right: 6px;
+							display: inline-block;
+						}
+					}
 
-				&.card-col-2,
-				&.card-col-3 {
-					padding: 18px 0px;
-				}
-
-				&.card-col-2 {
-					padding-left: 38px;
-					padding-right: 38px;
+					.items-list {
+						flex: 0 0 75%;
+						max-width: 75%;
+					}
 				}
 			}
 		}

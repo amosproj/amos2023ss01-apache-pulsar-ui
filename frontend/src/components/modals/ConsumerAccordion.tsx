@@ -11,6 +11,8 @@ import {
 } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import axios from 'axios'
+import ModalInfo from './ModalInfo'
+import config from '../../config'
 
 interface ConsumerAccordionProps {
 	consumerName: string | undefined
@@ -35,7 +37,7 @@ const ConsumerAccordion: React.FC<ConsumerAccordionProps> = ({
 	}
 
 	const fetchData = () => {
-		const url = `http://localhost:8081/api/topic/consumer/${consumerName}`
+		const url = config.backendUrl + `/api/topic/consumer/${consumerName}`
 
 		// Sending GET request
 		const params = {
@@ -52,50 +54,62 @@ const ConsumerAccordion: React.FC<ConsumerAccordionProps> = ({
 	}
 
 	return consumerName ? (
-		<Accordion expanded={isExpanded} onChange={handleAccordionChange}>
-			<AccordionSummary
-				expandIcon={<ExpandMoreIcon />}
-				aria-controls="panel1a-content"
-				id="panel1a-header"
-			>
-				<Typography>{consumerName}</Typography>
-			</AccordionSummary>
-			<AccordionDetails>
-				<Typography variant="body1" gutterBottom>
-					Address: {consumerDetails?.address ? consumerDetails.address : 'N/A'}
-				</Typography>
-				<Typography variant="body1" gutterBottom>
-					Available permits: {consumerDetails?.availablePermits}
-				</Typography>
-				<Typography variant="body1" gutterBottom>
-					Bytes out counter: {consumerDetails?.bytesOutCounter}
-				</Typography>
-				<Typography variant="body1" gutterBottom>
-					Client version: {consumerDetails?.clientVersion}
-				</Typography>
-				<Typography variant="body1" gutterBottom>
-					Connected since: {consumerDetails?.connectedSince}
-				</Typography>
-				<Typography variant="body1" gutterBottom>
-					Last acked timestamp: {consumerDetails?.lastAckedTimestamp}
-				</Typography>
-				<Typography variant="body1" gutterBottom>
-					Last consumed timestamp: {consumerDetails?.lastConsumedTimestamp}
-				</Typography>
-				<Typography variant="body1" gutterBottom>
-					Message out counter: {consumerDetails?.messageOutCounter}
-				</Typography>
-				<Typography variant="body1" gutterBottom>
-					Unacked messages: {consumerDetails?.unackedMessages}
-				</Typography>
-				<Typography variant="body1" gutterBottom>
-					Blocked consumer on unacked msgs:{' '}
-					{consumerDetails?.blockedConsumerOnUnackedMsgs.toString()}
-				</Typography>
-			</AccordionDetails>
-		</Accordion>
+		<div>
+			<p style={{ fontWeight: '600' }}>Consumer: </p>
+			<Accordion expanded={isExpanded} onChange={handleAccordionChange}>
+				<AccordionSummary
+					expandIcon={<ExpandMoreIcon />}
+					aria-controls="panel1a-content"
+					id="panel1a-header"
+				>
+					<Typography>{consumerName}</Typography>
+				</AccordionSummary>
+				<AccordionDetails>
+					<ModalInfo title="Address" detailedInfo={consumerDetails?.address} />
+					<ModalInfo
+						title="Available permits"
+						detailedInfo={consumerDetails?.availablePermits}
+					/>
+					<ModalInfo
+						title="Bytes out counter"
+						detailedInfo={consumerDetails?.bytesOutCounter}
+					/>
+					<ModalInfo
+						title="Client version"
+						detailedInfo={consumerDetails?.clientVersion}
+					/>
+					<ModalInfo
+						title="Connected since"
+						detailedInfo={consumerDetails?.connectedSince}
+					/>
+					<ModalInfo
+						title="Last acked timestamp"
+						detailedInfo={consumerDetails?.lastAckedTimestamp}
+					/>
+					<ModalInfo
+						title="Last consumed timestamp"
+						detailedInfo={consumerDetails?.lastConsumedTimestamp}
+					/>
+					<ModalInfo
+						title="Message out counter"
+						detailedInfo={consumerDetails?.messageOutCounter}
+					/>
+					<ModalInfo
+						title="Unacked messages"
+						detailedInfo={consumerDetails?.unackedMessages}
+					/>
+					<ModalInfo
+						title="Blocked consumer on unacked msgs"
+						detailedInfo={consumerDetails?.blockedConsumerOnUnackedMsgs}
+					/>
+				</AccordionDetails>
+			</Accordion>
+		</div>
 	) : (
-		<span>No active consumer</span>
+		<div className="modal-info">
+			<p className="title">Consumer: </p>
+			<p className="detail">No active consumer</p>
+		</div>
 	)
 }
 

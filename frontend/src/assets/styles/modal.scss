@@ -1,0 +1,18 @@
+@import './variables.scss';
+
+.MuiModal-root {
+	border-radius: $primary-radius;
+}
+
+.modal-info {
+	display: flex;
+	justify-content: space-between;
+	font: $primary-font;
+	padding: 0.5rem 0;
+	.title {
+		font-weight: 600;
+	}
+	.detail {
+		color: $primary-blue;
+	}
+}

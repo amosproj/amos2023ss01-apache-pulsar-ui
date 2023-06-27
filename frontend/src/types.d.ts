@@ -73,7 +73,9 @@ interface formProps {
 }
 
 interface ClusterInfo {
-	id: string
+	name: string
+	numberOfTenants: number
+	numberOfNamespces: number
 }
 
 interface TenantInfo {
@@ -82,11 +84,14 @@ interface TenantInfo {
 		adminRoles: string[]
 		allowedClusters: string[]
 	}
+	numberOfNamespaces: number
+	numberOfTopics: number
 }
 
 interface NamespaceInfo {
 	id: string
 	tenant: string
+	numberOfTopics: number
 }
 
 interface TopicInfo {
@@ -163,7 +168,21 @@ interface TopicDetail {
 			producer: string
 		}
 	]
+	schemaInfos: SchemaInfo[]
 	persistent: boolean
+}
+
+interface SchemaInfo {
+	name: string
+	version: number
+	type: string
+	properties: {
+		additionalProp1: string
+		additionalProp2: string
+		additionalProp3: string
+	}
+	schemaDefinition: string
+	timestamp: string
 }
 
 interface ProducerDetails {

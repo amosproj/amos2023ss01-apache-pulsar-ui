@@ -8,9 +8,11 @@ import axios from 'axios'
 import ClusterView from './ClusterView'
 import { selectCluster } from '../../../store/filterSlice'
 import { selectTrigger } from '../requestTriggerSlice'
+import config from '../../../config'
+import { Masonry } from 'react-plock'
 
 export interface ResponseCluster {
-	clusters: string[]
+	clusters: ClusterInfo[]
 }
 
 /**
@@ -19,10 +21,10 @@ export interface ResponseCluster {
  * @returns Rendered cluster view cards for the dashboard component
  */
 const ClusterGroup: React.FC = () => {
-	const [data, setData] = useState<string[]>([])
+	const [data, setData] = useState<ClusterInfo[]>([])
 	const [error, setError] = useState<string | null>(null)
 	const [loading, setLoading] = useState<boolean>(true)
-	const url = 'http://localhost:8081/api/cluster/all'
+	const url = config.backendUrl + '/api/cluster/all'
 	const trigger = useAppSelector(selectTrigger)
 
 	//Sends get request to /cluster/all for general information everytime the trigger value changes
@@ -48,13 +50,25 @@ const ClusterGroup: React.FC = () => {
 			) : error ? (
 				<div>Error: {error}</div>
 			) : (
-				<div>
-					{data.map((cluster, index) => (
-						<div className="main-card" key={index}>
-							<ClusterView key={index} data={{ id: cluster }} />
+				<Masonry
+					className="main-card-wrapper"
+					items={data}
+					config={{
+						columns: [1, 2],
+						gap: [34, 34],
+						media: [1619, 1620],
+					}}
+					render={(cluster, index) => (
+						<div
+							className={
+								data.length === 1 ? 'single-card main-card' : 'main-card'
+							}
+							key={index}
+						>
+							<ClusterView key={index} data={cluster} />
 						</div>
-					))}
-				</div>
+					)}
+				/>
 			)}
 		</div>
 	)

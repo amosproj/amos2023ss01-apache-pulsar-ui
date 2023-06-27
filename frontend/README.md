@@ -13,7 +13,7 @@ Installs all dependencies
 ### `yarn start`
 
 Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Open [http://backend:3000](http://backend:3000) to view it in the browser.
 
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
@@ -37,11 +37,11 @@ Executes prettier and formats code according to our predefined style. Fixes all 
 
 ## Docker Container
 
-### `docker build -t pui-frontend .`
+### `docker build -t apachepulsarui/frontend .`
 
 Builds the docker image of the frontend.
 
-### `docker run -p 8082:8082 pui-frontend`
+### `docker run -p 8082:8082 apachepulsarui/frontend`
 
 Starts the frontend docker container on port 8080.
 
