@@ -59,7 +59,7 @@ const NamespaceView: React.FC<NamespaceViewProps> = ({ data }) => {
 							<span className="text-blue">{tenant ? tenant : 'N/A'}</span>
 						</p>
 						<p className="text-black">
-							Number of Topics:{' '}
+							Number of Topics:<br></br>
 							<span className="text-blue">{numberOfTopics}</span>
 						</p>
 					</div>

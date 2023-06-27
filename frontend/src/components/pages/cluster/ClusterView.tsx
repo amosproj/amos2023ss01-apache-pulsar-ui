@@ -53,11 +53,11 @@ const ClusterView: React.FC<ClusterViewProps> = ({ data }) => {
 				<div className="flex flex-col card-col">
 					<div className="flex card-info">
 						<p className="text-black">
-							Number of Tenants:{' '}
+							Number of Tenants:<br></br>
 							<span className="text-blue">{numberOfTenants}</span>
 						</p>
 						<p className="text-black">
-							Number of Namespaces:{' '}
+							Number of Namespaces:<br></br>
 							<span className="text-blue">{numberOfNamespces}</span>
 						</p>
 					</div>

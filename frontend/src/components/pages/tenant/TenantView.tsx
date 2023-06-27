@@ -92,11 +92,11 @@ const TenantView: React.FC<TenantViewProps> = ({ data }) => {
 							</span>
 						</p>
 						<p className="text-black">
-							Number of Namespaces:{' '}
+							Number of Namespaces:<br></br>
 							<span className="text-blue">{numberOfNamespaces}</span>
 						</p>
 						<p className="text-black">
-							Number of Topics:{' '}
+							Number of Topics:<br></br>
 							<span className="text-blue">{numberOfTopics}</span>
 						</p>
 					</div>
