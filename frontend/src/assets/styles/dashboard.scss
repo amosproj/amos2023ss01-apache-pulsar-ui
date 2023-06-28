@@ -1,6 +1,9 @@
 @import './variables.scss';
 
 .dashboard-container {
+	margin: auto;
+	max-width: 2100px;
+	
 	header {
 		background: $primary-black;
 		position: absolute;
@@ -89,6 +92,11 @@
 		font-size: $font-medium;
 		line-height: 23px;
 		padding: 20px 0px;
+	}
+
+	.filter-wrapper {
+		max-height: 300px;
+		overflow: auto;
 	}
 
 	.MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded {

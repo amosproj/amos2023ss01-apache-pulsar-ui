@@ -88,7 +88,7 @@ const CustomFilter: React.FC<CustomFilterProps> = ({
 						placeholder={'Search Clusters'}
 						setSearchQuery={setClusterSearchQuery}
 					></CustomSearchbar>
-					<div className="flex flex-col mt-4">
+					<div className="flex flex-col mt-4 filter-wrapper">
 						{filteredClusters &&
 							filteredClusters.length > 0 &&
 							filteredClusters.map((item: string, index: number) => (
@@ -145,7 +145,7 @@ const CustomFilter: React.FC<CustomFilterProps> = ({
 							placeholder={'Search Namespaces'}
 							setSearchQuery={setNamespaceSearchQuery}
 						></CustomSearchbar>
-						<div className="flex flex-col mt-4">
+						<div className="flex flex-col mt-4 filter-wrapper">
 							{filteredNamespaces &&
 								filteredNamespaces.length > 0 &&
 								filteredNamespaces.map((item: string) => (
@@ -177,7 +177,7 @@ const CustomFilter: React.FC<CustomFilterProps> = ({
 								placeholder={'Search Topics'}
 								setSearchQuery={setTopicSearchQuery}
 							></CustomSearchbar>
-							<div className="flex flex-col mt-4">
+							<div className="flex flex-col mt-4 filter-wrapper">
 								{filteredTopics &&
 									filteredTopics.length > 0 &&
 									filteredTopics.map((item: string) => (
@@ -206,7 +206,7 @@ const CustomFilter: React.FC<CustomFilterProps> = ({
 								placeholder={'Search Producers'}
 								setSearchQuery={setProducerSearchQuery}
 							></CustomSearchbar>
-							<div className="flex flex-col mt-4">
+							<div className="flex flex-col mt-4 filter-wrapper">
 								{filteredProducers &&
 									filteredProducers.length > 0 &&
 									filteredProducers.map((item: string) => (
@@ -235,7 +235,7 @@ const CustomFilter: React.FC<CustomFilterProps> = ({
 								placeholder={'Search Subscriptions'}
 								setSearchQuery={setSubscriptionSearchQuery}
 							></CustomSearchbar>
-							<div className="flex flex-col mt-4">
+							<div className="flex flex-col mt-4 filter-wrapper">
 								{filteredSubscriptions &&
 									filteredSubscriptions.length > 0 &&
 									filteredSubscriptions.map((item: string) => (
@@ -269,7 +269,7 @@ const CustomFilter: React.FC<CustomFilterProps> = ({
 							placeholder={'Search Messages'}
 							setSearchQuery={setMessageSearchQuery}
 						></CustomSearchbar>
-						<div className="flex flex-col mt-4">
+						<div className="flex flex-col mt-4 filter-wrapper">
 							{filteredMessages &&
 								filteredMessages.length > 0 &&
 								filteredMessages.map((item: string) => (
