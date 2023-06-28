@@ -126,7 +126,6 @@ interface NamespaceDetail {
 	id: string
 	topics: string[]
 	tenant: string
-	amountOfTopics: number
 	bundlesData: {
 		boundaries: string[]
 		numBundles: number

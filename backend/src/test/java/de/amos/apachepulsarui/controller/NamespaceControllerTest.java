@@ -102,7 +102,6 @@ public class NamespaceControllerTest {
         mockMvc.perform(get("/namespace?name=tenantX/namespace1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", equalTo(namespace.getId())))
-                .andExpect(jsonPath("$.amountOfTopics", equalTo(namespace.getAmountOfTopics())))
                 .andExpect(jsonPath("$.topics", equalTo(namespace.getTopics())));
     }
 

@@ -118,7 +118,7 @@ const NamespaceView: React.FC<NamespaceViewProps> = ({ data }) => {
 						</div>
 						<div className="grey-line"></div>
 						<div className="flex card-info">
-							{details?.amountOfTopics !== 0 ? (
+							{details?.topics.length !== 0 ? (
 								<div className="items-list">
 									<p className="text-black">Topics:</p>
 									<ul>
@@ -136,12 +136,6 @@ const NamespaceView: React.FC<NamespaceViewProps> = ({ data }) => {
 									Topics: <span className="text-blue">None</span>
 								</p>
 							)}
-							<p className="text-black">
-								Amount of Topics:<br></br>
-								<span className="text-blue">
-									{details?.amountOfTopics ? details.amountOfTopics : 0}
-								</span>
-							</p>
 						</div>
 					</div>
 				</div>
