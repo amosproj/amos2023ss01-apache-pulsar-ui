@@ -2,3 +2,4 @@
 demodata/setup-topology/setup-topology.sh eol=lf
 demodata/setup-topology/setup-topology-local.sh eol=lf
 demodata/setup-topology/setup-topology-aws.sh eol=lf
+frontend eol=lf
