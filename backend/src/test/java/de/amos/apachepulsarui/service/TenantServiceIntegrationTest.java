@@ -5,7 +5,7 @@
 
 package de.amos.apachepulsarui.service;
 
-import de.amos.apachepulsarui.dto.TenantDetailsDto;
+import de.amos.apachepulsarui.dto.TenantDetailDto;
 import de.amos.apachepulsarui.dto.TenantDto;
 import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.apache.pulsar.client.admin.PulsarAdminException;
@@ -51,8 +51,8 @@ public class TenantServiceIntegrationTest extends AbstractIntegrationTest {
                 .findFirst().orElseThrow();
         Assertions.assertThat(tenantX).isNotNull();
         Assertions.assertThat(tenantY).isNotNull();
-        TenantDetailsDto tenantDetailsX = tenantService.getTenantDetails(tenantX);
-        TenantDetailsDto tenantDetailsY = tenantService.getTenantDetails(tenantY);
+        TenantDetailDto tenantDetailsX = tenantService.getTenantDetails(tenantX);
+        TenantDetailDto tenantDetailsY = tenantService.getTenantDetails(tenantY);
         Assertions.assertThat(tenantDetailsX.getNamespaces())
                 .containsExactlyInAnyOrder("tenantX/namespace1", "tenantX/namespace2");
         Assertions.assertThat(tenantDetailsY.getNamespaces())

@@ -15,7 +15,7 @@ import java.util.List;
 
 @Data
 @Builder
-public class TenantDetailsDto {
+public class TenantDetailDto {
 
     private String name;
 
