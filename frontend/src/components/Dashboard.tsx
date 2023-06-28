@@ -19,6 +19,7 @@ import {
 	HierarchyInPulsar,
 } from '../store/filterSlice'
 import { triggerRequest } from './pages/requestTriggerSlice'
+import { Button } from '@mui/material'
 
 const Dashboard: React.FC<DashboardProps> = ({
 	completeMessages,
@@ -330,12 +331,13 @@ const Dashboard: React.FC<DashboardProps> = ({
 					placeholder={'Search'}
 					setSearchQuery={setSearchQuery}
 				/> */}
-				<span
+				<Button
+					variant={'contained'}
 					className="reset-all-filter-button"
 					onClick={() => resetFilters()}
 				>
 					Reset all filters
-				</span>
+				</Button>
 				<div className="filters-wrapper">
 					<h2 className="dashboard-title">Filters</h2>
 					<FilterListIcon style={{ fill: '#A4A4A4' }} />
