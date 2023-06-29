@@ -49,7 +49,6 @@ public class ClusterService {
                 .brokers(activeBrokers)
                 .amountOfBrokers(activeBrokers.size())
                 .tenants(tenantsAllowedForCluster)
-                .amountOfTenants(tenantsAllowedForCluster.size())
                 .build();
     }
 

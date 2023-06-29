@@ -106,7 +106,6 @@ interface ClusterDetail {
 	name: string
 	tenants: string[]
 	brokers: string[]
-	amountOfTenants: number
 	amountOfBrokers: number
 	brokerServiceUrl: string
 	serviceUrl: string

@@ -84,10 +84,6 @@ const ClusterView: React.FC<ClusterViewProps> = ({ data }) => {
 						<div className="grey-line"></div>
 						<div className="flex card-info">
 							<p className="text-black">
-								Amount of Tenants:<br></br>
-								<span className="text-blue">{details?.amountOfTenants}</span>
-							</p>
-							<p className="text-black">
 								Tenants:<br></br>
 								{details?.tenants.map((item: string, index: number) => (
 									<span key={index} className="text-blue">
