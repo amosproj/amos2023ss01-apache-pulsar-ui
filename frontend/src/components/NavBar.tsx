@@ -26,7 +26,7 @@ import {
 } from '../store/filterSlice'
 
 //Removed 'Message' from this array for now
-const pages = ['Cluster', 'Tenant', 'Namespace', 'Topic', 'Message']
+const pages = ['Cluster', 'Tenant', 'Namespace', 'Topic']
 
 function NavBar() {
 	const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null)
