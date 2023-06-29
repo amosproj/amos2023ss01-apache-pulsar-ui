@@ -8,7 +8,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import ChevronRight from '@mui/icons-material/ChevronRight'
 import { useAppDispatch } from '../../../store/hooks'
-import { addFilterByDrillDown } from '../../../store/filterSlice'
+import { addFilterByDrilling } from '../../../store/filterSlice'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import config from '../../../config'
@@ -22,7 +22,7 @@ const ClusterView: React.FC<ClusterViewProps> = ({ data }) => {
 	const navigate = useNavigate()
 
 	const handleDrillDown = () => {
-		dispatch(addFilterByDrillDown({ filterName: 'cluster', id: name }))
+		dispatch(addFilterByDrilling({ filterName: 'cluster', id: name }))
 		navigate('/tenant')
 	}
 

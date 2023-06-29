@@ -8,7 +8,7 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import ChevronRight from '@mui/icons-material/ChevronRight'
 import { Collapse, CardActions, Button } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
-import { addFilterByDrillDown } from '../../../store/filterSlice'
+import { addFilterByDrilling } from '../../../store/filterSlice'
 import { useAppDispatch } from '../../../store/hooks'
 import axios from 'axios'
 import { addCommaSeparator } from '../../../Helpers'
@@ -41,8 +41,12 @@ const TenantView: React.FC<TenantViewProps> = ({ data }) => {
 	}
 
 	const handleDrillDown = () => {
-		dispatch(addFilterByDrillDown({ filterName: 'tenant', id: name }))
+		dispatch(addFilterByDrilling({ filterName: 'tenant', id: name }))
 		navigate('/namespace')
+	}
+	const handleDrillUp = (itemId: string) => {
+		dispatch(addFilterByDrilling({ filterName: 'cluster', id: itemId }))
+		navigate('/cluster')
 	}
 	const handleExpand = () => {
 		if (!details) fetchData()
@@ -81,7 +85,9 @@ const TenantView: React.FC<TenantViewProps> = ({ data }) => {
 									tenantInfo.allowedClusters.map(
 										(item: string, index: number) => (
 											<span key={index}>
-												{item}
+												<a href="#" onClick={() => handleDrillUp(item)}>
+													{item}
+												</a>
 												{addCommaSeparator(
 													index,
 													tenantInfo.allowedClusters.length

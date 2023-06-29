@@ -8,7 +8,10 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import ChevronRight from '@mui/icons-material/ChevronRight'
 import { Collapse, CardActions, Button } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
-import { addFilterByDrillDown } from '../../../store/filterSlice'
+import {
+	addFilterByDrilling,
+	resetAllFilters,
+} from '../../../store/filterSlice'
 import { useAppDispatch } from '../../../store/hooks'
 import axios from 'axios'
 import { addCommaSeparator } from '../../../Helpers'
@@ -40,8 +43,13 @@ const NamespaceView: React.FC<NamespaceViewProps> = ({ data }) => {
 	}
 
 	const handleDrillDown = () => {
-		dispatch(addFilterByDrillDown({ filterName: 'namespace', id: id }))
+		dispatch(addFilterByDrilling({ filterName: 'namespace', id: id }))
 		navigate('/topic')
+	}
+	const handleDrillUp = () => {
+		//dispatch(resetAllFilters())
+		dispatch(addFilterByDrilling({ filterName: 'tenant', id: tenant }))
+		navigate('/tenant')
 	}
 	const handleExpand = () => {
 		if (!details) fetchData()
@@ -56,7 +64,11 @@ const NamespaceView: React.FC<NamespaceViewProps> = ({ data }) => {
 					<div className="flex card-info">
 						<p className="text-black">
 							Tenant:<br></br>
-							<span className="text-blue">{tenant ? tenant : 'N/A'}</span>
+							<span className="text-blue">
+								<a href="#" onClick={handleDrillUp}>
+									{tenant ? tenant : 'N/A'}
+								</a>
+							</span>
 						</p>
 						<p className="text-black">
 							Number of Topics:<br></br>

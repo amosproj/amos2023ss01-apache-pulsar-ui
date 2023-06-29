@@ -9,7 +9,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import ChevronRight from '@mui/icons-material/ChevronRight'
 import { useNavigate } from 'react-router-dom'
-import { addFilterByDrillDown } from '../../../store/filterSlice'
+import { addFilterByDrilling } from '../../../store/filterSlice'
 import { useAppDispatch } from '../../../store/hooks'
 import axios from 'axios'
 import SubscriptionModal from '../../modals/SubscriptionModal'
@@ -39,10 +39,17 @@ const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 			})
 	}
 	const handleDrillDown = () => {
-		dispatch(addFilterByDrillDown({ filterName: 'topic', id: name }))
+		dispatch(addFilterByDrilling({ filterName: 'topic', id: name }))
 		navigate('/message')
 	}
-
+	const handleDrillUpToNamespace = () => {
+		dispatch(addFilterByDrilling({ filterName: 'namespace', id: namespace }))
+		navigate('/namespace')
+	}
+	const handleDrillUpToTenant = () => {
+		dispatch(addFilterByDrilling({ filterName: 'tenant', id: tenant }))
+		navigate('/tenant')
+	}
 	const handleExpand = () => {
 		if (!details) fetchData()
 		setExpanded(!expanded)
@@ -56,11 +63,19 @@ const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 					<div className="flex card-info">
 						<p className="text-black">
 							Tenant:<br></br>
-							<span className="text-blue">{tenant ? tenant : 'N/A'}</span>
+							<span className="text-blue">
+								<a href="#" onClick={handleDrillUpToTenant}>
+									{tenant ? tenant : 'N/A'}
+								</a>
+							</span>
 						</p>
 						<p className="text-black">
 							Namespace:<br></br>
-							<span className="text-blue">{namespace ? namespace : 'N/A'}</span>
+							<span className="text-blue">
+								<a href="#" onClick={handleDrillUpToNamespace}>
+									{namespace ? namespace : 'N/A'}
+								</a>
+							</span>
 						</p>
 						<p className="text-black">
 							Producers:<br></br>
