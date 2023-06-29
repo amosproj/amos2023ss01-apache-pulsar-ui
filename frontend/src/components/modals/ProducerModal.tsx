@@ -31,6 +31,7 @@ const ProducerModal: React.FC<ProducerModalProps> = ({ producer }) => {
 
 	const [open, setOpen] = useState(false)
 	const [producerDetails, setProducerDetails] = useState<ProducerDetails>()
+	const [messages, setMessages] = useState<MessageDto>()
 
 	const handleOpen = () => {
 		fetchData()
@@ -41,21 +42,47 @@ const ProducerModal: React.FC<ProducerModalProps> = ({ producer }) => {
 		setOpen(false)
 	}
 
-	const fetchData = () => {
+	/**
+	 * Fetch producer detail data from producer endpoint.
+	 */
+	const fetchProducerDetail = async () => {
 		const url = config.backendUrl + `/api/topic/producer/${producerName}`
-
-		// Sending GET request
+		// Set query param.
 		const params = {
 			topic: topicName,
 		}
-		axios
-			.get<ProducerDetails>(url, { params })
-			.then((response) => {
-				setProducerDetails(response.data)
-			})
-			.catch((error) => {
-				console.log(error)
-			})
+		// Send get request for producer api endpoint.
+		try {
+			const response = await axios.get<ProducerDetails>(url, { params })
+			setProducerDetails(response.data)
+		} catch (error) {
+			console.log(error)
+		}
+	}
+
+	/**
+	 * Fetch message information of current producer displayed in this modal.
+	 * @param numMessages number of messages to fetch from endpoint.
+	 */
+	const fetchProducerMessages = async (numMessages = 10) => {
+		const url = config.backendUrl + '/api/messages/'
+		// Set query params for messages.
+		const params = {
+			topic: topicName,
+			numMessages,
+			producers: producerName,
+		}
+		// Send get request to retrieve messages for this producer.
+		try {
+			const response = await axios.get<MessageDto>(url, { params })
+			setMessages(response.data)
+		} catch (error) {
+			console.log(error)
+		}
+	}
+
+	const fetchData = () => {
+		Promise.all([fetchProducerDetail(), fetchProducerMessages()])
 	}
 
 	return (
