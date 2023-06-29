@@ -5,6 +5,7 @@
 import * as React from 'react'
 import Button from '@mui/material/Button'
 import { Box, Modal, Typography } from '@mui/material'
+import InfoRoundedIcon from '@mui/icons-material/InfoRounded'
 
 export function InfoModal() {
 	const [open, setOpen] = React.useState(false)
@@ -33,9 +34,11 @@ export function InfoModal() {
 
 	return (
 		<div className="info-modal-wrapper">
-			<Button onClick={handleClickOpen} style={{ color: 'white' }}>
-				info
-			</Button>
+			<Button
+				startIcon={<InfoRoundedIcon />}
+				onClick={handleClickOpen}
+				style={{ color: 'white' }}
+			></Button>
 			<Modal
 				open={open}
 				onClose={handleClose}
