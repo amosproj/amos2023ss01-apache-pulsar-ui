@@ -60,7 +60,6 @@ public class TenantService {
                 .name(tenantName)
                 .tenantInfo(getTenantInfo(tenantName))
                 .namespaces(namespacesOfTenant)
-                .amountOfNamespaces(namespacesOfTenant.size())
                 .build();
     }
 

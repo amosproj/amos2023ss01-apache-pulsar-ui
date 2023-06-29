@@ -5,10 +5,8 @@
 
 package de.amos.apachepulsarui.dto;
 
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Setter;
 import org.apache.pulsar.common.policies.data.TenantInfo;
 
 import java.util.List;
@@ -20,9 +18,6 @@ public class TenantDetailDto {
     private String name;
 
     private List<String> namespaces;
-
-	@Setter(AccessLevel.PRIVATE)
-	private int amountOfNamespaces;
 
     private TenantInfo tenantInfo;
 

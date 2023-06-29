@@ -115,7 +115,6 @@ interface ClusterDetail {
 interface TenantDetail {
 	name: string
 	namespaces: string[]
-	amountOfNamespaces: number
 	tenantInfo: {
 		adminRoles: string[]
 		allowedClusters: string[]
