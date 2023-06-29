@@ -14,6 +14,7 @@ import { useAppDispatch } from '../../../store/hooks'
 import axios from 'axios'
 import SubscriptionModal from '../../modals/SubscriptionModal'
 import config from '../../../config'
+import MessageModal from '../../modals/MessageModal'
 
 const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 	const { name, tenant, namespace, producers, subscriptions }: TopicInfo = data
@@ -234,13 +235,7 @@ const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 							Show details
 						</Button>
 					)}
-					<Button
-						endIcon={<ChevronRight />}
-						variant={'contained'}
-						onClick={handleDrillDown}
-					>
-						Drill down
-					</Button>
+					<MessageModal topic={name} />
 				</CardActions>
 			</div>
 		</div>

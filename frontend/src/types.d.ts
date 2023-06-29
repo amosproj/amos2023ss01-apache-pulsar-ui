@@ -242,7 +242,17 @@ interface TopicViewProps {
 }
 
 interface MessageViewProps {
-	data: SampleMessage
+	data: MessageInfo
+}
+interface MessageInfo {
+	messageId: string
+	topic: string
+	payload: string
+	schema: string
+	namespace: string
+	tenant: string
+	publishTime: number
+	producer: string
 }
 
 interface CustomFilterProps {
