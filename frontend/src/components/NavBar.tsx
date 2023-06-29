@@ -140,7 +140,7 @@ function NavBar() {
 						sx={{
 							flexGrow: 1,
 							display: { xs: 'none', md: 'flex' },
-							justifyContent: 'end',
+							justifyContent: 'center',
 						}}
 					>
 						{pages.map((page) => (
