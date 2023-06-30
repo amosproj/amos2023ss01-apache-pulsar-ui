@@ -9,6 +9,8 @@ import axios from 'axios'
 import ConsumerAccordion from './ConsumerAccordion'
 import ModalInfo from './ModalInfo'
 import config from '../../config'
+import { Masonry } from 'react-plock'
+import MessageView from '../pages/message/MessageView'
 
 export interface ResponseSubscription {
 	name: string
@@ -134,7 +136,7 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
 						bgcolor: 'background.paper',
 						boxShadow: 24,
 						p: 4,
-						maxWidth: 500,
+						maxWidth: 600,
 						width: '100%',
 						maxHeight: '80vh',
 						overflowY: 'auto',
@@ -208,6 +210,34 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
 								<ModalInfo title="Inactive consumers" detailedInfo={''} />
 							)}
 						</>
+					)}
+					{messagesError || messages.length > 0 ? (
+						<>
+							<ModalInfo title="Messages" detailedInfo=" " />
+							<Masonry
+								className="main-card-wrapper"
+								items={messages}
+								config={{
+									columns: [1, 2],
+									gap: [34, 34],
+									media: [1619, 1620],
+								}}
+								render={(message, index) => (
+									<div
+										className={
+											messages.length === 1
+												? 'single-card main-card'
+												: 'main-card'
+										}
+										key={index}
+									>
+										<MessageView key={index} data={message} />
+									</div>
+								)}
+							/>
+						</>
+					) : (
+						<ModalInfo title="Messages" detailedInfo="" />
 					)}
 				</Box>
 			</Modal>
