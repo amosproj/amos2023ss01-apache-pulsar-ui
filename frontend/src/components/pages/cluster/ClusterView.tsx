@@ -12,6 +12,7 @@ import { addFilterByDrilling } from '../../../store/filterSlice'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import config from '../../../config'
+import { addCommaSeparator } from '../../../Helpers'
 
 const ClusterView: React.FC<ClusterViewProps> = ({ data }) => {
 	const { name, numberOfNamespces, numberOfTenants }: ClusterInfo = data
@@ -23,6 +24,11 @@ const ClusterView: React.FC<ClusterViewProps> = ({ data }) => {
 
 	const handleDrillDown = () => {
 		dispatch(addFilterByDrilling({ filterName: 'cluster', id: name }))
+		navigate('/tenant')
+	}
+
+	const handleDrillDownToTenant = (itemId: string) => {
+		dispatch(addFilterByDrilling({ filterName: 'tenant', id: itemId }))
 		navigate('/tenant')
 	}
 
@@ -54,11 +60,11 @@ const ClusterView: React.FC<ClusterViewProps> = ({ data }) => {
 					<div className="flex card-info">
 						<p className="text-black">
 							Number of Tenants:<br></br>
-							<span className="text-blue">{numberOfTenants}</span>
+							<span className="text-grey">{numberOfTenants}</span>
 						</p>
 						<p className="text-black">
 							Number of Namespaces:<br></br>
-							<span className="text-blue">{numberOfNamespces}</span>
+							<span className="text-grey">{numberOfNamespces}</span>
 						</p>
 					</div>
 				</div>
@@ -70,12 +76,12 @@ const ClusterView: React.FC<ClusterViewProps> = ({ data }) => {
 						<div className="flex card-info">
 							<p className="text-black">
 								Amount of Brokers:<br></br>
-								<span className="text-blue">{details?.amountOfBrokers}</span>
+								<span className="text-grey">{details?.amountOfBrokers}</span>
 							</p>
 							<p className="text-black">
 								Brokers:<br></br>
 								{details?.brokers.map((item: string, index: number) => (
-									<span key={index} className="text-blue">
+									<span key={index} className="text-grey">
 										{item},{' '}
 									</span>
 								))}
@@ -85,13 +91,16 @@ const ClusterView: React.FC<ClusterViewProps> = ({ data }) => {
 						<div className="flex card-info">
 							<p className="text-black">
 								Amount of Tenants:<br></br>
-								<span className="text-blue">{details?.amountOfTenants}</span>
+								<span className="text-grey">{details?.amountOfTenants}</span>
 							</p>
 							<p className="text-black">
 								Tenants:<br></br>
 								{details?.tenants.map((item: string, index: number) => (
 									<span key={index} className="text-blue">
-										{item},{' '}
+										<a href="#" onClick={() => handleDrillDownToTenant(item)}>
+											{item}
+										</a>
+										{addCommaSeparator(index, details.tenants.length)}
 									</span>
 								))}
 							</p>
@@ -100,13 +109,13 @@ const ClusterView: React.FC<ClusterViewProps> = ({ data }) => {
 						<div className="flex card-info">
 							<p className="text-black">
 								Service URL:<br></br>
-								<span className="text-blue">
+								<span className="text-grey">
 									{details?.serviceUrl ? details.serviceUrl : 'N/A'}
 								</span>
 							</p>
 							<p className="text-black">
 								Broker Service URL:<br></br>
-								<span className="text-blue">
+								<span className="text-grey">
 									{details?.brokerServiceUrl ? details.brokerServiceUrl : 'N/A'}
 								</span>
 							</p>

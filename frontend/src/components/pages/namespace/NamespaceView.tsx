@@ -51,6 +51,10 @@ const NamespaceView: React.FC<NamespaceViewProps> = ({ data }) => {
 		dispatch(addFilterByDrilling({ filterName: 'tenant', id: tenant }))
 		navigate('/tenant')
 	}
+	const handleDrillDownToTopic = (itemId: string) => {
+		dispatch(addFilterByDrilling({ filterName: 'topic', id: itemId }))
+		navigate('/topic')
+	}
 	const handleExpand = () => {
 		if (!details) fetchData()
 		setExpanded(!expanded)
@@ -72,7 +76,7 @@ const NamespaceView: React.FC<NamespaceViewProps> = ({ data }) => {
 						</p>
 						<p className="text-black">
 							Number of Topics:<br></br>
-							<span className="text-blue">{numberOfTopics}</span>
+							<span className="text-grey">{numberOfTopics}</span>
 						</p>
 					</div>
 				</div>
@@ -86,7 +90,7 @@ const NamespaceView: React.FC<NamespaceViewProps> = ({ data }) => {
 								Boundaries:<br></br>
 								{details?.bundlesData.boundaries.map(
 									(item: string, index: number) => (
-										<span key={index} className="text-blue">
+										<span key={index} className="text-grey">
 											{item}
 											{addCommaSeparator(
 												index,
@@ -98,7 +102,7 @@ const NamespaceView: React.FC<NamespaceViewProps> = ({ data }) => {
 							</p>
 							<p className="text-black">
 								Bundles:<br></br>
-								<span className="text-blue">
+								<span className="text-grey">
 									{details?.bundlesData.numBundles
 										? details.bundlesData.numBundles
 										: 0}
@@ -106,13 +110,13 @@ const NamespaceView: React.FC<NamespaceViewProps> = ({ data }) => {
 							</p>
 							<p className="text-black">
 								Message TTL:<br></br>
-								<span className="text-blue">
+								<span className="text-grey">
 									{details?.messagesTTL ? details?.messagesTTL : 'None'}
 								</span>
 							</p>
 							<p className="text-black">
 								Retention time:<br></br>
-								<span className="text-blue">
+								<span className="text-grey">
 									{details?.retentionPolicies?.retentionTimeInMinutes
 										? details?.retentionPolicies.retentionTimeInMinutes +
 										  ' minutes'
@@ -121,7 +125,7 @@ const NamespaceView: React.FC<NamespaceViewProps> = ({ data }) => {
 							</p>
 							<p className="text-black">
 								Retention size:<br></br>
-								<span className="text-blue">
+								<span className="text-grey">
 									{details?.retentionPolicies?.retentionSizeInMB
 										? details?.retentionPolicies.retentionSizeInMB + ' MB'
 										: 'None'}
@@ -137,7 +141,12 @@ const NamespaceView: React.FC<NamespaceViewProps> = ({ data }) => {
 										{details?.topics.map((item: string, index: number) => (
 											<li key={index}>
 												<span key={index} className="text-blue">
-													- {item}{' '}
+													<a
+														href="#"
+														onClick={() => handleDrillDownToTopic(item)}
+													>
+														- {item}{' '}
+													</a>
 												</span>
 											</li>
 										))}
@@ -145,12 +154,12 @@ const NamespaceView: React.FC<NamespaceViewProps> = ({ data }) => {
 								</div>
 							) : (
 								<p className="text-black">
-									Topics: <span className="text-blue">None</span>
+									Topics: <span className="text-grey">None</span>
 								</p>
 							)}
 							<p className="text-black">
 								Amount of Topics:<br></br>
-								<span className="text-blue">
+								<span className="text-grey">
 									{details?.amountOfTopics ? details.amountOfTopics : 0}
 								</span>
 							</p>

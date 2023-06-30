@@ -48,6 +48,10 @@ const TenantView: React.FC<TenantViewProps> = ({ data }) => {
 		dispatch(addFilterByDrilling({ filterName: 'cluster', id: itemId }))
 		navigate('/cluster')
 	}
+	const handleDrillDownToNamespace = (itemId: string) => {
+		dispatch(addFilterByDrilling({ filterName: 'namespace', id: itemId }))
+		navigate('/namespace')
+	}
 	const handleExpand = () => {
 		if (!details) fetchData()
 		setExpanded(!expanded)
@@ -61,7 +65,7 @@ const TenantView: React.FC<TenantViewProps> = ({ data }) => {
 					<div className="flex card-info">
 						<p className="text-black">
 							Admin Roles:<br></br>
-							<span className="text-blue">
+							<span className="text-grey">
 								{tenantInfo.adminRoles && tenantInfo.adminRoles.length > 0 ? (
 									tenantInfo.adminRoles.map((item: string, index: number) => (
 										<span key={index}>
@@ -99,11 +103,11 @@ const TenantView: React.FC<TenantViewProps> = ({ data }) => {
 						</p>
 						<p className="text-black">
 							Number of Namespaces:<br></br>
-							<span className="text-blue">{numberOfNamespaces}</span>
+							<span className="text-grey">{numberOfNamespaces}</span>
 						</p>
 						<p className="text-black">
 							Number of Topics:<br></br>
-							<span className="text-blue">{numberOfTopics}</span>
+							<span className="text-grey">{numberOfTopics}</span>
 						</p>
 					</div>
 					<div className="grey-line"></div>
@@ -118,14 +122,19 @@ const TenantView: React.FC<TenantViewProps> = ({ data }) => {
 								Namespaces:<br></br>
 								{details?.namespaces.map((item: string, index: number) => (
 									<span key={index} className="text-blue">
-										{item}
+										<a
+											href="#"
+											onClick={() => handleDrillDownToNamespace(item)}
+										>
+											{item}
+										</a>
 										{addCommaSeparator(index, details.namespaces.length)}
 									</span>
 								))}
 							</p>
 							<p className="text-black">
 								Amount of Namespaces:<br></br>
-								<span className="text-blue">{details?.amountOfNamespaces}</span>
+								<span className="text-grey">{details?.amountOfNamespaces}</span>
 							</p>
 						</div>
 					</div>
