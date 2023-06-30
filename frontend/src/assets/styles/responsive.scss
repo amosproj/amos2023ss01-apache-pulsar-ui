@@ -29,52 +29,6 @@
             gap: 18px;
             .primary-dashboard {
                 order: 1;
-                .main-card {
-                    padding: 18px;
-                    .card-content {
-                        h2 {
-                            font-size: $font-medium;
-                        }
-                        .card-buttons-container {
-                            .MuiCardActions-root {
-                                gap: 10px;
-                                margin-top: 18px;
-                                .MuiButtonBase-root.MuiButton-root.MuiButton-contained {
-                                    width: 100%;
-                                    font-size: $font-small;
-                                    padding: 8px;
-                                    span {
-                                        display: none;
-                                    }
-                                }
-                            }
-                        }
-                        .card-col {
-                            .card-info {
-                                row-gap: 16px;
-                                p {
-                                    flex: 0 0 50%;
-                                    max-width: 50%;
-                                    span {
-                                        padding-right: 16px;
-                                    }
-                                }
-                                .schema-box-wrapper, .timestamp-wrapper {
-                                    flex: 0 0 100%;
-                                    max-width: 100%;
-                                    span {
-                                        padding-right: 0px;
-                                    }
-                                }
-                                .items-list {
-                                    flex: 0 0 100%;
-                                    max-width: 100%;
-                                    padding-bottom: 4px;
-                                }
-                            }
-                        }
-                    }
-                }
             }
             .secondary-dashboard {
                 .filters-wrapper {
@@ -104,5 +58,80 @@
                 margin-bottom: 18px;
             }
         }
+    }
+    .message-box-wrapper.MuiBox-root {
+        width: 90%;
+        .message-box.MuiBox-root {
+            padding: 18px;
+            .message-filter-wrapper {
+                gap: 18px;
+                margin-bottom: 18px;
+            }
+        }
+    }
+    .main-card {
+        padding: 18px;
+        .card-content {
+            h2 {
+                font-size: $font-medium;
+            }
+            .card-buttons-container {
+                .MuiCardActions-root {
+                    gap: 10px;
+                    margin-top: 18px;
+                    .MuiButtonBase-root.MuiButton-root.MuiButton-contained {
+                        width: 100%;
+                        font-size: $font-small;
+                        padding: 8px;
+                        span {
+                            display: none;
+                        }
+                    }
+                }
+            }
+            .card-inner {
+                .card-col {
+                    .card-info {
+                        row-gap: 16px;
+                        p {
+                            flex: 0 0 50%;
+                            max-width: 50%;
+                            span {
+                                padding-right: 16px;
+                            }
+                            &.timestamp-wrapper {
+                                flex: 0 0 100%;
+                                max-width: 100%;
+                                span {
+                                    padding-right: 0px;
+                                }
+                            }
+                        }
+                        div {
+                            &.schema-box-wrapper {
+                                flex: 0 0 100%;
+                                max-width: 100%;
+                                span {
+                                    padding-right: 0px;
+                                }
+                            }
+                        }
+                        .items-list {
+                            flex: 0 0 100%;
+                            max-width: 100%;
+                            padding-bottom: 4px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .close-modal-button.MuiButtonBase-root.MuiIconButton-root {
+        right: 18px;
+        top: 18px;
+        padding: 4px;
+    }
+    .custom-scrollbar-wrapper {
+        display: none;
     }
 }

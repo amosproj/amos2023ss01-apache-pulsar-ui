@@ -44,7 +44,7 @@ const MessageView: React.FC<MessageViewProps> = ({ data }) => {
 					</div>
 					<div className="grey-line"></div>
 					<div className="flex card-info">
-						<p className="text-black">
+						<p className="text-black timestamp-wrapper">
 							Payload:<br></br>
 							<span className="text-blue">{payload}</span>
 						</p>

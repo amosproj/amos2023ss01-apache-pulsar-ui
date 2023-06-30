@@ -101,7 +101,7 @@ const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 				<div className="flex card-inner">
 					<div className="flex flex-col card-col">
 						<div className="flex card-info">
-							<p className="text-black">
+							<p className="text-black timestamp-wrapper">
 								Owner Broker:<br></br>
 								<span className="text-blue">
 									{details?.ownerBroker ? details.ownerBroker : 'N/A'}
