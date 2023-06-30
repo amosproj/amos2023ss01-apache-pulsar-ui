@@ -38,6 +38,8 @@ const ProducerModal: React.FC<ProducerModalProps> = ({ producer }) => {
 	const [open, setOpen] = useState(false)
 	const [producerDetails, setProducerDetails] = useState<ProducerDetails>()
 	const [messages, setMessages] = useState<MessageInfo[]>([])
+	const [producerError, setProducerError] = useState<string | null>(null)
+	const [messagesError, setMessagesError] = useState<string | null>(null)
 
 	const handleOpen = () => {
 		fetchData()
@@ -82,7 +84,7 @@ const ProducerModal: React.FC<ProducerModalProps> = ({ producer }) => {
 				setMessages(response.data.messages)
 			})
 			.catch((error) => {
-				console.log(error)
+				setProducerError(error.message)
 			})
 
 		fetchProducerDetail()
@@ -90,7 +92,7 @@ const ProducerModal: React.FC<ProducerModalProps> = ({ producer }) => {
 				setProducerDetails(response.data)
 			})
 			.catch((error) => {
-				console.log(error)
+				setMessagesError(error.message)
 			})
 	}
 
@@ -132,27 +134,34 @@ const ProducerModal: React.FC<ProducerModalProps> = ({ producer }) => {
 					>
 						<CloseIcon />
 					</IconButton>
-					<Typography variant="h5" gutterBottom>
-						Producer: {producer.producerName}
-					</Typography>
-					<ModalInfo title={'Producer ID'} detailedInfo={producerDetails?.id} />
-					<ModalInfo
-						title={'Address'}
-						detailedInfo={producerDetails?.address}
-					/>
-					<ModalInfo
-						title={'Average message size'}
-						detailedInfo={producerDetails?.averageMsgSize}
-					/>
-					<ModalInfo
-						title={'Client version'}
-						detailedInfo={producerDetails?.clientVersion}
-					/>
-					<ModalInfo
-						title={'Connected since'}
-						detailedInfo={producerDetails?.connectedSince}
-					/>
-					{messages.length > 0 ? (
+					{producerError || (
+						<>
+							<Typography variant="h5" gutterBottom>
+								Producer: {producer.producerName}
+							</Typography>
+							<ModalInfo
+								title={'Producer ID'}
+								detailedInfo={producerDetails?.id}
+							/>
+							<ModalInfo
+								title={'Address'}
+								detailedInfo={producerDetails?.address}
+							/>
+							<ModalInfo
+								title={'Average message size'}
+								detailedInfo={producerDetails?.averageMsgSize}
+							/>
+							<ModalInfo
+								title={'Client version'}
+								detailedInfo={producerDetails?.clientVersion}
+							/>
+							<ModalInfo
+								title={'Connected since'}
+								detailedInfo={producerDetails?.connectedSince}
+							/>
+						</>
+					)}
+					{messagesError || messages.length > 0 ? (
 						<>
 							<ModalInfo title="Messages" detailedInfo=" " />
 							<Masonry
