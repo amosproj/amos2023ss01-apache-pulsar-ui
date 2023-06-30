@@ -8,6 +8,8 @@ import CloseIcon from '@mui/icons-material/Close'
 import axios from 'axios'
 import ModalInfo from './ModalInfo'
 import config from '../../config'
+import MessageView from '../pages/message/MessageView'
+import { Masonry } from 'react-plock'
 
 /**
 The following information is shown in the producer information popup:
@@ -26,12 +28,16 @@ interface ProducerModalProps {
 	}
 }
 
+interface MessageResponse {
+	messages: MessageInfo[]
+}
+
 const ProducerModal: React.FC<ProducerModalProps> = ({ producer }) => {
 	const { producerName, topicName } = producer
 
 	const [open, setOpen] = useState(false)
 	const [producerDetails, setProducerDetails] = useState<ProducerDetails>()
-	const [messages, setMessages] = useState<MessageDto>()
+	const [messages, setMessages] = useState<MessageInfo[]>([])
 
 	const handleOpen = () => {
 		fetchData()
@@ -45,44 +51,47 @@ const ProducerModal: React.FC<ProducerModalProps> = ({ producer }) => {
 	/**
 	 * Fetch producer detail data from producer endpoint.
 	 */
-	const fetchProducerDetail = async () => {
+	const fetchProducerDetail = () => {
 		const url = config.backendUrl + `/api/topic/producer/${producerName}`
-		// Set query param.
 		const params = {
 			topic: topicName,
 		}
-		// Send get request for producer api endpoint.
-		try {
-			const response = await axios.get<ProducerDetails>(url, { params })
-			setProducerDetails(response.data)
-		} catch (error) {
-			console.log(error)
-		}
+		return axios.get<ProducerDetails>(url, { params })
 	}
 
 	/**
 	 * Fetch message information of current producer displayed in this modal.
 	 * @param numMessages number of messages to fetch from endpoint.
 	 */
-	const fetchProducerMessages = async (numMessages = 10) => {
+	const fetchProducerMessages = (numMessages = 10) => {
 		const url = config.backendUrl + '/api/messages/'
-		// Set query params for messages.
 		const params = {
 			topic: topicName,
 			numMessages,
 			producers: producerName,
 		}
-		// Send get request to retrieve messages for this producer.
-		try {
-			const response = await axios.get<MessageDto>(url, { params })
-			setMessages(response.data)
-		} catch (error) {
-			console.log(error)
-		}
+		return axios.get<MessageResponse>(url, { params })
 	}
 
+	/**
+	 * Fetch all data and set data.
+	 */
 	const fetchData = () => {
-		Promise.all([fetchProducerDetail(), fetchProducerMessages()])
+		fetchProducerMessages()
+			.then((response) => {
+				setMessages(response.data.messages)
+			})
+			.catch((error) => {
+				console.log(error)
+			})
+
+		fetchProducerDetail()
+			.then((response) => {
+				setProducerDetails(response.data)
+			})
+			.catch((error) => {
+				console.log(error)
+			})
 	}
 
 	return (
@@ -104,11 +113,11 @@ const ProducerModal: React.FC<ProducerModalProps> = ({ producer }) => {
 						bgcolor: 'background.paper',
 						boxShadow: 24,
 						p: 4,
-						maxWidth: 500,
+						maxWidth: 600,
 						width: '100%',
 						maxHeight: '80vh',
 						overflowY: 'auto',
-						borderRadius: '20px',
+						borderRadius: '25px',
 					}}
 				>
 					<IconButton
@@ -143,6 +152,34 @@ const ProducerModal: React.FC<ProducerModalProps> = ({ producer }) => {
 						title={'Connected since'}
 						detailedInfo={producerDetails?.connectedSince}
 					/>
+					{messages.length > 0 ? (
+						<>
+							<ModalInfo title="Messages" detailedInfo=" " />
+							<Masonry
+								className="main-card-wrapper"
+								items={messages}
+								config={{
+									columns: [1, 2],
+									gap: [34, 34],
+									media: [1619, 1620],
+								}}
+								render={(message, index) => (
+									<div
+										className={
+											messages.length === 1
+												? 'single-card main-card'
+												: 'main-card'
+										}
+										key={index}
+									>
+										<MessageView key={index} data={message} />
+									</div>
+								)}
+							/>
+						</>
+					) : (
+						<ModalInfo title="Messages" detailedInfo="" />
+					)}
 				</Box>
 			</Modal>
 		</>
