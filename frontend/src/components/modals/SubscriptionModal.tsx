@@ -41,13 +41,22 @@ interface SubscriptionModalProps {
 	topic: string
 }
 
+interface MessageResponse {
+	messages: MessageInfo[]
+}
+
 const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
 	subscription,
 	topic,
 }) => {
 	const [open, setOpen] = useState(false)
-	const [data, setData] = useState<ResponseSubscription>()
-	const [error, setError] = useState<string | null>(null)
+	const [subscriptionDetail, setSubscriptionDetail] =
+		useState<ResponseSubscription>()
+	const [messages, setMessages] = useState<MessageInfo[]>([])
+	const [subscriptionError, setSubscriptionError] = useState<string | null>(
+		null
+	)
+	const [messagesError, setMessageError] = useState<string | null>(null)
 	const baseURL = config.backendUrl + '/api/topic/subscription/'
 
 	const handleOpen = () => {
@@ -59,25 +68,11 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
 		setOpen(false)
 	}
 
-	// useEffect(() => {
-	// 	// Query parameters
-	// 	const topicQuery = `topic=${topic}`
-
-	// 	// Joining all query parameters
-	// 	const query = [topicQuery]
-	// 	const url = `${baseURL + subscription}?${query}`
-	// 	// Sending GET request
-	// 	axios
-	// 		.get<ResponseSubscription>(url)
-	// 		.then((response) => {
-	// 			setData(response.data)
-	// 		})
-	// 		.catch((error) => {
-	// 			setError(error.message)
-	// 		})
-	// }, [])
-
-	const fetchData = () => {
+	/**
+	 * Fetch detail info of subscription.
+	 * @returns Promise of subscription detail data.
+	 */
+	const fetchSubscription = () => {
 		// Query parameters
 		const topicQuery = `topic=${topic}`
 
@@ -85,14 +80,39 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
 		const query = [topicQuery]
 		const url = `${baseURL + subscription}?${query}`
 		// Sending GET request
-		axios
-			.get<ResponseSubscription>(url)
+		return axios.get<ResponseSubscription>(url)
+	}
+
+	/**
+	 * Fetch message information of current producer displayed in this modal.
+	 * @param numMessages number of messages to fetch from endpoint.
+	 * @returns Promise of messages data.
+	 */
+	const fetchSubscriptionMessages = (numMessages = 10) => {
+		const url = config.backendUrl + '/api/messages/'
+		const params = {
+			topic: topic,
+			numMessages,
+			subscription,
+		}
+		return axios.get<MessageResponse>(url, { params })
+	}
+
+	/**
+	 * Fetch all data and set data.
+	 */
+	const fetchData = () => {
+		fetchSubscription()
 			.then((response) => {
-				setData(response.data)
+				setSubscriptionDetail(response.data)
 			})
 			.catch((error) => {
-				setError(error.message)
+				setSubscriptionError(error.message)
 			})
+
+		fetchSubscriptionMessages()
+			.then((response) => setMessages(response.data.messages))
+			.catch((error) => setMessageError(error.messages))
 	}
 
 	return (
@@ -136,28 +156,59 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
 					<Typography variant="h5" component="h2" gutterBottom>
 						Subscription: {subscription}
 					</Typography>
-					<div>
-						<ConsumerAccordion
-							consumerName={data?.activeConsumer}
-							topicName={topic}
-						/>
-					</div>
-					<ModalInfo
-						title="Number of consumers"
-						detailedInfo={data?.numberConsumers}
-					/>
-					<ModalInfo title="Backlog size" detailedInfo={data?.backlogSize} />
-					<ModalInfo title="Message backlog" detailedInfo={data?.msgBacklog} />
-					<ModalInfo
-						title="Bytes out counter"
-						detailedInfo={data?.bytesOutCounter}
-					/>
-					<ModalInfo
-						title="Message out counter"
-						detailedInfo={data?.msgOutCounter}
-					/>
-					<ModalInfo title="Is replicated" detailedInfo={data?.replicated} />
-					<ModalInfo title="Type" detailedInfo={data?.type} />
+					{subscriptionError || (
+						<>
+							<ModalInfo
+								title="Backlog size"
+								detailedInfo={subscriptionDetail?.backlogSize}
+							/>
+							<ModalInfo
+								title="Message backlog"
+								detailedInfo={subscriptionDetail?.msgBacklog}
+							/>
+							<ModalInfo
+								title="Bytes out counter"
+								detailedInfo={subscriptionDetail?.bytesOutCounter}
+							/>
+							<ModalInfo
+								title="Message out counter"
+								detailedInfo={subscriptionDetail?.msgOutCounter}
+							/>
+							<ModalInfo
+								title="Is replicated"
+								detailedInfo={subscriptionDetail?.replicated}
+							/>
+							<ModalInfo title="Type" detailedInfo={subscriptionDetail?.type} />
+							<ModalInfo
+								title="Total number of consumers"
+								detailedInfo={subscriptionDetail?.numberConsumers}
+							/>
+							{subscriptionDetail?.activeConsumer ? (
+								<ConsumerAccordion
+									consumerName={subscriptionDetail?.activeConsumer}
+									topicName={topic}
+									isActive={true}
+								/>
+							) : (
+								<ModalInfo title="Active consumer" detailedInfo={''} />
+							)}
+							{subscriptionDetail?.inactiveConsumers &&
+							subscriptionDetail?.inactiveConsumers.length > 0 ? (
+								subscriptionDetail?.inactiveConsumers.map((consumer, index) => {
+									return (
+										<ConsumerAccordion
+											consumerName={consumer}
+											topicName={topic}
+											isActive={false}
+											key={index}
+										/>
+									)
+								})
+							) : (
+								<ModalInfo title="Inactive consumers" detailedInfo={''} />
+							)}
+						</>
+					)}
 				</Box>
 			</Modal>
 		</>
