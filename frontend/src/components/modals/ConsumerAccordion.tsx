@@ -57,7 +57,7 @@ const ConsumerAccordion: React.FC<ConsumerAccordionProps> = ({
 
 	return (
 		<div>
-			<p style={{ fontWeight: '600' }}>
+			<p style={{ fontWeight: '600' }} className="modal-info">
 				{isActive ? 'Active consumer:' : 'Inactive consumers:'}
 			</p>
 			<Accordion expanded={isExpanded} onChange={handleAccordionChange}>
