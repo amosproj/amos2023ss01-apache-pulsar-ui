@@ -3,13 +3,12 @@
 // SPDX-FileCopyrightText: 2019 Georg Schwarz <georg. schwarz@fau.de>
 
 import React, { useState } from 'react'
-import { Modal, Box, Typography, IconButton } from '@mui/material'
+import { Modal, Box, Typography, IconButton, Divider } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import axios from 'axios'
 import ModalInfo from './ModalInfo'
 import config from '../../config'
-import MessageView from '../pages/message/MessageView'
-import { Masonry } from 'react-plock'
+import { convertTimestampToDateTime } from '../../Helpers'
 
 /**
 The following information is shown in the producer information popup:
@@ -163,28 +162,26 @@ const ProducerModal: React.FC<ProducerModalProps> = ({ producer }) => {
 					)}
 					{messagesError || messages.length > 0 ? (
 						<>
-							<ModalInfo title="Messages" detailedInfo=" " />
-							<Masonry
-								className="main-card-wrapper"
-								items={messages}
-								config={{
-									columns: [1, 2],
-									gap: [34, 34],
-									media: [1619, 1620],
-								}}
-								render={(message, index) => (
-									<div
-										className={
-											messages.length === 1
-												? 'single-card main-card'
-												: 'main-card'
-										}
-										key={index}
-									>
-										<MessageView key={index} data={message} />
-									</div>
-								)}
-							/>
+							<ModalInfo title="Messages(10 latest)" detailedInfo=" " />
+							{messages.map((message, index) => {
+								return (
+									<>
+										<div key={index} className="modal-info">
+											<p>
+												Message ID:{' '}
+												<span className="detail">{message.messageId}</span>
+											</p>
+											<p>
+												Publish time:{' '}
+												<span className="detail">
+													{convertTimestampToDateTime(message.publishTime)}
+												</span>
+											</p>
+										</div>
+										<Divider />
+									</>
+								)
+							})}
 						</>
 					) : (
 						<ModalInfo title="Messages" detailedInfo="" />

@@ -99,3 +99,17 @@ export const flattenNamespacesToTopics = (
 export const addCommaSeparator = (index: number, length: number): string => {
 	return index !== length - 1 ? ', ' : ''
 }
+
+/**
+ * Converts a timestamp to a human-readable date and time format.
+ * @param {number} timestamp - The timestamp to convert.
+ * @returns {string} The formatted date and time string.
+ */
+export const convertTimestampToDateTime = (timestamp: number): string => {
+	// If the timestamp is already in milliseconds, no conversion is needed
+	const milliseconds = timestamp
+	const dateObj = new Date(milliseconds)
+	// ISO 8601 format: "YYYY-MM-DDTHH:mm:ss.sssZ"
+	const formattedTime = dateObj.toISOString()
+	return formattedTime
+}
