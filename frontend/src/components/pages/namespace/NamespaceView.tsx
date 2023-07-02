@@ -134,7 +134,7 @@ const NamespaceView: React.FC<NamespaceViewProps> = ({ data }) => {
 						</div>
 						<div className="grey-line"></div>
 						<div className="flex card-info">
-							{details?.amountOfTopics !== 0 ? (
+							{details?.topics.length !== 0 ? (
 								<div className="items-list">
 									<p className="text-black">Topics:</p>
 									<ul>

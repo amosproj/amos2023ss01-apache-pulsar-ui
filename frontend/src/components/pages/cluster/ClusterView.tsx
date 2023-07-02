@@ -15,7 +15,7 @@ import config from '../../../config'
 import { addCommaSeparator } from '../../../Helpers'
 
 const ClusterView: React.FC<ClusterViewProps> = ({ data }) => {
-	const { name, numberOfNamespces, numberOfTenants }: ClusterInfo = data
+	const { name, numberOfNamespaces, numberOfTenants }: ClusterInfo = data
 	const [expanded, setExpanded] = useState(false)
 	const [details, setDetails] = useState<ClusterDetail>()
 
@@ -89,21 +89,30 @@ const ClusterView: React.FC<ClusterViewProps> = ({ data }) => {
 						</div>
 						<div className="grey-line"></div>
 						<div className="flex card-info">
-							<p className="text-black">
-								Amount of Tenants:<br></br>
-								<span className="text-grey">{details?.amountOfTenants}</span>
-							</p>
-							<p className="text-black">
-								Tenants:<br></br>
-								{details?.tenants.map((item: string, index: number) => (
-									<span key={index} className="text-blue">
-										<a href="#" onClick={() => handleDrillDownToTenant(item)}>
-											{item}
-										</a>
-										{addCommaSeparator(index, details.tenants.length)}
-									</span>
-								))}
-							</p>
+								<p className="text-black">
+									Amount of Tenants:<br></br>
+									<span className="text-grey">{details?.amountOfTenants}</span>
+								</p>
+								{details?.tenants.length !== 0 ? (
+									<p className="text-black">
+										Tenants:<br></br>
+										{details?.tenants.map((item: string, index: number) => (
+											<span key={index} className="text-blue">
+												<a
+													href="#"
+													onClick={() => handleDrillDownToTenant(item)}
+												>
+													{item}
+												</a>
+												{addCommaSeparator(index, details.tenants.length)}
+											</span>
+										))}
+									</p>
+								) : (
+									<p className="text-black">
+										Tenants: <span className="text-grey">None</span>
+									</p>
+								)}
 						</div>
 						<div className="grey-line"></div>
 						<div className="flex card-info">

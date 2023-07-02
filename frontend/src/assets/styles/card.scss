@@ -23,7 +23,7 @@
 				width: 100%;
 				padding: 0px;
 				margin-top: 22px;
-	
+
 				.MuiButtonBase-root.MuiButton-root.MuiButton-contained {
 					display: flex;
 					justify-content: center;
@@ -64,8 +64,8 @@
 					p {
 						flex: 0 0 25%;
 						max-width: 25%;
+						padding-right: 20px;
 						span {
-							padding-right: 6px;
 							display: inline-block;
 						}
 					}
@@ -95,8 +95,8 @@
 					}
 
 					.items-list {
-						flex: 0 0 75%;
-						max-width: 75%;
+						flex: 0 0 100%;
+						max-width: 100%;
 					}
 				}
 			}
