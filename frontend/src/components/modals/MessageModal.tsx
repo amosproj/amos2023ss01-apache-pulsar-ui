@@ -48,6 +48,7 @@ const MessageModal: React.FC<MessageModalProps> = ({ topic }) => {
 	const handleOpen = () => {
 		fetchData()
 		setOpen(true)
+		setScrollTop(15)
 	}
 
 	const handleScroll = (event: any) => {
@@ -55,7 +56,9 @@ const MessageModal: React.FC<MessageModalProps> = ({ topic }) => {
 		if (document.getElementById('message-list')?.offsetHeight) {
 			messageListHeight = document.getElementById('message-list')?.offsetHeight
 		}
-
+		console.log('list height', messageListHeight)
+		console.log('event scroll', event.currentTarget.scrollTop)
+		console.log('set scroll', scrollTop)
 		setScrollTop((event.currentTarget.scrollTop * 100) / messageListHeight + 15)
 	}
 
@@ -115,7 +118,7 @@ const MessageModal: React.FC<MessageModalProps> = ({ topic }) => {
 									type="number"
 									label="Nr. of messages requested"
 									variant="outlined"
-									value={amount}
+									defaultValue={amount}
 									onChange={handleAmountChange}
 									size="small"
 								/>
