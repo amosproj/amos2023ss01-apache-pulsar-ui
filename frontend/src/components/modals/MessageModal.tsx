@@ -3,19 +3,11 @@
 // SPDX-FileCopyrightText: 2019 Georg Schwarz <georg. schwarz@fau.de>
 
 import React, { useState } from 'react'
-import {
-	Modal,
-	Box,
-	Typography,
-	IconButton,
-	Button,
-	TextField,
-} from '@mui/material'
+import { Modal, Box, IconButton, Button, TextField } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import axios from 'axios'
-import ModalInfo from './ModalInfo'
 import config from '../../config'
-import { ChevronRight, Height } from '@mui/icons-material'
+import { ChevronRight } from '@mui/icons-material'
 import MessageView from '../pages/message/MessageView'
 import { Masonry } from 'react-plock'
 
@@ -43,23 +35,20 @@ const MessageModal: React.FC<MessageModalProps> = ({ topic }) => {
 	const [data, setData] = useState<MessageInfo[]>([])
 	const [loading, setLoading] = useState<boolean>(true)
 	const [error, setError] = useState<string | null>(null)
-	const [scrollTop, setScrollTop] = useState(15)
+	const [scrollTop, setScrollTop] = useState(0)
 
 	const handleOpen = () => {
 		fetchData()
 		setOpen(true)
-		setScrollTop(15)
+		setScrollTop(0)
 	}
 
 	const handleScroll = (event: any) => {
-		let messageListHeight = event.currentTarget.offsetHeight
-		if (document.getElementById('message-list')?.offsetHeight) {
-			messageListHeight = document.getElementById('message-list')?.offsetHeight
-		}
-		console.log('list height', messageListHeight)
-		console.log('event scroll', event.currentTarget.scrollTop)
-		console.log('set scroll', scrollTop)
-		setScrollTop((event.currentTarget.scrollTop * 100) / messageListHeight + 15)
+		const messageBox = event.currentTarget
+		const scrollableHeight = messageBox.scrollHeight - messageBox.clientHeight
+		const scrollPercentage = (messageBox.scrollTop / scrollableHeight) * 100
+
+		setScrollTop(scrollPercentage)
 	}
 
 	const handleClose = () => {
