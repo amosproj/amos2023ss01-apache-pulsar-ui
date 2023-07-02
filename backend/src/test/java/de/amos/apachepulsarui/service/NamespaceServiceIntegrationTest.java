@@ -78,7 +78,6 @@ public class NamespaceServiceIntegrationTest extends AbstractIntegrationTest {
 
         Assertions.assertThat(namespace.getId()).isEqualTo("tenant1/namespace1");
         Assertions.assertThat(namespace.getTopics()).contains("persistent://tenant1/namespace1/testTopic");
-        Assertions.assertThat(namespace.getAmountOfTopics()).isEqualTo(1);
     }
 
     private void createTenant(String tenant) throws PulsarAdminException {

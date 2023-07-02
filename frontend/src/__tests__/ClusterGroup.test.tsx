@@ -8,17 +8,17 @@ import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
 const dataTest: Array<ClusterInfo> = [
 	{
 		name: 'amos-demo-2',
-		numberOfNamespces: 1,
+		numberOfNamespaces: 1,
 		numberOfTenants: 1,
 	},
 	{
 		name: 'amos-demo-3',
-		numberOfNamespces: 1,
+		numberOfNamespaces: 1,
 		numberOfTenants: 1,
 	},
 	{
 		name: 'amos-demo-4',
-		numberOfNamespces: 1,
+		numberOfNamespaces: 1,
 		numberOfTenants: 1,
 	},
 ]

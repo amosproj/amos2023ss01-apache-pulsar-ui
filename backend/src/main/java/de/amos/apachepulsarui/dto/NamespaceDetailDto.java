@@ -8,7 +8,6 @@ package de.amos.apachepulsarui.dto;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.apache.pulsar.common.policies.data.BundlesData;
 import org.apache.pulsar.common.policies.data.RetentionPolicies;
 
@@ -24,9 +23,6 @@ public class NamespaceDetailDto {
 
 	private String tenant;
 
-	@Setter(AccessLevel.PRIVATE)
-	private int amountOfTopics = 0;
-
 	private BundlesData bundlesData;
 
 	private Integer messagesTTL;
@@ -41,7 +37,6 @@ public class NamespaceDetailDto {
 
 	public void setTopics(List<String> topics) {
 		this.topics = topics;
-		this.amountOfTopics = topics.size();
 	}
 
 	/**

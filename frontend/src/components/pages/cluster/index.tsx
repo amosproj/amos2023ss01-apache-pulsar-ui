@@ -44,7 +44,11 @@ const ClusterGroup: React.FC = () => {
 
 	return (
 		<div>
-			<h2 className="dashboard-title">Available Clusters</h2>
+			<h2 className="dashboard-title">Available Clusters ({data.length})</h2>
+			<h3 className="dashboard-subtitle">
+				Tenants: {sumElements(data, 'numberOfTenants')}, Namespaces:{' '}
+				{sumElements(data, 'numberOfNamespaces')}
+			</h3>
 			{loading ? (
 				<div className="main-card"> Loading...</div>
 			) : error ? (
@@ -73,5 +77,10 @@ const ClusterGroup: React.FC = () => {
 		</div>
 	)
 }
+
+const sumElements = (
+	clusters: ClusterInfo[],
+	field: 'numberOfTenants' | 'numberOfNamespaces'
+) => clusters.map((element) => element[field]).reduce((a, b) => a + b, 0)
 
 export default ClusterGroup

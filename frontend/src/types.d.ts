@@ -75,7 +75,7 @@ interface formProps {
 interface ClusterInfo {
 	name: string
 	numberOfTenants: number
-	numberOfNamespces: number
+	numberOfNamespaces: number
 }
 
 interface TenantInfo {
@@ -107,7 +107,6 @@ interface ClusterDetail {
 	name: string
 	tenants: string[]
 	brokers: string[]
-	amountOfTenants: number
 	amountOfBrokers: number
 	brokerServiceUrl: string
 	serviceUrl: string
@@ -116,7 +115,6 @@ interface ClusterDetail {
 interface TenantDetail {
 	name: string
 	namespaces: string[]
-	amountOfNamespaces: number
 	tenantInfo: {
 		adminRoles: string[]
 		allowedClusters: string[]
@@ -127,11 +125,11 @@ interface NamespaceDetail {
 	id: string
 	topics: string[]
 	tenant: string
-	amountOfTopics: number
 	bundlesData: {
 		boundaries: string[]
 		numBundles: number
 	}
+	amountOfTopics: number
 	messagesTTL: number
 	retentionPolicies: {
 		retentionTimeInMinutes: number

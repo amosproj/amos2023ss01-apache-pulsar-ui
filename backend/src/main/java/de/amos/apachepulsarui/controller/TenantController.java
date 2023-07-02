@@ -6,7 +6,7 @@
 
 package de.amos.apachepulsarui.controller;
 
-import de.amos.apachepulsarui.dto.TenantDetailsDto;
+import de.amos.apachepulsarui.dto.TenantDetailDto;
 import de.amos.apachepulsarui.dto.TenantsDto;
 import de.amos.apachepulsarui.service.TenantService;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ public class TenantController {
     private final TenantService tenantService;
 
     @GetMapping()
-    public ResponseEntity<TenantDetailsDto> getTenantDetails(@RequestParam String tenantName) {
+    public ResponseEntity<TenantDetailDto> getTenantDetails(@RequestParam String tenantName) {
         return new ResponseEntity<>(tenantService.getTenantDetails(tenantName), HttpStatus.OK);
     }
 

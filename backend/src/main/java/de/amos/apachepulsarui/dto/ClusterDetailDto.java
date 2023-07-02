@@ -23,9 +23,6 @@ public class ClusterDetailDto {
 	private List<String> brokers;
 
 	@Setter(AccessLevel.PRIVATE)
-	private int amountOfTenants;
-
-	@Setter(AccessLevel.PRIVATE)
 	private int amountOfBrokers;
 
 	private String brokerServiceUrl;

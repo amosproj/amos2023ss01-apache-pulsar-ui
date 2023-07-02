@@ -13,11 +13,14 @@ html {
 	@apply h-full;
 }
 
-p, a {
+p,
+a {
 	hyphens: auto;
 }
 
-h3, h2, span {
+h3,
+h2,
+span {
 	word-break: break-all;
 }
 
