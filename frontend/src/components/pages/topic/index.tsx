@@ -88,7 +88,11 @@ const TopicGroup: React.FC = () => {
 
 	return (
 		<div>
-			<h2 className="dashboard-title">Available Topics</h2>
+			<h2 className="dashboard-title">Available Topics ({data.length})</h2>
+			<h3 className="dashboard-subtitle">
+				Producers: {sumElements(data, 'producers')}, Subscriptions:{' '}
+				{sumElements(data, 'subscriptions')}
+			</h3>
 			{loading ? (
 				<div className="main-card"> Loading...</div>
 			) : error ? (
@@ -112,5 +116,10 @@ const TopicGroup: React.FC = () => {
 		</div>
 	)
 }
+
+const sumElements = (
+	topics: TopicInfo[],
+	field: 'producers' | 'subscriptions'
+) => topics.map((element) => element[field].length).reduce((a, b) => a + b, 0)
 
 export default TopicGroup

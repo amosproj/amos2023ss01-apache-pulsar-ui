@@ -14,7 +14,7 @@ import axios from 'axios'
 import config from '../../../config'
 
 const ClusterView: React.FC<ClusterViewProps> = ({ data }) => {
-	const { name, numberOfNamespces, numberOfTenants }: ClusterInfo = data
+	const { name, numberOfNamespaces, numberOfTenants }: ClusterInfo = data
 	const [expanded, setExpanded] = useState(false)
 	const [details, setDetails] = useState<ClusterDetail>()
 
@@ -58,7 +58,7 @@ const ClusterView: React.FC<ClusterViewProps> = ({ data }) => {
 						</p>
 						<p className="text-black">
 							Number of Namespaces:<br></br>
-							<span className="text-blue">{numberOfNamespces}</span>
+							<span className="text-blue">{numberOfNamespaces}</span>
 						</p>
 					</div>
 				</div>

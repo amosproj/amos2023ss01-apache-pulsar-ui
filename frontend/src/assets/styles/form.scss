@@ -6,7 +6,7 @@
 		font-size: $font-medium;
 		padding: 15px 21px;
 		border-radius: $primary-radius;
-		background: #E5E5E5;
+		background: #e5e5e5;
 
 		input {
 			padding: 0px;
@@ -30,7 +30,8 @@
 	padding: 0px;
 }
 
-.custom-checkbox-wrapper, .custom-radio-wrapper {
+.custom-checkbox-wrapper,
+.custom-radio-wrapper {
 	gap: 16px;
 	align-items: center;
 	margin-bottom: 16px;
@@ -42,7 +43,7 @@
 		width: 16px;
 		height: 16px;
 		cursor: pointer;
-		
+
 		&.custom-radio {
 			border-radius: 100%;
 		}
