@@ -138,10 +138,6 @@ const TenantView: React.FC<TenantViewProps> = ({ data }) => {
 									Namespaces: <span className="text-blue">None</span>
 								</p>
 							)}
-							<p className="text-black">
-								Amount of Namespaces:<br></br>
-								<span className="text-grey">{details?.amountOfNamespaces}</span>
-							</p>
 						</div>
 					</div>
 				</div>

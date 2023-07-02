@@ -89,10 +89,6 @@ const ClusterView: React.FC<ClusterViewProps> = ({ data }) => {
 						</div>
 						<div className="grey-line"></div>
 						<div className="flex card-info">
-							<p className="text-black">
-								Amount of Tenants:<br></br>
-								<span className="text-grey">{details?.amountOfTenants}</span>
-							</p>
 							{details?.tenants.length !== 0 ? (
 								<p className="text-black">
 									Tenants:<br></br>
