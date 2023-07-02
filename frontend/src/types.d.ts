@@ -75,7 +75,7 @@ interface formProps {
 interface ClusterInfo {
 	name: string
 	numberOfTenants: number
-	numberOfNamespces: number
+	numberOfNamespaces: number
 }
 
 interface TenantInfo {

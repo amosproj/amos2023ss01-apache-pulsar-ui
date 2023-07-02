@@ -93,7 +93,7 @@ public class ClusterService {
         List<String> tenats = getTenantsAllowedForCluster(clusterDto.getName());
         long numberOfNamespaces = tenats.stream().mapToLong(t -> namespaceService.getAllOfTenant(t).size()).sum();
         clusterDto.setNumberOfTenants(tenats.size());
-        clusterDto.setNumberOfNamespces(numberOfNamespaces);
+        clusterDto.setNumberOfNamespaces(numberOfNamespaces);
         return clusterDto;
     }
 
