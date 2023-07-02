@@ -3,7 +3,7 @@
 .dashboard-container {
 	margin: auto;
 	max-width: 2100px;
-	
+
 	header {
 		background: $primary-black;
 		position: absolute;
@@ -42,7 +42,7 @@
 		padding-right: 38px;
 		display: flex;
 		flex-direction: column;
-		
+
 		.MuiCollapse-wrapper.MuiCollapse-vertical .MuiAccordionDetails-root {
 			padding: 0px;
 			padding-bottom: 4px;
@@ -69,6 +69,12 @@
 		font-weight: 700;
 		font-size: $font-large;
 		line-height: 39px;
+	}
+
+	.dashboard-subtitle {
+		color: $darker-grey;
+		font-family: $primary-font;
+		font-size: $font-medium;
 		margin-bottom: 34px;
 	}
 

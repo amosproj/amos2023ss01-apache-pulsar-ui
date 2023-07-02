@@ -57,7 +57,11 @@ const TenantGroup: React.FC = () => {
 
 	return (
 		<div>
-			<h2 className="dashboard-title">Available Tenants</h2>
+			<h2 className="dashboard-title">Available Tenants ({data.length})</h2>
+			<h3 className="dashboard-subtitle">
+				Namespaces: {sumElements(data, 'numberOfNamespaces')}, Topics:{' '}
+				{sumElements(data, 'numberOfTopics')}
+			</h3>
 			{loading ? (
 				<div className="main-card"> Loading...</div>
 			) : error ? (
@@ -81,5 +85,10 @@ const TenantGroup: React.FC = () => {
 		</div>
 	)
 }
+
+const sumElements = (
+	tenants: TenantInfo[],
+	field: 'numberOfNamespaces' | 'numberOfTopics'
+) => tenants.map((element) => element[field]).reduce((a, b) => a + b, 0)
 
 export default TenantGroup

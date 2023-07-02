@@ -67,7 +67,8 @@ const NamespaceGroup: React.FC = () => {
 
 	return (
 		<div>
-			<h2 className="dashboard-title">Available Namespaces</h2>
+			<h2 className="dashboard-title">Available Namespaces ({data.length})</h2>
+			<h3 className="dashboard-subtitle">Topics: {sumTopics(data)}</h3>
 			{loading ? (
 				<div className="main-card"> Loading...</div>
 			) : error ? (
@@ -91,5 +92,8 @@ const NamespaceGroup: React.FC = () => {
 		</div>
 	)
 }
+
+const sumTopics = (namespaces: NamespaceInfo[]) =>
+	namespaces.map((element) => element.numberOfTopics).reduce((a, b) => a + b, 0)
 
 export default NamespaceGroup
