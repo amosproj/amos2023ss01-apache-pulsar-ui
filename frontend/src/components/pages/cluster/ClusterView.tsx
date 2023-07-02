@@ -64,7 +64,7 @@ const ClusterView: React.FC<ClusterViewProps> = ({ data }) => {
 						</p>
 						<p className="text-black">
 							Number of Namespaces:<br></br>
-							<span className="text-grey">{numberOfNamespces}</span>
+							<span className="text-grey">{numberOfNamespaces}</span>
 						</p>
 					</div>
 				</div>
@@ -89,30 +89,27 @@ const ClusterView: React.FC<ClusterViewProps> = ({ data }) => {
 						</div>
 						<div className="grey-line"></div>
 						<div className="flex card-info">
+							<p className="text-black">
+								Amount of Tenants:<br></br>
+								<span className="text-grey">{details?.amountOfTenants}</span>
+							</p>
+							{details?.tenants.length !== 0 ? (
 								<p className="text-black">
-									Amount of Tenants:<br></br>
-									<span className="text-grey">{details?.amountOfTenants}</span>
+									Tenants:<br></br>
+									{details?.tenants.map((item: string, index: number) => (
+										<span key={index} className="text-blue">
+											<a href="#" onClick={() => handleDrillDownToTenant(item)}>
+												{item}
+											</a>
+											{addCommaSeparator(index, details.tenants.length)}
+										</span>
+									))}
 								</p>
-								{details?.tenants.length !== 0 ? (
-									<p className="text-black">
-										Tenants:<br></br>
-										{details?.tenants.map((item: string, index: number) => (
-											<span key={index} className="text-blue">
-												<a
-													href="#"
-													onClick={() => handleDrillDownToTenant(item)}
-												>
-													{item}
-												</a>
-												{addCommaSeparator(index, details.tenants.length)}
-											</span>
-										))}
-									</p>
-								) : (
-									<p className="text-black">
-										Tenants: <span className="text-grey">None</span>
-									</p>
-								)}
+							) : (
+								<p className="text-black">
+									Tenants: <span className="text-grey">None</span>
+								</p>
+							)}
 						</div>
 						<div className="grey-line"></div>
 						<div className="flex card-info">
