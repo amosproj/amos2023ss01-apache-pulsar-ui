@@ -132,6 +132,11 @@ const MessageModal: React.FC<MessageModalProps> = ({ topic }) => {
 							<div className="main-card"> Loading...</div>
 						) : error ? (
 							<div>Error: {error}</div>
+						) : data.length === 0 ? (
+							<div className="main-card">
+								{' '}
+								No messages found for topic &ldquo;{topic}&ldquo;
+							</div>
 						) : (
 							<div id="message-list">
 								<Masonry
