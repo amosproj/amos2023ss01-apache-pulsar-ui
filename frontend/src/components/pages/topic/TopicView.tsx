@@ -9,7 +9,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import ChevronRight from '@mui/icons-material/ChevronRight'
 import { useNavigate } from 'react-router-dom'
-import { addFilterByDrillDown } from '../../../store/filterSlice'
+import { addFilterByDrilling } from '../../../store/filterSlice'
 import { useAppDispatch } from '../../../store/hooks'
 import axios from 'axios'
 import SubscriptionModal from '../../modals/SubscriptionModal'
@@ -39,10 +39,17 @@ const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 			})
 	}
 	const handleDrillDown = () => {
-		dispatch(addFilterByDrillDown({ filterName: 'topic', id: name }))
+		dispatch(addFilterByDrilling({ filterName: 'topic', id: name }))
 		navigate('/message')
 	}
-
+	const handleDrillUpToNamespace = () => {
+		dispatch(addFilterByDrilling({ filterName: 'namespace', id: namespace }))
+		navigate('/namespace')
+	}
+	const handleDrillUpToTenant = () => {
+		dispatch(addFilterByDrilling({ filterName: 'tenant', id: tenant }))
+		navigate('/tenant')
+	}
 	const handleExpand = () => {
 		if (!details) fetchData()
 		setExpanded(!expanded)
@@ -56,11 +63,19 @@ const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 					<div className="flex card-info">
 						<p className="text-black">
 							Tenant:<br></br>
-							<span className="text-blue">{tenant ? tenant : 'N/A'}</span>
+							<span className="text-blue">
+								<a href="#" onClick={handleDrillUpToTenant}>
+									{tenant ? tenant : 'N/A'}
+								</a>
+							</span>
 						</p>
 						<p className="text-black">
 							Namespace:<br></br>
-							<span className="text-blue">{namespace ? namespace : 'N/A'}</span>
+							<span className="text-blue">
+								<a href="#" onClick={handleDrillUpToNamespace}>
+									{namespace ? namespace : 'N/A'}
+								</a>
+							</span>
 						</p>
 						<p className="text-black">
 							Producers:<br></br>
@@ -75,7 +90,7 @@ const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 									/>
 								))
 							) : (
-								<span className="text-blue">None</span>
+								<span className="text-grey">None</span>
 							)}
 						</p>
 						<p className="text-black">
@@ -89,7 +104,7 @@ const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 									/>
 								))
 							) : (
-								<span className="text-blue">None</span>
+								<span className="text-grey">None</span>
 							)}
 						</p>
 					</div>
@@ -102,7 +117,7 @@ const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 						<div className="flex card-info">
 							<p className="text-black">
 								Owner Broker:<br></br>
-								<span className="text-blue">
+								<span className="text-grey">
 									{details?.ownerBroker ? details.ownerBroker : 'N/A'}
 								</span>
 							</p>
@@ -111,7 +126,7 @@ const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 						<div className="flex card-info">
 							<p className="text-black">
 								Produced messages:<br></br>
-								<span className="text-blue">
+								<span className="text-grey">
 									{details?.topicStatsDto.producedMesages
 										? details?.topicStatsDto.producedMesages
 										: 0}
@@ -119,7 +134,7 @@ const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 							</p>
 							<p className="text-black">
 								Consumed messages:<br></br>
-								<span className="text-blue">
+								<span className="text-grey">
 									{details?.topicStatsDto.consumedMessages
 										? details?.topicStatsDto.consumedMessages
 										: 0}
@@ -127,7 +142,7 @@ const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 							</p>
 							<p className="text-black">
 								Average message size:<br></br>
-								<span className="text-blue">
+								<span className="text-grey">
 									{details?.topicStatsDto?.averageMessageSize
 										? details.topicStatsDto.averageMessageSize
 										: 0}{' '}
@@ -136,7 +151,7 @@ const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 							</p>
 							<p className="text-black">
 								Storage size:<br></br>
-								<span className="text-blue">
+								<span className="text-grey">
 									{details?.topicStatsDto?.storageSize
 										? details.topicStatsDto.storageSize
 										: 0}{' '}
@@ -151,29 +166,29 @@ const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 									<div className="flex card-info">
 										<p className="text-black">
 											Schema:<br></br>
-											<span className="text-blue">{schema.name}</span>
+											<span className="text-grey">{schema.name}</span>
 										</p>
 										<p className="text-black">
 											Version:<br></br>
-											<span className="text-blue">{schema.version}</span>
+											<span className="text-grey">{schema.version}</span>
 										</p>
 										<p className="text-black">
 											Type:<br></br>
-											<span className="text-blue">{schema.type}</span>
+											<span className="text-grey">{schema.type}</span>
 										</p>
 										<p className="text-black">
 											Props:<br></br>
-											<span className="text-blue">
+											<span className="text-grey">
 												{schema.properties.additionalProp1
 													? schema.properties.additionalProp1
 													: 'N/A'}
 											</span>
-											<span className="text-blue">
+											<span className="text-grey">
 												{schema.properties.additionalProp2
 													? ', ' + schema.properties.additionalProp2
 													: ''}
 											</span>
-											<span className="text-blue">
+											<span className="text-grey">
 												{schema.properties.additionalProp3
 													? ', ' + schema.properties.additionalProp3
 													: ''}
@@ -193,7 +208,7 @@ const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 										</div>
 										<p className="text-black timestamp-wrapper">
 											Timestamp:<br></br>
-											<span className="text-blue">{schema.timestamp}</span>
+											<span className="text-grey">{schema.timestamp}</span>
 										</p>
 									</div>
 								</div>
@@ -204,7 +219,7 @@ const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 								<div className="flex card-info">
 									<p className="text-black">
 										Schema:<br></br>
-										<span className="text-blue">N/A</span>
+										<span className="text-grey">N/A</span>
 									</p>
 								</div>
 							</>

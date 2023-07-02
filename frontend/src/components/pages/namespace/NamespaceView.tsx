@@ -8,7 +8,10 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import ChevronRight from '@mui/icons-material/ChevronRight'
 import { Collapse, CardActions, Button } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
-import { addFilterByDrillDown } from '../../../store/filterSlice'
+import {
+	addFilterByDrilling,
+	resetAllFilters,
+} from '../../../store/filterSlice'
 import { useAppDispatch } from '../../../store/hooks'
 import axios from 'axios'
 import { addCommaSeparator } from '../../../Helpers'
@@ -40,7 +43,16 @@ const NamespaceView: React.FC<NamespaceViewProps> = ({ data }) => {
 	}
 
 	const handleDrillDown = () => {
-		dispatch(addFilterByDrillDown({ filterName: 'namespace', id: id }))
+		dispatch(addFilterByDrilling({ filterName: 'namespace', id: id }))
+		navigate('/topic')
+	}
+	const handleDrillUp = () => {
+		//dispatch(resetAllFilters())
+		dispatch(addFilterByDrilling({ filterName: 'tenant', id: tenant }))
+		navigate('/tenant')
+	}
+	const handleDrillDownToTopic = (itemId: string) => {
+		dispatch(addFilterByDrilling({ filterName: 'topic', id: itemId }))
 		navigate('/topic')
 	}
 	const handleExpand = () => {
@@ -56,11 +68,15 @@ const NamespaceView: React.FC<NamespaceViewProps> = ({ data }) => {
 					<div className="flex card-info">
 						<p className="text-black">
 							Tenant:<br></br>
-							<span className="text-blue">{tenant ? tenant : 'N/A'}</span>
+							<span className="text-blue">
+								<a href="#" onClick={handleDrillUp}>
+									{tenant ? tenant : 'N/A'}
+								</a>
+							</span>
 						</p>
 						<p className="text-black">
 							Number of Topics:<br></br>
-							<span className="text-blue">{numberOfTopics}</span>
+							<span className="text-grey">{numberOfTopics}</span>
 						</p>
 					</div>
 				</div>
@@ -74,7 +90,7 @@ const NamespaceView: React.FC<NamespaceViewProps> = ({ data }) => {
 								Boundaries:<br></br>
 								{details?.bundlesData.boundaries.map(
 									(item: string, index: number) => (
-										<span key={index} className="text-blue">
+										<span key={index} className="text-grey">
 											{item}
 											{addCommaSeparator(
 												index,
@@ -86,7 +102,7 @@ const NamespaceView: React.FC<NamespaceViewProps> = ({ data }) => {
 							</p>
 							<p className="text-black">
 								Bundles:<br></br>
-								<span className="text-blue">
+								<span className="text-grey">
 									{details?.bundlesData.numBundles
 										? details.bundlesData.numBundles
 										: 0}
@@ -94,13 +110,13 @@ const NamespaceView: React.FC<NamespaceViewProps> = ({ data }) => {
 							</p>
 							<p className="text-black">
 								Message TTL:<br></br>
-								<span className="text-blue">
+								<span className="text-grey">
 									{details?.messagesTTL ? details?.messagesTTL : 'None'}
 								</span>
 							</p>
 							<p className="text-black">
 								Retention time:<br></br>
-								<span className="text-blue">
+								<span className="text-grey">
 									{details?.retentionPolicies?.retentionTimeInMinutes
 										? details?.retentionPolicies.retentionTimeInMinutes +
 										  ' minutes'
@@ -109,7 +125,7 @@ const NamespaceView: React.FC<NamespaceViewProps> = ({ data }) => {
 							</p>
 							<p className="text-black">
 								Retention size:<br></br>
-								<span className="text-blue">
+								<span className="text-grey">
 									{details?.retentionPolicies?.retentionSizeInMB
 										? details?.retentionPolicies.retentionSizeInMB + ' MB'
 										: 'None'}
@@ -125,7 +141,12 @@ const NamespaceView: React.FC<NamespaceViewProps> = ({ data }) => {
 										{details?.topics.map((item: string, index: number) => (
 											<li key={index}>
 												<span key={index} className="text-blue">
-													- {item}{' '}
+													<a
+														href="#"
+														onClick={() => handleDrillDownToTopic(item)}
+													>
+														- {item}{' '}
+													</a>
 												</span>
 											</li>
 										))}
@@ -133,9 +154,15 @@ const NamespaceView: React.FC<NamespaceViewProps> = ({ data }) => {
 								</div>
 							) : (
 								<p className="text-black">
-									Topics: <span className="text-blue">None</span>
+									Topics: <span className="text-grey">None</span>
 								</p>
 							)}
+							<p className="text-black">
+								Amount of Topics:<br></br>
+								<span className="text-grey">
+									{details?.amountOfTopics ? details.amountOfTopics : 0}
+								</span>
+							</p>
 						</div>
 					</div>
 				</div>

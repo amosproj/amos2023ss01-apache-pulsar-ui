@@ -23,25 +23,25 @@ const MessageView: React.FC<MessageViewProps> = ({ data }) => {
 				<div className="flex flex-col card-col">
 					<p className="text-black">
 						Cluster:{' '}
-						<span className="text-blue">
+						<span className="text-grey">
 							{data?.cluster ? data.cluster : 'N/A'}
 						</span>
 					</p>
 					<p className="text-black">
 						Tenant:{' '}
-						<span className="text-blue">
+						<span className="text-grey">
 							{data?.tenant ? data.tenant : 'N/A'}
 						</span>
 					</p>
 					<p className="text-black">
 						Namespace:{' '}
-						<span className="text-blue">
+						<span className="text-grey">
 							{data?.namespace ? data.namespace : 'N/A'}
 						</span>
 					</p>
 					<p className="text-black">
 						Topic:{' '}
-						<span className="text-blue">
+						<span className="text-grey">
 							{data?.topic ? data.topic : 'N/A'}
 						</span>
 					</p>
@@ -54,17 +54,17 @@ const MessageView: React.FC<MessageViewProps> = ({ data }) => {
 						<div className="flex flex-col card-info">
 							<p className="text-black">
 								Schema:{' '}
-								<span className="text-blue">
+								<span className="text-grey">
 									{data?.schema ? data.schema : 'N/A'}
 								</span>
 							</p>
 							<p className="text-black">
 								Message ID:{' '}
-								<span className="text-blue">{data?.id ? data.id : 'N/A'}</span>
+								<span className="text-grey">{data?.id ? data.id : 'N/A'}</span>
 							</p>
 							<p className="text-black">
 								Publish time:{' '}
-								<span className="text-blue">
+								<span className="text-grey">
 									{data?.publishTime ? data.publishTime : 'N/A'}
 								</span>
 							</p>

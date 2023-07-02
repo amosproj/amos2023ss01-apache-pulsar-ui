@@ -8,7 +8,7 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import ChevronRight from '@mui/icons-material/ChevronRight'
 import { Collapse, CardActions, Button } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
-import { addFilterByDrillDown } from '../../../store/filterSlice'
+import { addFilterByDrilling } from '../../../store/filterSlice'
 import { useAppDispatch } from '../../../store/hooks'
 import axios from 'axios'
 import { addCommaSeparator } from '../../../Helpers'
@@ -41,7 +41,15 @@ const TenantView: React.FC<TenantViewProps> = ({ data }) => {
 	}
 
 	const handleDrillDown = () => {
-		dispatch(addFilterByDrillDown({ filterName: 'tenant', id: name }))
+		dispatch(addFilterByDrilling({ filterName: 'tenant', id: name }))
+		navigate('/namespace')
+	}
+	const handleDrillUp = (itemId: string) => {
+		dispatch(addFilterByDrilling({ filterName: 'cluster', id: itemId }))
+		navigate('/cluster')
+	}
+	const handleDrillDownToNamespace = (itemId: string) => {
+		dispatch(addFilterByDrilling({ filterName: 'namespace', id: itemId }))
 		navigate('/namespace')
 	}
 	const handleExpand = () => {
@@ -57,7 +65,7 @@ const TenantView: React.FC<TenantViewProps> = ({ data }) => {
 					<div className="flex card-info">
 						<p className="text-black">
 							Admin Roles:<br></br>
-							<span className="text-blue">
+							<span className="text-grey">
 								{tenantInfo.adminRoles && tenantInfo.adminRoles.length > 0 ? (
 									tenantInfo.adminRoles.map((item: string, index: number) => (
 										<span key={index}>
@@ -81,7 +89,9 @@ const TenantView: React.FC<TenantViewProps> = ({ data }) => {
 									tenantInfo.allowedClusters.map(
 										(item: string, index: number) => (
 											<span key={index}>
-												{item}
+												<a href="#" onClick={() => handleDrillUp(item)}>
+													{item}
+												</a>
 												{addCommaSeparator(
 													index,
 													tenantInfo.allowedClusters.length
@@ -93,11 +103,11 @@ const TenantView: React.FC<TenantViewProps> = ({ data }) => {
 						</p>
 						<p className="text-black">
 							Number of Namespaces:<br></br>
-							<span className="text-blue">{numberOfNamespaces}</span>
+							<span className="text-grey">{numberOfNamespaces}</span>
 						</p>
 						<p className="text-black">
 							Number of Topics:<br></br>
-							<span className="text-blue">{numberOfTopics}</span>
+							<span className="text-grey">{numberOfTopics}</span>
 						</p>
 					</div>
 					<div className="grey-line"></div>
@@ -109,23 +119,29 @@ const TenantView: React.FC<TenantViewProps> = ({ data }) => {
 					<div className="flex flex-col card-col">
 						<div className="flex card-info">
 							{details?.namespaces.length !== 0 ? (
-								<div className="items-list">
-									<p className="text-black">Namespaces:</p>
-									<ul>
-										{details?.namespaces.map((item: string, index: number) => (
-											<li key={index}>
-												<span key={index} className="text-blue">
-													- {item}{' '}
-												</span>
-											</li>
-										))}
-									</ul>
-								</div>
+								<p className="text-black">
+									Namespaces:<br></br>
+									{details?.namespaces.map((item: string, index: number) => (
+										<span key={index} className="text-blue">
+											<a
+												href="#"
+												onClick={() => handleDrillDownToNamespace(item)}
+											>
+												{item}
+											</a>
+											{addCommaSeparator(index, details.namespaces.length)}
+										</span>
+									))}
+								</p>
 							) : (
 								<p className="text-black">
 									Namespaces: <span className="text-blue">None</span>
 								</p>
 							)}
+							<p className="text-black">
+								Amount of Namespaces:<br></br>
+								<span className="text-grey">{details?.amountOfNamespaces}</span>
+							</p>
 						</div>
 					</div>
 				</div>
