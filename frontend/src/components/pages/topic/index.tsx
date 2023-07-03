@@ -17,6 +17,8 @@ import TopicView from './TopicView'
 import { selectTrigger } from '../requestTriggerSlice'
 import config from '../../../config'
 import { Masonry } from 'react-plock'
+import { Pagination } from '@mui/material'
+import { Box } from '@mui/system'
 
 export interface ResponseTopic {
 	topics: TopicInfo[]
@@ -40,6 +42,18 @@ const TopicGroup: React.FC = () => {
 	const topicFilter = useAppSelector(selectTopic)
 	const baseURL = config.backendUrl + '/api/topic/all'
 	const trigger = useAppSelector(selectTrigger)
+
+	const [page, setPage] = useState(1) // Added state variable for current page
+	const itemsPerPage = 20 // Set number of items per page
+
+	// ...rest of the functions...
+
+	const handleChangePage = (
+		event: React.ChangeEvent<unknown>,
+		value: number
+	) => {
+		setPage(value) // Set the current page
+	}
 
 	// Sends get request to /cluster/all for general information everytime the trigger value changes
 	useEffect(() => {
@@ -98,20 +112,37 @@ const TopicGroup: React.FC = () => {
 			) : error ? (
 				<div>Error: {error}</div>
 			) : (
-				<Masonry
-					className="main-card-wrapper"
-					items={data}
-					config={{
-						columns: [1, 2],
-						gap: [34, 34],
-						media: [1619, 1620],
-					}}
-					render={(topic, index) => (
-						<div className="main-card" key={index}>
-							<TopicView key={index} data={topic} />
-						</div>
-					)}
-				/>
+				<>
+					<Masonry
+						className="main-card-wrapper"
+						// Slicing the items array based on the current page
+						items={data.slice((page - 1) * itemsPerPage, page * itemsPerPage)}
+						config={{
+							columns: [1, 2],
+							gap: [34, 34],
+							media: [1619, 1620],
+						}}
+						render={(topic, index) => (
+							<div
+								className={
+									data.length === 1 ? 'single-card main-card' : 'main-card'
+								}
+								key={index}
+							>
+								<TopicView key={index} data={topic} />
+							</div>
+						)}
+					/>
+					<Box display="flex" justifyContent="center" marginTop={2}>
+						{/* Added Pagination component */}
+						<Pagination
+							count={Math.ceil(data.length / itemsPerPage)} // Calculate the number of pages
+							page={page}
+							onChange={handleChangePage}
+							shape="rounded"
+						/>
+					</Box>
+				</>
 			)}
 		</div>
 	)
