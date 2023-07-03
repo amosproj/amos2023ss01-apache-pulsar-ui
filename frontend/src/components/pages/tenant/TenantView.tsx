@@ -8,7 +8,10 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import ChevronRight from '@mui/icons-material/ChevronRight'
 import { Collapse, CardActions, Button } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
-import { addFilterByDrilling } from '../../../store/filterSlice'
+import {
+	addFilterByDrilling,
+	resetAllFilters,
+} from '../../../store/filterSlice'
 import { useAppDispatch } from '../../../store/hooks'
 import axios from 'axios'
 import { addCommaSeparator } from '../../../Helpers'
@@ -45,6 +48,7 @@ const TenantView: React.FC<TenantViewProps> = ({ data }) => {
 		navigate('/namespace')
 	}
 	const handleDrillUp = (itemId: string) => {
+		dispatch(resetAllFilters())
 		dispatch(addFilterByDrilling({ filterName: 'cluster', id: itemId }))
 		navigate('/cluster')
 	}
