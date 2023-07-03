@@ -34,3 +34,28 @@ span {
 .dashboard-container {
 	margin: 64px;
 }
+
+.close-modal-button.MuiButtonBase-root.MuiIconButton-root {
+	position: absolute;
+	right: 34px;
+	top: 34px;
+	background: $gradient-blue;
+	color: $primary-white;
+	padding: 10px;
+	z-index: 1;
+}
+
+.custom-scrollbar-wrapper {
+	position: absolute;
+	width: 10px;
+	height: 100%;
+	right: 0;
+	top: 0;
+	background-color: $primary-white;
+	.custom-scrollbar {
+		position: relative;
+		top: 0;
+		width: 100%;
+		background-color: $primary-blue;
+	}
+}

@@ -17,11 +17,13 @@ import config from '../../config'
 interface ConsumerAccordionProps {
 	consumerName: string | undefined
 	topicName: string
+	isActive: boolean
 }
 
 const ConsumerAccordion: React.FC<ConsumerAccordionProps> = ({
 	consumerName,
 	topicName,
+	isActive,
 }) => {
 	const [consumerDetails, setConsumerDetails] = useState<ConsumerDetails>()
 	const [isExpanded, setExpanded] = useState<boolean>(false)
@@ -53,9 +55,11 @@ const ConsumerAccordion: React.FC<ConsumerAccordionProps> = ({
 			})
 	}
 
-	return consumerName ? (
+	return (
 		<div>
-			<p style={{ fontWeight: '600' }}>Consumer: </p>
+			<p style={{ fontWeight: '600' }} className="modal-info">
+				{isActive ? 'Active consumer:' : 'Inactive consumers:'}
+			</p>
 			<Accordion expanded={isExpanded} onChange={handleAccordionChange}>
 				<AccordionSummary
 					expandIcon={<ExpandMoreIcon />}
@@ -104,11 +108,6 @@ const ConsumerAccordion: React.FC<ConsumerAccordionProps> = ({
 					/>
 				</AccordionDetails>
 			</Accordion>
-		</div>
-	) : (
-		<div className="modal-info">
-			<p className="title">Consumer: </p>
-			<p className="detail">No active consumer</p>
 		</div>
 	)
 }

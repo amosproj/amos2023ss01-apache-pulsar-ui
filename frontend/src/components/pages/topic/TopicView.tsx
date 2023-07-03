@@ -14,6 +14,7 @@ import { useAppDispatch } from '../../../store/hooks'
 import axios from 'axios'
 import SubscriptionModal from '../../modals/SubscriptionModal'
 import config from '../../../config'
+import MessageModal from '../../modals/MessageModal'
 
 const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 	const { name, tenant, namespace, producers, subscriptions }: TopicInfo = data
@@ -115,7 +116,7 @@ const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 				<div className="flex card-inner">
 					<div className="flex flex-col card-col">
 						<div className="flex card-info">
-							<p className="text-black">
+							<p className="text-black timestamp-wrapper">
 								Owner Broker:<br></br>
 								<span className="text-grey">
 									{details?.ownerBroker ? details.ownerBroker : 'N/A'}
@@ -249,13 +250,7 @@ const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 							Show details
 						</Button>
 					)}
-					<Button
-						endIcon={<ChevronRight />}
-						variant={'contained'}
-						onClick={handleDrillDown}
-					>
-						Drill down
-					</Button>
+					<MessageModal topic={name} />
 				</CardActions>
 			</div>
 		</div>

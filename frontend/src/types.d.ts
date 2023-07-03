@@ -100,6 +100,7 @@ interface TopicInfo {
 	tenant: string
 	subscriptions: string[]
 	producers: string[]
+	messagesSendToTopic: number
 }
 
 interface ClusterDetail {
@@ -128,6 +129,7 @@ interface NamespaceDetail {
 		boundaries: string[]
 		numBundles: number
 	}
+	amountOfTopics: number
 	messagesTTL: number
 	retentionPolicies: {
 		retentionTimeInMinutes: number
@@ -153,18 +155,18 @@ interface TopicDetail {
 	}
 	producedMessages: number
 	consumedMessages: number
-	messagesDto: [
-		{
-			messageId: string
-			topic: string
-			payload: string
-			schema: string
-			namespace: string
-			tenant: string
-			publishTime: number
-			producer: string
-		}
-	]
+	// messagesDto: [
+	// 	{
+	// 		messageId: string
+	// 		topic: string
+	// 		payload: string
+	// 		schema: string
+	// 		namespace: string
+	// 		tenant: string
+	// 		publishTime: number
+	// 		producer: string
+	// 	}
+	// ]
 	schemaInfos: SchemaInfo[]
 	persistent: boolean
 }
@@ -239,7 +241,17 @@ interface TopicViewProps {
 }
 
 interface MessageViewProps {
-	data: SampleMessage
+	data: MessageInfo
+}
+interface MessageInfo {
+	messageId: string
+	topic: string
+	payload: string
+	schema: string
+	namespace: string
+	tenant: string
+	publishTime: number
+	producer: string
 }
 
 interface CustomFilterProps {

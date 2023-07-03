@@ -3,11 +3,12 @@
 // SPDX-FileCopyrightText: 2019 Georg Schwarz <georg. schwarz@fau.de>
 
 import React, { useState } from 'react'
-import { Modal, Box, Typography, IconButton } from '@mui/material'
+import { Modal, Box, Typography, IconButton, Divider } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import axios from 'axios'
 import ModalInfo from './ModalInfo'
 import config from '../../config'
+import { convertTimestampToDateTime } from '../../Helpers'
 
 /**
 The following information is shown in the producer information popup:
@@ -26,11 +27,18 @@ interface ProducerModalProps {
 	}
 }
 
+interface MessageResponse {
+	messages: MessageInfo[]
+}
+
 const ProducerModal: React.FC<ProducerModalProps> = ({ producer }) => {
 	const { producerName, topicName } = producer
 
 	const [open, setOpen] = useState(false)
 	const [producerDetails, setProducerDetails] = useState<ProducerDetails>()
+	const [messages, setMessages] = useState<MessageInfo[]>([])
+	const [producerError, setProducerError] = useState<string | null>(null)
+	const [messagesError, setMessagesError] = useState<string | null>(null)
 
 	const handleOpen = () => {
 		fetchData()
@@ -41,20 +49,49 @@ const ProducerModal: React.FC<ProducerModalProps> = ({ producer }) => {
 		setOpen(false)
 	}
 
-	const fetchData = () => {
+	/**
+	 * Fetch producer detail data from producer endpoint.
+	 */
+	const fetchProducerDetail = () => {
 		const url = config.backendUrl + `/api/topic/producer/${producerName}`
-
-		// Sending GET request
 		const params = {
 			topic: topicName,
 		}
-		axios
-			.get<ProducerDetails>(url, { params })
+		return axios.get<ProducerDetails>(url, { params })
+	}
+
+	/**
+	 * Fetch message information of current producer displayed in this modal.
+	 * @param numMessages number of messages to fetch from endpoint.
+	 */
+	const fetchProducerMessages = (numMessages = 10) => {
+		const url = config.backendUrl + '/api/messages/'
+		const params = {
+			topic: topicName,
+			numMessages,
+			producers: producerName,
+		}
+		return axios.get<MessageResponse>(url, { params })
+	}
+
+	/**
+	 * Fetch all data and set data.
+	 */
+	const fetchData = () => {
+		fetchProducerMessages()
+			.then((response) => {
+				setMessages(response.data.messages)
+			})
+			.catch((error) => {
+				setProducerError(error.message)
+			})
+
+		fetchProducerDetail()
 			.then((response) => {
 				setProducerDetails(response.data)
 			})
 			.catch((error) => {
-				console.log(error)
+				setMessagesError(error.message)
 			})
 	}
 
@@ -77,11 +114,11 @@ const ProducerModal: React.FC<ProducerModalProps> = ({ producer }) => {
 						bgcolor: 'background.paper',
 						boxShadow: 24,
 						p: 4,
-						maxWidth: 500,
+						maxWidth: 600,
 						width: '100%',
 						maxHeight: '80vh',
 						overflowY: 'auto',
-						borderRadius: '20px',
+						borderRadius: '25px',
 					}}
 				>
 					<IconButton
@@ -96,26 +133,59 @@ const ProducerModal: React.FC<ProducerModalProps> = ({ producer }) => {
 					>
 						<CloseIcon />
 					</IconButton>
-					<Typography variant="h5" gutterBottom>
-						Producer: {producer.producerName}
-					</Typography>
-					<ModalInfo title={'Producer ID'} detailedInfo={producerDetails?.id} />
-					<ModalInfo
-						title={'Address'}
-						detailedInfo={producerDetails?.address}
-					/>
-					<ModalInfo
-						title={'Average message size'}
-						detailedInfo={producerDetails?.averageMsgSize}
-					/>
-					<ModalInfo
-						title={'Client version'}
-						detailedInfo={producerDetails?.clientVersion}
-					/>
-					<ModalInfo
-						title={'Connected since'}
-						detailedInfo={producerDetails?.connectedSince}
-					/>
+					{producerError || (
+						<>
+							<Typography variant="h5" gutterBottom>
+								Producer: {producer.producerName}
+							</Typography>
+							<ModalInfo
+								title={'Producer ID'}
+								detailedInfo={producerDetails?.id}
+							/>
+							<ModalInfo
+								title={'Address'}
+								detailedInfo={producerDetails?.address}
+							/>
+							<ModalInfo
+								title={'Average message size'}
+								detailedInfo={producerDetails?.averageMsgSize}
+							/>
+							<ModalInfo
+								title={'Client version'}
+								detailedInfo={producerDetails?.clientVersion}
+							/>
+							<ModalInfo
+								title={'Connected since'}
+								detailedInfo={producerDetails?.connectedSince}
+							/>
+						</>
+					)}
+					{messagesError || messages.length > 0 ? (
+						<>
+							<ModalInfo title="Messages(10 latest)" detailedInfo=" " />
+							{messages.map((message, index) => {
+								return (
+									<>
+										<div key={index} className="modal-info">
+											<p>
+												Message ID:{' '}
+												<span className="detail">{message.messageId}</span>
+											</p>
+											<p>
+												Publish time:{' '}
+												<span className="detail">
+													{convertTimestampToDateTime(message.publishTime)}
+												</span>
+											</p>
+										</div>
+										<Divider />
+									</>
+								)
+							})}
+						</>
+					) : (
+						<ModalInfo title="Messages" detailedInfo="" />
+					)}
 				</Box>
 			</Modal>
 		</>
