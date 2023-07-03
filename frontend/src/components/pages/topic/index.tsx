@@ -57,6 +57,7 @@ const TopicGroup: React.FC = () => {
 
 	// Sends get request to /cluster/all for general information everytime the trigger value changes
 	useEffect(() => {
+		setPage(1)
 		// Query parameters
 		const clusterQuery = clusterFilter
 			.map((cluster) => `clusters=${cluster}`)
