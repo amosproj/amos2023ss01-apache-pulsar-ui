@@ -226,7 +226,6 @@ const filterSlice = createSlice({
 			state.producer = initialState.producer
 			state.subscription = initialState.subscription
 			state.message = initialState.message
-			console.log('done')
 		},
 		// the filtering of lower views does not apply to higher views,
 		// those filters shall be reset when the user "goes up".

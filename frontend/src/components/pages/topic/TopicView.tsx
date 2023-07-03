@@ -9,7 +9,10 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import ChevronRight from '@mui/icons-material/ChevronRight'
 import { useNavigate } from 'react-router-dom'
-import { addFilterByDrilling } from '../../../store/filterSlice'
+import {
+	addFilterByDrilling,
+	resetAllFilters,
+} from '../../../store/filterSlice'
 import { useAppDispatch } from '../../../store/hooks'
 import axios from 'axios'
 import SubscriptionModal from '../../modals/SubscriptionModal'
@@ -39,15 +42,17 @@ const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 				console.log(error)
 			})
 	}
-	const handleDrillDown = () => {
+	/*const handleDrillDown = () => {
 		dispatch(addFilterByDrilling({ filterName: 'topic', id: name }))
 		navigate('/message')
-	}
+	}*/
 	const handleDrillUpToNamespace = () => {
+		dispatch(resetAllFilters())
 		dispatch(addFilterByDrilling({ filterName: 'namespace', id: namespace }))
 		navigate('/namespace')
 	}
 	const handleDrillUpToTenant = () => {
+		dispatch(resetAllFilters())
 		dispatch(addFilterByDrilling({ filterName: 'tenant', id: tenant }))
 		navigate('/tenant')
 	}

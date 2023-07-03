@@ -47,7 +47,7 @@ const NamespaceView: React.FC<NamespaceViewProps> = ({ data }) => {
 		navigate('/topic')
 	}
 	const handleDrillUp = () => {
-		//dispatch(resetAllFilters())
+		dispatch(resetAllFilters())
 		dispatch(addFilterByDrilling({ filterName: 'tenant', id: tenant }))
 		navigate('/tenant')
 	}
