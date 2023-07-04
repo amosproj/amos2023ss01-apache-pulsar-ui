@@ -90,20 +90,21 @@ const ClusterView: React.FC<ClusterViewProps> = ({ data }) => {
 						<div className="grey-line"></div>
 						<div className="flex card-info">
 							{details?.tenants.length !== 0 ? (
-								<p className="text-black">
-									Tenants:<br></br>
-									{details?.tenants.map((item: string, index: number) => (
-										<span key={index} className="text-blue">
-											<a href="#" onClick={() => handleDrillDownToTenant(item)}>
-												{item}
-											</a>
-											{addCommaSeparator(index, details.tenants.length)}
-										</span>
-									))}
-								</p>
+								<div className="items-list">
+									<p className="text-black">Tenants:</p>
+									<ul>
+										{details?.tenants.map((item: string, index: number) => (
+											<li key={index}>
+												<span key={index} className="text-blue">
+													- {item}{' '}
+												</span>
+											</li>
+										))}
+									</ul>
+								</div>
 							) : (
 								<p className="text-black">
-									Tenants: <span className="text-grey">None</span>
+									Tenants: <span className="text-blue">None</span>
 								</p>
 							)}
 						</div>

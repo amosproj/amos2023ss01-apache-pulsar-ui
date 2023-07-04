@@ -123,20 +123,18 @@ const TenantView: React.FC<TenantViewProps> = ({ data }) => {
 					<div className="flex flex-col card-col">
 						<div className="flex card-info">
 							{details?.namespaces.length !== 0 ? (
-								<p className="text-black">
-									Namespaces:<br></br>
-									{details?.namespaces.map((item: string, index: number) => (
-										<span key={index} className="text-blue">
-											<a
-												href="#"
-												onClick={() => handleDrillDownToNamespace(item)}
-											>
-												{item}
-											</a>
-											{addCommaSeparator(index, details.namespaces.length)}
-										</span>
-									))}
-								</p>
+								<div className="items-list">
+									<p className="text-black">Namespaces:</p>
+									<ul>
+										{details?.namespaces.map((item: string, index: number) => (
+											<li key={index}>
+												<span key={index} className="text-blue">
+													- {item}{' '}
+												</span>
+											</li>
+										))}
+									</ul>
+								</div>
 							) : (
 								<p className="text-black">
 									Namespaces: <span className="text-blue">None</span>
