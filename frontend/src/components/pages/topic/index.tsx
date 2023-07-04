@@ -43,10 +43,8 @@ const TopicGroup: React.FC = () => {
 	const baseURL = config.backendUrl + '/api/topic/all'
 	const trigger = useAppSelector(selectTrigger)
 
-	const [page, setPage] = useState(1) // Added state variable for current page
+	const [page, setPage] = useState(1) // Page state set to page 1 as current page
 	const itemsPerPage = 20 // Set number of items per page
-
-	// ...rest of the functions...
 
 	const handleChangePage = (
 		event: React.ChangeEvent<unknown>,
