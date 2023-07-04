@@ -1,6 +1,6 @@
 package de.amos.apachepulsarui.service;
 
-import de.amos.apachepulsarui.dto.TenantDetailsDto;
+import de.amos.apachepulsarui.dto.TenantDetailDto;
 import de.amos.apachepulsarui.dto.TenantDto;
 import de.amos.apachepulsarui.exception.PulsarApiException;
 import lombok.RequiredArgsConstructor;
@@ -54,13 +54,12 @@ public class TenantService {
     }
 
     @Cacheable("tenant.detail")
-    public TenantDetailsDto getTenantDetails(String tenantName) {
+    public TenantDetailDto getTenantDetails(String tenantName) {
         List<String> namespacesOfTenant = namespaceService.getAllOfTenant(tenantName);
-        return TenantDetailsDto.builder()
+        return TenantDetailDto.builder()
                 .name(tenantName)
                 .tenantInfo(getTenantInfo(tenantName))
                 .namespaces(namespacesOfTenant)
-                .amountOfNamespaces(namespacesOfTenant.size())
                 .build();
     }
 

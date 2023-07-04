@@ -1,6 +1,9 @@
 @import './variables.scss';
 
 .dashboard-container {
+	margin: auto;
+	max-width: 2100px;
+
 	header {
 		background: $primary-black;
 		position: absolute;
@@ -39,7 +42,7 @@
 		padding-right: 38px;
 		display: flex;
 		flex-direction: column;
-		
+
 		.MuiCollapse-wrapper.MuiCollapse-vertical .MuiAccordionDetails-root {
 			padding: 0px;
 			padding-bottom: 4px;
@@ -66,6 +69,12 @@
 		font-weight: 700;
 		font-size: $font-large;
 		line-height: 39px;
+	}
+
+	.dashboard-subtitle {
+		color: $darker-grey;
+		font-family: $primary-font;
+		font-size: $font-medium;
 		margin-bottom: 34px;
 	}
 
@@ -73,7 +82,7 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		margin: 0px 0px 38px 0px;
+		margin: 0px 0px 0px 0px;
 		&.filters-wrapper-mobile {
 			display: none;
 		}
@@ -91,6 +100,11 @@
 		padding: 20px 0px;
 	}
 
+	.filter-wrapper {
+		max-height: 300px;
+		overflow: auto;
+	}
+
 	.MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded {
 		box-shadow: none;
 		border-top: 1px solid $primary-grey;
@@ -106,6 +120,64 @@
 			.MuiAccordionSummary-content.MuiAccordionSummary-contentGutters {
 				margin: 0px;
 			}
+		}
+	}
+}
+
+.message-box-wrapper.MuiBox-root {
+	background-color: $primary-white;
+	width: 80%;
+    height: 80vh;
+	top: 100px;
+	overflow-y: hidden;
+    padding-top: 0px;
+	position: relative;
+	margin: 0 auto;
+	border-radius: $primary-radius;
+	box-shadow: $primary-shadow;
+	.message-box.MuiBox-root {
+		width: 100%;
+		height: 100%;
+		padding: 34px;
+		background-color: transparent;
+		overflow-y: scroll;
+		-ms-overflow-style: none;  /* Internet Explorer 10+ */
+		scrollbar-width: none;  /* Firefox */
+		&::-webkit-scrollbar { 
+			display: none;  /* Safari and Chrome */
+		}
+		.message-filter-wrapper {
+			display: flex;
+			flex-direction: column;
+			gap: 30px;
+			margin-bottom: 32px;
+			.message-title {
+				color: $primary-black;
+				font-family: $primary-font;
+				font-weight: 700;
+				font-size: $font-medium;
+			}
+			.message-filter {
+				display: flex;
+				gap: 18px;
+				align-items: center;
+			}
+		}
+		.MuiButtonBase-root.MuiButton-root.MuiButton-contained {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			width: 120px;
+			height: 44px;
+			padding: 20px;
+			background: $gradient-blue;
+			border-radius: $primary-radius;
+			font-weight: 500;
+			font-size: $font-small;
+			line-height: 150%;
+			color: $primary-white;
+			text-transform: unset;
+			box-shadow: none;
 		}
 	}
 }

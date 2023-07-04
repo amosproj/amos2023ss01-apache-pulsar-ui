@@ -16,7 +16,8 @@ public class ClusterDto {
 
     private long numberOfTenants;
 
-    private long numberOfNamespces;
+    private long numberOfNamespaces;
+    
     public static ClusterDto create(String name) {
         return ClusterDto.builder().name(name).build();
     }

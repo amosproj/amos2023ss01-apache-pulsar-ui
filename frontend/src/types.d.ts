@@ -75,7 +75,7 @@ interface formProps {
 interface ClusterInfo {
 	name: string
 	numberOfTenants: number
-	numberOfNamespces: number
+	numberOfNamespaces: number
 }
 
 interface TenantInfo {
@@ -100,13 +100,13 @@ interface TopicInfo {
 	tenant: string
 	subscriptions: string[]
 	producers: string[]
+	messagesSendToTopic: number
 }
 
 interface ClusterDetail {
 	name: string
 	tenants: string[]
 	brokers: string[]
-	amountOfTenants: number
 	amountOfBrokers: number
 	brokerServiceUrl: string
 	serviceUrl: string
@@ -115,7 +115,6 @@ interface ClusterDetail {
 interface TenantDetail {
 	name: string
 	namespaces: string[]
-	amountOfNamespaces: number
 	tenantInfo: {
 		adminRoles: string[]
 		allowedClusters: string[]
@@ -126,11 +125,11 @@ interface NamespaceDetail {
 	id: string
 	topics: string[]
 	tenant: string
-	amountOfTopics: number
 	bundlesData: {
 		boundaries: string[]
 		numBundles: number
 	}
+	amountOfTopics: number
 	messagesTTL: number
 	retentionPolicies: {
 		retentionTimeInMinutes: number
@@ -156,18 +155,18 @@ interface TopicDetail {
 	}
 	producedMessages: number
 	consumedMessages: number
-	messagesDto: [
-		{
-			messageId: string
-			topic: string
-			payload: string
-			schema: string
-			namespace: string
-			tenant: string
-			publishTime: number
-			producer: string
-		}
-	]
+	// messagesDto: [
+	// 	{
+	// 		messageId: string
+	// 		topic: string
+	// 		payload: string
+	// 		schema: string
+	// 		namespace: string
+	// 		tenant: string
+	// 		publishTime: number
+	// 		producer: string
+	// 	}
+	// ]
 	schemaInfos: SchemaInfo[]
 	persistent: boolean
 }
@@ -242,7 +241,17 @@ interface TopicViewProps {
 }
 
 interface MessageViewProps {
-	data: SampleMessage
+	data: MessageInfo
+}
+interface MessageInfo {
+	messageId: string
+	topic: string
+	payload: string
+	schema: string
+	namespace: string
+	tenant: string
+	publishTime: number
+	producer: string
 }
 
 interface CustomFilterProps {

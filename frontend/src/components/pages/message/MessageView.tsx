@@ -2,99 +2,60 @@
 // SPDX-FileCopyrightText: 2010-2021 Dirk Riehle <dirk@riehle.org
 // SPDX-FileCopyrightText: 2019 Georg Schwarz <georg. schwarz@fau.de>
 
-import React, { useState } from 'react'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import ExpandLessIcon from '@mui/icons-material/ExpandLess'
-import { Collapse, CardActions, Button } from '@mui/material'
+import React from 'react'
 
 const MessageView: React.FC<MessageViewProps> = ({ data }) => {
-	const [expanded, setExpanded] = useState(false)
+	const {
+		messageId,
+		topic,
+		payload,
+		schema,
+		namespace,
+		tenant,
+		publishTime,
+		producer,
+	} = data
 
-	const handleExpand = () => {
-		//TODO if(!data) fetch detailed data
-		setExpanded(!expanded)
-	}
+	const publishDate = new Date(publishTime)
 
 	return (
 		<div className="flex flex-col card-content">
-			<h2 className="uppercase">{data?.payload}</h2>
-			<div className="grey-line"></div>
+			<h2 className="uppercase">ID: {messageId}</h2>
+			<h4 className="uppercase"> {publishDate.toISOString()}</h4>
 			<div className="flex card-inner">
 				<div className="flex flex-col card-col">
-					<p className="text-black">
-						Cluster:{' '}
-						<span className="text-blue">
-							{data?.cluster ? data.cluster : 'N/A'}
-						</span>
-					</p>
-					<p className="text-black">
-						Tenant:{' '}
-						<span className="text-blue">
-							{data?.tenant ? data.tenant : 'N/A'}
-						</span>
-					</p>
-					<p className="text-black">
-						Namespace:{' '}
-						<span className="text-blue">
-							{data?.namespace ? data.namespace : 'N/A'}
-						</span>
-					</p>
-					<p className="text-black">
-						Topic:{' '}
-						<span className="text-blue">
-							{data?.topic ? data.topic : 'N/A'}
-						</span>
-					</p>
-				</div>
-			</div>
-			<Collapse in={expanded} timeout="auto" unmountOnExit>
-				<div className="flex card-inner">
-					<div className="flex flex-col card-col">
-						<div className="grey-line"></div>
-						<div className="flex flex-col card-info">
-							<p className="text-black">
-								Schema:{' '}
-								<span className="text-blue">
-									{data?.schema ? data.schema : 'N/A'}
-								</span>
-							</p>
-							<p className="text-black">
-								Message ID:{' '}
-								<span className="text-blue">{data?.id ? data.id : 'N/A'}</span>
-							</p>
-							<p className="text-black">
-								Publish time:{' '}
-								<span className="text-blue">
-									{data?.publishTime ? data.publishTime : 'N/A'}
-								</span>
-							</p>
+					<div className="flex card-info">
+						<p className="text-black">
+							Topic:<br></br>
+							<span className="text-grey">{topic}</span>
+						</p>
+						<p className="text-black">
+							Namespace:<br></br>
+							<span className="text-grey">{namespace}</span>
+						</p>
+						<p className="text-black">
+							Tenant:<br></br>
+							<span className="text-grey">{tenant}</span>
+						</p>
+						<p className="text-black">
+							Producer:<br></br>
+							<span className="text-grey">{producer}</span>
+						</p>
+					</div>
+					<div className="grey-line"></div>
+					<div className="flex card-info">
+						<p className="text-black timestamp-wrapper">
+							Payload:<br></br>
+							<span className="text-grey">{payload}</span>
+						</p>
+						<div className="text-black schema-box-wrapper">
+							Schema:<br></br>
+							<span className="schema-box">
+								<pre className="text-black">{schema}</pre>
+							</span>
 						</div>
 					</div>
 				</div>
-			</Collapse>
-			<div className="flex justify-between">
-				{' '}
-				<CardActions disableSpacing>
-					{expanded ? (
-						<Button
-							variant={'contained'}
-							style={{ marginRight: '10px' }}
-							onClick={handleExpand}
-							endIcon={<ExpandLessIcon />}
-						>
-							Hide
-						</Button>
-					) : (
-						<Button
-							variant={'contained'}
-							style={{ marginRight: '10px' }}
-							onClick={handleExpand}
-							endIcon={<ExpandMoreIcon />}
-						>
-							show details
-						</Button>
-					)}
-				</CardActions>
 			</div>
 		</div>
 	)

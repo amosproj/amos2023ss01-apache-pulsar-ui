@@ -185,10 +185,7 @@ const filterSlice = createSlice({
 			})
 		},
 		// Adds Id to a filter array while resetting all other Id's in it. Specifically needed for Drill Down Buttons
-		addFilterByDrillDown: (
-			state,
-			action: PayloadAction<UpdateSingleFilter>
-		) => {
+		addFilterByDrilling: (state, action: PayloadAction<UpdateSingleFilter>) => {
 			switch (action.payload.filterName) {
 				case 'cluster':
 					state.cluster = initialState.cluster
@@ -405,7 +402,7 @@ export const {
 	addFilter,
 	addFilterWithRadio,
 	deleteFilter,
-	addFilterByDrillDown,
+	addFilterByDrilling,
 	resetAllFilters,
 	updateFilterAccordingToNav,
 } = filterSlice.actions

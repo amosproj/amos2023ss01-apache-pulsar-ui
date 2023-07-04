@@ -108,10 +108,6 @@ function App() {
 							<Route path="/tenant" element={<TenantGroup />}></Route>
 							<Route path="/namespace" element={<NamespaceGroup />}></Route>
 							<Route path="/topic" element={<TopicGroup />}></Route>
-							<Route
-								path="/message"
-								element={<div>in development</div>}
-							></Route>
 						</Routes>
 					</Dashboard>
 				</div>
