@@ -157,12 +157,6 @@ const NamespaceView: React.FC<NamespaceViewProps> = ({ data }) => {
 									Topics: <span className="text-grey">None</span>
 								</p>
 							)}
-							<p className="text-black">
-								Amount of Topics:<br></br>
-								<span className="text-grey">
-									{details?.amountOfTopics ? details.amountOfTopics : 0}
-								</span>
-							</p>
 						</div>
 					</div>
 				</div>
