@@ -104,7 +104,8 @@ const ClusterView: React.FC<ClusterViewProps> = ({ data }) => {
 								</div>
 							) : (
 								<p className="text-black">
-									Tenants: <span className="text-blue">None</span>
+									Tenants: <br></br>
+									<span className="text-blue">None</span>
 								</p>
 							)}
 						</div>

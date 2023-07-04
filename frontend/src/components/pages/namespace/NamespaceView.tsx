@@ -154,7 +154,8 @@ const NamespaceView: React.FC<NamespaceViewProps> = ({ data }) => {
 								</div>
 							) : (
 								<p className="text-black">
-									Topics: <span className="text-grey">None</span>
+									Topics: <br></br>
+									<span className="text-grey">None</span>
 								</p>
 							)}
 						</div>
