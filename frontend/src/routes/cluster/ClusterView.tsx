@@ -3,38 +3,44 @@
 // SPDX-FileCopyrightText: 2019 Georg Schwarz <georg. schwarz@fau.de>
 
 import React, { useState } from 'react'
+import { Button, CardActions, Collapse } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import ChevronRight from '@mui/icons-material/ChevronRight'
-import { Collapse, CardActions, Button } from '@mui/material'
+import { useAppDispatch } from '../../store/hooks'
+import { addFilterByDrilling } from '../../store/filterSlice'
 import { useNavigate } from 'react-router-dom'
-import {
-	addFilterByDrilling,
-	resetAllFilters,
-} from '../../../store/filterSlice'
-import { useAppDispatch } from '../../../store/hooks'
 import axios from 'axios'
-import { addCommaSeparator } from '../../../Helpers'
-import config from '../../../config'
+import config from '../../config'
+import { addCommaSeparator } from '../../Helpers'
 
-const TenantView: React.FC<TenantViewProps> = ({ data }) => {
-	const { name, tenantInfo, numberOfNamespaces, numberOfTopics }: TenantInfo =
-		data
-
+const ClusterView: React.FC<ClusterViewProps> = ({ data }) => {
+	const { name, numberOfNamespaces, numberOfTenants }: ClusterInfo = data
 	const [expanded, setExpanded] = useState(false)
-	const [details, setDetails] = useState<TenantDetail>()
+	const [details, setDetails] = useState<ClusterDetail>()
+
 	const dispatch = useAppDispatch()
 	const navigate = useNavigate()
 
+	const handleDrillDown = () => {
+		dispatch(addFilterByDrilling({ filterName: 'cluster', id: name }))
+		navigate('/tenant')
+	}
+
+	const handleDrillDownToTenant = (itemId: string) => {
+		dispatch(addFilterByDrilling({ filterName: 'tenant', id: itemId }))
+		navigate('/tenant')
+	}
+
 	const fetchData = () => {
-		const url = config.backendUrl + '/api/tenant/'
+		const url = config.backendUrl + '/api/cluster/'
 
 		// Sending GET request
 		const params = {
-			tenantName: name,
+			clusterName: name,
 		}
 		axios
-			.get<TenantDetail>(url, { params })
+			.get<ClusterDetail>(url, { params })
 			.then((response) => {
 				setDetails(response.data)
 			})
@@ -42,25 +48,10 @@ const TenantView: React.FC<TenantViewProps> = ({ data }) => {
 				console.log(error)
 			})
 	}
-
-	const handleDrillDown = () => {
-		dispatch(addFilterByDrilling({ filterName: 'tenant', id: name }))
-		navigate('/namespace')
-	}
-	const handleDrillUp = (itemId: string) => {
-		dispatch(resetAllFilters())
-		dispatch(addFilterByDrilling({ filterName: 'cluster', id: itemId }))
-		navigate('/cluster')
-	}
-	const handleDrillDownToNamespace = (itemId: string) => {
-		dispatch(addFilterByDrilling({ filterName: 'namespace', id: itemId }))
-		navigate('/namespace')
-	}
 	const handleExpand = () => {
 		if (!details) fetchData()
 		setExpanded(!expanded)
 	}
-
 	return (
 		<div className="flex flex-col card-content">
 			<h2 className="uppercase">{name}</h2>
@@ -68,53 +59,14 @@ const TenantView: React.FC<TenantViewProps> = ({ data }) => {
 				<div className="flex flex-col card-col">
 					<div className="flex card-info">
 						<p className="text-black">
-							Admin Roles:<br></br>
-							<span className="text-grey">
-								{tenantInfo.adminRoles && tenantInfo.adminRoles.length > 0 ? (
-									tenantInfo.adminRoles.map((item: string, index: number) => (
-										<span key={index}>
-											{item}
-											{addCommaSeparator(
-												index,
-												tenantInfo.adminRoles.length
-											)}{' '}
-										</span>
-									))
-								) : (
-									<span>N/A </span>
-								)}
-							</span>
-						</p>
-						<p className="text-black">
-							Allowed Clusters:<br></br>
-							<span className="text-blue">
-								{tenantInfo.allowedClusters &&
-									tenantInfo.allowedClusters.length > 0 &&
-									tenantInfo.allowedClusters.map(
-										(item: string, index: number) => (
-											<span key={index}>
-												<a href="#" onClick={() => handleDrillUp(item)}>
-													{item}
-												</a>
-												{addCommaSeparator(
-													index,
-													tenantInfo.allowedClusters.length
-												)}{' '}
-											</span>
-										)
-									)}
-							</span>
+							Number of Tenants:<br></br>
+							<span className="text-grey">{numberOfTenants}</span>
 						</p>
 						<p className="text-black">
 							Number of Namespaces:<br></br>
 							<span className="text-grey">{numberOfNamespaces}</span>
 						</p>
-						<p className="text-black">
-							Number of Topics:<br></br>
-							<span className="text-grey">{numberOfTopics}</span>
-						</p>
 					</div>
-					<div className="grey-line"></div>
 				</div>
 			</div>
 			<div className="grey-line"></div>
@@ -122,11 +74,26 @@ const TenantView: React.FC<TenantViewProps> = ({ data }) => {
 				<div className="flex card-inner">
 					<div className="flex flex-col card-col">
 						<div className="flex card-info">
-							{details?.namespaces.length !== 0 ? (
+							<p className="text-black">
+								Amount of Brokers:<br></br>
+								<span className="text-grey">{details?.amountOfBrokers}</span>
+							</p>
+							<p className="text-black">
+								Brokers:<br></br>
+								{details?.brokers.map((item: string, index: number) => (
+									<span key={index} className="text-grey">
+										{item},{' '}
+									</span>
+								))}
+							</p>
+						</div>
+						<div className="grey-line"></div>
+						<div className="flex card-info">
+							{details?.tenants.length !== 0 ? (
 								<div className="items-list">
-									<p className="text-black">Namespaces:</p>
+									<p className="text-black">Tenants:</p>
 									<ul>
-										{details?.namespaces.map((item: string, index: number) => (
+										{details?.tenants.map((item: string, index: number) => (
 											<li key={index}>
 												<span key={index} className="text-blue">
 													- {item}{' '}
@@ -137,10 +104,25 @@ const TenantView: React.FC<TenantViewProps> = ({ data }) => {
 								</div>
 							) : (
 								<p className="text-black">
-									Namespaces: <br></br>
+									Tenants: <br></br>
 									<span className="text-blue">None</span>
 								</p>
 							)}
+						</div>
+						<div className="grey-line"></div>
+						<div className="flex card-info">
+							<p className="text-black">
+								Service URL:<br></br>
+								<span className="text-grey">
+									{details?.serviceUrl ? details.serviceUrl : 'N/A'}
+								</span>
+							</p>
+							<p className="text-black">
+								Broker Service URL:<br></br>
+								<span className="text-grey">
+									{details?.brokerServiceUrl ? details.brokerServiceUrl : 'N/A'}
+								</span>
+							</p>
 						</div>
 					</div>
 				</div>
@@ -159,8 +141,8 @@ const TenantView: React.FC<TenantViewProps> = ({ data }) => {
 						</Button>
 					) : (
 						<Button
-							className="outlined-button"
 							variant={'contained'}
+							className="outlined-button"
 							onClick={handleExpand}
 							endIcon={<ExpandMoreIcon />}
 						>
@@ -180,4 +162,4 @@ const TenantView: React.FC<TenantViewProps> = ({ data }) => {
 	)
 }
 
-export default TenantView
+export default ClusterView

@@ -8,14 +8,11 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import ChevronRight from '@mui/icons-material/ChevronRight'
 import { Collapse, CardActions, Button } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
-import {
-	addFilterByDrilling,
-	resetAllFilters,
-} from '../../../store/filterSlice'
-import { useAppDispatch } from '../../../store/hooks'
+import { addFilterByDrilling, resetAllFilters } from '../../store/filterSlice'
+import { useAppDispatch } from '../../store/hooks'
 import axios from 'axios'
-import { addCommaSeparator } from '../../../Helpers'
-import config from '../../../config'
+import { addCommaSeparator } from '../../Helpers'
+import config from '../../config'
 
 const NamespaceView: React.FC<NamespaceViewProps> = ({ data }) => {
 	const { id, tenant, numberOfTopics }: NamespaceInfo = data

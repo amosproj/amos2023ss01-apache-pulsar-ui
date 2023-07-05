@@ -5,10 +5,10 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { RootState } from '.'
 import axios from 'axios'
-import { ResponseCluster } from '../components/pages/cluster'
-import { ResponseTenant } from '../components/pages/tenant'
-import { ResponseNamespace } from '../components/pages/namespace'
-import { ResponseTopic } from '../components/pages/topic'
+import { ResponseCluster } from '../routes/cluster'
+import { ResponseTenant } from '../routes/tenant'
+import { ResponseNamespace } from '../routes/namespace'
+import { ResponseTopic } from '../routes/topic'
 import config from '../config'
 
 export type HierarchyInPulsar =

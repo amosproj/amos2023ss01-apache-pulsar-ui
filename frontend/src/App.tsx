@@ -10,10 +10,10 @@ import { selectView } from './store/globalSlice'
 import NavBar from './components/NavBar'
 import Dashboard from './components/Dashboard'
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
-import ClusterGroup from './components/pages/cluster'
-import NamespaceGroup from './components/pages/namespace'
-import TenantGroup from './components/pages/tenant'
-import TopicGroup from './components/pages/topic'
+import ClusterGroup from './routes/cluster'
+import NamespaceGroup from './routes/namespace'
+import TenantGroup from './routes/tenant'
+import TopicGroup from './routes/topic'
 
 const allData: Array<SampleCluster> = []
 const allMessages: Array<SampleMessage> = []

@@ -8,7 +8,7 @@ import CloseIcon from '@mui/icons-material/Close'
 import axios from 'axios'
 import config from '../../config'
 import { ChevronRight } from '@mui/icons-material'
-import MessageView from '../pages/message/MessageView'
+import MessageView from '../../routes/message/MessageView'
 import { Masonry } from 'react-plock'
 
 /**

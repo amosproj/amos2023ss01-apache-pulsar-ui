@@ -2,7 +2,7 @@ import React from 'react'
 import { render, screen } from '@testing-library/react'
 import { Provider } from 'react-redux'
 import store from '../store'
-import NamespaceView from '../components/pages/namespace/NamespaceView'
+import NamespaceView from '../routes/namespace/NamespaceView'
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
 
 const dataTest: Array<NamespaceInfo> = [

@@ -6,7 +6,7 @@ import { combineReducers } from '@reduxjs/toolkit'
 import formControllerSlice from '../components/form/formControllerSlice'
 import globalSlice from './globalSlice'
 import filterSlice from './filterSlice'
-import requestTriggerSlice from '../components/pages/requestTriggerSlice'
+import requestTriggerSlice from '../routes/requestTriggerSlice'
 
 export default combineReducers({
 	globalControl: globalSlice,

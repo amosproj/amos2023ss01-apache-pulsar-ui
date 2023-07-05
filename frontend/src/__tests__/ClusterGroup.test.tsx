@@ -2,7 +2,7 @@ import React from 'react'
 import { render, screen } from '@testing-library/react'
 import { Provider } from 'react-redux'
 import store from '../store'
-import ClusterView from '../components/pages/cluster/ClusterView'
+import ClusterView from '../routes/cluster/ClusterView'
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
 
 const dataTest: Array<ClusterInfo> = [

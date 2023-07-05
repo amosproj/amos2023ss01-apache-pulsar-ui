@@ -3,21 +3,18 @@
 // SPDX-FileCopyrightText: 2019 Georg Schwarz <georg. schwarz@fau.de>
 
 import React, { useState } from 'react'
-import ProducerModal from '../../modals/ProducerModal'
+import ProducerModal from '../../components/modals/ProducerModal'
 import { Collapse, CardActions, Button } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import ChevronRight from '@mui/icons-material/ChevronRight'
 import { useNavigate } from 'react-router-dom'
-import {
-	addFilterByDrilling,
-	resetAllFilters,
-} from '../../../store/filterSlice'
-import { useAppDispatch } from '../../../store/hooks'
+import { addFilterByDrilling, resetAllFilters } from '../../store/filterSlice'
+import { useAppDispatch } from '../../store/hooks'
 import axios from 'axios'
-import SubscriptionModal from '../../modals/SubscriptionModal'
-import config from '../../../config'
-import MessageModal from '../../modals/MessageModal'
+import SubscriptionModal from '../../components/modals/SubscriptionModal'
+import config from '../../config'
+import MessageModal from '../../components/modals/MessageModal'
 
 const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 	const { name, tenant, namespace, producers, subscriptions }: TopicInfo = data

@@ -5,7 +5,7 @@
 import React from 'react'
 import { useAppDispatch } from '../../store/hooks'
 import { addFilter, deleteFilter } from '../../store/filterSlice'
-import { triggerRequest } from '../pages/requestTriggerSlice'
+import { triggerRequest } from '../../routes/requestTriggerSlice'
 
 const CustomCheckbox: React.FC<CustomCheckboxProps> = ({
 	id,

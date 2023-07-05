@@ -18,7 +18,7 @@ import {
 	updateFilterAccordingToNav,
 	HierarchyInPulsar,
 } from '../store/filterSlice'
-import { triggerRequest } from './pages/requestTriggerSlice'
+import { triggerRequest } from '../routes/requestTriggerSlice'
 import { Button } from '@mui/material'
 
 const Dashboard: React.FC<DashboardProps> = ({
