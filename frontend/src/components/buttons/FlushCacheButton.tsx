@@ -58,11 +58,11 @@ export default function FlushCacheButton() {
 	}
 
 	return (
-		<Box sx={{ m: 1, position: 'absolute' }} className="flush-cache-container">
+		<Box className="flush-cache-container">
 			<Button
 				variant="contained"
 				onClick={handleClick}
-				className="flush-cache-button"
+				className="outlined-button"
 				title="Flush the backend-cache to get live-data from apache pulsar"
 			>
 				Flush Cache

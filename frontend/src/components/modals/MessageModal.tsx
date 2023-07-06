@@ -111,19 +111,19 @@ const MessageModal: React.FC<MessageModalProps> = ({ topic }) => {
 				Drill down
 			</Button>
 			<Modal open={open} onClose={handleClose}>
-				<Box className="message-box-wrapper">
-					<Box className="message-box" onScroll={handleScroll}>
+				<Box className="modal-box">
+					<Box className="modal-box-inner" onScroll={handleScroll}>
 						<IconButton className="close-modal-button" onClick={handleClose}>
 							<CloseIcon />
 						</IconButton>
-						<div className="message-filter-wrapper">
+						<div className="modal-content messages-container">
 							<div className="custom-scrollbar-wrapper">
 								<div
 									className="custom-scrollbar"
 									style={{ height: scrollTop + '%' }}
 								></div>
 							</div>
-							<h2 className="message-title">Messages ({data.length})</h2>
+							<h2 className="modal-title">Messages ({data.length})</h2>
 							<div className="message-filter">
 								<TextField
 									type="number"

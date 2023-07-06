@@ -68,9 +68,15 @@ const NamespaceGroup: React.FC = () => {
 
 	return (
 		<div>
-			<h2 className="dashboard-title">Available Namespaces ({data.length})</h2>
-			<h3 className="dashboard-subtitle">Topics: {sumTopics(data)}</h3>
-			<FlushCacheButton />
+			<div className="flex dashboard-header">
+				<div>
+					<h2 className="dashboard-title">
+						Available Namespaces ({data.length})
+					</h2>
+					<h3 className="dashboard-subtitle">Topics: {sumTopics(data)}</h3>
+				</div>
+				<FlushCacheButton />
+			</div>
 			{loading ? (
 				<div className="main-card"> Loading...</div>
 			) : error ? (
