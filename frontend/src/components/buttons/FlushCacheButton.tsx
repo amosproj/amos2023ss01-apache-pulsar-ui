@@ -56,6 +56,7 @@ export default function FlushCacheButton() {
 				variant="contained"
 				onClick={handleClick}
 				className="flush-cache-button"
+				title="Flush the backend-cache to get live-data from apache pulsar"
 			>
 				Flush Cache
 			</Button>
