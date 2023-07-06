@@ -32,6 +32,7 @@ interface MessageResponse {
 const MessageModal: React.FC<MessageModalProps> = ({ topic }) => {
 	const [open, setOpen] = useState(false)
 	const [amount, setAmount] = useState<number>(10)
+	const [inputValue, setInputValue] = useState<string>('10')
 	const [data, setData] = useState<MessageInfo[]>([])
 	const [loading, setLoading] = useState<boolean>(true)
 	const [error, setError] = useState<string | null>(null)
@@ -76,7 +77,28 @@ const MessageModal: React.FC<MessageModalProps> = ({ topic }) => {
 			})
 	}
 	const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		setAmount(Number(event.target.value))
+		const value = event.target.value
+		setInputValue(value) // set the inputValue state
+
+		if (value === '') {
+			return // allow empty input but don't update amount
+		}
+
+		// Convert input value to a number
+		let newAmount = Number(value)
+
+		// Take the absolute value
+		newAmount = Math.abs(newAmount)
+
+		// Round it down to nearest integer
+		newAmount = Math.floor(newAmount)
+
+		// Set the minimum possible value to 1
+		newAmount = Math.max(1, newAmount)
+
+		// Update state
+		setAmount(newAmount)
+		setInputValue(newAmount.toString())
 	}
 
 	return (
@@ -107,7 +129,7 @@ const MessageModal: React.FC<MessageModalProps> = ({ topic }) => {
 									type="number"
 									label="Nr. of messages requested"
 									variant="outlined"
-									defaultValue={amount}
+									value={inputValue}
 									onChange={handleAmountChange}
 									size="small"
 								/>
