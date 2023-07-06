@@ -333,7 +333,7 @@ const Dashboard: React.FC<DashboardProps> = ({
 				/> */}
 				<Button
 					variant={'contained'}
-					className="reset-all-filter-button"
+					className="full-button"
 					onClick={() => resetFilters()}
 				>
 					Reset all filters

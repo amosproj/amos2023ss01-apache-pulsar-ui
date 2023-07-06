@@ -58,12 +58,16 @@ const TenantGroup: React.FC = () => {
 
 	return (
 		<div>
-			<h2 className="dashboard-title">Available Tenants ({data.length})</h2>
-			<h3 className="dashboard-subtitle">
-				Namespaces: {sumElements(data, 'numberOfNamespaces')}, Topics:{' '}
-				{sumElements(data, 'numberOfTopics')}
-			</h3>
-			<FlushCacheButton />
+			<div className="flex dashboard-header">
+				<div>
+					<h2 className="dashboard-title">Available Tenants ({data.length})</h2>
+					<h3 className="dashboard-subtitle">
+						Namespaces: {sumElements(data, 'numberOfNamespaces')}, Topics:{' '}
+						{sumElements(data, 'numberOfTopics')}
+					</h3>
+				</div>
+				<FlushCacheButton />
+			</div>
 			{loading ? (
 				<div className="main-card"> Loading...</div>
 			) : error ? (

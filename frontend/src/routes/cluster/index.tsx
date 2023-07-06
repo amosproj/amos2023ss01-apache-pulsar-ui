@@ -45,12 +45,18 @@ const ClusterGroup: React.FC = () => {
 
 	return (
 		<div>
-			<h2 className="dashboard-title">Available Clusters ({data.length})</h2>
-			<h3 className="dashboard-subtitle">
-				Tenants: {sumElements(data, 'numberOfTenants')}, Namespaces:{' '}
-				{sumElements(data, 'numberOfNamespaces')}
-			</h3>
-			<FlushCacheButton />
+			<div className="flex dashboard-header">
+				<div>
+					<h2 className="dashboard-title">
+						Available Clusters ({data.length})
+					</h2>
+					<h3 className="dashboard-subtitle">
+						Tenants: {sumElements(data, 'numberOfTenants')}, Namespaces:{' '}
+						{sumElements(data, 'numberOfNamespaces')}
+					</h3>
+				</div>
+				<FlushCacheButton />
+			</div>
 			{loading ? (
 				<div className="main-card"> Loading...</div>
 			) : error ? (

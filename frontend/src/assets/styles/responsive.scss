@@ -89,9 +89,6 @@
 						margin: auto;
 					}
 				}
-				.reset-all-filter-button {
-					margin: 18px 0px;
-				}
 				.desktop-filters {
 					display: none;
 				}
@@ -104,6 +101,50 @@
 			}
 			.dashboard-subtitle {
 				margin-bottom: 18px;
+			}
+		}
+	}
+	.modal-box.MuiBox-root {
+		.modal-box-inner.MuiBox-root {
+			.info-logo {
+				width: 45%;
+			}
+			.modal-content {
+				gap: 18px;
+				justify-content: unset;
+				.triple-icon-text {
+					flex-direction: column;
+					gap: 18px;
+					justify-content: center;
+					.single-icon-text {
+						gap: 10px;
+					}
+				}
+				margin-bottom: 18px;
+			}
+			.MuiButtonBase-root.MuiButton-root.MuiButton-contained {
+				&.more-info-button {
+					width: 100%;
+				}
+			}
+		}
+	}
+	.close-modal-button.MuiButtonBase-root.MuiIconButton-root {
+		position: absolute;
+		right: 18px;
+		top: 18px;
+		background: $gradient-blue;
+		color: $primary-white;
+		padding: 4px;
+		z-index: 1;
+	}
+}
+
+@media only screen and (max-width: $screen-sm-max) {
+	.modal-box.MuiBox-root {
+		.modal-box-inner.MuiBox-root {
+			.info-logo {
+				width: 75%;
 			}
 		}
 	}

@@ -31,18 +31,36 @@ span {
 	width: 100%;
 }
 
-.dashboard-container {
-	margin: 64px;
+.MuiButtonBase-root.MuiButton-root.MuiButton-contained {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	max-width: 260px;
+	height: 44px;
+	padding: 20px;
+	background: $gradient-blue;
+	border-radius: $primary-radius;
+	font-weight: 500;
+	font-size: $font-small;
+	line-height: 150%;
+	color: $primary-white;
+	text-transform: unset;
+	box-shadow: none;
+
+	&.full-button {
+		max-width: 100%;
+	}
+
+	&.outlined-button {
+		background: transparent;
+		border: 1px solid $primary-blue;
+		color: $primary-blue;
+	}
 }
 
-.close-modal-button.MuiButtonBase-root.MuiIconButton-root {
-	position: absolute;
-	right: 34px;
-	top: 34px;
-	background: $gradient-blue;
-	color: $primary-white;
-	padding: 10px;
-	z-index: 1;
+.dashboard-container {
+	margin: 64px;
 }
 
 .custom-scrollbar-wrapper {
