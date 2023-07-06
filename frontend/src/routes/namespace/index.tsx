@@ -14,6 +14,7 @@ import NamespaceView from './NamespaceView'
 import { selectTrigger } from '../requestTriggerSlice'
 import config from '../../config'
 import { Masonry } from 'react-plock'
+import FlushCacheButton from '../../components/buttons/FlushCacheButton'
 
 export interface ResponseNamespace {
 	namespaces: NamespaceInfo[]
@@ -69,6 +70,7 @@ const NamespaceGroup: React.FC = () => {
 		<div>
 			<h2 className="dashboard-title">Available Namespaces ({data.length})</h2>
 			<h3 className="dashboard-subtitle">Topics: {sumTopics(data)}</h3>
+			<FlushCacheButton />
 			{loading ? (
 				<div className="main-card"> Loading...</div>
 			) : error ? (

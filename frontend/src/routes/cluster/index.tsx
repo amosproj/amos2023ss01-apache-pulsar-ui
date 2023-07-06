@@ -10,6 +10,7 @@ import { selectCluster } from '../../store/filterSlice'
 import { selectTrigger } from '../requestTriggerSlice'
 import config from '../../config'
 import { Masonry } from 'react-plock'
+import FlushCacheButton from '../../components/buttons/FlushCacheButton'
 
 export interface ResponseCluster {
 	clusters: ClusterInfo[]
@@ -49,6 +50,7 @@ const ClusterGroup: React.FC = () => {
 				Tenants: {sumElements(data, 'numberOfTenants')}, Namespaces:{' '}
 				{sumElements(data, 'numberOfNamespaces')}
 			</h3>
+			<FlushCacheButton />
 			{loading ? (
 				<div className="main-card"> Loading...</div>
 			) : error ? (
