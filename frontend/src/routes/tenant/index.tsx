@@ -10,6 +10,7 @@ import TenantView from './TenantView'
 import { selectTrigger } from '../requestTriggerSlice'
 import config from '../../config'
 import { Masonry } from 'react-plock'
+import FlushCacheButton from '../../components/buttons/FlushCacheButton'
 
 export interface ResponseTenant {
 	tenants: TenantInfo[]
@@ -62,6 +63,7 @@ const TenantGroup: React.FC = () => {
 				Namespaces: {sumElements(data, 'numberOfNamespaces')}, Topics:{' '}
 				{sumElements(data, 'numberOfTopics')}
 			</h3>
+			<FlushCacheButton />
 			{loading ? (
 				<div className="main-card"> Loading...</div>
 			) : error ? (

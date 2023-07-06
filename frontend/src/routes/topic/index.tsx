@@ -19,6 +19,7 @@ import config from '../../config'
 import { Masonry } from 'react-plock'
 import { Pagination } from '@mui/material'
 import { Box } from '@mui/system'
+import FlushCacheButton from '../../components/buttons/FlushCacheButton'
 
 export interface ResponseTopic {
 	topics: TopicInfo[]
@@ -106,6 +107,7 @@ const TopicGroup: React.FC = () => {
 				Producers: {sumElements(data, 'producers')}, Subscriptions:{' '}
 				{sumElements(data, 'subscriptions')}
 			</h3>
+			<FlushCacheButton />
 			{loading ? (
 				<div className="main-card"> Loading...</div>
 			) : error ? (
