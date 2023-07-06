@@ -37,11 +37,13 @@
 		position: relative;
 
 		.flush-cache-container {
-			top: 0;
+			top: -5px;
 			right: 0;
 			.flush-cache-button {
 				border-radius: $primary-radius;
-				background-color: $primary-blue;
+				background-color: $primary-white;
+				color: $primary-blue;
+				// font-size: $font-small;
 			}
 		}
 	}
