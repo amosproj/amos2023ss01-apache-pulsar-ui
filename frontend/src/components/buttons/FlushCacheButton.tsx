@@ -11,6 +11,11 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 	return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />
 })
 
+/**
+ * Flush backend-cache button component.
+ * When user clicks on it, it calls the backend api to flush the cache in backend
+ * to get the latest data in pulsar.
+ */
 export default function FlushCacheButton() {
 	const [open, setOpen] = React.useState(false)
 	const [error, setError] = React.useState(false)
@@ -34,11 +39,13 @@ export default function FlushCacheButton() {
 			})
 	}
 
+	// when clicked, sends the request and set the open to true to get alert.
 	const handleClick = () => {
 		flushCache()
 		setOpen(true)
 	}
 
+	// closes alert.
 	const handleClose = (
 		event?: React.SyntheticEvent | Event,
 		reason?: string
