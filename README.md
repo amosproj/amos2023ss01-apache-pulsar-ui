@@ -12,20 +12,33 @@ We want to achieve this by structuring our UI according to the topology of Apach
 * Node.js Version **20.0.0** or higher
 * Docker Desktop
 
-## Backend and Pulsar instance
+## Startup
 
 First, build the application JAR from the `backend` directory with:
 
 `./mvnw package -DskipTests`
 
-Then, start Docker Desktop and create the pulsar setup from the root-directory with:
+### Start Frontend, Backend and Pulsar instance without demodata
+
+Start Docker Desktop and create the pulsar setup from the root-directory with:
 
 ```bash
 echo BACKEND_IP=localhost >> .env
-docker-compose --profile demodata --profile backend --profile frontend up --build -d
+docker-compose --profile backend --profile frontend up --build -d
+```
+
+### Start Frontend, Backend and Pulsar instance with demodata
+
+Start Docker Desktop and create the pulsar setup from the root-directory with:
+
+```bash
+echo BACKEND_IP=localhost >> .env
+docker-compose --profile backend --profile frontend --profile demodata -f docker-compose.yml -f docker-compose-setup.yml up --build -d
 ```
 
 Notes: 
+* The `docker-compose.yml` includes the pulsar, backend and frontend services.
+* The `docker-compose-setup.yml` includes services for the local or AWS demodata setup. `-f` selects the files used for the startup.
 * `--build` is needed for the first startup, or when the demodata docker images are changed
 * `-d` runs the container in the background, so u can close the terminal without terminating the app itself.
 * `--profile demodata` is needed when you want to create the demo topology and start the demo producers & consumers, that will continuously send and receive messages
@@ -64,5 +77,5 @@ so you need to pass it to the `docker-compose` via `-e` flag.
 
 ```bash
 echo BACKEND_IP=${EC2_IP_ADDRESS} >> .env
-docker-compose --profile demodata-aws --profile backend --profile frontend up --build -d
+docker-compose --profile backend --profile frontend --profile demodata-aws -f docker-compose.yml -f docker-compose-setup.yml up --build -d
 ```
