@@ -6,6 +6,7 @@
 
 package de.amos.apachepulsarui;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
@@ -17,6 +18,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableCaching
 public class ApachePulsarUiApplication {
 
+	@Value("${frontend.url}")
+	private String allowedOrigin;
+
 	public static void main(String[] args) {
 		SpringApplication.run(ApachePulsarUiApplication.class, args);
 	}
@@ -26,7 +30,7 @@ public class ApachePulsarUiApplication {
 		return new WebMvcConfigurer() {
 			@Override
 			public void addCorsMappings(CorsRegistry corsRegistry) {
-				corsRegistry.addMapping("/**").allowedOrigins("*");
+				corsRegistry.addMapping("/**").allowedOrigins(allowedOrigin);
 			}
 		};
 	}
