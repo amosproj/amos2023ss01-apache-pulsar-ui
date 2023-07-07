@@ -7,7 +7,7 @@ import { Modal, Box, Typography, IconButton, Divider } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import axios from 'axios'
 import ConsumerAccordion from './ConsumerAccordion'
-import ModalInfo from './ModalInfo'
+import InformationText from './InformationText'
 import config from '../../config'
 import { convertTimestampToDateTime } from '../../Helpers'
 
@@ -147,28 +147,31 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
 					</Typography>
 					{subscriptionError || (
 						<>
-							<ModalInfo
+							<InformationText
 								title="Backlog size"
 								detailedInfo={subscriptionDetail?.backlogSize}
 							/>
-							<ModalInfo
+							<InformationText
 								title="Message backlog"
 								detailedInfo={subscriptionDetail?.msgBacklog}
 							/>
-							<ModalInfo
+							<InformationText
 								title="Bytes out counter"
 								detailedInfo={subscriptionDetail?.bytesOutCounter}
 							/>
-							<ModalInfo
+							<InformationText
 								title="Message out counter"
 								detailedInfo={subscriptionDetail?.msgOutCounter}
 							/>
-							<ModalInfo
+							<InformationText
 								title="Is replicated"
 								detailedInfo={subscriptionDetail?.replicated}
 							/>
-							<ModalInfo title="Type" detailedInfo={subscriptionDetail?.type} />
-							<ModalInfo
+							<InformationText
+								title="Type"
+								detailedInfo={subscriptionDetail?.type}
+							/>
+							<InformationText
 								title="Total number of consumers"
 								detailedInfo={subscriptionDetail?.numberConsumers}
 							/>
@@ -179,7 +182,7 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
 									isActive={true}
 								/>
 							) : (
-								<ModalInfo title="Active consumer" detailedInfo={''} />
+								<InformationText title="Active consumer" detailedInfo={''} />
 							)}
 							{subscriptionDetail?.inactiveConsumers &&
 							subscriptionDetail?.inactiveConsumers.length > 0 ? (
@@ -194,13 +197,13 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
 									)
 								})
 							) : (
-								<ModalInfo title="Inactive consumers" detailedInfo={''} />
+								<InformationText title="Inactive consumers" detailedInfo={''} />
 							)}
 						</>
 					)}
 					{messagesError || messages.length > 0 ? (
 						<>
-							<ModalInfo title="Messages(10 latest)" detailedInfo=" " />
+							<InformationText title="Messages(10 latest)" detailedInfo=" " />
 							{messages.map((message, index) => {
 								return (
 									<>
@@ -222,7 +225,7 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
 							})}
 						</>
 					) : (
-						<ModalInfo title="Messages" detailedInfo="" />
+						<InformationText title="Messages" detailedInfo="" />
 					)}
 				</Box>
 			</Modal>

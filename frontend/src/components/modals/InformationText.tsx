@@ -5,7 +5,7 @@ interface ModalInfoProps {
 	detailedInfo: boolean | number | string | undefined
 }
 
-const ModalInfo: React.FC<ModalInfoProps> = ({ title, detailedInfo }) => {
+const InformationText: React.FC<ModalInfoProps> = ({ title, detailedInfo }) => {
 	return (
 		<div className="modal-info">
 			<p className="title">{title}:</p>
@@ -16,4 +16,4 @@ const ModalInfo: React.FC<ModalInfoProps> = ({ title, detailedInfo }) => {
 	)
 }
 
-export default ModalInfo
+export default InformationText

@@ -13,10 +13,7 @@ import CustomSearchbar from './CustomSearchbar'
 import { useAppSelector } from '../../store/hooks'
 import { selectAllFilters, selectOptions } from '../../store/filterSlice'
 
-const CustomFilter: React.FC<CustomFilterProps> = ({
-	messages,
-	currentView,
-}) => {
+const CustomFilter: React.FC<CustomFilterProps> = ({ currentView }) => {
 	// Options are what we've got from apis so far.
 	const options = useAppSelector(selectOptions)
 	// filters are displayed in filters.

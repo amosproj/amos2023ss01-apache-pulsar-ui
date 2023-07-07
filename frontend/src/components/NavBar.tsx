@@ -35,7 +35,6 @@ function NavBar() {
 		setAnchorElNav(event.currentTarget)
 	}
 	const dispatch = useAppDispatch()
-	//const selectedNav = useAppSelector(selectView).selectedNav
 	const navigate = useNavigate()
 	const location = useLocation()
 
@@ -48,13 +47,6 @@ function NavBar() {
 		dispatch(setNav(tag))
 		navigate('/' + tag)
 	}
-
-	// const handleClickOnDisconnect = () => {
-	// 	//TODO add disconnect functionality
-	// 	// dispatch(backToLP())
-	// }
-
-	// const endpoint = useAppSelector(selectEndpoint)
 
 	return (
 		<AppBar position="static">
@@ -70,27 +62,6 @@ function NavBar() {
 							verticalAlign: 'middle',
 						}}
 					/>
-					{/* <Input
-						disabled
-						defaultValue={endpoint}
-						inputProps={{ style: { textAlign: 'center' } }}
-						size="small"
-						style={{
-							width: '120px',
-							marginLeft: '20px',
-							marginRight: '5px',
-							textAlign: 'center',
-							background: 'white',
-							borderRadius: '5px',
-						}}
-					/><Button
-						variant="outlined"
-						style={{ color: 'white', background: '#ba000d' }}
-						size="small"
-						onClick={handleClickOnDisconnect}
-					>
-						Disconnect
-					</Button> */}
 					<Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
 						<IconButton
 							size="large"

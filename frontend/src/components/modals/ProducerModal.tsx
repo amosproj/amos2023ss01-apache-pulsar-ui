@@ -6,7 +6,7 @@ import React, { useState } from 'react'
 import { Modal, Box, Typography, IconButton, Divider } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import axios from 'axios'
-import ModalInfo from './ModalInfo'
+import InformationText from './InformationText'
 import config from '../../config'
 import { convertTimestampToDateTime } from '../../Helpers'
 
@@ -138,23 +138,23 @@ const ProducerModal: React.FC<ProducerModalProps> = ({ producer }) => {
 							<Typography variant="h5" gutterBottom>
 								Producer: {producer.producerName}
 							</Typography>
-							<ModalInfo
+							<InformationText
 								title={'Producer ID'}
 								detailedInfo={producerDetails?.id}
 							/>
-							<ModalInfo
+							<InformationText
 								title={'Address'}
 								detailedInfo={producerDetails?.address}
 							/>
-							<ModalInfo
+							<InformationText
 								title={'Average message size'}
 								detailedInfo={producerDetails?.averageMsgSize}
 							/>
-							<ModalInfo
+							<InformationText
 								title={'Client version'}
 								detailedInfo={producerDetails?.clientVersion}
 							/>
-							<ModalInfo
+							<InformationText
 								title={'Connected since'}
 								detailedInfo={producerDetails?.connectedSince}
 							/>
@@ -162,7 +162,7 @@ const ProducerModal: React.FC<ProducerModalProps> = ({ producer }) => {
 					)}
 					{messagesError || messages.length > 0 ? (
 						<>
-							<ModalInfo title="Messages(10 latest)" detailedInfo=" " />
+							<InformationText title="Messages(10 latest)" detailedInfo=" " />
 							{messages.map((message, index) => {
 								return (
 									<>
@@ -184,7 +184,7 @@ const ProducerModal: React.FC<ProducerModalProps> = ({ producer }) => {
 							})}
 						</>
 					) : (
-						<ModalInfo title="Messages" detailedInfo="" />
+						<InformationText title="Messages" detailedInfo="" />
 					)}
 				</Box>
 			</Modal>

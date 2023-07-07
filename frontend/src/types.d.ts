@@ -29,16 +29,7 @@ interface CardProps {
 }
 
 interface DashboardProps {
-	completeMessages: Array<SampleMessage>
 	children: ReactNode
-	view?:
-		| 'cluster'
-		| 'tenant'
-		| 'namespace'
-		| 'topic'
-		| 'message'
-		| string
-		| null
 }
 
 interface CustomAccordionProps {
@@ -155,18 +146,6 @@ interface TopicDetail {
 	}
 	producedMessages: number
 	consumedMessages: number
-	// messagesDto: [
-	// 	{
-	// 		messageId: string
-	// 		topic: string
-	// 		payload: string
-	// 		schema: string
-	// 		namespace: string
-	// 		tenant: string
-	// 		publishTime: number
-	// 		producer: string
-	// 	}
-	// ]
 	schemaInfos: SchemaInfo[]
 	persistent: boolean
 }
@@ -255,7 +234,6 @@ interface MessageInfo {
 }
 
 interface CustomFilterProps {
-	messages: Array<SampleMessage>
 	currentView:
 		| 'cluster'
 		| 'tenant'
@@ -275,80 +253,4 @@ interface CustomSearchProps {
 interface UpdateForData {
 	message: string
 	topic: string
-}
-
-// Data Types
-type SampleCluster = {
-	id: string
-	tenants: Array<SampleTenant>
-	brokers: Array<string>
-	bookies?: Array<string>
-	amountOfTenants: number
-	amountOfNamespaces: number
-	amountOfTopics: number
-	amountOfBrokers: number
-	brokerServiceUrl: string
-	serviceUrl: string
-}
-
-type SampleTenant = {
-	id: string
-	namespaces: Array<SampleNamespace>
-	amountOfNamespaces: number
-	amountOfTopics: number
-	cluster: string
-	tenantInfo: { adminRoles: Array<string>; allowedClusters: Array<string> }
-}
-
-type SampleNamespace = {
-	id: string
-	topics: Array<SampleTopic>
-	cluster: string
-	tenant: string
-	amountOfTopics: number
-	bundlesData: { boundaries: Array<string>; numBundles: number }
-	messagesTTL: number | null
-	retentionPolicies: {
-		retentionTimeInMinutes: number
-		retentionSizeInMB: number
-	}
-}
-
-type SampleTopic = {
-	id: string
-	name: string
-	localName: string
-	namespace: string
-	tenant: string
-	cluster: string
-	topicStatsDto: SampleTopicStats
-	persistent: boolean
-}
-
-type SampleTopicStats = {
-	subscriptions: Array<string>
-	producers: Array<string>
-	numberSubscriptions: number
-	numberProducers: number
-	producedMesages: number
-	consumedMessages: number
-	averageMessageSize: number
-	storageSize: number
-}
-
-type SampleSubscription = {
-	name: string
-	consumers: Array<string>
-	numberConsumers: number
-}
-
-type SampleMessage = {
-	id: string
-	payload: string
-	schema: string
-	cluster: string
-	tenant: string
-	namespace: string
-	topic: string
-	publishTime: string
 }

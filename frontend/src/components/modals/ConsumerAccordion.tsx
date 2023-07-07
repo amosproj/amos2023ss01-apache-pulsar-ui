@@ -11,7 +11,7 @@ import {
 } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import axios from 'axios'
-import ModalInfo from './ModalInfo'
+import InformationText from './InformationText'
 import config from '../../config'
 
 interface ConsumerAccordionProps {
@@ -69,40 +69,43 @@ const ConsumerAccordion: React.FC<ConsumerAccordionProps> = ({
 					<Typography>{consumerName}</Typography>
 				</AccordionSummary>
 				<AccordionDetails>
-					<ModalInfo title="Address" detailedInfo={consumerDetails?.address} />
-					<ModalInfo
+					<InformationText
+						title="Address"
+						detailedInfo={consumerDetails?.address}
+					/>
+					<InformationText
 						title="Available permits"
 						detailedInfo={consumerDetails?.availablePermits}
 					/>
-					<ModalInfo
+					<InformationText
 						title="Bytes out counter"
 						detailedInfo={consumerDetails?.bytesOutCounter}
 					/>
-					<ModalInfo
+					<InformationText
 						title="Client version"
 						detailedInfo={consumerDetails?.clientVersion}
 					/>
-					<ModalInfo
+					<InformationText
 						title="Connected since"
 						detailedInfo={consumerDetails?.connectedSince}
 					/>
-					<ModalInfo
+					<InformationText
 						title="Last acked timestamp"
 						detailedInfo={consumerDetails?.lastAckedTimestamp}
 					/>
-					<ModalInfo
+					<InformationText
 						title="Last consumed timestamp"
 						detailedInfo={consumerDetails?.lastConsumedTimestamp}
 					/>
-					<ModalInfo
+					<InformationText
 						title="Message out counter"
 						detailedInfo={consumerDetails?.messageOutCounter}
 					/>
-					<ModalInfo
+					<InformationText
 						title="Unacked messages"
 						detailedInfo={consumerDetails?.unackedMessages}
 					/>
-					<ModalInfo
+					<InformationText
 						title="Blocked consumer on unacked msgs"
 						detailedInfo={consumerDetails?.blockedConsumerOnUnackedMsgs}
 					/>

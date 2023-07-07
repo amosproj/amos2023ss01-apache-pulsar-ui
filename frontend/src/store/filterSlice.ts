@@ -47,12 +47,6 @@ export type UpdateSingleFilter = {
 	id: string
 }
 
-type UpdateDisplayedOptions = {
-	// topologyLevel: 'cluster' | 'tenant' | 'namespace' | 'topic' | 'message'
-	topologyLevel: HierarchyInPulsar
-	options: string[]
-}
-
 const initialState: FilterState = {
 	cluster: [],
 	tenant: [],
@@ -277,18 +271,6 @@ const filterSlice = createSlice({
 		})
 		builder.addCase(topicOptionThunk.fulfilled, (state, action) => {
 			const data: ResponseTopic = JSON.parse(JSON.stringify(action.payload))
-			/*const producers: string[] = data.topics
-				.flatMap((item) => item.producers)
-				.flat()
-				.filter((element, index) => {
-					return producers.indexOf(element) === index
-				})
-			const subscriptions: string[] = data.topics
-				.flatMap((item) => item.subscriptions)
-				.flat()
-				.filter((element, index) => {
-					return producers.indexOf(element) === index
-				})*/
 			data.topics.forEach((topic) => {
 				if (topic.producers) {
 					state.displayedOptions.allProducers.push(...topic.producers)
