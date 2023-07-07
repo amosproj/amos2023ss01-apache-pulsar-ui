@@ -12,6 +12,7 @@ services:
     environment:
       - "PULSAR_CONSUMER_URL=pulsar://pulsar:6650"
       - "PULSAR_ADMIN_URL=http://pulsar:8080"
+      - "FRONTEND_URL=http://${BACKEND_IP}:8082"
     depends_on:
       pulsar:
         condition: service_healthy
