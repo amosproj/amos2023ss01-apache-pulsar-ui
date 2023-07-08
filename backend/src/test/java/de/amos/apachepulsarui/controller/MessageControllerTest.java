@@ -16,8 +16,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static java.util.Collections.emptyList;
 import static org.hamcrest.Matchers.equalTo;
@@ -37,7 +38,7 @@ public class MessageControllerTest {
 
     @Test
     void getMessages_returnsMessages() throws Exception {
-        List<MessageDto> messageDtos = List.of(
+        Set<MessageDto> messageDtos = Set.of(
                 aMessage("persistent://public/default/spaceships", "Nebuchadnezzar"),
                 aMessage("persistent://public/default/spaceships", "Serenity")
         );
@@ -54,7 +55,7 @@ public class MessageControllerTest {
 
     @Test
     void getMessages_withoutNumMessages_returns10Messages() throws Exception {
-        var messageDtos = new ArrayList<MessageDto>();
+        HashSet<MessageDto> messageDtos = new HashSet<>();
         for (int i = 0; i < 10; i++) {
             messageDtos.add(aMessage("persistent://public/default/test", "Test" + i));
         }
@@ -70,7 +71,7 @@ public class MessageControllerTest {
 
     @Test
     void getMessages_withProducer_returns10Messages() throws Exception {
-        var messageDtos = new ArrayList<MessageDto>();
+        HashSet<MessageDto> messageDtos = new HashSet<>();
         for (int i = 0; i < 10; i++) {
             messageDtos.add(aMessage("persistent://public/default/test", "Test" + i));
         }
@@ -86,7 +87,7 @@ public class MessageControllerTest {
 
     @Test
     void getMessages_withSubscription_returns10Messages() throws Exception {
-        var messageDtos = new ArrayList<MessageDto>();
+        HashSet<MessageDto> messageDtos = new HashSet<>();
         for (int i = 0; i < 10; i++) {
             messageDtos.add(aMessage("persistent://public/default/test", "Test" + i));
         }
