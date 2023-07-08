@@ -65,7 +65,7 @@ public class MessageServiceIntegrationTest extends AbstractIntegrationTest {
         }
         var messages = messageService.getLatestMessagesFiltered(TOPICNAME, 1, emptyList(), emptyList());
 
-        MessageDto messageReceived = messages.get(0);
+        MessageDto messageReceived = messages.iterator().next();
         assertThat(messageReceived.getMessageId()).isNotEmpty(); // generated
         assertThat(messageReceived.getTopic()).isEqualTo(messageToSend.getTopic());
         assertThat(messageReceived.getPayload()).isEqualTo(messageToSend.getPayload());
@@ -91,7 +91,7 @@ public class MessageServiceIntegrationTest extends AbstractIntegrationTest {
         }
         var messages = messageService.getLatestMessagesFiltered(TOPICNAME, 1, List.of(producerName), emptyList());
 
-        MessageDto messageReceived = messages.get(0);
+        MessageDto messageReceived = messages.iterator().next();
         assertThat(messageReceived.getMessageId()).isNotEmpty(); // generated
         assertThat(messageReceived.getTopic()).isEqualTo(messageToSend.getTopic());
         assertThat(messageReceived.getPayload()).isEqualTo(messageToSend.getPayload());
@@ -155,7 +155,7 @@ public class MessageServiceIntegrationTest extends AbstractIntegrationTest {
         }
         var messages = messageService.getLatestMessagesFiltered(TOPICNAME, 1, emptyList(), List.of(subscriptionName));
 
-        MessageDto messageReceived = messages.get(0);
+        MessageDto messageReceived = messages.iterator().next();
         assertThat(messageReceived.getMessageId()).isNotEmpty(); // generated
         assertThat(messageReceived.getTopic()).isEqualTo(messageToSend.getTopic());
         assertThat(messageReceived.getPayload()).isEqualTo(messageToSend.getPayload());
@@ -179,7 +179,7 @@ public class MessageServiceIntegrationTest extends AbstractIntegrationTest {
         }
         var messages = messageService.getLatestMessagesFiltered(TOPICNAME, 1, emptyList(), emptyList());
 
-        MessageDto messageReceived = messages.get(0);
+        MessageDto messageReceived = messages.iterator().next();
         assertThat(messageReceived.getSchema()).isEqualTo(schema.getSchemaInfo().getSchemaDefinition());
     }
 
