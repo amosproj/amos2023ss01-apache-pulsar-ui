@@ -8,13 +8,13 @@ package de.amos.apachepulsarui.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.util.List;
+import java.util.Set;
 
 
 @Data
 @AllArgsConstructor
 public class MessagesDto {
 
-    private List<MessageDto> messages;
+    private Set<MessageDto> messages;
 
 }
