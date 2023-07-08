@@ -19,6 +19,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -48,7 +50,7 @@ public class MessageService {
 
         return messageDtos.stream()
                 .filter(m -> messageIds.contains(m.getMessageId()))
-                .collect(Collectors.toSet());
+                .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     private List<String> peekMessageIds(String topic, String subscription, Integer numMessages) {
@@ -67,7 +69,7 @@ public class MessageService {
     private Set<MessageDto> filterByProducers(Set<MessageDto> messageDtos, List<String> producers) {
         return messageDtos.stream()
                 .filter(m -> producers.contains(m.getProducer()))
-                .collect(Collectors.toSet());
+                .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     private Set<MessageDto> getLatestMessagesOfTopic(String topic, Integer numMessages) {
@@ -86,7 +88,10 @@ public class MessageService {
             }
             return messages.stream()
                     .map(message -> MessageDto.fromExistingMessage(message, schema))
-                    .collect(Collectors.toSet());
+                    // latest message first in set
+                    .sorted(Comparator.comparing(MessageDto::getPublishTime, Comparator.reverseOrder()))
+                    // linked to keep the order!
+                    .collect(Collectors.toCollection(LinkedHashSet::new));
         } catch (PulsarAdminException e) {
             throw new PulsarApiException(
                     "Could not examine the amount of '%d' messages for topic '%s'".formatted(numMessages, topic),
