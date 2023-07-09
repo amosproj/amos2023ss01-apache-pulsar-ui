@@ -13,6 +13,8 @@ import { useAppDispatch } from '../../store/hooks'
 import axios from 'axios'
 import { addCommaSeparator } from '../../Helpers'
 import config from '../../config'
+import { TenantViewProps, TenantInfo, TenantDetail } from '../../types'
+import { Topology } from '../../enum'
 
 const TenantView: React.FC<TenantViewProps> = ({ data }) => {
 	const { name, tenantInfo, numberOfNamespaces, numberOfTopics }: TenantInfo =
@@ -41,16 +43,18 @@ const TenantView: React.FC<TenantViewProps> = ({ data }) => {
 	}
 
 	const handleDrillDown = () => {
-		dispatch(addFilterByDrilling({ filterName: 'tenant', id: name }))
+		dispatch(addFilterByDrilling({ filterName: Topology.TENANT, id: name }))
 		navigate('/namespace')
 	}
 	const handleDrillUp = (itemId: string) => {
 		dispatch(resetAllFilters())
-		dispatch(addFilterByDrilling({ filterName: 'cluster', id: itemId }))
+		dispatch(addFilterByDrilling({ filterName: Topology.CLUSTER, id: itemId }))
 		navigate('/cluster')
 	}
 	const handleDrillDownToNamespace = (itemId: string) => {
-		dispatch(addFilterByDrilling({ filterName: 'namespace', id: itemId }))
+		dispatch(
+			addFilterByDrilling({ filterName: Topology.NAMESPACE, id: itemId })
+		)
 		navigate('/namespace')
 	}
 	const handleExpand = () => {

@@ -13,6 +13,8 @@ import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import config from '../../config'
 import { addCommaSeparator } from '../../Helpers'
+import { ClusterViewProps, ClusterInfo, ClusterDetail } from '../../types'
+import { Topology } from '../../enum'
 
 const ClusterView: React.FC<ClusterViewProps> = ({ data }) => {
 	const { name, numberOfNamespaces, numberOfTenants }: ClusterInfo = data
@@ -23,12 +25,12 @@ const ClusterView: React.FC<ClusterViewProps> = ({ data }) => {
 	const navigate = useNavigate()
 
 	const handleDrillDown = () => {
-		dispatch(addFilterByDrilling({ filterName: 'cluster', id: name }))
+		dispatch(addFilterByDrilling({ filterName: Topology.CLUSTER, id: name }))
 		navigate('/tenant')
 	}
 
 	const handleDrillDownToTenant = (itemId: string) => {
-		dispatch(addFilterByDrilling({ filterName: 'tenant', id: itemId }))
+		dispatch(addFilterByDrilling({ filterName: Topology.TENANT, id: itemId }))
 		navigate('/tenant')
 	}
 

@@ -15,6 +15,7 @@ import { selectTrigger } from '../requestTriggerSlice'
 import config from '../../config'
 import { Masonry } from 'react-plock'
 import FlushCacheButton from '../../components/buttons/FlushCacheButton'
+import { NamespaceInfo } from '../../types'
 
 export interface ResponseNamespace {
 	namespaces: NamespaceInfo[]

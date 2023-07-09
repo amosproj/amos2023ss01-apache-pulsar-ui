@@ -10,15 +10,7 @@ import { ResponseTenant } from '../routes/tenant'
 import { ResponseNamespace } from '../routes/namespace'
 import { ResponseTopic } from '../routes/topic'
 import config from '../config'
-
-export type HierarchyInPulsar =
-	| 'cluster'
-	| 'tenant'
-	| 'namespace'
-	| 'topic'
-	| 'message'
-	| 'producer'
-	| 'subscription'
+import { Topology } from '../enum'
 
 export type FilterState = {
 	// used to keep track of what curently is filtered and what not:
@@ -28,7 +20,6 @@ export type FilterState = {
 	topic: string[]
 	producer: string[]
 	subscription: string[]
-	message: string[]
 	// used for displaying the options in the filter dropdowns:
 	displayedOptions: {
 		allClusters: string[]
@@ -37,13 +28,12 @@ export type FilterState = {
 		allTopics: string[]
 		allProducers: string[]
 		allSubscriptions: string[]
-		allMessages: string[]
 	}
 	view: UpdateSingleFilter['filterName']
 }
 
 export type UpdateSingleFilter = {
-	filterName: HierarchyInPulsar
+	filterName: Topology
 	id: string
 }
 
@@ -54,7 +44,6 @@ const initialState: FilterState = {
 	topic: [],
 	producer: [],
 	subscription: [],
-	message: [],
 	displayedOptions: {
 		allClusters: [],
 		allTenants: [],
@@ -62,9 +51,8 @@ const initialState: FilterState = {
 		allTopics: [],
 		allProducers: [],
 		allSubscriptions: [],
-		allMessages: [],
 	},
-	view: 'cluster',
+	view: Topology.CLUSTER,
 }
 
 const backendInstance = axios.create({
@@ -180,35 +168,8 @@ const filterSlice = createSlice({
 		},
 		// Adds Id to a filter array while resetting all other Id's in it. Specifically needed for Drill Down Buttons
 		addFilterByDrilling: (state, action: PayloadAction<UpdateSingleFilter>) => {
-			switch (action.payload.filterName) {
-				case 'cluster':
-					state.cluster = initialState.cluster
-					state.cluster = [action.payload.id]
-					break
-				case 'tenant':
-					state.tenant = initialState.tenant
-					state.tenant = [action.payload.id]
-					break
-				case 'namespace':
-					state.namespace = initialState.namespace
-					state.namespace = [action.payload.id]
-					break
-				case 'topic':
-					state.topic = initialState.topic
-					state.topic = [action.payload.id]
-					break
-				case 'message':
-					state.message = initialState.message
-					state.message = [action.payload.id]
-					break
-				default:
-					console.log(
-						'wrong type for updateDisplayedOptions with' +
-							action.payload.filterName +
-							' ' +
-							action.payload.id
-					)
-			}
+			state[action.payload.filterName] = initialState[action.payload.filterName]
+			state[action.payload.filterName] = [action.payload.id]
 		},
 		// Resets all filter arrays / applied filters to initial state
 		resetAllFilters: (state) => {
@@ -219,7 +180,6 @@ const filterSlice = createSlice({
 			state.topic = initialState.topic
 			state.producer = initialState.producer
 			state.subscription = initialState.subscription
-			state.message = initialState.message
 		},
 		// the filtering of lower views does not apply to higher views,
 		// those filters shall be reset when the user "goes up".
@@ -230,13 +190,12 @@ const filterSlice = createSlice({
 			const lastView = state.view
 			const currentView = action.payload
 			const pulsarHierarchyArr: UpdateSingleFilter['filterName'][] = [
-				'cluster',
-				'tenant',
-				'namespace',
-				'topic',
-				'message',
-				'producer',
-				'subscription',
+				Topology.CLUSTER,
+				Topology.TENANT,
+				Topology.NAMESPACE,
+				Topology.TOPIC,
+				Topology.PRODUCER,
+				Topology.SUBSCRIPTION,
 			]
 			const currentViewLevel = pulsarHierarchyArr.indexOf(currentView)
 			const lastViewLevel = pulsarHierarchyArr.indexOf(lastView)
@@ -335,7 +294,6 @@ const selectOptions = (
 	allTopics: string[]
 	allProducers: string[]
 	allSubscriptions: string[]
-	allMessages: string[]
 } => {
 	return state.filterControl.displayedOptions
 }
@@ -349,7 +307,6 @@ const selectAllFilters = (
 	topic: string[]
 	producer: string[]
 	subscription: string[]
-	message: string[]
 } => {
 	return {
 		cluster: state.filterControl.cluster,
@@ -358,7 +315,6 @@ const selectAllFilters = (
 		topic: state.filterControl.topic,
 		producer: state.filterControl.producer,
 		subscription: state.filterControl.subscription,
-		message: state.filterControl.message,
 	}
 }
 

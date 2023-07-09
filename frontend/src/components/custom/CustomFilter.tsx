@@ -12,6 +12,8 @@ import CustomRadio from './CustomRadio'
 import CustomSearchbar from './CustomSearchbar'
 import { useAppSelector } from '../../store/hooks'
 import { selectAllFilters, selectOptions } from '../../store/filterSlice'
+import { Topology } from '../../enum'
+import { CustomFilterProps } from '../../types'
 
 const CustomFilter: React.FC<CustomFilterProps> = ({ currentView }) => {
 	// Options are what we've got from apis so far.
@@ -24,7 +26,6 @@ const CustomFilter: React.FC<CustomFilterProps> = ({ currentView }) => {
 	const [topicSearchQuery, setTopicSearchQuery] = useState('')
 	const [producerSearchQuery, setProducerSearchQuery] = useState('')
 	const [subscriptionSearchQuery, setSubscriptionSearchQuery] = useState('')
-	const [messageSearchQuery, setMessageSearchQuery] = useState('')
 
 	const filteredCheckboxes = (searchQuery: string, completeArray: string[]) => {
 		let filteredArr = []
@@ -54,10 +55,6 @@ const CustomFilter: React.FC<CustomFilterProps> = ({ currentView }) => {
 	const filteredSubscriptions = filteredCheckboxes(
 		subscriptionSearchQuery,
 		options.allSubscriptions
-	)
-	const filteredMessages = filteredCheckboxes(
-		messageSearchQuery,
-		options.allMessages
 	)
 
 	const viewLevelOne = currentView === 'topic' || currentView === 'message'
@@ -93,7 +90,7 @@ const CustomFilter: React.FC<CustomFilterProps> = ({ currentView }) => {
 									key={'checkbox-cluster' + Math.floor(Math.random() * 999999)}
 									text={item}
 									id={item}
-									typology={'cluster'}
+									topology={Topology.CLUSTER}
 									selected={filters.cluster.includes(item) ? true : false}
 								></CustomCheckbox>
 							))}
@@ -121,7 +118,7 @@ const CustomFilter: React.FC<CustomFilterProps> = ({ currentView }) => {
 										key={'checkbox-tenant' + Math.floor(Math.random() * 999999)}
 										text={item}
 										id={item}
-										typology={'tenant'}
+										topology={Topology.TENANT}
 										selected={filters.tenant.includes(item) ? true : false}
 									></CustomCheckbox>
 								))}
@@ -152,7 +149,7 @@ const CustomFilter: React.FC<CustomFilterProps> = ({ currentView }) => {
 										}
 										text={item}
 										id={item}
-										typology={'namespace'}
+										topology={Topology.NAMESPACE}
 										selected={filters.namespace.includes(item) ? true : false}
 									></CustomCheckbox>
 								))}
@@ -184,7 +181,7 @@ const CustomFilter: React.FC<CustomFilterProps> = ({ currentView }) => {
 											}
 											text={item}
 											id={item}
-											typology={'topic'}
+											topology={Topology.TOPIC}
 											selected={filters.topic.includes(item) ? true : false}
 										></CustomCheckbox>
 									))}
@@ -213,7 +210,7 @@ const CustomFilter: React.FC<CustomFilterProps> = ({ currentView }) => {
 											}
 											text={item}
 											id={item}
-											typology={'producer'}
+											topology={Topology.PRODUCER}
 											selected={filters.producer.includes(item) ? true : false}
 										></CustomRadio>
 									))}
@@ -242,7 +239,7 @@ const CustomFilter: React.FC<CustomFilterProps> = ({ currentView }) => {
 											}
 											text={item}
 											id={item}
-											typology={'subscription'}
+											topology={Topology.SUBSCRIPTION}
 											selected={
 												filters.subscription.includes(item) ? true : false
 											}
@@ -252,37 +249,6 @@ const CustomFilter: React.FC<CustomFilterProps> = ({ currentView }) => {
 						</AccordionDetails>
 					</Accordion>
 				</>
-			)}
-			{currentView === 'message' && (
-				<Accordion>
-					<AccordionSummary
-						expandIcon={<ExpandMoreIcon />}
-						aria-controls="panel1a-content"
-					>
-						<h3 className="filter-title">Messages</h3>
-					</AccordionSummary>
-					<AccordionDetails>
-						<CustomSearchbar
-							placeholder={'Search Messages'}
-							setSearchQuery={setMessageSearchQuery}
-						></CustomSearchbar>
-						<div className="flex flex-col mt-4 filter-wrapper">
-							{filteredMessages &&
-								filteredMessages.length > 0 &&
-								filteredMessages.map((item: string) => (
-									<CustomCheckbox
-										key={
-											'checkbox-message' + Math.floor(Math.random() * 999999)
-										}
-										text={item}
-										id={item}
-										typology={'message'}
-										selected={filters.message.includes(item) ? true : false}
-									></CustomCheckbox>
-								))}
-						</div>
-					</AccordionDetails>
-				</Accordion>
 			)}
 		</div>
 	)

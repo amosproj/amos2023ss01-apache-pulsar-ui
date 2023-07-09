@@ -13,6 +13,8 @@ import { useAppDispatch } from '../../store/hooks'
 import axios from 'axios'
 import { addCommaSeparator } from '../../Helpers'
 import config from '../../config'
+import { NamespaceViewProps, NamespaceInfo, NamespaceDetail } from '../../types'
+import { Topology } from '../../enum'
 
 const NamespaceView: React.FC<NamespaceViewProps> = ({ data }) => {
 	const { id, tenant, numberOfTopics }: NamespaceInfo = data
@@ -40,16 +42,16 @@ const NamespaceView: React.FC<NamespaceViewProps> = ({ data }) => {
 	}
 
 	const handleDrillDown = () => {
-		dispatch(addFilterByDrilling({ filterName: 'namespace', id: id }))
+		dispatch(addFilterByDrilling({ filterName: Topology.NAMESPACE, id: id }))
 		navigate('/topic')
 	}
 	const handleDrillUp = () => {
 		dispatch(resetAllFilters())
-		dispatch(addFilterByDrilling({ filterName: 'tenant', id: tenant }))
+		dispatch(addFilterByDrilling({ filterName: Topology.TENANT, id: tenant }))
 		navigate('/tenant')
 	}
 	const handleDrillDownToTopic = (itemId: string) => {
-		dispatch(addFilterByDrilling({ filterName: 'topic', id: itemId }))
+		dispatch(addFilterByDrilling({ filterName: Topology.TOPIC, id: itemId }))
 		navigate('/topic')
 	}
 	const handleExpand = () => {

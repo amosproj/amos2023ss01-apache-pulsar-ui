@@ -15,18 +15,19 @@ import Button from '@mui/material/Button'
 import MenuItem from '@mui/material/MenuItem'
 import { useAppDispatch } from '../store/hooks'
 import { setNav } from '../store/globalSlice'
-// import { selectEndpoint } from '../store/globalSlice'
 import logo from '../assets/images/team-logo-light.png'
-// import { Input } from '@mui/material'
 import { InfoModal } from './InfoModal'
 import { useLocation, useNavigate } from 'react-router-dom'
-import {
-	updateFilterAccordingToNav,
-	HierarchyInPulsar,
-} from '../store/filterSlice'
+import { updateFilterAccordingToNav } from '../store/filterSlice'
+import { Topology } from '../enum'
 
 //Removed 'Message' from this array for now
-const pages = ['Cluster', 'Tenant', 'Namespace', 'Topic']
+const pages = [
+	Topology.CLUSTER,
+	Topology.TENANT,
+	Topology.NAMESPACE,
+	Topology.TOPIC,
+]
 
 function NavBar() {
 	const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null)
@@ -42,8 +43,8 @@ function NavBar() {
 		setAnchorElNav(null)
 	}
 
-	const handleClickOnNav = (tag: string) => {
-		tag = tag.toLowerCase()
+	const handleClickOnNav = (tag: Topology) => {
+		//tag = tag.toLowerCase()
 		dispatch(setNav(tag))
 		navigate('/' + tag)
 	}
@@ -97,9 +98,7 @@ function NavBar() {
 									disabled={page.toLowerCase() == location.pathname.slice(1)}
 									onClick={() => {
 										handleClickOnNav(page)
-										updateFilterAccordingToNav(
-											page.toLowerCase() as HierarchyInPulsar
-										)
+										updateFilterAccordingToNav(page)
 									}}
 								>
 									<Typography textAlign="center">{page}</Typography>
@@ -120,11 +119,7 @@ function NavBar() {
 								disabled={page.toLowerCase() == location.pathname.slice(1)}
 								onClick={() => {
 									handleClickOnNav(page)
-									dispatch(
-										updateFilterAccordingToNav(
-											page.toLowerCase() as HierarchyInPulsar
-										)
-									)
+									dispatch(updateFilterAccordingToNav(page))
 								}}
 								sx={{ my: 2, color: 'white', display: 'block' }}
 							>

@@ -7,7 +7,6 @@ import ProducerModal from '../../components/modals/ProducerModal'
 import { Collapse, CardActions, Button } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import ExpandLessIcon from '@mui/icons-material/ExpandLess'
-import ChevronRight from '@mui/icons-material/ChevronRight'
 import { useNavigate } from 'react-router-dom'
 import { addFilterByDrilling, resetAllFilters } from '../../store/filterSlice'
 import { useAppDispatch } from '../../store/hooks'
@@ -15,6 +14,8 @@ import axios from 'axios'
 import SubscriptionModal from '../../components/modals/SubscriptionModal'
 import config from '../../config'
 import MessageModal from '../../components/modals/MessageModal'
+import { TopicViewProps, TopicInfo, TopicDetail, SchemaInfo } from '../../types'
+import { Topology } from '../../enum'
 
 const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 	const { name, tenant, namespace, producers, subscriptions }: TopicInfo = data
@@ -45,12 +46,14 @@ const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 	}*/
 	const handleDrillUpToNamespace = () => {
 		dispatch(resetAllFilters())
-		dispatch(addFilterByDrilling({ filterName: 'namespace', id: namespace }))
+		dispatch(
+			addFilterByDrilling({ filterName: Topology.NAMESPACE, id: namespace })
+		)
 		navigate('/namespace')
 	}
 	const handleDrillUpToTenant = () => {
 		dispatch(resetAllFilters())
-		dispatch(addFilterByDrilling({ filterName: 'tenant', id: tenant }))
+		dispatch(addFilterByDrilling({ filterName: Topology.TENANT, id: tenant }))
 		navigate('/tenant')
 	}
 	const handleExpand = () => {

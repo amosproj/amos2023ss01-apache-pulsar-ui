@@ -20,6 +20,7 @@ import { Masonry } from 'react-plock'
 import { Pagination } from '@mui/material'
 import { Box } from '@mui/system'
 import FlushCacheButton from '../../components/buttons/FlushCacheButton'
+import { TopicInfo } from '../../types'
 
 export interface ResponseTopic {
 	topics: TopicInfo[]

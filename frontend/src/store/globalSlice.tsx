@@ -4,9 +4,10 @@
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { RootState } from '.'
+import { Topology } from '../enum'
 
 export type View = {
-	selectedNav: string | null
+	selectedNav: Topology
 	filteredId: number | string | null
 }
 
@@ -16,7 +17,7 @@ export type globalState = {
 
 const initialState: globalState = {
 	view: {
-		selectedNav: 'cluster',
+		selectedNav: Topology.CLUSTER,
 		filteredId: null,
 	},
 }
@@ -25,7 +26,7 @@ const globalSlice = createSlice({
 	name: 'globalControl',
 	initialState,
 	reducers: {
-		setNav: (state, action: PayloadAction<string>) => {
+		setNav: (state, action: PayloadAction<Topology>) => {
 			state.view.selectedNav = action.payload
 		},
 		setView: (state, action: PayloadAction<View>) => {

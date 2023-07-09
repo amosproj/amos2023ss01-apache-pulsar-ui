@@ -16,10 +16,11 @@ import {
 	fetchOptionsThunk,
 	resetAllFilters,
 	updateFilterAccordingToNav,
-	HierarchyInPulsar,
 } from '../store/filterSlice'
 import { triggerRequest } from '../routes/requestTriggerSlice'
 import { Button } from '@mui/material'
+import { DashboardProps } from '../types'
+import { Topology } from '../enum'
 
 const Dashboard: React.FC<DashboardProps> = ({ children }) => {
 	const dispatch = useAppDispatch()
@@ -30,7 +31,7 @@ const Dashboard: React.FC<DashboardProps> = ({ children }) => {
 		if (location.pathname === '/') navigate('/cluster')
 		// fetch all filter options once beforehand
 		dispatch(fetchOptionsThunk())
-		dispatch(updateFilterAccordingToNav(location.pathname as HierarchyInPulsar))
+		dispatch(updateFilterAccordingToNav(location.pathname as Topology))
 	}, [])
 
 	/**

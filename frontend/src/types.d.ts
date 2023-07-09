@@ -2,6 +2,8 @@
 // SPDX-FileCopyrightText: 2010-2021 Dirk Riehle <dirk@riehle.org
 // SPDX-FileCopyrightText: 2019 Georg Schwarz <georg. schwarz@fau.de>
 
+import { Topology } from './enum'
+
 // Demo interfaces (MessageList was for Topics, Message needs to be updated)
 interface MessageList {
 	id: string
@@ -12,20 +14,6 @@ interface MessageList {
 interface Message {
 	id: string
 	value: string
-}
-
-// Component Prop Interfaces
-interface CardProps {
-	data:
-		| SampleCluster
-		| SampleTenant
-		| SampleNamespace
-		| SampleTopic
-		| SampleMessage
-	handleClick: (
-		e: React.MouseEvent<HTMLElement>,
-		currentEl: SampleCluster | SampleTenant | SampleNamespace | SampleTopic
-	) => void
 }
 
 interface DashboardProps {
@@ -47,14 +35,7 @@ interface CustomSelectProps<T> {
 interface CustomCheckboxProps {
 	id: string
 	text: string
-	typology:
-		| 'cluster'
-		| 'tenant'
-		| 'namespace'
-		| 'topic'
-		| 'message'
-		| 'producer'
-		| 'subscription'
+	topology: Topology
 	selected: boolean
 }
 
@@ -235,11 +216,10 @@ interface MessageInfo {
 
 interface CustomFilterProps {
 	currentView:
-		| 'cluster'
-		| 'tenant'
-		| 'namespace'
-		| 'topic'
-		| 'message'
+		| Topology.CLUSTER
+		| Topology.TENANT
+		| Topology.NAMESPACE
+		| Topology.TOPIC
 		| undefined
 		| null
 		| string
