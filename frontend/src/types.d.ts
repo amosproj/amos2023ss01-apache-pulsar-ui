@@ -4,29 +4,18 @@
 
 import { Topology } from './enum'
 
-// Demo interfaces (MessageList was for Topics, Message needs to be updated)
 declare global {
-	interface MessageList {
-		id: string
-		name: string
-		messages: Array<Message>
-	}
-
-	interface Message {
-		id: string
-		value: string
-	}
-
 	interface DashboardProps {
 		children: ReactNode
 	}
 
-	interface CustomAccordionProps {
-		data: Array<MessageList>
+	interface FilterItem {
+		id: string
+		name: string
 	}
 
 	interface CustomSelectProps<T> {
-		data: Array<MessageList>
+		data: Array<FilterItem>
 		onChange: (event: SelectChangeEvent<T>) => void
 		value: T
 		label: string
@@ -38,11 +27,6 @@ declare global {
 		text: string
 		topology: Topology
 		selected: boolean
-	}
-
-	interface formProps {
-		data: Array<MessageList>
-		triggerUpdate(message: string, topic: string): void
 	}
 
 	interface ClusterInfo {
