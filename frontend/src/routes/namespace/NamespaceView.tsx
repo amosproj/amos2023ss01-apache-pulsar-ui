@@ -13,7 +13,6 @@ import { useAppDispatch } from '../../store/hooks'
 import axios from 'axios'
 import { addCommaSeparator } from '../../Helpers'
 import config from '../../config'
-import { NamespaceViewProps, NamespaceInfo, NamespaceDetail } from '../../types'
 import { Topology } from '../../enum'
 
 const NamespaceView: React.FC<NamespaceViewProps> = ({ data }) => {

@@ -13,7 +13,6 @@ import { useAppDispatch } from '../../store/hooks'
 import axios from 'axios'
 import { addCommaSeparator } from '../../Helpers'
 import config from '../../config'
-import { TenantViewProps, TenantInfo, TenantDetail } from '../../types'
 import { Topology } from '../../enum'
 
 const TenantView: React.FC<TenantViewProps> = ({ data }) => {

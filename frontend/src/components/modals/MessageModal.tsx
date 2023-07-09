@@ -10,7 +10,6 @@ import config from '../../config'
 import { ChevronRight } from '@mui/icons-material'
 import MessageView from '../../routes/message/MessageView'
 import { Masonry } from 'react-plock'
-import { MessageInfo } from '../../types'
 
 /**
 The following information is shown in the producer information popup:

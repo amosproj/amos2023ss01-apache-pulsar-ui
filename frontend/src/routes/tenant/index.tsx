@@ -11,7 +11,6 @@ import { selectTrigger } from '../requestTriggerSlice'
 import config from '../../config'
 import { Masonry } from 'react-plock'
 import FlushCacheButton from '../../components/buttons/FlushCacheButton'
-import { TenantInfo } from '../../types'
 
 export interface ResponseTenant {
 	tenants: TenantInfo[]

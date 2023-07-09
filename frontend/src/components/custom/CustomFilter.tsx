@@ -13,7 +13,6 @@ import CustomSearchbar from './CustomSearchbar'
 import { useAppSelector } from '../../store/hooks'
 import { selectAllFilters, selectOptions } from '../../store/filterSlice'
 import { Topology } from '../../enum'
-import { CustomFilterProps } from '../../types'
 
 const CustomFilter: React.FC<CustomFilterProps> = ({ currentView }) => {
 	// Options are what we've got from apis so far.

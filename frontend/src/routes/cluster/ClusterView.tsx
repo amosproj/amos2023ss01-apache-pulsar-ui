@@ -13,7 +13,6 @@ import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import config from '../../config'
 import { addCommaSeparator } from '../../Helpers'
-import { ClusterViewProps, ClusterInfo, ClusterDetail } from '../../types'
 import { Topology } from '../../enum'
 
 const ClusterView: React.FC<ClusterViewProps> = ({ data }) => {

@@ -6,7 +6,6 @@ import React from 'react'
 import { useAppDispatch } from '../../store/hooks'
 import { addFilterWithRadio, deleteFilter } from '../../store/filterSlice'
 import { triggerRequest } from '../../routes/requestTriggerSlice'
-import { CustomCheckboxProps } from '../../types'
 
 const CustomRadio: React.FC<CustomCheckboxProps> = ({
 	id,

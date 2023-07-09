@@ -19,7 +19,6 @@ import {
 } from '../store/filterSlice'
 import { triggerRequest } from '../routes/requestTriggerSlice'
 import { Button } from '@mui/material'
-import { DashboardProps } from '../types'
 import { Topology } from '../enum'
 
 const Dashboard: React.FC<DashboardProps> = ({ children }) => {

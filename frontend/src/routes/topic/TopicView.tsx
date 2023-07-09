@@ -14,7 +14,6 @@ import axios from 'axios'
 import SubscriptionModal from '../../components/modals/SubscriptionModal'
 import config from '../../config'
 import MessageModal from '../../components/modals/MessageModal'
-import { TopicViewProps, TopicInfo, TopicDetail, SchemaInfo } from '../../types'
 import { Topology } from '../../enum'
 
 const TopicView: React.FC<TopicViewProps> = ({ data }) => {
