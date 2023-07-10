@@ -19,6 +19,8 @@ export interface ResponseTenant {
 /**
  * Card group component for the tenant type.
  * Displays the TenantView cards, title, loading window and network error.
+ *
+ * @component
  * @returns Rendered tenant view cards for the dashboard component
  */
 const TenantGroup: React.FC = () => {

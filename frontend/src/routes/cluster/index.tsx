@@ -19,6 +19,8 @@ export interface ResponseCluster {
 /**
  * Card group component for the cluster type.
  * Displays the ClusterView cards, title, loading window and network error.
+ *
+ * @component
  * @returns Rendered cluster view cards for the dashboard component
  */
 const ClusterGroup: React.FC = () => {

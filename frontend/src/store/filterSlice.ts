@@ -13,7 +13,7 @@ import config from '../config'
 import { Topology } from '../enum'
 
 export type FilterState = {
-	// used to keep track of what curently is filtered and what not:
+	// used to keep track of what currently is filtered and what not:
 	cluster: string[]
 	tenant: string[]
 	namespace: string[]
@@ -285,6 +285,11 @@ const selectSubscription = (state: RootState): string[] => {
 	return state.filterControl.subscription
 }
 
+/**
+ * Selects/returns all available filter options from the state
+ * @param state - current state
+ * @returns Filter Options
+ */
 const selectOptions = (
 	state: RootState
 ): {
@@ -297,7 +302,11 @@ const selectOptions = (
 } => {
 	return state.filterControl.displayedOptions
 }
-
+/**
+ * Selects/returns all applied filters from the state
+ * @param state - current state
+ * @returns Applied filters
+ */
 const selectAllFilters = (
 	state: RootState
 ): {

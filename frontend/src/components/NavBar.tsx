@@ -29,7 +29,16 @@ const pages = [
 	Topology.TOPIC,
 ]
 
-function NavBar() {
+/**
+ * NavBar is a React component that provides a navigational bar interface.
+ * It manages navigation menu state and provides handlers for opening and closing Modals as well as clicking on navigation items.
+ * The NavBar renders AppBar which contains navigation options for different pages.
+ * It also contains the InfoModal component.
+ *
+ * @component
+ * @returns The rendered NavBar component.
+ */
+const NavBar: React.FC = () => {
 	const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null)
 
 	const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -43,6 +52,7 @@ function NavBar() {
 		setAnchorElNav(null)
 	}
 
+	// handles click on navigation items
 	const handleClickOnNav = (tag: Topology) => {
 		//tag = tag.toLowerCase()
 		dispatch(setNav(tag))

@@ -7,7 +7,14 @@ import Button from '@mui/material/Button'
 import { Box, Modal, Typography } from '@mui/material'
 import InfoRoundedIcon from '@mui/icons-material/InfoRounded'
 
-export function InfoModal() {
+/**
+ * InfoModal is a React component that provides an informative modal interface.
+ * It handles opening and closing of the modal and displays information about the project mission.
+ *
+ * @component
+ * @returns The rendered InfoModal component.
+ */
+export const InfoModal: React.FC = () => {
 	const [open, setOpen] = React.useState(false)
 
 	const handleClickOpen = () => {

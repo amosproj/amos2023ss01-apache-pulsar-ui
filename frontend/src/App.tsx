@@ -15,6 +15,13 @@ import NamespaceGroup from './routes/namespace'
 import TenantGroup from './routes/tenant'
 import TopicGroup from './routes/topic'
 
+/**
+ * The main application component.
+ * It sets up the main routes for the application and also renders the main Dashboard and NavBar components.
+ *
+ * @component
+ * @returns The main application component rendered to the DOM.
+ */
 function App() {
 	return (
 		<>

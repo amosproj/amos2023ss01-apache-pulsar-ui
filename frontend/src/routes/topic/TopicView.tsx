@@ -16,6 +16,15 @@ import config from '../../config'
 import MessageModal from '../../components/modals/MessageModal'
 import { Topology } from '../../enum'
 
+/**
+ * TopicView is a React component for visualizing topic details.
+ * It shows key properties of a tenant such as its name, related tenant and namespace,
+ * and allows for the navigation to the detailed view.
+ *
+ * @component
+ * @param data - The data object containing the cluster information.
+ * @returns The rendered ClusterView component.
+ */
 const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 	const { name, tenant, namespace, producers, subscriptions }: TopicInfo = data
 	const [expanded, setExpanded] = useState(false)

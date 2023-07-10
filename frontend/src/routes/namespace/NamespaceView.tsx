@@ -15,6 +15,15 @@ import { addCommaSeparator } from '../../Helpers'
 import config from '../../config'
 import { Topology } from '../../enum'
 
+/**
+ * NamespaceView is a React component for visualizing namespace details.
+ * It shows key properties of a namespace such as its id, related tenants and numberOfTopics,
+ * and allows for the navigation to the detailed view.
+ *
+ * @component
+ * @param data - The data object containing the cluster information.
+ * @returns The rendered ClusterView component.
+ */
 const NamespaceView: React.FC<NamespaceViewProps> = ({ data }) => {
 	const { id, tenant, numberOfTopics }: NamespaceInfo = data
 

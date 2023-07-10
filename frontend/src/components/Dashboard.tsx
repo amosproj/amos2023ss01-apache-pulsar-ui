@@ -21,6 +21,16 @@ import { triggerRequest } from '../routes/requestTriggerSlice'
 import { Button } from '@mui/material'
 import { Topology } from '../enum'
 
+/**
+ * Dashboard is a React component that provides a dashboard with filter options.
+ * It's the primary UI for user's interaction where it allows them to apply or reset filters on data.
+ * The children param is used to display the topology views.
+ * It also fetches filter options beforehand and updates filter according to navigation.
+ *
+ * @component
+ * @param children - Child components
+ * @returns The rendered Dashboard component.
+ */
 const Dashboard: React.FC<DashboardProps> = ({ children }) => {
 	const dispatch = useAppDispatch()
 	const navigate = useNavigate()
@@ -35,6 +45,8 @@ const Dashboard: React.FC<DashboardProps> = ({ children }) => {
 
 	/**
 	 * Resets all filters and triggers another page request to update the currently displayed cards
+	 * @function
+	 * @returns {void}
 	 */
 	const resetFilters = () => {
 		dispatch(resetAllFilters())
