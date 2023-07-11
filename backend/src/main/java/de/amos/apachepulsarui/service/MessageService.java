@@ -19,7 +19,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -27,8 +31,8 @@ import java.util.List;
 public class MessageService {
     private final PulsarAdmin pulsarAdmin;
 
-    public List<MessageDto> getLatestMessagesFiltered(String topic, Integer numMessages, List<String> producers, List<String> subscriptions) {
-        List<MessageDto> messageDtos = getLatestMessagesOfTopic(topic, numMessages);
+    public Set<MessageDto> getLatestMessagesFiltered(String topic, Integer numMessages, List<String> producers, List<String> subscriptions) {
+        Set<MessageDto> messageDtos = getLatestMessagesOfTopic(topic, numMessages);
         if (!producers.isEmpty()) {
             messageDtos = filterByProducers(messageDtos, producers);
         }
@@ -39,12 +43,14 @@ public class MessageService {
         return messageDtos;
     }
 
-    private List<MessageDto> filterBySubscription(List<MessageDto> messageDtos, Integer numMessages, String topic, List<String> subscriptions) {
+    private Set<MessageDto> filterBySubscription(Set<MessageDto> messageDtos, Integer numMessages, String topic, List<String> subscriptions) {
         List<String> messageIds = subscriptions.stream()
                 .flatMap(s -> peekMessageIds(topic, s, numMessages).stream())
                 .toList();
 
-        return messageDtos.stream().filter(m -> messageIds.contains(m.getMessageId())).toList();
+        return messageDtos.stream()
+                .filter(m -> messageIds.contains(m.getMessageId()))
+                .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     private List<String> peekMessageIds(String topic, String subscription, Integer numMessages) {
@@ -60,14 +66,13 @@ public class MessageService {
     }
 
 
-    private List<MessageDto> filterByProducers(List<MessageDto> messageDtos, List<String> producers) {
+    private Set<MessageDto> filterByProducers(Set<MessageDto> messageDtos, List<String> producers) {
         return messageDtos.stream()
                 .filter(m -> producers.contains(m.getProducer()))
-                .toList();
-
+                .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
-    private List<MessageDto> getLatestMessagesOfTopic(String topic, Integer numMessages) {
+    private Set<MessageDto> getLatestMessagesOfTopic(String topic, Integer numMessages) {
         var schema = getSchemaIfExists(topic);
         try {
             var messages = new ArrayList<Message<byte[]>>();
@@ -83,7 +88,10 @@ public class MessageService {
             }
             return messages.stream()
                     .map(message -> MessageDto.fromExistingMessage(message, schema))
-                    .toList();
+                    // latest message first in set
+                    .sorted(Comparator.comparing(MessageDto::getPublishTime, Comparator.reverseOrder()))
+                    // linked to keep the order!
+                    .collect(Collectors.toCollection(LinkedHashSet::new));
         } catch (PulsarAdminException e) {
             throw new PulsarApiException(
                     "Could not examine the amount of '%d' messages for topic '%s'".formatted(numMessages, topic),
