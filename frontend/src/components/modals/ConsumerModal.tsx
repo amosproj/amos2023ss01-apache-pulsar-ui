@@ -8,22 +8,6 @@ import CloseIcon from '@mui/icons-material/Close'
 import axios from 'axios'
 import config from '../../config'
 
-/** 
-The following information is shown in the consumer information popup:
-
-address: Address of this consumer
-availablePermits: Number of available message permits for the consumer
-BytesOutCounter: Total bytes delivered to consumer (bytes)
-ClientVersion: Client library version
-ConnectedSince: Timestamp of connection
-ConsumerName: Name of the consumer
-LastAckedTimestamp:
-LastConsumedTimestamp:
-MessageOutConter: Total messages delivered to consumer (msg).
-UnackedMessages: Number of unacknowledged messages for the consumer, where an unacknowledged message is one that has been sent to the consumer but not yet acknowledged
-isBlockedConsumerOnUnackedMsgs: Flag to verify if consumer is blocked due to reaching threshold of unacked messages
-*/
-
 interface ConsumerModalProps {
 	consumer: {
 		topicName: string
@@ -31,6 +15,16 @@ interface ConsumerModalProps {
 	}
 }
 
+/**
+ * ConsumerModal is a react component for displaying information in pulsar.
+ * !!! Currently this component is replaced by ConsumerAccordion.
+ *
+ * @component
+ * @param  consumer
+ * @param  consumer.topicName - The name of topic it belongs to.
+ * @param  consumer.consumerName - The name of current consumer.
+ * @returns The rendered ConsumerModal component.
+ */
 const ConsumerModal: React.FC<ConsumerModalProps> = ({ consumer }) => {
 	const { topicName, consumerName } = consumer
 

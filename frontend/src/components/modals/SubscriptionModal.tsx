@@ -34,6 +34,26 @@ interface MessageResponse {
 	messages: MessageInfo[]
 }
 
+/**
+ * SubscriptionModal is a react component for displaying subscription information in pulsar.
+ *
+ * The following information is shown in the subscription information popup:
+ * Consumers: List of connected consumers on this subscription w/ their stats.
+ * -> When clicked, the corresponding consumer accordion is expanded
+ * ConsumersCount: Number of total consumers
+ * BacklogSize: Size of backlog in byte
+ * MsgBacklog: Number of entries in the subscription backlog
+ * BytesOutCounter: Total bytes delivered to consumer (bytes)
+ * MsgOutCounter: Total messages delivered to consumer (msg)
+ * isReplicated: Mark that the subscription state is kept in sync across different regions
+ * Type: The subscription type as defined by SubscriptionType
+ * Messages: 10 messages in this subscription
+ *
+ * @component
+ * @param subscription - The name of subscription.
+ * @param topic - The name of topic.
+ * @returns The rendered SubscriptionModal component.
+ */
 const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
 	subscription,
 	topic,
