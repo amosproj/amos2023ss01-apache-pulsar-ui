@@ -2,7 +2,7 @@ import React from 'react'
 import { render, screen } from '@testing-library/react'
 import { Provider } from 'react-redux'
 import store from '../store'
-import TenantView from '../components/pages/tenant/TenantView'
+import TenantView from '../routes/tenant/TenantView'
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
 
 const dataTest: Array<TenantInfo> = [

@@ -2,7 +2,7 @@ import React from 'react'
 import { render, screen } from '@testing-library/react'
 import { Provider } from 'react-redux'
 import store from '../store'
-import TopicView from '../components/pages/topic/TopicView'
+import TopicView from '../routes/topic/TopicView'
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
 
 const dataTest: Array<TopicInfo> = [

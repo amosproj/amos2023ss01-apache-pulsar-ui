@@ -3,22 +3,28 @@
 // SPDX-FileCopyrightText: 2019 Georg Schwarz <georg. schwarz@fau.de>
 
 import React, { useState } from 'react'
-import ProducerModal from '../../modals/ProducerModal'
+import ProducerModal from '../../components/modals/ProducerModal'
 import { Collapse, CardActions, Button } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import ExpandLessIcon from '@mui/icons-material/ExpandLess'
-import ChevronRight from '@mui/icons-material/ChevronRight'
 import { useNavigate } from 'react-router-dom'
-import {
-	addFilterByDrilling,
-	resetAllFilters,
-} from '../../../store/filterSlice'
-import { useAppDispatch } from '../../../store/hooks'
+import { addFilterByDrilling, resetAllFilters } from '../../store/filterSlice'
+import { useAppDispatch } from '../../store/hooks'
 import axios from 'axios'
-import SubscriptionModal from '../../modals/SubscriptionModal'
-import config from '../../../config'
-import MessageModal from '../../modals/MessageModal'
+import SubscriptionModal from '../../components/modals/SubscriptionModal'
+import config from '../../config'
+import MessageModal from '../../components/modals/MessageModal'
+import { Topology } from '../../enum'
 
+/**
+ * TopicView is a React component for visualizing topic details.
+ * It shows key properties of a tenant such as its name, related tenant and namespace,
+ * and allows for the navigation to the detailed view.
+ *
+ * @component
+ * @param data - The data object containing the cluster information.
+ * @returns The rendered ClusterView component.
+ */
 const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 	const { name, tenant, namespace, producers, subscriptions }: TopicInfo = data
 	const [expanded, setExpanded] = useState(false)
@@ -48,12 +54,14 @@ const TopicView: React.FC<TopicViewProps> = ({ data }) => {
 	}*/
 	const handleDrillUpToNamespace = () => {
 		dispatch(resetAllFilters())
-		dispatch(addFilterByDrilling({ filterName: 'namespace', id: namespace }))
+		dispatch(
+			addFilterByDrilling({ filterName: Topology.NAMESPACE, id: namespace })
+		)
 		navigate('/namespace')
 	}
 	const handleDrillUpToTenant = () => {
 		dispatch(resetAllFilters())
-		dispatch(addFilterByDrilling({ filterName: 'tenant', id: tenant }))
+		dispatch(addFilterByDrilling({ filterName: Topology.TENANT, id: tenant }))
 		navigate('/tenant')
 	}
 	const handleExpand = () => {

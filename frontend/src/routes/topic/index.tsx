@@ -3,7 +3,7 @@
 // SPDX-FileCopyrightText: 2019 Georg Schwarz <georg. schwarz@fau.de>
 
 import React, { useEffect, useState } from 'react'
-import { useAppDispatch, useAppSelector } from '../../../store/hooks'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import axios from 'axios'
 import {
 	selectCluster,
@@ -12,13 +12,14 @@ import {
 	selectSubscription,
 	selectTenant,
 	selectTopic,
-} from '../../../store/filterSlice'
+} from '../../store/filterSlice'
 import TopicView from './TopicView'
 import { selectTrigger } from '../requestTriggerSlice'
-import config from '../../../config'
+import config from '../../config'
 import { Masonry } from 'react-plock'
 import { Pagination } from '@mui/material'
 import { Box } from '@mui/system'
+import FlushCacheButton from '../../components/buttons/FlushCacheButton'
 
 export interface ResponseTopic {
 	topics: TopicInfo[]
@@ -27,6 +28,8 @@ export interface ResponseTopic {
 /**
  * Card group component for the topic type.
  * Displays the TopicView cards, title, loading window and network error.
+ *
+ * @component
  * @returns Rendered topic view cards for the dashboard component
  */
 const TopicGroup: React.FC = () => {
@@ -101,11 +104,16 @@ const TopicGroup: React.FC = () => {
 
 	return (
 		<div>
-			<h2 className="dashboard-title">Available Topics ({data.length})</h2>
-			<h3 className="dashboard-subtitle">
-				Producers: {sumElements(data, 'producers')}, Subscriptions:{' '}
-				{sumElements(data, 'subscriptions')}
-			</h3>
+			<div className="flex dashboard-header">
+				<div>
+					<h2 className="dashboard-title">Available Topics ({data.length})</h2>
+					<h3 className="dashboard-subtitle">
+						Producers: {sumElements(data, 'producers')}, Subscriptions:{' '}
+						{sumElements(data, 'subscriptions')}
+					</h3>
+				</div>
+				<FlushCacheButton />
+			</div>
 			{loading ? (
 				<div className="main-card"> Loading...</div>
 			) : error ? (

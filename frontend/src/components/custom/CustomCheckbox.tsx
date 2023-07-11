@@ -5,19 +5,19 @@
 import React from 'react'
 import { useAppDispatch } from '../../store/hooks'
 import { addFilter, deleteFilter } from '../../store/filterSlice'
-import { triggerRequest } from '../pages/requestTriggerSlice'
+import { triggerRequest } from '../../routes/requestTriggerSlice'
 
 const CustomCheckbox: React.FC<CustomCheckboxProps> = ({
 	id,
 	text,
-	typology,
+	topology,
 	selected,
 }) => {
 	const dispatch = useAppDispatch()
 	const handleClick = (): void => {
 		dispatch(triggerRequest())
-		if (selected) dispatch(deleteFilter({ filterName: typology, id: id }))
-		else dispatch(addFilter({ filterName: typology, id: id }))
+		if (selected) dispatch(deleteFilter({ filterName: topology, id: id }))
+		else dispatch(addFilter({ filterName: topology, id: id }))
 	}
 
 	return (

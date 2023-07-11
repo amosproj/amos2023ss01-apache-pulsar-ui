@@ -3,13 +3,14 @@
 // SPDX-FileCopyrightText: 2019 Georg Schwarz <georg. schwarz@fau.de>
 
 import React, { useEffect, useState } from 'react'
-import { useAppDispatch, useAppSelector } from '../../../store/hooks'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import axios from 'axios'
 import ClusterView from './ClusterView'
-import { selectCluster } from '../../../store/filterSlice'
+import { selectCluster } from '../../store/filterSlice'
 import { selectTrigger } from '../requestTriggerSlice'
-import config from '../../../config'
+import config from '../../config'
 import { Masonry } from 'react-plock'
+import FlushCacheButton from '../../components/buttons/FlushCacheButton'
 
 export interface ResponseCluster {
 	clusters: ClusterInfo[]
@@ -18,6 +19,8 @@ export interface ResponseCluster {
 /**
  * Card group component for the cluster type.
  * Displays the ClusterView cards, title, loading window and network error.
+ *
+ * @component
  * @returns Rendered cluster view cards for the dashboard component
  */
 const ClusterGroup: React.FC = () => {
@@ -44,11 +47,18 @@ const ClusterGroup: React.FC = () => {
 
 	return (
 		<div>
-			<h2 className="dashboard-title">Available Clusters ({data.length})</h2>
-			<h3 className="dashboard-subtitle">
-				Tenants: {sumElements(data, 'numberOfTenants')}, Namespaces:{' '}
-				{sumElements(data, 'numberOfNamespaces')}
-			</h3>
+			<div className="flex dashboard-header">
+				<div>
+					<h2 className="dashboard-title">
+						Available Clusters ({data.length})
+					</h2>
+					<h3 className="dashboard-subtitle">
+						Tenants: {sumElements(data, 'numberOfTenants')}, Namespaces:{' '}
+						{sumElements(data, 'numberOfNamespaces')}
+					</h3>
+				</div>
+				<FlushCacheButton />
+			</div>
 			{loading ? (
 				<div className="main-card"> Loading...</div>
 			) : error ? (

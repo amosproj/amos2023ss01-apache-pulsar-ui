@@ -3,17 +3,18 @@
 // SPDX-FileCopyrightText: 2019 Georg Schwarz <georg. schwarz@fau.de>
 
 import React, { useEffect, useState } from 'react'
-import { useAppDispatch, useAppSelector } from '../../../store/hooks'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import axios from 'axios'
 import {
 	selectCluster,
 	selectNamespace,
 	selectTenant,
-} from '../../../store/filterSlice'
+} from '../../store/filterSlice'
 import NamespaceView from './NamespaceView'
 import { selectTrigger } from '../requestTriggerSlice'
-import config from '../../../config'
+import config from '../../config'
 import { Masonry } from 'react-plock'
+import FlushCacheButton from '../../components/buttons/FlushCacheButton'
 
 export interface ResponseNamespace {
 	namespaces: NamespaceInfo[]
@@ -22,7 +23,9 @@ export interface ResponseNamespace {
 /**
  * Card group component for the namespace type.
  * Displays the NamespaceView cards, title, loading window and network error.
- * @returns Rendered namespace view cards for the dashboard component
+ *
+ * @component
+ * @returns  Rendered namespace view cards for the dashboard component
  */
 const NamespaceGroup: React.FC = () => {
 	const [data, setData] = useState<NamespaceInfo[]>([])
@@ -67,8 +70,15 @@ const NamespaceGroup: React.FC = () => {
 
 	return (
 		<div>
-			<h2 className="dashboard-title">Available Namespaces ({data.length})</h2>
-			<h3 className="dashboard-subtitle">Topics: {sumTopics(data)}</h3>
+			<div className="flex dashboard-header">
+				<div>
+					<h2 className="dashboard-title">
+						Available Namespaces ({data.length})
+					</h2>
+					<h3 className="dashboard-subtitle">Topics: {sumTopics(data)}</h3>
+				</div>
+				<FlushCacheButton />
+			</div>
 			{loading ? (
 				<div className="main-card"> Loading...</div>
 			) : error ? (

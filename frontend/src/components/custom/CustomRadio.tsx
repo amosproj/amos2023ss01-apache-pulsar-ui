@@ -5,19 +5,19 @@
 import React from 'react'
 import { useAppDispatch } from '../../store/hooks'
 import { addFilterWithRadio, deleteFilter } from '../../store/filterSlice'
-import { triggerRequest } from '../pages/requestTriggerSlice'
+import { triggerRequest } from '../../routes/requestTriggerSlice'
 
 const CustomRadio: React.FC<CustomCheckboxProps> = ({
 	id,
 	text,
-	typology,
+	topology,
 	selected,
 }) => {
 	const dispatch = useAppDispatch()
 	const handleClick = (): void => {
 		dispatch(triggerRequest())
-		if (selected) dispatch(deleteFilter({ filterName: typology, id: id }))
-		else dispatch(addFilterWithRadio({ filterName: typology, id: id }))
+		if (selected) dispatch(deleteFilter({ filterName: topology, id: id }))
+		else dispatch(addFilterWithRadio({ filterName: topology, id: id }))
 	}
 
 	return (

@@ -8,18 +8,8 @@ import CloseIcon from '@mui/icons-material/Close'
 import axios from 'axios'
 import config from '../../config'
 import { ChevronRight } from '@mui/icons-material'
-import MessageView from '../pages/message/MessageView'
+import MessageView from '../../routes/message/MessageView'
 import { Masonry } from 'react-plock'
-
-/**
-The following information is shown in the producer information popup:
-Address: Address of this publisher.
-AverageMsgSize: Average message size published by this publisher.
-ClientVersion: Client library version.
-ConnectedSince: Timestamp of connection.
-ProducerId: Id of this publisher.
-ProducerName: Producer name.
-*/
 
 interface MessageModalProps {
 	topic: string
@@ -29,9 +19,27 @@ interface MessageResponse {
 	messages: MessageInfo[]
 }
 
+/**
+ * MessageModal is a react component for displaying message information in pulsar.
+ *
+ * The following information is shown in MessageModal:
+ * messageId: the id of the message
+ * topic: the topic this message belongs to
+ * payload: payload this message contains
+ * schema:
+ * namespace: the name space this message belongs to
+ * tenant: the tenant this message belongs to
+ * publishTime:
+ * producer: the producer this message belongs to
+ *
+ * @component
+ * @param topic - The name of topic
+ * @returns The rendered MessageModal component.
+ */
 const MessageModal: React.FC<MessageModalProps> = ({ topic }) => {
 	const [open, setOpen] = useState(false)
 	const [amount, setAmount] = useState<number>(10)
+	const [inputValue, setInputValue] = useState<string>('10')
 	const [data, setData] = useState<MessageInfo[]>([])
 	const [loading, setLoading] = useState<boolean>(true)
 	const [error, setError] = useState<string | null>(null)
@@ -76,7 +84,28 @@ const MessageModal: React.FC<MessageModalProps> = ({ topic }) => {
 			})
 	}
 	const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		setAmount(Number(event.target.value))
+		const value = event.target.value
+		setInputValue(value) // set the inputValue state
+
+		if (value === '') {
+			return // allow empty input but don't update amount
+		}
+
+		// Convert input value to a number
+		let newAmount = Number(value)
+
+		// Take the absolute value
+		newAmount = Math.abs(newAmount)
+
+		// Round it down to nearest integer
+		newAmount = Math.floor(newAmount)
+
+		// Set the minimum possible value to 1
+		newAmount = Math.max(1, newAmount)
+
+		// Update state
+		setAmount(newAmount)
+		setInputValue(newAmount.toString())
 	}
 
 	return (
@@ -89,25 +118,25 @@ const MessageModal: React.FC<MessageModalProps> = ({ topic }) => {
 				Drill down
 			</Button>
 			<Modal open={open} onClose={handleClose}>
-				<Box className="message-box-wrapper">
-					<Box className="message-box" onScroll={handleScroll}>
+				<Box className="modal-box">
+					<Box className="modal-box-inner" onScroll={handleScroll}>
 						<IconButton className="close-modal-button" onClick={handleClose}>
 							<CloseIcon />
 						</IconButton>
-						<div className="message-filter-wrapper">
+						<div className="modal-content messages-container">
 							<div className="custom-scrollbar-wrapper">
 								<div
 									className="custom-scrollbar"
 									style={{ height: scrollTop + '%' }}
 								></div>
 							</div>
-							<h2 className="message-title">Messages ({data.length})</h2>
+							<h2 className="modal-title">Messages ({data.length})</h2>
 							<div className="message-filter">
 								<TextField
 									type="number"
 									label="Nr. of messages requested"
 									variant="outlined"
-									defaultValue={amount}
+									value={inputValue}
 									onChange={handleAmountChange}
 									size="small"
 								/>

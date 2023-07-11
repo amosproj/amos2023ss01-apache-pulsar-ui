@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/messages")
@@ -30,8 +31,10 @@ public class MessageController {
     public ResponseEntity<MessagesDto> getMessages(@RequestParam String topic,
                                                    @RequestParam(required = false, defaultValue = "10") Integer numMessages,
                                                    @RequestParam(required = false, defaultValue = "") List<String> producers,
-                                                   @RequestParam(required = false, defaultValue = "") List<String> subscriptions) {
-        List<MessageDto> messageDtos = messageService.getLatestMessagesFiltered(topic, numMessages, producers, subscriptions);
+                                                   @RequestParam(required = false, defaultValue = "") List<String> subscriptions)
+    {
+        Set<MessageDto> messageDtos = messageService.getLatestMessagesFiltered(topic, numMessages, producers, subscriptions);
         return new ResponseEntity<>(new MessagesDto(messageDtos), HttpStatus.OK);
     }
+
 }

@@ -5,30 +5,21 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { RootState } from '.'
 import axios from 'axios'
-import { ResponseCluster } from '../components/pages/cluster'
-import { ResponseTenant } from '../components/pages/tenant'
-import { ResponseNamespace } from '../components/pages/namespace'
-import { ResponseTopic } from '../components/pages/topic'
+import { ResponseCluster } from '../routes/cluster'
+import { ResponseTenant } from '../routes/tenant'
+import { ResponseNamespace } from '../routes/namespace'
+import { ResponseTopic } from '../routes/topic'
 import config from '../config'
-
-export type HierarchyInPulsar =
-	| 'cluster'
-	| 'tenant'
-	| 'namespace'
-	| 'topic'
-	| 'message'
-	| 'producer'
-	| 'subscription'
+import { Topology } from '../enum'
 
 export type FilterState = {
-	// used to keep track of what curently is filtered and what not:
+	// used to keep track of what currently is filtered and what not:
 	cluster: string[]
 	tenant: string[]
 	namespace: string[]
 	topic: string[]
 	producer: string[]
 	subscription: string[]
-	message: string[]
 	// used for displaying the options in the filter dropdowns:
 	displayedOptions: {
 		allClusters: string[]
@@ -37,20 +28,13 @@ export type FilterState = {
 		allTopics: string[]
 		allProducers: string[]
 		allSubscriptions: string[]
-		allMessages: string[]
 	}
 	view: UpdateSingleFilter['filterName']
 }
 
 export type UpdateSingleFilter = {
-	filterName: HierarchyInPulsar
+	filterName: Topology
 	id: string
-}
-
-type UpdateDisplayedOptions = {
-	// topologyLevel: 'cluster' | 'tenant' | 'namespace' | 'topic' | 'message'
-	topologyLevel: HierarchyInPulsar
-	options: string[]
 }
 
 const initialState: FilterState = {
@@ -60,7 +44,6 @@ const initialState: FilterState = {
 	topic: [],
 	producer: [],
 	subscription: [],
-	message: [],
 	displayedOptions: {
 		allClusters: [],
 		allTenants: [],
@@ -68,9 +51,8 @@ const initialState: FilterState = {
 		allTopics: [],
 		allProducers: [],
 		allSubscriptions: [],
-		allMessages: [],
 	},
-	view: 'cluster',
+	view: Topology.CLUSTER,
 }
 
 const backendInstance = axios.create({
@@ -186,35 +168,8 @@ const filterSlice = createSlice({
 		},
 		// Adds Id to a filter array while resetting all other Id's in it. Specifically needed for Drill Down Buttons
 		addFilterByDrilling: (state, action: PayloadAction<UpdateSingleFilter>) => {
-			switch (action.payload.filterName) {
-				case 'cluster':
-					state.cluster = initialState.cluster
-					state.cluster = [action.payload.id]
-					break
-				case 'tenant':
-					state.tenant = initialState.tenant
-					state.tenant = [action.payload.id]
-					break
-				case 'namespace':
-					state.namespace = initialState.namespace
-					state.namespace = [action.payload.id]
-					break
-				case 'topic':
-					state.topic = initialState.topic
-					state.topic = [action.payload.id]
-					break
-				case 'message':
-					state.message = initialState.message
-					state.message = [action.payload.id]
-					break
-				default:
-					console.log(
-						'wrong type for updateDisplayedOptions with' +
-							action.payload.filterName +
-							' ' +
-							action.payload.id
-					)
-			}
+			state[action.payload.filterName] = initialState[action.payload.filterName]
+			state[action.payload.filterName] = [action.payload.id]
 		},
 		// Resets all filter arrays / applied filters to initial state
 		resetAllFilters: (state) => {
@@ -225,7 +180,6 @@ const filterSlice = createSlice({
 			state.topic = initialState.topic
 			state.producer = initialState.producer
 			state.subscription = initialState.subscription
-			state.message = initialState.message
 		},
 		// the filtering of lower views does not apply to higher views,
 		// those filters shall be reset when the user "goes up".
@@ -236,13 +190,12 @@ const filterSlice = createSlice({
 			const lastView = state.view
 			const currentView = action.payload
 			const pulsarHierarchyArr: UpdateSingleFilter['filterName'][] = [
-				'cluster',
-				'tenant',
-				'namespace',
-				'topic',
-				'message',
-				'producer',
-				'subscription',
+				Topology.CLUSTER,
+				Topology.TENANT,
+				Topology.NAMESPACE,
+				Topology.TOPIC,
+				Topology.PRODUCER,
+				Topology.SUBSCRIPTION,
 			]
 			const currentViewLevel = pulsarHierarchyArr.indexOf(currentView)
 			const lastViewLevel = pulsarHierarchyArr.indexOf(lastView)
@@ -277,18 +230,6 @@ const filterSlice = createSlice({
 		})
 		builder.addCase(topicOptionThunk.fulfilled, (state, action) => {
 			const data: ResponseTopic = JSON.parse(JSON.stringify(action.payload))
-			/*const producers: string[] = data.topics
-				.flatMap((item) => item.producers)
-				.flat()
-				.filter((element, index) => {
-					return producers.indexOf(element) === index
-				})
-			const subscriptions: string[] = data.topics
-				.flatMap((item) => item.subscriptions)
-				.flat()
-				.filter((element, index) => {
-					return producers.indexOf(element) === index
-				})*/
 			data.topics.forEach((topic) => {
 				if (topic.producers) {
 					state.displayedOptions.allProducers.push(...topic.producers)
@@ -344,6 +285,11 @@ const selectSubscription = (state: RootState): string[] => {
 	return state.filterControl.subscription
 }
 
+/**
+ * Selects/returns all available filter options from the state
+ * @param state - current state
+ * @returns Filter Options
+ */
 const selectOptions = (
 	state: RootState
 ): {
@@ -353,11 +299,14 @@ const selectOptions = (
 	allTopics: string[]
 	allProducers: string[]
 	allSubscriptions: string[]
-	allMessages: string[]
 } => {
 	return state.filterControl.displayedOptions
 }
-
+/**
+ * Selects/returns all applied filters from the state
+ * @param state - current state
+ * @returns Applied filters
+ */
 const selectAllFilters = (
 	state: RootState
 ): {
@@ -367,7 +316,6 @@ const selectAllFilters = (
 	topic: string[]
 	producer: string[]
 	subscription: string[]
-	message: string[]
 } => {
 	return {
 		cluster: state.filterControl.cluster,
@@ -376,7 +324,6 @@ const selectAllFilters = (
 		topic: state.filterControl.topic,
 		producer: state.filterControl.producer,
 		subscription: state.filterControl.subscription,
-		message: state.filterControl.message,
 	}
 }
 

@@ -3,13 +3,14 @@
 // SPDX-FileCopyrightText: 2019 Georg Schwarz <georg. schwarz@fau.de>
 
 import React, { useEffect, useState } from 'react'
-import { useAppDispatch, useAppSelector } from '../../../store/hooks'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import axios from 'axios'
-import { selectCluster, selectTenant } from '../../../store/filterSlice'
+import { selectCluster, selectTenant } from '../../store/filterSlice'
 import TenantView from './TenantView'
 import { selectTrigger } from '../requestTriggerSlice'
-import config from '../../../config'
+import config from '../../config'
 import { Masonry } from 'react-plock'
+import FlushCacheButton from '../../components/buttons/FlushCacheButton'
 
 export interface ResponseTenant {
 	tenants: TenantInfo[]
@@ -18,6 +19,8 @@ export interface ResponseTenant {
 /**
  * Card group component for the tenant type.
  * Displays the TenantView cards, title, loading window and network error.
+ *
+ * @component
  * @returns Rendered tenant view cards for the dashboard component
  */
 const TenantGroup: React.FC = () => {
@@ -57,11 +60,16 @@ const TenantGroup: React.FC = () => {
 
 	return (
 		<div>
-			<h2 className="dashboard-title">Available Tenants ({data.length})</h2>
-			<h3 className="dashboard-subtitle">
-				Namespaces: {sumElements(data, 'numberOfNamespaces')}, Topics:{' '}
-				{sumElements(data, 'numberOfTopics')}
-			</h3>
+			<div className="flex dashboard-header">
+				<div>
+					<h2 className="dashboard-title">Available Tenants ({data.length})</h2>
+					<h3 className="dashboard-subtitle">
+						Namespaces: {sumElements(data, 'numberOfNamespaces')}, Topics:{' '}
+						{sumElements(data, 'numberOfTopics')}
+					</h3>
+				</div>
+				<FlushCacheButton />
+			</div>
 			{loading ? (
 				<div className="main-card"> Loading...</div>
 			) : error ? (

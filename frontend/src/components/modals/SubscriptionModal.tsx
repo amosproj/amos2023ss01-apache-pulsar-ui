@@ -7,7 +7,7 @@ import { Modal, Box, Typography, IconButton, Divider } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import axios from 'axios'
 import ConsumerAccordion from './ConsumerAccordion'
-import ModalInfo from './ModalInfo'
+import InformationText from './InformationText'
 import config from '../../config'
 import { convertTimestampToDateTime } from '../../Helpers'
 
@@ -34,6 +34,26 @@ interface MessageResponse {
 	messages: MessageInfo[]
 }
 
+/**
+ * SubscriptionModal is a react component for displaying subscription information in pulsar.
+ *
+ * The following information is shown in the subscription information popup:
+ * Consumers: List of connected consumers on this subscription w/ their stats.
+ * -> When clicked, the corresponding consumer accordion is expanded
+ * ConsumersCount: Number of total consumers
+ * BacklogSize: Size of backlog in byte
+ * MsgBacklog: Number of entries in the subscription backlog
+ * BytesOutCounter: Total bytes delivered to consumer (bytes)
+ * MsgOutCounter: Total messages delivered to consumer (msg)
+ * isReplicated: Mark that the subscription state is kept in sync across different regions
+ * Type: The subscription type as defined by SubscriptionType
+ * Messages: 10 messages in this subscription
+ *
+ * @component
+ * @param subscription - The name of subscription.
+ * @param topic - The name of topic.
+ * @returns The rendered SubscriptionModal component.
+ */
 const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
 	subscription,
 	topic,
@@ -147,28 +167,31 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
 					</Typography>
 					{subscriptionError || (
 						<>
-							<ModalInfo
+							<InformationText
 								title="Backlog size"
 								detailedInfo={subscriptionDetail?.backlogSize}
 							/>
-							<ModalInfo
+							<InformationText
 								title="Message backlog"
 								detailedInfo={subscriptionDetail?.msgBacklog}
 							/>
-							<ModalInfo
+							<InformationText
 								title="Bytes out counter"
 								detailedInfo={subscriptionDetail?.bytesOutCounter}
 							/>
-							<ModalInfo
+							<InformationText
 								title="Message out counter"
 								detailedInfo={subscriptionDetail?.msgOutCounter}
 							/>
-							<ModalInfo
+							<InformationText
 								title="Is replicated"
 								detailedInfo={subscriptionDetail?.replicated}
 							/>
-							<ModalInfo title="Type" detailedInfo={subscriptionDetail?.type} />
-							<ModalInfo
+							<InformationText
+								title="Type"
+								detailedInfo={subscriptionDetail?.type}
+							/>
+							<InformationText
 								title="Total number of consumers"
 								detailedInfo={subscriptionDetail?.numberConsumers}
 							/>
@@ -179,7 +202,7 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
 									isActive={true}
 								/>
 							) : (
-								<ModalInfo title="Active consumer" detailedInfo={''} />
+								<InformationText title="Active consumer" detailedInfo={''} />
 							)}
 							{subscriptionDetail?.inactiveConsumers &&
 							subscriptionDetail?.inactiveConsumers.length > 0 ? (
@@ -194,13 +217,13 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
 									)
 								})
 							) : (
-								<ModalInfo title="Inactive consumers" detailedInfo={''} />
+								<InformationText title="Inactive consumers" detailedInfo={''} />
 							)}
 						</>
 					)}
 					{messagesError || messages.length > 0 ? (
 						<>
-							<ModalInfo title="Messages(10 latest)" detailedInfo=" " />
+							<InformationText title="Messages(10 latest)" detailedInfo=" " />
 							{messages.map((message, index) => {
 								return (
 									<>
@@ -222,7 +245,7 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
 							})}
 						</>
 					) : (
-						<ModalInfo title="Messages" detailedInfo="" />
+						<InformationText title="Messages" detailedInfo="" />
 					)}
 				</Box>
 			</Modal>
