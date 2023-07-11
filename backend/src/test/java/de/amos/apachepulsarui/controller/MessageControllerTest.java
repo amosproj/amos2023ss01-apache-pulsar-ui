@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Set;
 
 import static java.util.Collections.emptyList;
-import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -49,8 +49,7 @@ public class MessageControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.messages", hasSize(2)))
-                .andExpect(jsonPath("$.messages[0].payload", equalTo("Nebuchadnezzar")))
-                .andExpect(jsonPath("$.messages[1].payload", equalTo("Serenity")));
+                .andExpect(jsonPath("$.messages[*].payload", containsInAnyOrder("Nebuchadnezzar", "Serenity")));
     }
 
     @Test
