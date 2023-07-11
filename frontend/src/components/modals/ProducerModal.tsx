@@ -10,16 +10,6 @@ import InformationText from './InformationText'
 import config from '../../config'
 import { convertTimestampToDateTime } from '../../Helpers'
 
-/**
-The following information is shown in the producer information popup:
-Address: Address of this publisher.
-AverageMsgSize: Average message size published by this publisher.
-ClientVersion: Client library version.
-ConnectedSince: Timestamp of connection.
-ProducerId: Id of this publisher.
-ProducerName: Producer name.
-*/
-
 interface ProducerModalProps {
 	producer: {
 		producerName: string
@@ -31,6 +21,23 @@ interface MessageResponse {
 	messages: MessageInfo[]
 }
 
+/**
+ * ProducerModal is a react component for displaying producer information in pulsar.
+ *
+ * The following information is shown in the producer information popup:
+ * Address: Address of this producer.
+ * AverageMsgSize: Average message size published by this producer.
+ * ClientVersion: Client library version.
+ * ConnectedSince: Timestamp of connection.
+ * ProducerId: Id of this publisher.
+ * ProducerName: Producer name.
+ *
+ * @component
+ * @param producer
+ * @param producer.producerName - The name of producer.
+ * @param producer.topicName - The name of topic it belongs to.
+ * @returns The rendered ProducerModal component.
+ */
 const ProducerModal: React.FC<ProducerModalProps> = ({ producer }) => {
 	const { producerName, topicName } = producer
 

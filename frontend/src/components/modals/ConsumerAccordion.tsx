@@ -20,6 +20,30 @@ interface ConsumerAccordionProps {
 	isActive: boolean
 }
 
+/**
+ * ConsumerAccordion is a react accordion component
+ * for displaying consumer information in pulsar.
+ * It shows the consumer details.
+ *
+ * The following information is shown in the consumer information popup:
+ * address: Address of this consumer
+ * availablePermits: Number of available message permits for the consumer
+ * BytesOutCounter: Total bytes delivered to consumer (bytes)
+ * ClientVersion: Client library version
+ * ConnectedSince: Timestamp of connection
+ * ConsumerName: Name of the consumer
+ * LastAckedTimestamp:
+ * LastConsumedTimestamp:
+ * MessageOutConter: Total messages delivered to consumer (msg).
+ * UnackedMessages: Number of unacknowledged messages for the consumer, where an  * unacknowledged message is one that has been sent to the consumer but not yet acknowledged
+ * isBlockedConsumerOnUnackedMsgs: Flag to verify if consumer is blocked due to reaching  * threshold of unacked messages
+ *
+ * @component
+ * @param consumerName - The name of current consumer.
+ * @param topicName - The name of topic which this consumer belongs to.
+ * @param isActive - Whether this consumer is active (in pulsar there is only one active consumer)
+ * @returns The rendered ConsumerAccordion component.
+ */
 const ConsumerAccordion: React.FC<ConsumerAccordionProps> = ({
 	consumerName,
 	topicName,
