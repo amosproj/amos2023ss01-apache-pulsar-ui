@@ -12,7 +12,14 @@ import FilterListIcon from '@mui/icons-material/FilterList'
 import BarChartIcon from '@mui/icons-material/BarChart'
 import SearchIcon from '@mui/icons-material/Search'
 
-export function InfoModal() {
+/**
+ * InfoModal is a React component that provides an informative modal interface.
+ * It handles opening and closing of the modal and displays information about the project mission.
+ *
+ * @component
+ * @returns The rendered InfoModal component.
+ */
+export const InfoModal: React.FC = () => {
 	const [open, setOpen] = React.useState(false)
 
 	const handleClickOpen = () => {

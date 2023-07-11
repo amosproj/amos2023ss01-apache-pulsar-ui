@@ -28,6 +28,8 @@ export interface ResponseTopic {
 /**
  * Card group component for the topic type.
  * Displays the TopicView cards, title, loading window and network error.
+ *
+ * @component
  * @returns Rendered topic view cards for the dashboard component
  */
 const TopicGroup: React.FC = () => {

@@ -15,27 +15,36 @@ import Button from '@mui/material/Button'
 import MenuItem from '@mui/material/MenuItem'
 import { useAppDispatch } from '../store/hooks'
 import { setNav } from '../store/globalSlice'
-// import { selectEndpoint } from '../store/globalSlice'
 import logo from '../assets/images/team-logo-light.png'
-// import { Input } from '@mui/material'
 import { InfoModal } from './InfoModal'
 import { useLocation, useNavigate } from 'react-router-dom'
-import {
-	updateFilterAccordingToNav,
-	HierarchyInPulsar,
-} from '../store/filterSlice'
+import { updateFilterAccordingToNav } from '../store/filterSlice'
+import { Topology } from '../enum'
 
 //Removed 'Message' from this array for now
-const pages = ['Cluster', 'Tenant', 'Namespace', 'Topic']
+const pages = [
+	Topology.CLUSTER,
+	Topology.TENANT,
+	Topology.NAMESPACE,
+	Topology.TOPIC,
+]
 
-function NavBar() {
+/**
+ * NavBar is a React component that provides a navigational bar interface.
+ * It manages navigation menu state and provides handlers for opening and closing Modals as well as clicking on navigation items.
+ * The NavBar renders AppBar which contains navigation options for different pages.
+ * It also contains the InfoModal component.
+ *
+ * @component
+ * @returns The rendered NavBar component.
+ */
+const NavBar: React.FC = () => {
 	const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null)
 
 	const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
 		setAnchorElNav(event.currentTarget)
 	}
 	const dispatch = useAppDispatch()
-	//const selectedNav = useAppSelector(selectView).selectedNav
 	const navigate = useNavigate()
 	const location = useLocation()
 
@@ -43,18 +52,12 @@ function NavBar() {
 		setAnchorElNav(null)
 	}
 
-	const handleClickOnNav = (tag: string) => {
-		tag = tag.toLowerCase()
+	// handles click on navigation items
+	const handleClickOnNav = (tag: Topology) => {
+		//tag = tag.toLowerCase()
 		dispatch(setNav(tag))
 		navigate('/' + tag)
 	}
-
-	// const handleClickOnDisconnect = () => {
-	// 	//TODO add disconnect functionality
-	// 	// dispatch(backToLP())
-	// }
-
-	// const endpoint = useAppSelector(selectEndpoint)
 
 	return (
 		<AppBar position="static">
@@ -70,27 +73,6 @@ function NavBar() {
 							verticalAlign: 'middle',
 						}}
 					/>
-					{/* <Input
-						disabled
-						defaultValue={endpoint}
-						inputProps={{ style: { textAlign: 'center' } }}
-						size="small"
-						style={{
-							width: '120px',
-							marginLeft: '20px',
-							marginRight: '5px',
-							textAlign: 'center',
-							background: 'white',
-							borderRadius: '5px',
-						}}
-					/><Button
-						variant="outlined"
-						style={{ color: 'white', background: '#ba000d' }}
-						size="small"
-						onClick={handleClickOnDisconnect}
-					>
-						Disconnect
-					</Button> */}
 					<Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
 						<IconButton
 							size="large"
@@ -126,9 +108,7 @@ function NavBar() {
 									disabled={page.toLowerCase() == location.pathname.slice(1)}
 									onClick={() => {
 										handleClickOnNav(page)
-										updateFilterAccordingToNav(
-											page.toLowerCase() as HierarchyInPulsar
-										)
+										updateFilterAccordingToNav(page)
 									}}
 								>
 									<Typography textAlign="center">{page}</Typography>
@@ -149,11 +129,7 @@ function NavBar() {
 								disabled={page.toLowerCase() == location.pathname.slice(1)}
 								onClick={() => {
 									handleClickOnNav(page)
-									dispatch(
-										updateFilterAccordingToNav(
-											page.toLowerCase() as HierarchyInPulsar
-										)
-									)
+									dispatch(updateFilterAccordingToNav(page))
 								}}
 								sx={{ my: 2, color: 'white', display: 'block' }}
 							>
