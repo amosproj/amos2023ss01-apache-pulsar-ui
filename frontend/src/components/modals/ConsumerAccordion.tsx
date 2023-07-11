@@ -23,7 +23,7 @@ interface ConsumerAccordionProps {
 /**
  * ConsumerAccordion is a react accordion component
  * for displaying consumer information in pulsar.
- * It show the consumer details.
+ * It shows the consumer details.
  *
  * The following information is shown in the consumer information popup:
  * address: Address of this consumer
