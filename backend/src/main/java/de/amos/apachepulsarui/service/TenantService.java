@@ -63,7 +63,6 @@ public class TenantService {
                 .build();
     }
 
-
     private TenantInfo getTenantInfo(String tenantName) {
         try {
             return pulsarAdmin.tenants().getTenantInfo(tenantName);
@@ -71,7 +70,6 @@ public class TenantService {
             throw new PulsarApiException("Could not fetch tenant info of tenant '%s'".formatted(tenantName), e);
         }
     }
-
 
     private TenantDto enrichWithCardDetails(TenantDto tenantDto) {
         try {

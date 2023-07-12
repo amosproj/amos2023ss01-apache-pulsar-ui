@@ -26,8 +26,8 @@ public class ClusterService {
     @Cacheable("cluster.allNames")
     public List<ClusterDto> getAllNames() {
         try {
-            return pulsarAdmin.clusters().getClusters()
-                    .stream().map(ClusterDto::create)
+            return pulsarAdmin.clusters().getClusters().stream()
+                    .map(ClusterDto::create)
                     .map(this::enrichWithCardDetails)
                     .toList();
         } catch (PulsarAdminException e) {
@@ -41,7 +41,6 @@ public class ClusterService {
         ClusterData clusterData = getClusterData(clusterName);
         List<String> activeBrokers = getActiveBrokers(clusterName);
         List<String> tenantsAllowedForCluster = getTenantsAllowedForCluster(clusterName);
-
         return ClusterDetailDto.builder()
                 .name(clusterName)
                 .serviceUrl(clusterData.getServiceUrl())
@@ -90,9 +89,9 @@ public class ClusterService {
     }
 
     private ClusterDto enrichWithCardDetails(ClusterDto clusterDto) {
-        List<String> tenats = getTenantsAllowedForCluster(clusterDto.getName());
-        long numberOfNamespaces = tenats.stream().mapToLong(t -> namespaceService.getAllOfTenant(t).size()).sum();
-        clusterDto.setNumberOfTenants(tenats.size());
+        List<String> tenants = getTenantsAllowedForCluster(clusterDto.getName());
+        long numberOfNamespaces = tenants.stream().mapToLong(t -> namespaceService.getAllOfTenant(t).size()).sum();
+        clusterDto.setNumberOfTenants(tenants.size());
         clusterDto.setNumberOfNamespaces(numberOfNamespaces);
         return clusterDto;
     }
