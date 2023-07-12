@@ -65,7 +65,6 @@ public class NamespaceService {
         try {
 
             Namespaces namespaces = pulsarAdmin.namespaces();
-
             namespace.setBundlesData(namespaces.getBundles(namespace.getId()));
             namespace.setMessagesTTL(namespaces.getNamespaceMessageTTL(namespace.getId()));
             namespace.setRetentionPolicies(namespaces.getRetention(namespace.getId()));
