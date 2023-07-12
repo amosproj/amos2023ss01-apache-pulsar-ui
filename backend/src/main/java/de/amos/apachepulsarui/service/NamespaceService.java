@@ -48,8 +48,23 @@ public class NamespaceService {
     }
 
     @Cacheable("namespace.detail")
-    public NamespaceDetailDto getNamespaceDetails(String namespaceName) {
-        return enrichWithNamespaceData(NamespaceDetailDto.fromString(namespaceName));
+    public NamespaceDetailDto getNamespaceDetails(String namespace) {
+        try {
+
+            Namespaces namespaces = pulsarAdmin.namespaces();
+
+            return NamespaceDetailDto.create(
+                    namespace,
+                    namespaces.getBundles(namespace),
+                    namespaces.getNamespaceMessageTTL(namespace),
+                    namespaces.getRetention(namespace),
+                    topicService.getAllByNamespace(namespace)
+            );
+        } catch (PulsarAdminException e) {
+            throw new PulsarApiException(
+                    "Could not fetch namespace data of namespace '%s'".formatted(namespace), e
+            );
+        }
     }
 
     @Cacheable("namespace.allNames")
@@ -58,24 +73,6 @@ public class NamespaceService {
             return pulsarAdmin.namespaces().getNamespaces(tenantName);
         } catch (PulsarAdminException e) {
             throw new PulsarApiException("Could not fetch namespaces of tenant '%s'".formatted(tenantName), e);
-        }
-    }
-
-    private NamespaceDetailDto enrichWithNamespaceData(NamespaceDetailDto namespace) throws PulsarApiException {
-        try {
-
-            Namespaces namespaces = pulsarAdmin.namespaces();
-
-            namespace.setBundlesData(namespaces.getBundles(namespace.getId()));
-            namespace.setMessagesTTL(namespaces.getNamespaceMessageTTL(namespace.getId()));
-            namespace.setRetentionPolicies(namespaces.getRetention(namespace.getId()));
-            namespace.setTopics(topicService.getAllByNamespace(namespace.getId()));
-
-            return namespace;
-        } catch (PulsarAdminException e) {
-            throw new PulsarApiException(
-                    "Could not fetch namespace data of namespace '%s'".formatted(namespace.getId()), e
-            );
         }
     }
 

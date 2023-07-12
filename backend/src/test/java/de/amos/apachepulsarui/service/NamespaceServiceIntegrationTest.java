@@ -76,7 +76,7 @@ public class NamespaceServiceIntegrationTest extends AbstractIntegrationTest {
 
         NamespaceDetailDto namespace = namespaceService.getNamespaceDetails("tenant1/namespace1");
 
-        Assertions.assertThat(namespace.getId()).isEqualTo("tenant1/namespace1");
+        Assertions.assertThat(namespace.getName()).isEqualTo("tenant1/namespace1");
         Assertions.assertThat(namespace.getTopics()).contains("persistent://tenant1/namespace1/testTopic");
     }
 
