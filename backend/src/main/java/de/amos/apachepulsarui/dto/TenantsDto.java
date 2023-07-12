@@ -16,5 +16,4 @@ import java.util.List;
 public class TenantsDto {
 
     private List<TenantDto> tenants;
-
 }

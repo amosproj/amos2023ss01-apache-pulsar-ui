@@ -63,7 +63,6 @@ public class TenantService {
                 .build();
     }
 
-
     private TenantInfo getTenantInfo(String tenantName) {
         try {
             return pulsarAdmin.tenants().getTenantInfo(tenantName);
@@ -72,11 +71,10 @@ public class TenantService {
         }
     }
 
-
     private TenantDto enrichWithCardDetails(TenantDto tenantDto) {
         try {
             List<String> namespaces = pulsarAdmin.namespaces().getNamespaces(tenantDto.getName());
-            long numberOfTopics = namespaces.stream().mapToLong(n -> topicService.getAllByNamespace(n).size()).sum();
+            long numberOfTopics = namespaces.stream().mapToLong(n -> topicService.getAllForNamespace(n).size()).sum();
             tenantDto.setNumberOfTopics(numberOfTopics);
             tenantDto.setNumberOfNamespaces(namespaces.size());
             return tenantDto;

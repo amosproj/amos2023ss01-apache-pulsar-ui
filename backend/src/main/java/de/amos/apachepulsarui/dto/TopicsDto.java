@@ -15,5 +15,4 @@ import java.util.List;
 public class TopicsDto {
 
     private List<TopicDto> topics;
-
 }

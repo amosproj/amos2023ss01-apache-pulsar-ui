@@ -33,7 +33,7 @@ public class NamespaceController {
     public ResponseEntity<NamespacesDto> getAll(@RequestParam(required = false, defaultValue = "") List<String> tenants,
                                                 @RequestParam(required = false, defaultValue = "") List<String> namespaces) {
         if (!namespaces.isEmpty()) {
-            return wrapInEntity(getAllForNamespaces(namespaces));
+            return wrapInEntity(namespaceService.getAllForNamespaces(namespaces));
         } else {
             return wrapInEntity(getAllForTenants(tenants));
         }

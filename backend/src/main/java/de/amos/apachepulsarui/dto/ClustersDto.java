@@ -15,5 +15,4 @@ import java.util.List;
 public class ClustersDto {
 
     private List<ClusterDto> clusters;
-
 }

@@ -16,11 +16,8 @@ import java.util.List;
 public class TenantDetailDto {
 
     private String name;
-
     private List<String> namespaces;
-
     private TenantInfo tenantInfo;
-
 	/**
 	 * @return An unmodifiable copy of the namespaces of this tenant.
 	 */

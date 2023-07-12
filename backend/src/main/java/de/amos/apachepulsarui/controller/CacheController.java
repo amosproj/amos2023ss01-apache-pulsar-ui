@@ -23,5 +23,4 @@ public class CacheController {
                 .forEach(cache -> Objects.requireNonNull(cacheManager.getCache(cache)).clear());
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
 }

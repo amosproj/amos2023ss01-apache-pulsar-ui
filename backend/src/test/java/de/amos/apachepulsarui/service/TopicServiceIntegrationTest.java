@@ -74,7 +74,7 @@ public class TopicServiceIntegrationTest extends AbstractIntegrationTest {
     void getAllByNamespace_returnsTopics() {
         String topicName = "persistent://public/default/topic1";
         createNewTopic(topicName);
-        List<String> topics = topicService.getAllByNamespace("public/default");
+        List<String> topics = topicService.getAllForNamespace("public/default");
         Assertions.assertThat(topics).containsExactly(topicName);
     }
 

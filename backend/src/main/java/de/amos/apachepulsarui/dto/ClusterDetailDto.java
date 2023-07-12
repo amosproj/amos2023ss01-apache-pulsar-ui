@@ -17,16 +17,11 @@ import java.util.List;
 public class ClusterDetailDto {
 
     private String name;
-
     private List<String> tenants;
-
 	private List<String> brokers;
-
 	@Setter(AccessLevel.PRIVATE)
 	private int amountOfBrokers;
-
 	private String brokerServiceUrl;
-
 	private String serviceUrl;
 
 }

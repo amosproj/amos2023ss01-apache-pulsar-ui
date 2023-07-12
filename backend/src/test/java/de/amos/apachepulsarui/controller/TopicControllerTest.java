@@ -49,13 +49,13 @@ public class TopicControllerTest {
     private TopicStats topicStats;
 
     @MockBean
-    private SubscriptionStats subscriptionStats;
-
-    @MockBean
     private PublisherStats publisherStats;
 
     @MockBean
     private ConsumerStats consumerStats;
+
+    @MockBean
+    private SubscriptionStats subscriptionStats;
 
     @Test
     void getAll_withoutParameters_returnsAllTopics() throws Exception {
@@ -95,7 +95,7 @@ public class TopicControllerTest {
         when(tenantService.getAllNames()).thenReturn(tenants);
         when(namespaceService.getNamespaceNamesForTenants(tenants)).thenReturn(namespaces);
         when(topicService.getAllForNamespaces(namespaces)).thenReturn(topics);
-        when(topicService.getTopicForProducer(topics, "Producer")).thenReturn(topics);
+        when(topicService.getTopicsForProducer(topics, "Producer")).thenReturn(topics);
 
 
         mockMvc.perform(get("/topic/all?producer=Producer")
@@ -119,7 +119,7 @@ public class TopicControllerTest {
         when(tenantService.getAllNames()).thenReturn(tenants);
         when(namespaceService.getNamespaceNamesForTenants(tenants)).thenReturn(namespaces);
         when(topicService.getAllForNamespaces(namespaces)).thenReturn(topics);
-        when(topicService.getAllForSubscriptions(topics, List.of("Subscription"))).thenReturn(topics);
+        when(topicService.getTopicsForSubscriptions(topics, List.of("Subscription"))).thenReturn(topics);
 
 
         mockMvc.perform(get("/topic/all?subscriptions=Subscription")
@@ -221,10 +221,8 @@ public class TopicControllerTest {
     void getSubscriptionByNameAndTopic() throws Exception {
         String subscription = "R2D2";
         String topic = "persistent://public/default/droide";
-
-        SubscriptionDto subscriptionDto = SubscriptionDto.create(subscriptionStats, subscription);
-
-
+        SubscriptionDto subscriptionDto = new SubscriptionDto();
+        subscriptionDto.setName(subscription);
         when(topicService.getSubscriptionByTopic(topic, subscription)).thenReturn(subscriptionDto);
 
         mockMvc.perform(get("/topic/subscription/" + subscription)
@@ -232,17 +230,18 @@ public class TopicControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", equalTo(subscription)));
+
+
     }
 
     @Test
     void getProducerByNameAndTopic() throws Exception {
         String producer = "C3PO";
         String topic = "persistent://public/default/droide";
-        when(publisherStats.getProducerName()).thenReturn(producer);
+        ProducerDto producerDto = new ProducerDto();
+        producerDto.setName(producer);
 
-        ProducerDto dto = ProducerDto.create(publisherStats);
-
-        when(topicService.getProducerByTopic(topic, producer)).thenReturn(dto);
+        when(topicService.getProducerByTopic(topic, producer)).thenReturn(producerDto);
 
         mockMvc.perform(get("/topic/producer/" + producer)
                         .queryParam("topic", topic)
@@ -255,12 +254,11 @@ public class TopicControllerTest {
     void getConsumerByNameAndTopic() throws Exception {
         String consumer = "BB8";
         String topic = "persistent://public/default/droide";
-
-        when(consumerStats.getConsumerName()).thenReturn(consumer);
-
-        ConsumerDto consumerDto = ConsumerDto.create(consumerStats);
+        ConsumerDto consumerDto = new ConsumerDto();
+        consumerDto.setName(consumer);
 
         when(topicService.getConsumerByTopic(topic, consumer)).thenReturn(consumerDto);
+
 
         mockMvc.perform(get("/topic/consumer/" + consumer)
                         .queryParam("topic", topic)
