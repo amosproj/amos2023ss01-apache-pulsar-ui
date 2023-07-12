@@ -13,9 +13,7 @@ import lombok.Data;
 public class ClusterDto {
 
     private String name;
-
     private long numberOfTenants;
-
     private long numberOfNamespaces;
     
     public static ClusterDto create(String name) {

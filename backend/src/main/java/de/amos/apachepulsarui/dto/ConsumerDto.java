@@ -5,12 +5,13 @@
 
 package de.amos.apachepulsarui.dto;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 import org.apache.pulsar.common.policies.data.ConsumerStats;
+import org.apache.pulsar.common.policies.data.TopicStats;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder(access = AccessLevel.PRIVATE)
 public class ConsumerDto {
 
@@ -26,7 +27,8 @@ public class ConsumerDto {
     private int unackedMessages;
     private boolean blockedConsumerOnUnackedMsgs;
 
-    public static ConsumerDto create(ConsumerStats consumerStats) {
+    public static ConsumerDto create(TopicStats topicStats, String consumer) {
+        ConsumerStats consumerStats = getConsumerStatsByTopic(topicStats, consumer);
         return ConsumerDto.builder()
                 .name(consumerStats.getConsumerName())
                 .address(consumerStats.getAddress())
@@ -40,5 +42,15 @@ public class ConsumerDto {
                 .unackedMessages(consumerStats.getUnackedMessages())
                 .blockedConsumerOnUnackedMsgs(consumerStats.isBlockedConsumerOnUnackedMsgs())
                 .build();
+    }
+
+
+    private static ConsumerStats getConsumerStatsByTopic(TopicStats topicStats, String consumer) {
+        return topicStats.getSubscriptions()
+                .values().stream()
+                .flatMap(subscriptionStats -> subscriptionStats.getConsumers().stream())
+                .filter(c -> c.getConsumerName().equals(consumer))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("No ConsumerStats found for " + consumer));
     }
 }

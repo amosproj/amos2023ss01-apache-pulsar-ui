@@ -18,15 +18,10 @@ import java.util.List;
 public class NamespaceDetailDto {
 
     private String id;
-
 	private List<String> topics;
-
 	private String tenant;
-
 	private BundlesData bundlesData;
-
 	private Integer messagesTTL;
-
 	private RetentionPolicies retentionPolicies;
 
 	public static NamespaceDetailDto fromString(String namespaceId) {

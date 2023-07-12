@@ -20,15 +20,10 @@ import java.util.Set;
 public class TopicDto {
 
     private String name;
-
     private String namespace;
-
     private String tenant;
-
     private Set<String> subscriptions;
-
     private List<String> producers;
-
     private long messagesSendToTopic;
 
     public static TopicDto create(String completeTopicName, TopicStats topicStats) {

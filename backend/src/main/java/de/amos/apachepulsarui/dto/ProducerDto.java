@@ -5,41 +5,42 @@
 
 package de.amos.apachepulsarui.dto;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 import org.apache.pulsar.common.policies.data.PublisherStats;
+import org.apache.pulsar.common.policies.data.TopicStats;
+
+import java.util.Objects;
 
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
 @Builder(access = AccessLevel.PRIVATE)
 public class ProducerDto {
 
     private long id;
-
     private String name;
-
-    //todo figure out how to get the amount of messages
-    //private long amountOfMessages;
-
     private String address;
-
     private double averageMsgSize;
-
     private String clientVersion;
-
     private String connectedSince;
 
-    public static ProducerDto create(PublisherStats publisherStats) {
+    public static ProducerDto create(TopicStats topicStats, String producer) {
+        PublisherStats publisherStats = getPublisherStats(topicStats, producer);
         return ProducerDto.builder()
                 .id(publisherStats.getProducerId())
                 .name(publisherStats.getProducerName())
-                //.amountOfMessages(numOfMsgs)
                 .connectedSince(publisherStats.getConnectedSince())
                 .address(publisherStats.getAddress())
                 .averageMsgSize(publisherStats.getAverageMsgSize())
                 .clientVersion(publisherStats.getClientVersion())
                 .build();
+    }
+
+    private static PublisherStats getPublisherStats(TopicStats topicStats, String producer) {
+        return topicStats.getPublishers().stream()
+                .filter(ps -> Objects.equals(ps.getProducerName(), producer))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("No PublisherStats found for " + producer));
+
     }
 }

@@ -20,21 +20,14 @@ import java.nio.charset.StandardCharsets;
 public class MessageDto {
 
     String messageId;
-
     @NotEmpty
     String topic;
-
     @NotEmpty
     String payload;
-
     String schema;
-
     String namespace;
-
     String tenant;
-
     Long publishTime;
-
     String producer;
 
     /**
