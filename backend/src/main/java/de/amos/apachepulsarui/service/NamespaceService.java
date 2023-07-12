@@ -48,8 +48,23 @@ public class NamespaceService {
     }
 
     @Cacheable("namespace.detail")
-    public NamespaceDetailDto getNamespaceDetails(String namespaceName) {
-        return enrichWithNamespaceData(NamespaceDetailDto.fromString(namespaceName));
+    public NamespaceDetailDto getNamespaceDetails(String namespace) {
+        try {
+
+            Namespaces namespaces = pulsarAdmin.namespaces();
+
+            return NamespaceDetailDto.create(
+                    namespace,
+                    namespaces.getBundles(namespace),
+                    namespaces.getNamespaceMessageTTL(namespace),
+                    namespaces.getRetention(namespace),
+                    topicService.getAllByNamespace(namespace)
+            );
+        } catch (PulsarAdminException e) {
+            throw new PulsarApiException(
+                    "Could not fetch namespace data of namespace '%s'".formatted(namespace), e
+            );
+        }
     }
 
     @Cacheable("namespace.allNames")

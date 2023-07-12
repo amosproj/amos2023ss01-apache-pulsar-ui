@@ -37,18 +37,12 @@ public class ClusterService {
 
     @Cacheable("cluster.detail")
     public ClusterDetailDto getClusterDetails(String clusterName) {
-
-        ClusterData clusterData = getClusterData(clusterName);
-        List<String> activeBrokers = getActiveBrokers(clusterName);
-        List<String> tenantsAllowedForCluster = getTenantsAllowedForCluster(clusterName);
-        return ClusterDetailDto.builder()
-                .name(clusterName)
-                .serviceUrl(clusterData.getServiceUrl())
-                .brokerServiceUrl(clusterData.getBrokerServiceUrl())
-                .brokers(activeBrokers)
-                .amountOfBrokers(activeBrokers.size())
-                .tenants(tenantsAllowedForCluster)
-                .build();
+        return ClusterDetailDto.create(
+                clusterName,
+                getActiveBrokers(clusterName),
+                getTenantsAllowedForCluster(clusterName),
+                getClusterData(clusterName)
+        );
     }
 
     private ClusterData getClusterData(String clusterName) throws PulsarApiException {

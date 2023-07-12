@@ -94,14 +94,19 @@ public class NamespaceControllerTest {
     @Test
     void getNamespaceDetails_returnsNamespace() throws Exception {
 
-        NamespaceDetailDto namespace = NamespaceDetailDto.fromString("tenantX/namespace1");
-        namespace.setTopics(List.of("a", "b"));
+        NamespaceDetailDto namespace = NamespaceDetailDto.create(
+                "tenantX/namespace1",
+                null,
+                null,
+                null,
+                List.of("a", "b")
+        );
 
         Mockito.when(namespaceService.getNamespaceDetails("tenantX/namespace1")).thenReturn(namespace);
 
         mockMvc.perform(get("/namespace?name=tenantX/namespace1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", equalTo(namespace.getId())))
+                .andExpect(jsonPath("$.name", equalTo(namespace.getName())))
                 .andExpect(jsonPath("$.topics", equalTo(namespace.getTopics())));
     }
 
