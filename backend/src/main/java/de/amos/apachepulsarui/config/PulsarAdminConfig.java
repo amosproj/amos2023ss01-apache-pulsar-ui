@@ -20,13 +20,11 @@ public class PulsarAdminConfig {
 
     @Bean
     public PulsarAdmin createPulsarAdmin() {
-        boolean tlsAllowInsecureConnection = false;
-        String tlsTrustCertsFilePath = null;
         try {
             return PulsarAdmin.builder()
                     .serviceHttpUrl(adminUrl)
-                    .tlsTrustCertsFilePath(tlsTrustCertsFilePath)
-                    .allowTlsInsecureConnection(tlsAllowInsecureConnection)
+                    .tlsTrustCertsFilePath(null)
+                    .allowTlsInsecureConnection(false)
                     .build();
         } catch (PulsarClientException e) {
             throw new PulsarApiException(

@@ -21,19 +21,12 @@ import java.util.Comparator;
 public class TopicDetailDto {
 
     private String name;
-
     private String localName;
-
     private String namespace;
-
     private String tenant;
-
     private boolean isPersistent;
-
     private String ownerBroker;
-
     private TopicStatsDto topicStatsDto;
-
     private List<SchemaInfoDto> schemaInfos = new ArrayList<>();
 
     public static TopicDetailDto create(
