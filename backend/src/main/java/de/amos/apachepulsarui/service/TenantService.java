@@ -56,11 +56,11 @@ public class TenantService {
     @Cacheable("tenant.detail")
     public TenantDetailDto getTenantDetails(String tenantName) {
         List<String> namespacesOfTenant = namespaceService.getAllOfTenant(tenantName);
-        return TenantDetailDto.builder()
-                .name(tenantName)
-                .tenantInfo(getTenantInfo(tenantName))
-                .namespaces(namespacesOfTenant)
-                .build();
+        return TenantDetailDto.create(
+                tenantName,
+                getTenantInfo(tenantName),
+                namespacesOfTenant
+        );
     }
 
     private TenantInfo getTenantInfo(String tenantName) {

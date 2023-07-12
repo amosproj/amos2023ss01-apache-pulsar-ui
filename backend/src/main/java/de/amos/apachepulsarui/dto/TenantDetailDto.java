@@ -5,14 +5,15 @@
 
 package de.amos.apachepulsarui.dto;
 
-import lombok.Builder;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.apache.pulsar.common.policies.data.TenantInfo;
 
 import java.util.List;
 
 @Data
-@Builder
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TenantDetailDto {
 
     private String name;
@@ -21,6 +22,14 @@ public class TenantDetailDto {
 
 	public List<String> getNamespaces() {
 		return List.copyOf(namespaces);
+	}
+
+	public static TenantDetailDto create(String name, TenantInfo tenantInfo, List<String> namespaces) {
+		TenantDetailDto tenantDetailDto = new TenantDetailDto();
+		tenantDetailDto.name = name;
+		tenantDetailDto.tenantInfo = tenantInfo;
+		tenantDetailDto.namespaces = namespaces;
+		return tenantDetailDto;
 	}
 
 }
