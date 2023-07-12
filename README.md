@@ -33,12 +33,14 @@ Start Docker Desktop and create the pulsar setup from the root-directory with:
 
 ```bash
 echo BACKEND_IP=localhost >> .env
+```
+```bash
 docker-compose --profile backend --profile frontend --profile demodata -f docker-compose.yml -f docker-compose-setup.yml up --build -d
 ```
 
 Notes: 
 * The `docker-compose.yml` includes the pulsar, backend and frontend services.
-* The `docker-compose-setup.yml` includes services for the local or AWS demodata setup. `-f` selects the files used for the startup.
+* The `docker-compose-setup.yml` includes services for the local demodata setup. `-f` selects the files used for the startup.
 * `--build` is needed for the first startup, or when the demodata docker images are changed
 * `-d` runs the container in the background, so u can close the terminal without terminating the app itself.
 * `--profile demodata` is needed when you want to create the demo topology and start the demo producers & consumers, that will continuously send and receive messages
@@ -77,5 +79,11 @@ so you need to pass it to the `docker-compose` via `-e` flag.
 
 ```bash
 echo BACKEND_IP=${EC2_IP_ADDRESS} >> .env
-docker-compose --profile backend --profile frontend --profile demodata-aws -f docker-compose.yml -f docker-compose-setup.yml up --build -d
 ```
+```bash
+docker-compose --profile backend --profile frontend --profile demodata-aws -f docker-compose.yml -f docker-compose-setup-aws.yml up --build -d
+```
+
+Notes: 
+* The `docker-compose-setup-aws.yml` includes services for the aws demodata setup. 
+* `--profile demodata-aws` is needed when you want to create the aws demo topology.

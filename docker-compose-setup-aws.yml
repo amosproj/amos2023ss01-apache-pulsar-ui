@@ -1,0 +1,16 @@
+version: '3'
+services:
+
+  setup-topology-aws:
+    image: pulsarui/setuptopology
+    profiles: 
+      - demodata-aws
+    build:
+      context: demodata/setup-topology
+      dockerfile: Dockerfile
+    environment:
+        - 'PULSAR_ADMIN_URL=http://pulsar:8080'
+        - 'USE_AWS=true'
+    depends_on:
+      pulsar:
+        condition: service_healthy
