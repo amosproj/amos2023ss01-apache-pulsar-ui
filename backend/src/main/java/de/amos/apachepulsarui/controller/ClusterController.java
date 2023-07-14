@@ -27,4 +27,5 @@ public class ClusterController {
     public ResponseEntity<ClustersDto> getAll() {
         return new ResponseEntity<>(new ClustersDto(clusterService.getAllNames()), HttpStatus.OK);
     }
+
 }

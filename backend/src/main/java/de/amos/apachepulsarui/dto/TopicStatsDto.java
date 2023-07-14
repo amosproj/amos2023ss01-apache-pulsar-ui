@@ -43,7 +43,6 @@ public class TopicStatsDto {
                 .averageMessageSize(topicStats.getAverageMsgSize())
                 .storageSize(topicStats.getStorageSize())
                 .build();
-
     }
 
     private static List<String> getProducers(TopicStats topicStats) {
@@ -52,10 +51,5 @@ public class TopicStatsDto {
                 .map(PublisherStats::getProducerName)
                 .toList();
     }
-
-
-
-
-
 
 }

@@ -34,9 +34,6 @@ public class NamespaceDetailDto {
 		this.topics = topics;
 	}
 
-	/**
-	 * @return An unmodifiable copy of the topics of this namespace.
-	 */
 	public List<String> getTopics() {
 		return List.copyOf(topics);
 	}

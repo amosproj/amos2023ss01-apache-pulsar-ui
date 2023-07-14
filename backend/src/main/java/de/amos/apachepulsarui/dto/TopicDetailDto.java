@@ -54,7 +54,7 @@ public class TopicDetailDto {
                     .toList();
             topicDetailDto.setSchemaInfos(schemaInfosSorted);
         }
-
         return topicDetailDto;
     }
+
 }

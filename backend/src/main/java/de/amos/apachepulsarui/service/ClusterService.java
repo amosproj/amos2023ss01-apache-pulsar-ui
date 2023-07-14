@@ -90,7 +90,9 @@ public class ClusterService {
 
     private ClusterDto enrichWithCardDetails(ClusterDto clusterDto) {
         List<String> tenants = getTenantsAllowedForCluster(clusterDto.getName());
-        long numberOfNamespaces = tenants.stream().mapToLong(t -> namespaceService.getAllOfTenant(t).size()).sum();
+        long numberOfNamespaces = tenants.stream()
+                .mapToLong(t -> namespaceService.getAllOfTenant(t).size())
+                .sum();
         clusterDto.setNumberOfTenants(tenants.size());
         clusterDto.setNumberOfNamespaces(numberOfNamespaces);
         return clusterDto;
