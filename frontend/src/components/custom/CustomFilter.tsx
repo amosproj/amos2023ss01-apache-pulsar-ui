@@ -86,7 +86,7 @@ const CustomFilter: React.FC<CustomFilterProps> = ({ currentView }) => {
 							filteredClusters.length > 0 &&
 							filteredClusters.map((item: string, index: number) => (
 								<CustomCheckbox
-									key={'checkbox-cluster' + Math.floor(Math.random() * 999999)}
+									key={'checkbox-cluster' + index}
 									text={item}
 									id={item}
 									topology={Topology.CLUSTER}
@@ -112,9 +112,9 @@ const CustomFilter: React.FC<CustomFilterProps> = ({ currentView }) => {
 						<div className="flex flex-col mt-4">
 							{filteredTenants &&
 								filteredTenants.length > 0 &&
-								filteredTenants.map((item: string) => (
+								filteredTenants.map((item: string, index: number) => (
 									<CustomCheckbox
-										key={'checkbox-tenant' + Math.floor(Math.random() * 999999)}
+										key={'checkbox-tenant' + index}
 										text={item}
 										id={item}
 										topology={Topology.TENANT}
@@ -141,11 +141,9 @@ const CustomFilter: React.FC<CustomFilterProps> = ({ currentView }) => {
 						<div className="flex flex-col mt-4 filter-wrapper">
 							{filteredNamespaces &&
 								filteredNamespaces.length > 0 &&
-								filteredNamespaces.map((item: string) => (
+								filteredNamespaces.map((item: string, index: number) => (
 									<CustomCheckbox
-										key={
-											'checkbox-namespace' + Math.floor(Math.random() * 999999)
-										}
+										key={'checkbox-namespace' + index}
 										text={item}
 										id={item}
 										topology={Topology.NAMESPACE}
@@ -173,11 +171,9 @@ const CustomFilter: React.FC<CustomFilterProps> = ({ currentView }) => {
 							<div className="flex flex-col mt-4 filter-wrapper">
 								{filteredTopics &&
 									filteredTopics.length > 0 &&
-									filteredTopics.map((item: string) => (
+									filteredTopics.map((item: string, index: number) => (
 										<CustomCheckbox
-											key={
-												'checkbox-topic' + Math.floor(Math.random() * 999999)
-											}
+											key={'checkbox-topic' + index}
 											text={item}
 											id={item}
 											topology={Topology.TOPIC}
@@ -202,11 +198,9 @@ const CustomFilter: React.FC<CustomFilterProps> = ({ currentView }) => {
 							<div className="flex flex-col mt-4 filter-wrapper">
 								{filteredProducers &&
 									filteredProducers.length > 0 &&
-									filteredProducers.map((item: string) => (
+									filteredProducers.map((item: string, index: number) => (
 										<CustomRadio
-											key={
-												'checkbox-topic' + Math.floor(Math.random() * 999999)
-											}
+											key={'checkbox-topic' + index}
 											text={item}
 											id={item}
 											topology={Topology.PRODUCER}
@@ -231,11 +225,9 @@ const CustomFilter: React.FC<CustomFilterProps> = ({ currentView }) => {
 							<div className="flex flex-col mt-4 filter-wrapper">
 								{filteredSubscriptions &&
 									filteredSubscriptions.length > 0 &&
-									filteredSubscriptions.map((item: string) => (
+									filteredSubscriptions.map((item: string, index: number) => (
 										<CustomCheckbox
-											key={
-												'checkbox-topic' + Math.floor(Math.random() * 999999)
-											}
+											key={'checkbox-topic' + index}
 											text={item}
 											id={item}
 											topology={Topology.SUBSCRIPTION}
