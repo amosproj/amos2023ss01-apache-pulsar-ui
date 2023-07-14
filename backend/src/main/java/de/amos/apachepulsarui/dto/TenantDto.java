@@ -24,4 +24,5 @@ public class TenantDto {
                 .tenantInfo(tenantInfo)
                 .build();
     }
+
 }

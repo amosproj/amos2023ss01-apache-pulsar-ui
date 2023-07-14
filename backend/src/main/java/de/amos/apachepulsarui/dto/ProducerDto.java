@@ -41,6 +41,6 @@ public class ProducerDto {
                 .filter(ps -> Objects.equals(ps.getProducerName(), producer))
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("No PublisherStats found for " + producer));
-
     }
+
 }

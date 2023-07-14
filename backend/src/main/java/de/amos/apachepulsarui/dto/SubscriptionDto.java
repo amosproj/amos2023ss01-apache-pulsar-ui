@@ -61,6 +61,6 @@ public class SubscriptionDto {
                 .stream()
                 .map(ConsumerStats::getConsumerName)
                 .toList();
-
     }
+
 }

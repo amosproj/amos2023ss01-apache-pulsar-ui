@@ -48,14 +48,11 @@ public class NamespaceController {
         return new ResponseEntity<>(new NamespacesDto(namespaceDtos), HttpStatus.OK);
     }
 
-    private List<NamespaceDto> getAllForNamespaces(List<String> namespaces) {
-        return namespaceService.getAllForNamespaces(namespaces);
-    }
-
     private List<NamespaceDto> getAllForTenants(List<String> tenants) {
         if (tenants.isEmpty()) {
             tenants = tenantService.getAllNames();
         }
         return namespaceService.getAllForTenants(tenants);
     }
+
 }

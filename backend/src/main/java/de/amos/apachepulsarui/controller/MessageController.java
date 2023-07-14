@@ -36,4 +36,5 @@ public class MessageController {
         Set<MessageDto> messageDtos = messageService.getLatestMessagesFiltered(topic, numMessages, producers, subscriptions);
         return new ResponseEntity<>(new MessagesDto(messageDtos), HttpStatus.OK);
     }
+
 }

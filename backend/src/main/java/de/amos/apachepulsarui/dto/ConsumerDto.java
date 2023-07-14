@@ -46,8 +46,7 @@ public class ConsumerDto {
 
 
     private static ConsumerStats getConsumerStatsByTopic(TopicStats topicStats, String consumer) {
-        return topicStats.getSubscriptions()
-                .values().stream()
+        return topicStats.getSubscriptions().values().stream()
                 .flatMap(subscriptionStats -> subscriptionStats.getConsumers().stream())
                 .filter(c -> c.getConsumerName().equals(consumer))
                 .findFirst()
