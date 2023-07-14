@@ -12,7 +12,6 @@ import { addFilterByDrilling } from '../../store/filterSlice'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import config from '../../config'
-import { addCommaSeparator } from '../../Helpers'
 import { Topology } from '../../enum'
 
 /**
@@ -35,11 +34,6 @@ const ClusterView: React.FC<ClusterViewProps> = ({ data }) => {
 
 	const handleDrillDown = () => {
 		dispatch(addFilterByDrilling({ filterName: Topology.CLUSTER, id: name }))
-		navigate('/tenant')
-	}
-
-	const handleDrillDownToTenant = (itemId: string) => {
-		dispatch(addFilterByDrilling({ filterName: Topology.TENANT, id: itemId }))
 		navigate('/tenant')
 	}
 

@@ -2,7 +2,7 @@
 // SPDX-FileCopyrightText: 2010-2021 Dirk Riehle <dirk@riehle.org
 // SPDX-FileCopyrightText: 2019 Georg Schwarz <georg. schwarz@fau.de>
 
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 import { RootState } from '../store'
 
 export type RequestTriggerState = {

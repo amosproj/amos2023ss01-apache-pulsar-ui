@@ -51,7 +51,7 @@ const MessageModal: React.FC<MessageModalProps> = ({ topic }) => {
 		setScrollTop(0)
 	}
 
-	const handleScroll = (event: any) => {
+	const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
 		const messageBox = event.currentTarget
 		const scrollableHeight = messageBox.scrollHeight - messageBox.clientHeight
 		const scrollPercentage = (messageBox.scrollTop / scrollableHeight) * 100

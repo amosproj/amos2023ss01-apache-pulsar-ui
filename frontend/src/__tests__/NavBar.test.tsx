@@ -3,7 +3,6 @@ import { render, screen, fireEvent } from '@testing-library/react'
 import { Provider } from 'react-redux'
 import NavBar from '../components/NavBar'
 import store from '../store'
-import { setNav } from '../store/globalSlice'
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
 
 // Spy on the dispatch function

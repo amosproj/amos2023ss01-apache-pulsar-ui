@@ -3,7 +3,7 @@
 // SPDX-FileCopyrightText: 2019 Georg Schwarz <georg. schwarz@fau.de>
 
 import React, { useEffect, useState } from 'react'
-import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import { useAppSelector } from '../../store/hooks'
 import axios from 'axios'
 import {
 	selectCluster,

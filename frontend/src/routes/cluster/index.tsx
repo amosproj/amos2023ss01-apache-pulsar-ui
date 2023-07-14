@@ -3,10 +3,9 @@
 // SPDX-FileCopyrightText: 2019 Georg Schwarz <georg. schwarz@fau.de>
 
 import React, { useEffect, useState } from 'react'
-import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import { useAppSelector } from '../../store/hooks'
 import axios from 'axios'
 import ClusterView from './ClusterView'
-import { selectCluster } from '../../store/filterSlice'
 import { selectTrigger } from '../requestTriggerSlice'
 import config from '../../config'
 import { Masonry } from 'react-plock'

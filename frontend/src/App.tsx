@@ -5,8 +5,6 @@
 import React from 'react'
 import './App.css'
 import './assets/styles/styles.scss'
-import { useAppSelector } from './store/hooks'
-import { selectView } from './store/globalSlice'
 import NavBar from './components/NavBar'
 import Dashboard from './components/Dashboard'
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
