@@ -21,7 +21,6 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { updateFilterAccordingToNav } from '../store/filterSlice'
 import { Topology } from '../enum'
 
-// Removed 'Message' from this array for now
 const pages = [
 	Topology.CLUSTER,
 	Topology.TENANT,
