@@ -15,14 +15,13 @@ import config from '../../config'
 import { Topology } from '../../enum'
 
 /**
- * ClusterView is a React component for visualizing cluster details.
+ * The ClusterView component displays cluster details.
  * It shows key properties of a cluster such as its name, number of tenants and namespaces,
  * and allows for the navigation to the detailed view.
  *
  * @component
  * @param data - The data object containing the cluster information.
- *
- * @returns The rendered ClusterView component.
+ * @returns a card including in-depth information regarding a specific cluster.
  */
 const ClusterView: React.FC<ClusterViewProps> = ({ data }) => {
 	const { name, numberOfNamespaces, numberOfTenants }: ClusterInfo = data

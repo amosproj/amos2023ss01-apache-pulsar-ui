@@ -21,11 +21,11 @@ export interface ResponseNamespace {
 }
 
 /**
- * Card group component for the namespace type.
+ * The NamespaceGroup component groups the namespaces included within the dashboard inside a masonry.
  * Displays the NamespaceView cards, title, loading window and network error.
  *
  * @component
- * @returns  Rendered namespace view cards for the dashboard component
+ * @returns a masonry containing NamespaceView cards.
  */
 const NamespaceGroup: React.FC = () => {
 	const [data, setData] = useState<NamespaceInfo[]>([])

@@ -13,11 +13,22 @@ import CustomSearchbar from './CustomSearchbar'
 import { useAppSelector } from '../../store/hooks'
 import { selectAllFilters, selectOptions } from '../../store/filterSlice'
 import { Topology } from '../../enum'
+import { filteredBySearchQuery } from '../../Helpers'
 
+/**
+ * The CustomFilter component provides filters for each topology level/page.
+ * It allows users to filter topologies on different levels. The lower the topology level, the greater
+ * will be the number of filter options available to the user. For example, Namespaces can also be
+ * filtered based on Tenants and Clusters. Conversely, Clusters can only be filtered among themselves.
+ *
+ * @component
+ * @param currentView - The current view/page/topology that the user is on.
+ * @returns a set of filters based on the page the user is visiting.
+ */
 const CustomFilter: React.FC<CustomFilterProps> = ({ currentView }) => {
-	// Options are what we've got from apis so far.
+	// The options constant includes the data we already received from the backend API.
 	const options = useAppSelector(selectOptions)
-	// filters are displayed in filters.
+	// The filters constant includes the list of elements determining the applied filters.
 	const filters = useAppSelector(selectAllFilters)
 	const [clusterSearchQuery, setClusterSearchQuery] = useState('')
 	const [namespaceSearchQuery, setNamespaceSearchQuery] = useState('')
@@ -26,36 +37,33 @@ const CustomFilter: React.FC<CustomFilterProps> = ({ currentView }) => {
 	const [producerSearchQuery, setProducerSearchQuery] = useState('')
 	const [subscriptionSearchQuery, setSubscriptionSearchQuery] = useState('')
 
-	const filteredCheckboxes = (searchQuery: string, completeArray: string[]) => {
-		let filteredArr = []
-		filteredArr = completeArray.filter((item: string) => {
-			return item.includes(searchQuery)
-		})
-		return filteredArr
-	}
-
-	const filteredClusters = filteredCheckboxes(
+	// Inside each filter accordion, we only display the elements that contain the query from the searchbar.
+	const filteredClusters = filteredBySearchQuery(
 		clusterSearchQuery,
 		options.allClusters
 	)
-	const filteredTenants = filteredCheckboxes(
+	const filteredTenants = filteredBySearchQuery(
 		tenantSearchQuery,
 		options.allTenants
 	)
-	const filteredNamespaces = filteredCheckboxes(
+	const filteredNamespaces = filteredBySearchQuery(
 		namespaceSearchQuery,
 		options.allNamespaces
 	)
-	const filteredTopics = filteredCheckboxes(topicSearchQuery, options.allTopics)
-	const filteredProducers = filteredCheckboxes(
+	const filteredTopics = filteredBySearchQuery(
+		topicSearchQuery,
+		options.allTopics
+	)
+	const filteredProducers = filteredBySearchQuery(
 		producerSearchQuery,
 		options.allProducers
 	)
-	const filteredSubscriptions = filteredCheckboxes(
+	const filteredSubscriptions = filteredBySearchQuery(
 		subscriptionSearchQuery,
 		options.allSubscriptions
 	)
 
+	// We exclude or include specific filters based on the view level.
 	const viewLevelOne = currentView === 'topic' || currentView === 'message'
 	const viewLevelTwo =
 		currentView === 'namespace' ||

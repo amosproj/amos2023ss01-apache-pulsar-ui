@@ -21,28 +21,25 @@ interface ConsumerAccordionProps {
 }
 
 /**
- * ConsumerAccordion is a react accordion component
- * for displaying consumer information in pulsar.
- * It shows the consumer details.
- *
- * The following information is shown in the consumer information popup:
- * address: Address of this consumer
- * availablePermits: Number of available message permits for the consumer
- * BytesOutCounter: Total bytes delivered to consumer (bytes)
- * ClientVersion: Client library version
- * ConnectedSince: Timestamp of connection
- * ConsumerName: Name of the consumer
- * LastAckedTimestamp:
- * LastConsumedTimestamp:
- * MessageOutConter: Total messages delivered to consumer (msg).
- * UnackedMessages: Number of unacknowledged messages for the consumer, where an  * unacknowledged message is one that has been sent to the consumer but not yet acknowledged
- * isBlockedConsumerOnUnackedMsgs: Flag to verify if consumer is blocked due to reaching  * threshold of unacked messages
+ * The ConsumerAccordion component is an accordion for displaying consumer details.
+ * The following information is shown:
+ * Address - Address of this consumer.
+ * AvailablePermits - Number of available message permits for the consumer.
+ * BytesOutCounter - Total bytes delivered to consumer (bytes).
+ * ClientVersion - Client library version.
+ * ConnectedSince - Timestamp of connection.
+ * ConsumerName - Name of the consumer.
+ * LastAckedTimestamp
+ * LastConsumedTimestamp
+ * MessageOutConter - Total messages delivered to consumer (msg).
+ * UnackedMessages - Number of unacknowledged messages for the consumer, where an * unacknowledged message is one that has been sent to the consumer but not yet acknowledged.
+ * IsBlockedConsumerOnUnackedMsgs - Flag to verify if consumer is blocked due to reaching  * threshold of unacked messages.
  *
  * @component
  * @param consumerName - The name of current consumer.
  * @param topicName - The name of topic which this consumer belongs to.
- * @param isActive - Whether this consumer is active (in pulsar there is only one active consumer)
- * @returns The rendered ConsumerAccordion component.
+ * @param isActive - Whether this consumer is active (in Pulsar there is only one active consumer).
+ * @returns an accordion including in-depth information regarding a specific consumer.
  */
 const ConsumerAccordion: React.FC<ConsumerAccordionProps> = ({
 	consumerName,

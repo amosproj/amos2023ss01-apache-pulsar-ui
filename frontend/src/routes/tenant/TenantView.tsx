@@ -16,13 +16,13 @@ import config from '../../config'
 import { Topology } from '../../enum'
 
 /**
- * TenantView is a React component for visualizing tenant details.
+ * The TenantView component displays tenant details.
  * It shows key properties of a tenant such as its name, info and numberOfNamespaces,
  * and allows for the navigation to the detailed view.
  *
  * @component
- * @param data - The data object containing the cluster information.
- * @returns The rendered ClusterView component.
+ * @param data - The data object containing the tenant information.
+ * @returns a card including in-depth information regarding a specific tenant.
  */
 const TenantView: React.FC<TenantViewProps> = ({ data }) => {
 	const { name, tenantInfo, numberOfNamespaces, numberOfTopics }: TenantInfo =
@@ -138,7 +138,12 @@ const TenantView: React.FC<TenantViewProps> = ({ data }) => {
 										{details?.namespaces.map((item: string, index: number) => (
 											<li key={index}>
 												<span key={index} className="text-blue">
-													- {item}{' '}
+													<a
+														href="#"
+														onClick={() => handleDrillDownToNamespace(item)}
+													>
+														- {item}{' '}
+													</a>
 												</span>
 											</li>
 										))}

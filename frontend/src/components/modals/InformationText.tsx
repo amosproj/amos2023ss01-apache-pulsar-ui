@@ -6,13 +6,12 @@ interface ModalInfoProps {
 }
 
 /**
- * InformationText is a react component for displaying detailed information for other
- * modals.
+ * The InformationText component is adopted within other modals to display detailed information.
  *
  * @component
- * @param title - The title of information.
- * @param detailedInfo - The detail of information.
- * @returns Rendered InformationText.
+ * @param title - The title for the information.
+ * @param detailedInfo - The detailed information.
+ * @returns a styled block of text with a title.
  */
 const InformationText: React.FC<ModalInfoProps> = ({ title, detailedInfo }) => {
 	return (

@@ -3,10 +3,10 @@
 // SPDX-FileCopyrightText: 2019 Georg Schwarz <georg. schwarz@fau.de>
 
 /**
- * Helper function to add comma separator if not the last element.
- * @param index the index of current element in array.
- * @param length the length of array.
- * @returns comma or null.
+ * Adds a comma separator if not the last element.
+ * @param {number} index the index of current element in array.
+ * @param {number} length the length of array.
+ * @returns {string} comma or null.
  */
 export const addCommaSeparator = (index: number, length: number): string => {
 	return index !== length - 1 ? ', ' : ''
@@ -15,7 +15,7 @@ export const addCommaSeparator = (index: number, length: number): string => {
 /**
  * Converts a timestamp to a human-readable date and time format.
  * @param {number} timestamp - The timestamp to convert.
- * @returns {string} The formatted date and time string.
+ * @returns {string} the formatted date and time string.
  */
 export const convertTimestampToDateTime = (timestamp: number): string => {
 	// If the timestamp is already in milliseconds, no conversion is needed
@@ -24,4 +24,21 @@ export const convertTimestampToDateTime = (timestamp: number): string => {
 	// ISO 8601 format: "YYYY-MM-DDTHH:mm:ss.sssZ"
 	const formattedTime = dateObj.toISOString()
 	return formattedTime
+}
+
+/**
+ * Filters an array of strings based on the provided input.
+ * @param {string} searchQuery - The input.
+ * @param {string[]} completeArray - The array to be filtered.
+ * @returns {string[]} the filtered array of strings that match or contain the provided input.
+ */
+export const filteredBySearchQuery = (
+	searchQuery: string,
+	completeArray: string[]
+) => {
+	let filteredArr = []
+	filteredArr = completeArray.filter((item: string) => {
+		return item.includes(searchQuery)
+	})
+	return filteredArr
 }
