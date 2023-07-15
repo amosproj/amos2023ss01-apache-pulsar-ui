@@ -4,8 +4,8 @@
 
 /**
  * Adds a comma separator if not the last element.
- * @param {number} index the index of current element in array.
- * @param {number} length the length of array.
+ * @param {number} index - The index of current element in array.
+ * @param {number} length - The length of array.
  * @returns {string} comma or null.
  */
 export const addCommaSeparator = (index: number, length: number): string => {
