@@ -26,11 +26,11 @@ export interface ResponseTopic {
 }
 
 /**
- * Card group component for the topic type.
+ * The TopicGroup component groups the topics included within the dashboard inside a masonry.
  * Displays the TopicView cards, title, loading window and network error.
  *
  * @component
- * @returns Rendered topic view cards for the dashboard component
+ * @returns a masonry containing TopicView cards.
  */
 const TopicGroup: React.FC = () => {
 	const [data, setData] = useState<TopicInfo[]>([])

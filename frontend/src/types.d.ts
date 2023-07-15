@@ -14,14 +14,6 @@ declare global {
 		name: string
 	}
 
-	interface CustomSelectProps<T> {
-		data: Array<FilterItem>
-		onChange: (event: SelectChangeEvent<T>) => void
-		value: T
-		label: string
-		error: boolean
-	}
-
 	interface CustomCheckboxProps {
 		id: string
 		text: string

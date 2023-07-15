@@ -22,21 +22,20 @@ interface MessageResponse {
 }
 
 /**
- * ProducerModal is a react component for displaying producer information in pulsar.
- *
- * The following information is shown in the producer information popup:
- * Address: Address of this producer.
- * AverageMsgSize: Average message size published by this producer.
- * ClientVersion: Client library version.
- * ConnectedSince: Timestamp of connection.
- * ProducerId: Id of this publisher.
- * ProducerName: Producer name.
+ * The ProducerModal component provides producer details.
+ * The following information is shown:
+ * Address - Address of this producer.
+ * AverageMsgSize - Average message size published by this producer.
+ * ClientVersion - Client library version.
+ * ConnectedSince - Timestamp of connection.
+ * ProducerId - Id of this publisher.
+ * ProducerName - Producer name.
  *
  * @component
  * @param producer
  * @param producer.producerName - The name of producer.
  * @param producer.topicName - The name of topic it belongs to.
- * @returns The rendered ProducerModal component.
+ * @returns a modal including in-depth information regarding a specific producer.
  */
 const ProducerModal: React.FC<ProducerModalProps> = ({ producer }) => {
 	const { producerName, topicName } = producer

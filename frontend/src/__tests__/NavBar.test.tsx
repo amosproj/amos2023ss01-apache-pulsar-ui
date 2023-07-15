@@ -8,7 +8,7 @@ import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
 // Spy on the dispatch function
 jest.spyOn(store, 'dispatch')
 
-test('every page button dispatches correct setNav reducer', () => {
+test('should check if every page button dispatches the correct setNav reducer', () => {
 	// const pages = ['Cluster', 'Namespace', 'Topic']
 	// Remove 'Cluster' because after #80 now the cluster view is the default view
 	const pages = ['Namespace']

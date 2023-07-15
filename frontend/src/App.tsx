@@ -18,7 +18,7 @@ import TopicGroup from './routes/topic'
  * It sets up the main routes for the application and also renders the main Dashboard and NavBar components.
  *
  * @component
- * @returns The main application component rendered to the DOM.
+ * @returns the main application component rendered to the DOM.
  */
 function App() {
 	return (
