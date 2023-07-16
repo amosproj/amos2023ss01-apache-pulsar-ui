@@ -58,7 +58,7 @@ public class NamespaceService {
                     namespaces.getBundles(namespace),
                     namespaces.getNamespaceMessageTTL(namespace),
                     namespaces.getRetention(namespace),
-                    topicService.getAllByNamespace(namespace)
+                    topicService.getAllForNamespace(namespace)
             );
         } catch (PulsarAdminException e) {
             throw new PulsarApiException(
@@ -80,15 +80,15 @@ public class NamespaceService {
         try {
 
             Namespaces namespaces = pulsarAdmin.namespaces();
-            namespace.setBundlesData(namespaces.getBundles(namespace.getId()));
-            namespace.setMessagesTTL(namespaces.getNamespaceMessageTTL(namespace.getId()));
-            namespace.setRetentionPolicies(namespaces.getRetention(namespace.getId()));
-            namespace.setTopics(topicService.getAllForNamespace(namespace.getId()));
+            namespace.setBundlesData(namespaces.getBundles(namespace.getName()));
+            namespace.setMessagesTTL(namespaces.getNamespaceMessageTTL(namespace.getName()));
+            namespace.setRetentionPolicies(namespaces.getRetention(namespace.getName()));
+            namespace.setTopics(topicService.getAllForNamespace(namespace.getName()));
 
             return namespace;
         } catch (PulsarAdminException e) {
             throw new PulsarApiException(
-                    "Could not fetch namespace data of namespace '%s'".formatted(namespace.getId()), e
+                    "Could not fetch namespace data of namespace '%s'".formatted(namespace.getName()), e
             );
         }
     }
