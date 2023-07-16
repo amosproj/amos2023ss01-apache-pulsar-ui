@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -73,23 +74,6 @@ public class NamespaceService {
             return pulsarAdmin.namespaces().getNamespaces(tenantName);
         } catch (PulsarAdminException e) {
             throw new PulsarApiException("Could not fetch namespaces of tenant '%s'".formatted(tenantName), e);
-        }
-    }
-
-    private NamespaceDetailDto enrichWithNamespaceData(NamespaceDetailDto namespace) throws PulsarApiException {
-        try {
-
-            Namespaces namespaces = pulsarAdmin.namespaces();
-            namespace.setBundlesData(namespaces.getBundles(namespace.getName()));
-            namespace.setMessagesTTL(namespaces.getNamespaceMessageTTL(namespace.getName()));
-            namespace.setRetentionPolicies(namespaces.getRetention(namespace.getName()));
-            namespace.setTopics(topicService.getAllForNamespace(namespace.getName()));
-
-            return namespace;
-        } catch (PulsarAdminException e) {
-            throw new PulsarApiException(
-                    "Could not fetch namespace data of namespace '%s'".formatted(namespace.getName()), e
-            );
         }
     }
 
