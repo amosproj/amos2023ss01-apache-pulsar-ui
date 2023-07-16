@@ -7,45 +7,45 @@ import { Box, Modal, IconButton, Button } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import ChevronRight from '@mui/icons-material/ChevronRight'
 import InfoRoundedIcon from '@mui/icons-material/InfoRounded'
-import logo from '../assets/images/team-logo-no-margins.png'
+import logo from '../../assets/images/team-logo-no-margins.png'
 import FilterListIcon from '@mui/icons-material/FilterList'
 import BarChartIcon from '@mui/icons-material/BarChart'
 import SearchIcon from '@mui/icons-material/Search'
 
 /**
- * InfoModal is a React component that provides an informative modal interface.
- * It handles opening and closing of the modal and displays information about the project mission.
+ * The InfoModal component provides an informative modal interface containing relevant information
+ * regarding Apache Pulsar UI, including the project mission and its main features.
  *
  * @component
- * @returns The rendered InfoModal component.
+ * @returns a modal describing the Apache Pulsar UI project.
  */
 export const InfoModal: React.FC = () => {
 	const [open, setOpen] = React.useState(false)
 
-	const handleClickOpen = () => {
-		setOpen(true)
-	}
-
-	const handleClose = () => {
-		setOpen(false)
+	// Toggles opening and closing of the modal
+	const handleOpenAndClose = () => {
+		setOpen((prevState) => !prevState)
 	}
 
 	return (
 		<div className="info-modal-wrapper">
 			<Button
 				startIcon={<InfoRoundedIcon />}
-				onClick={handleClickOpen}
+				onClick={handleOpenAndClose}
 				style={{ color: 'white' }}
 			></Button>
 			<Modal
 				open={open}
-				onClose={handleClose}
+				onClose={handleOpenAndClose}
 				aria-labelledby="modal-modal-title"
 				aria-describedby="modal-modal-description"
 			>
 				<Box className="modal-box">
 					<Box className="modal-box-inner flex">
-						<IconButton className="close-modal-button" onClick={handleClose}>
+						<IconButton
+							className="close-modal-button"
+							onClick={handleOpenAndClose}
+						>
 							<CloseIcon />
 						</IconButton>
 						<div className="modal-content items-center">

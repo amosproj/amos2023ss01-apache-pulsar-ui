@@ -6,33 +6,19 @@
 
 package de.amos.apachepulsarui.service;
 
-import de.amos.apachepulsarui.dto.ConsumerDto;
-import de.amos.apachepulsarui.dto.ProducerDto;
-import de.amos.apachepulsarui.dto.SchemaInfoDto;
-import de.amos.apachepulsarui.dto.SubscriptionDto;
-import de.amos.apachepulsarui.dto.TopicDetailDto;
-import de.amos.apachepulsarui.dto.TopicDto;
+import de.amos.apachepulsarui.dto.*;
 import de.amos.apachepulsarui.exception.PulsarApiException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.apache.pulsar.client.admin.PulsarAdminException;
 import org.apache.pulsar.common.naming.TopicName;
-import org.apache.pulsar.common.policies.data.ConsumerStats;
-import org.apache.pulsar.common.policies.data.PublisherStats;
 import org.apache.pulsar.common.policies.data.TopicStats;
 import org.apache.pulsar.common.schema.SchemaInfo;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
-import java.util.function.Predicate;
-
-import static de.amos.apachepulsarui.dto.ProducerDto.create;
 
 @Service
 @RequiredArgsConstructor
@@ -40,8 +26,6 @@ import static de.amos.apachepulsarui.dto.ProducerDto.create;
 public class TopicService {
 
     private final PulsarAdmin pulsarAdmin;
-
-    private final ConsumerService consumerService;
 
     @Cacheable("topics.allForTopics")
     public List<TopicDto> getAllForTopics(List<String> topics) {
@@ -54,7 +38,7 @@ public class TopicService {
     @Cacheable("topics.allForNamespace")
     public List<TopicDto> getAllForNamespaces(List<String> namespaces) {
         return namespaces.stream()
-                .map(this::getByNamespace)
+                .map(this::getAllForNamespace)
                 .flatMap(topics -> getAllForTopics(topics).stream())
                 .toList();
     }
@@ -73,11 +57,7 @@ public class TopicService {
      * @param namespace The namespace you want to get a list of all topics for.
      * @return A list of topics (their fully qualified names).
      */
-    public List<String> getAllByNamespace(String namespace) {
-        return getByNamespace(namespace);
-    }
-
-    private List<String> getByNamespace(String namespace) throws PulsarApiException {
+    public List<String> getAllForNamespace(String namespace) {
         try {
             return pulsarAdmin.topics().getList(namespace);
         } catch (PulsarAdminException e) {
@@ -127,40 +107,17 @@ public class TopicService {
 
     public ProducerDto getProducerByTopic(String topic, String producer) {
         TopicStats topicStats = getTopicStats(topic);
-        PublisherStats publisherStats = topicStats.getPublishers().stream()
-                .filter(ps -> Objects.equals(ps.getProducerName(), producer))
-                .findFirst().orElseThrow();
-
-        return create(publisherStats);
+        return ProducerDto.create(topicStats, producer);
     }
-
-// Todo: will there be an extra call to get the producer messages?
-// if not needed, this can be thrown away, but I will leave it here until we know for sure
-
-//    private List<MessageDto> getMessagesByProducer(String topic, Set<String> subscriptions, String producer) {
-//        return subscriptions.stream()
-//                .flatMap(s -> messageService.peekMessages(topic, s).stream())
-//                .filter(distinctByKey(MessageDto::getMessageId))
-//                .filter(message -> Objects.equals(message.getProducer(), producer))
-//                .toList();
-//    }
 
     public SubscriptionDto getSubscriptionByTopic(String topic, String subscription) {
-        return SubscriptionDto.create(getTopicStats(topic).getSubscriptions().get(subscription), subscription);
-    }
-
-    //source: https://www.baeldung.com/java-streams-distinct-by
-    public static <T> Predicate<T> distinctByKey(
-            Function<? super T, ?> keyExtractor) {
-
-        Map<Object, Boolean> seen = new ConcurrentHashMap<>();
-        return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
+        TopicStats topicStats = getTopicStats(topic);
+        return SubscriptionDto.create(topicStats, subscription);
     }
 
     public ConsumerDto getConsumerByTopic(String topic, String consumer) {
         TopicStats topicStats = getTopicStats(topic);
-        ConsumerStats consumerStats = consumerService.getConsumerStatsByTopic(topicStats, consumer);
-        return ConsumerDto.create(consumerStats);
+        return ConsumerDto.create(topicStats, consumer);
     }
 
     private boolean exists(String topic) {
@@ -175,13 +132,13 @@ public class TopicService {
         }
     }
 
-    public List<TopicDto> getTopicForProducer(List<TopicDto> topics, String producer) {
+    public List<TopicDto> getTopicsForProducer(List<TopicDto> topics, String producer) {
         return topics.stream()
                 .filter(topicDto -> topicDto.getProducers().contains(producer))
                 .toList();
     }
 
-    public List<TopicDto> getAllForSubscriptions(List<TopicDto> topics, List<String> subscriptions) {
+    public List<TopicDto> getTopicsForSubscriptions(List<TopicDto> topics, List<String> subscriptions) {
         return topics.stream()
                 .filter(topic -> topic.getSubscriptions().stream().anyMatch(subscriptions::contains))
                 .toList();

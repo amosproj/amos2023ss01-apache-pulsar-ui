@@ -14,15 +14,9 @@ import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.apache.pulsar.client.admin.PulsarAdminException;
 import org.apache.pulsar.client.api.Message;
 import org.apache.pulsar.common.api.proto.CommandSubscribe;
-import org.apache.pulsar.common.naming.TopicName;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,7 +33,6 @@ public class MessageService {
         if (!subscriptions.isEmpty()) {
             messageDtos = filterBySubscription(messageDtos, numMessages, topic, subscriptions);
         }
-
         return messageDtos;
     }
 
@@ -47,7 +40,6 @@ public class MessageService {
         List<String> messageIds = subscriptions.stream()
                 .flatMap(s -> peekMessageIds(topic, s, numMessages).stream())
                 .toList();
-
         return messageDtos.stream()
                 .filter(m -> messageIds.contains(m.getMessageId()))
                 .collect(Collectors.toCollection(LinkedHashSet::new));
@@ -57,14 +49,14 @@ public class MessageService {
         try {
             if (pulsarAdmin.topics().getSubscriptions(topic).contains(subscription)) {
                 return pulsarAdmin.topics().peekMessages(topic, subscription, numMessages).stream()
-                        .map(m -> m.getMessageId().toString()).toList();
+                        .map(m -> m.getMessageId().toString())
+                        .toList();
             }
             return Collections.emptyList();
         } catch (PulsarAdminException e) {
             throw new PulsarApiException(String.format("Could not get Messages for subscription %s", subscription), e);
         }
     }
-
 
     private Set<MessageDto> filterByProducers(Set<MessageDto> messageDtos, List<String> producers) {
         return messageDtos.stream()
@@ -106,9 +98,5 @@ public class MessageService {
         } catch (PulsarAdminException e) {
             return "";
         }
-    }
-
-    public boolean inValidTopicName(MessageDto messageDto) {
-        return !TopicName.isValid(messageDto.getTopic());
     }
 }

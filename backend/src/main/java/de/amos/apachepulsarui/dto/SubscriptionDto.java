@@ -5,42 +5,34 @@
 
 package de.amos.apachepulsarui.dto;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 import org.apache.pulsar.common.policies.data.ConsumerStats;
 import org.apache.pulsar.common.policies.data.SubscriptionStats;
+import org.apache.pulsar.common.policies.data.TopicStats;
 
 import java.util.List;
 import java.util.Objects;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder(access = AccessLevel.PRIVATE)
 public class SubscriptionDto {
 
     private String name;
-
     private String activeConsumer;
-
     private List<String> inactiveConsumers;
-
     private long numberConsumers;
-
     private double msgAckRate;
-
     private long msgBacklog;
-
     private long backlogSize;
-
     private long msgOutCounter;
-
     private long bytesOutCounter;
-
     private boolean replicated;
-
     private String type;
 
-    public static SubscriptionDto create(SubscriptionStats subscriptionStats, String name) {
+    public static SubscriptionDto create(TopicStats topicStats, String name) {
+        SubscriptionStats subscriptionStats = topicStats.getSubscriptions().get(name);
         List<String> consumers = getConsumers(subscriptionStats);
         String active = consumers.stream()
                 .filter(c -> Objects.equals(c, subscriptionStats.getActiveConsumerName()))
@@ -69,6 +61,6 @@ public class SubscriptionDto {
                 .stream()
                 .map(ConsumerStats::getConsumerName)
                 .toList();
-
     }
+
 }

@@ -3,10 +3,9 @@
 // SPDX-FileCopyrightText: 2019 Georg Schwarz <georg. schwarz@fau.de>
 
 import React, { useEffect, useState } from 'react'
-import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import { useAppSelector } from '../../store/hooks'
 import axios from 'axios'
 import ClusterView from './ClusterView'
-import { selectCluster } from '../../store/filterSlice'
 import { selectTrigger } from '../requestTriggerSlice'
 import config from '../../config'
 import { Masonry } from 'react-plock'
@@ -17,11 +16,11 @@ export interface ResponseCluster {
 }
 
 /**
- * Card group component for the cluster type.
+ * The ClusterGroup component groups the clusters included within the dashboard inside a masonry.
  * Displays the ClusterView cards, title, loading window and network error.
  *
  * @component
- * @returns Rendered cluster view cards for the dashboard component
+ * @returns a masonry containing ClusterView cards.
  */
 const ClusterGroup: React.FC = () => {
 	const [data, setData] = useState<ClusterInfo[]>([])
@@ -30,7 +29,7 @@ const ClusterGroup: React.FC = () => {
 	const url = config.backendUrl + '/api/cluster/all'
 	const trigger = useAppSelector(selectTrigger)
 
-	//Sends get request to /cluster/all for general information everytime the trigger value changes
+	// Sends get request to /cluster/all for general information everytime the trigger value changes
 	useEffect(() => {
 		// Sending GET request
 		axios

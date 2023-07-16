@@ -3,15 +3,12 @@ import { render, screen, fireEvent } from '@testing-library/react'
 import { Provider } from 'react-redux'
 import NavBar from '../components/NavBar'
 import store from '../store'
-import { setNav } from '../store/globalSlice'
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
 
 // Spy on the dispatch function
 jest.spyOn(store, 'dispatch')
 
-test('every page button dispatches correct setNav reducer', () => {
-	// const pages = ['Cluster', 'Namespace', 'Topic']
-	// Remove 'Cluster' because after #80 now the cluster view is the default view
+test('should check if every page button dispatches the correct setNav reducer', () => {
 	const pages = ['Namespace']
 
 	render(

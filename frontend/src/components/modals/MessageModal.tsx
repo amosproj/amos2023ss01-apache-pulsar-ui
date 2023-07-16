@@ -20,21 +20,20 @@ interface MessageResponse {
 }
 
 /**
- * MessageModal is a react component for displaying message information in pulsar.
- *
- * The following information is shown in MessageModal:
- * messageId: the id of the message
- * topic: the topic this message belongs to
- * payload: payload this message contains
- * schema:
- * namespace: the name space this message belongs to
- * tenant: the tenant this message belongs to
- * publishTime:
- * producer: the producer this message belongs to
+ * The MessageModal component provides consumer details.
+ * The following information is shown:
+ * MessageId - The id of the message.
+ * Topic - The topic this message belongs to.
+ * Payload - Payload this message contains.
+ * Schema
+ * Namespace - The name space this message belongs to.
+ * Tenant - The tenant this message belongs to.
+ * PublishTime
+ * Producer - The producer this message belongs to.
  *
  * @component
- * @param topic - The name of topic
- * @returns The rendered MessageModal component.
+ * @param topic - The name of topic.
+ * @returns a scrollable modal including the messages associated to a specific topic.
  */
 const MessageModal: React.FC<MessageModalProps> = ({ topic }) => {
 	const [open, setOpen] = useState(false)
@@ -51,16 +50,21 @@ const MessageModal: React.FC<MessageModalProps> = ({ topic }) => {
 		setScrollTop(0)
 	}
 
-	const handleScroll = (event: any) => {
+	const handleClose = () => {
+		setOpen(false)
+	}
+
+	// Sets the vertical length percentage of the custom scrollbar
+	const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
+		// Get the modal box inner element
 		const messageBox = event.currentTarget
+
+		// Determine the percentage of vertical length for the custom scrollbar based on total box height
 		const scrollableHeight = messageBox.scrollHeight - messageBox.clientHeight
 		const scrollPercentage = (messageBox.scrollTop / scrollableHeight) * 100
 
+		// Update state
 		setScrollTop(scrollPercentage)
-	}
-
-	const handleClose = () => {
-		setOpen(false)
 	}
 
 	const fetchData = () => {
@@ -83,6 +87,8 @@ const MessageModal: React.FC<MessageModalProps> = ({ topic }) => {
 				setLoading(false)
 			})
 	}
+
+	// Sanitizes the input of the message amount field
 	const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const value = event.target.value
 		setInputValue(value) // set the inputValue state

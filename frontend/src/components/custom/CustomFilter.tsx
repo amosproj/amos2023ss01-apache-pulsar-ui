@@ -13,11 +13,22 @@ import CustomSearchbar from './CustomSearchbar'
 import { useAppSelector } from '../../store/hooks'
 import { selectAllFilters, selectOptions } from '../../store/filterSlice'
 import { Topology } from '../../enum'
+import { filteredBySearchQuery } from '../../Helpers'
 
+/**
+ * The CustomFilter component provides filters for each topology level/page.
+ * It allows users to filter topologies on different levels. The lower the topology level, the greater
+ * will be the number of filter options available to the user. For example, Namespaces can also be
+ * filtered based on Tenants and Clusters. Conversely, Clusters can only be filtered among themselves.
+ *
+ * @component
+ * @param currentView - The current view/page/topology that the user is on.
+ * @returns a set of filters based on the page the user is visiting.
+ */
 const CustomFilter: React.FC<CustomFilterProps> = ({ currentView }) => {
-	// Options are what we've got from apis so far.
+	// The options constant includes the data we already received from the backend API.
 	const options = useAppSelector(selectOptions)
-	// filters are displayed in filters.
+	// The filters constant includes the list of elements determining the applied filters.
 	const filters = useAppSelector(selectAllFilters)
 	const [clusterSearchQuery, setClusterSearchQuery] = useState('')
 	const [namespaceSearchQuery, setNamespaceSearchQuery] = useState('')
@@ -26,36 +37,33 @@ const CustomFilter: React.FC<CustomFilterProps> = ({ currentView }) => {
 	const [producerSearchQuery, setProducerSearchQuery] = useState('')
 	const [subscriptionSearchQuery, setSubscriptionSearchQuery] = useState('')
 
-	const filteredCheckboxes = (searchQuery: string, completeArray: string[]) => {
-		let filteredArr = []
-		filteredArr = completeArray.filter((item: string) => {
-			return item.includes(searchQuery)
-		})
-		return filteredArr
-	}
-
-	const filteredClusters = filteredCheckboxes(
+	// Inside each filter accordion, we only display the elements that contain the query from the searchbar.
+	const filteredClusters = filteredBySearchQuery(
 		clusterSearchQuery,
 		options.allClusters
 	)
-	const filteredTenants = filteredCheckboxes(
+	const filteredTenants = filteredBySearchQuery(
 		tenantSearchQuery,
 		options.allTenants
 	)
-	const filteredNamespaces = filteredCheckboxes(
+	const filteredNamespaces = filteredBySearchQuery(
 		namespaceSearchQuery,
 		options.allNamespaces
 	)
-	const filteredTopics = filteredCheckboxes(topicSearchQuery, options.allTopics)
-	const filteredProducers = filteredCheckboxes(
+	const filteredTopics = filteredBySearchQuery(
+		topicSearchQuery,
+		options.allTopics
+	)
+	const filteredProducers = filteredBySearchQuery(
 		producerSearchQuery,
 		options.allProducers
 	)
-	const filteredSubscriptions = filteredCheckboxes(
+	const filteredSubscriptions = filteredBySearchQuery(
 		subscriptionSearchQuery,
 		options.allSubscriptions
 	)
 
+	// We exclude or include specific filters based on the view level.
 	const viewLevelOne = currentView === 'topic' || currentView === 'message'
 	const viewLevelTwo =
 		currentView === 'namespace' ||
@@ -86,7 +94,7 @@ const CustomFilter: React.FC<CustomFilterProps> = ({ currentView }) => {
 							filteredClusters.length > 0 &&
 							filteredClusters.map((item: string, index: number) => (
 								<CustomCheckbox
-									key={'checkbox-cluster' + Math.floor(Math.random() * 999999)}
+									key={'checkbox-cluster' + index}
 									text={item}
 									id={item}
 									topology={Topology.CLUSTER}
@@ -112,9 +120,9 @@ const CustomFilter: React.FC<CustomFilterProps> = ({ currentView }) => {
 						<div className="flex flex-col mt-4">
 							{filteredTenants &&
 								filteredTenants.length > 0 &&
-								filteredTenants.map((item: string) => (
+								filteredTenants.map((item: string, index: number) => (
 									<CustomCheckbox
-										key={'checkbox-tenant' + Math.floor(Math.random() * 999999)}
+										key={'checkbox-tenant' + index}
 										text={item}
 										id={item}
 										topology={Topology.TENANT}
@@ -141,11 +149,9 @@ const CustomFilter: React.FC<CustomFilterProps> = ({ currentView }) => {
 						<div className="flex flex-col mt-4 filter-wrapper">
 							{filteredNamespaces &&
 								filteredNamespaces.length > 0 &&
-								filteredNamespaces.map((item: string) => (
+								filteredNamespaces.map((item: string, index: number) => (
 									<CustomCheckbox
-										key={
-											'checkbox-namespace' + Math.floor(Math.random() * 999999)
-										}
+										key={'checkbox-namespace' + index}
 										text={item}
 										id={item}
 										topology={Topology.NAMESPACE}
@@ -173,11 +179,9 @@ const CustomFilter: React.FC<CustomFilterProps> = ({ currentView }) => {
 							<div className="flex flex-col mt-4 filter-wrapper">
 								{filteredTopics &&
 									filteredTopics.length > 0 &&
-									filteredTopics.map((item: string) => (
+									filteredTopics.map((item: string, index: number) => (
 										<CustomCheckbox
-											key={
-												'checkbox-topic' + Math.floor(Math.random() * 999999)
-											}
+											key={'checkbox-topic' + index}
 											text={item}
 											id={item}
 											topology={Topology.TOPIC}
@@ -202,11 +206,9 @@ const CustomFilter: React.FC<CustomFilterProps> = ({ currentView }) => {
 							<div className="flex flex-col mt-4 filter-wrapper">
 								{filteredProducers &&
 									filteredProducers.length > 0 &&
-									filteredProducers.map((item: string) => (
+									filteredProducers.map((item: string, index: number) => (
 										<CustomRadio
-											key={
-												'checkbox-topic' + Math.floor(Math.random() * 999999)
-											}
+											key={'checkbox-topic' + index}
 											text={item}
 											id={item}
 											topology={Topology.PRODUCER}
@@ -231,11 +233,9 @@ const CustomFilter: React.FC<CustomFilterProps> = ({ currentView }) => {
 							<div className="flex flex-col mt-4 filter-wrapper">
 								{filteredSubscriptions &&
 									filteredSubscriptions.length > 0 &&
-									filteredSubscriptions.map((item: string) => (
+									filteredSubscriptions.map((item: string, index: number) => (
 										<CustomCheckbox
-											key={
-												'checkbox-topic' + Math.floor(Math.random() * 999999)
-											}
+											key={'checkbox-topic' + index}
 											text={item}
 											id={item}
 											topology={Topology.SUBSCRIPTION}

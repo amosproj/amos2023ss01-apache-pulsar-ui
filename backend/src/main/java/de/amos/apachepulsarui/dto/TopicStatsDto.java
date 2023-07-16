@@ -20,19 +20,12 @@ import java.util.Set;
 public class TopicStatsDto {
 
     private Set<String> subscriptions;
-
     private List<String> producers;
-
     private long numberSubscriptions;
-
     private long numberProducers;
-
     private long producedMesages;
-
     private long consumedMessages;
-
     private double averageMessageSize;
-
     private long storageSize;
 
     public static TopicStatsDto createTopicStatsDto(TopicStats topicStats) {
@@ -50,7 +43,6 @@ public class TopicStatsDto {
                 .averageMessageSize(topicStats.getAverageMsgSize())
                 .storageSize(topicStats.getStorageSize())
                 .build();
-
     }
 
     private static List<String> getProducers(TopicStats topicStats) {
@@ -59,10 +51,5 @@ public class TopicStatsDto {
                 .map(PublisherStats::getProducerName)
                 .toList();
     }
-
-
-
-
-
 
 }

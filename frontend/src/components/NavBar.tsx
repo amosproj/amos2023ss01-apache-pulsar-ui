@@ -16,12 +16,11 @@ import MenuItem from '@mui/material/MenuItem'
 import { useAppDispatch } from '../store/hooks'
 import { setNav } from '../store/globalSlice'
 import logo from '../assets/images/team-logo-light.png'
-import { InfoModal } from './InfoModal'
+import { InfoModal } from './modals/InfoModal'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { updateFilterAccordingToNav } from '../store/filterSlice'
 import { Topology } from '../enum'
 
-//Removed 'Message' from this array for now
 const pages = [
 	Topology.CLUSTER,
 	Topology.TENANT,
@@ -30,13 +29,13 @@ const pages = [
 ]
 
 /**
- * NavBar is a React component that provides a navigational bar interface.
+ * The NavBar component provides a navigational bar interface.
  * It manages navigation menu state and provides handlers for opening and closing Modals as well as clicking on navigation items.
  * The NavBar renders AppBar which contains navigation options for different pages.
  * It also contains the InfoModal component.
  *
  * @component
- * @returns The rendered NavBar component.
+ * @returns a styled navbar that allows users to switch between different topology pages.
  */
 const NavBar: React.FC = () => {
 	const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null)
@@ -52,9 +51,8 @@ const NavBar: React.FC = () => {
 		setAnchorElNav(null)
 	}
 
-	// handles click on navigation items
+	// Handles click on navigation items
 	const handleClickOnNav = (tag: Topology) => {
-		//tag = tag.toLowerCase()
 		dispatch(setNav(tag))
 		navigate('/' + tag)
 	}

@@ -5,12 +5,12 @@
 import React from 'react'
 
 /**
- * MessageView is a React component for visualizing message details.
+ * The MessageView component displays message details.
  * It shows key properties of a message such as its id, related topic and namespace.
  *
  * @component
- * @param data - The data object containing the cluster information.
- * @returns The rendered ClusterView component.
+ * @param data - The data object containing the message information.
+ * @returns a card including in-depth information regarding a specific message.
  */
 const MessageView: React.FC<MessageViewProps> = ({ data }) => {
 	const {

@@ -5,8 +5,6 @@
 import React from 'react'
 import './App.css'
 import './assets/styles/styles.scss'
-import { useAppSelector } from './store/hooks'
-import { selectView } from './store/globalSlice'
 import NavBar from './components/NavBar'
 import Dashboard from './components/Dashboard'
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
@@ -20,7 +18,7 @@ import TopicGroup from './routes/topic'
  * It sets up the main routes for the application and also renders the main Dashboard and NavBar components.
  *
  * @component
- * @returns The main application component rendered to the DOM.
+ * @returns the main application component rendered to the DOM.
  */
 function App() {
 	return (

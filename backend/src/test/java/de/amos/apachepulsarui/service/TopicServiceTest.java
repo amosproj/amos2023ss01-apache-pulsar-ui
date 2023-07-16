@@ -71,7 +71,7 @@ class TopicServiceTest {
     void getAllTopicsByNamespace() throws PulsarAdminException {
         whenAdminTopics();
 
-        assertEquals(topicService.getAllByNamespace(NAMESPACE), List.of(TOPIC_NAME));
+        assertEquals(topicService.getAllForNamespace(NAMESPACE), List.of(TOPIC_NAME));
     }
 
     private void whenTopicStats() throws PulsarAdminException {
@@ -117,7 +117,7 @@ class TopicServiceTest {
         topicDto1.setProducers(List.of("unWantedProducer"));
         List<TopicDto> topics = List.of(topicDto, topicDto1);
 
-        assertEquals(topicService.getTopicForProducer(topics, "wantedProducer").size() , 1);
+        assertEquals(topicService.getTopicsForProducer(topics, "wantedProducer").size() , 1);
     }
 
     @Test
@@ -128,7 +128,7 @@ class TopicServiceTest {
         topicDto1.setSubscriptions(Set.of("unWantedSubscription"));
         List<TopicDto> topics = List.of(topicDto, topicDto1);
 
-        assertEquals(topicService.getAllForSubscriptions(topics, List.of("wantedSubscription")).size() , 1);
+        assertEquals(topicService.getTopicsForSubscriptions(topics, List.of("wantedSubscription")).size() , 1);
     }
 
 }

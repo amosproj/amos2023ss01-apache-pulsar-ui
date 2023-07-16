@@ -17,11 +17,11 @@ export interface ResponseTenant {
 }
 
 /**
- * Card group component for the tenant type.
+ * The TenantGroup component groups the tenants included within the dashboard inside a masonry.
  * Displays the TenantView cards, title, loading window and network error.
  *
  * @component
- * @returns Rendered tenant view cards for the dashboard component
+ * @returns a masonry containing TenantView cards.
  */
 const TenantGroup: React.FC = () => {
 	const [data, setData] = useState<TenantInfo[]>([])

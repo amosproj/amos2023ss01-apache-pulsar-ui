@@ -14,13 +14,9 @@ import org.apache.pulsar.common.policies.data.TenantInfo;
 public class TenantDto {
 
     private String name;
-
     private TenantInfo tenantInfo;
-
     private long numberOfNamespaces;
-
     private long numberOfTopics;
-
 
     public static TenantDto create(TenantInfo tenantInfo, String name) {
         return TenantDto.builder()
@@ -28,4 +24,5 @@ public class TenantDto {
                 .tenantInfo(tenantInfo)
                 .build();
     }
+
 }

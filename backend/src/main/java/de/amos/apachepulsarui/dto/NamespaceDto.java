@@ -15,9 +15,7 @@ import org.apache.pulsar.common.naming.NamespaceName;
 public class NamespaceDto {
 
     private String id;
-
 	private String tenant;
-
 	private long numberOfTopics;
 
 	public static NamespaceDto fromString(String namespaceId) {
@@ -26,4 +24,5 @@ public class NamespaceDto {
 		namespaceDto.setTenant(NamespaceName.get(namespaceId).getTenant());
 		return namespaceDto;
 	}
+
 }

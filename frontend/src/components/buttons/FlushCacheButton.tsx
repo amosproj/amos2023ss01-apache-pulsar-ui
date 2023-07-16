@@ -4,6 +4,9 @@ import MuiAlert, { AlertProps } from '@mui/material/Alert'
 import config from '../../config'
 import axios from 'axios'
 
+/**
+ * The Alert communicates to the user if flushing was executed correctly or not.
+ */
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 	props,
 	ref
@@ -12,16 +15,14 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 })
 
 /**
- * Flush backend-cache button component.
- * When user clicks on it, it calls the backend api to flush the cache in backend
- * to get the latest data in pulsar.
+ * On click event, the FlushCacheButton flushes the cache and retrieves the latest data from Pulsar.
  */
 export default function FlushCacheButton() {
 	const [open, setOpen] = React.useState(false)
 	const [error, setError] = React.useState(false)
 
 	/**
-	 * Call the backend api endpoint to flush the backend-cache
+	 * Calls the API endpoint to flush the backend-cache.
 	 */
 	const flushCache = () => {
 		const url = config.backendUrl + '/api/cache/flush'
@@ -39,13 +40,13 @@ export default function FlushCacheButton() {
 			})
 	}
 
-	// when clicked, sends the request and set the open to true to get alert.
+	// Sends the request and displays the alert.
 	const handleClick = () => {
 		flushCache()
 		setOpen(true)
 	}
 
-	// closes alert.
+	// Closes alert.
 	const handleClose = (
 		event?: React.SyntheticEvent | Event,
 		reason?: string
@@ -53,7 +54,6 @@ export default function FlushCacheButton() {
 		if (reason === 'clickaway') {
 			return
 		}
-
 		setOpen(false)
 	}
 

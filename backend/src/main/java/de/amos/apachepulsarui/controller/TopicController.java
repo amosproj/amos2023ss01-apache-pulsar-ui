@@ -56,10 +56,10 @@ public class TopicController {
         }
 
         if (!producer.isEmpty()) {
-            topicsToReturn = topicService.getTopicForProducer(topicsToReturn, producer);
+            topicsToReturn = topicService.getTopicsForProducer(topicsToReturn, producer);
         }
         if (!subscriptions.isEmpty()) {
-            topicsToReturn = topicService.getAllForSubscriptions(topicsToReturn, subscriptions);
+            topicsToReturn = topicService.getTopicsForSubscriptions(topicsToReturn, subscriptions);
         }
         return wrapInEntity(topicsToReturn);
     }
@@ -71,7 +71,9 @@ public class TopicController {
 
     @GetMapping("/subscription/{subscription}")
     public ResponseEntity<SubscriptionDto> getSubscriptionByNameAndTopic(@RequestParam String topic, @PathVariable String subscription) {
-        return new ResponseEntity<>(topicService.getSubscriptionByTopic(topic, subscription), HttpStatus.OK);
+        SubscriptionDto subscriptionDto = topicService.getSubscriptionByTopic(topic, subscription);
+
+        return new ResponseEntity<>(subscriptionDto, HttpStatus.OK);
     }
 
     @GetMapping("/producer/{producer}")
