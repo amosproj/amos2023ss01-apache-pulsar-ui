@@ -52,10 +52,12 @@ const MessageView: React.FC<MessageViewProps> = ({ data }) => {
 					</div>
 					<div className="grey-line"></div>
 					<div className="flex card-info">
-						<p className="text-black timestamp-wrapper">
+						<div className="text-black schema-box-wrapper">
 							Payload:<br></br>
-							<span className="text-grey">{payload}</span>
-						</p>
+							<span className="schema-box">
+								<pre className="text-black">{payload}</pre>
+							</span>
+						</div>
 						<div className="text-black schema-box-wrapper">
 							Schema:<br></br>
 							<span className="schema-box">
