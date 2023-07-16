@@ -257,8 +257,8 @@ const filterSlice = createSlice({
 			})
 			state.displayedOptions.allTopics = data.topics.map((item) => item.name)
 		})
-		builder.addCase(fetchOptionsThunk.fulfilled, (state) => {
-			console.log('fetchOptions thunk worked')
+		builder.addCase(fetchOptionsThunk.rejected, () => {
+			console.log('Fetching filters did not work. Reload!')
 		})
 	},
 })
