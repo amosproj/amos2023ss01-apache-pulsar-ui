@@ -6,9 +6,9 @@ COPY src/requirements.txt /app/
 
 RUN pip install -r requirements.txt
 
-COPY src/createCustomer.py /app/createCustomer.py
+COPY src/demoProducerConsumer.py /app/demoProducerConsumer.py
 COPY src/models/* /app/models/
 
 ENV PYTHONUNBUFFERED=true
 
-ENTRYPOINT ["/usr/local/bin/python3", "/app/createCustomer.py"]
+ENTRYPOINT ["/usr/local/bin/python3", "/app/demoProducerConsumer.py"]
