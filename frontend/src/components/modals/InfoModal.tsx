@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
-// SPDX-FileCopyrightText: 2010-2021 Dirk Riehle <dirk@riehle.org
-// SPDX-FileCopyrightText: 2019 Georg Schwarz <georg. schwarz@fau.de>
-
+// SPDX-FileCopyrightText: 2023 Julian Tochman-Szewc <tochman-szewc@campus.tu-berlin.de>
+// SPDX-FileCopyrightText: 2023 Shahraz Nasir <shahraz.nasir@campus.tu-berlin.de>
+// SPDX-FileCopyrightText: 2023 Ziqi He <ziqi.he@fau.de>
 import * as React from 'react'
 import { Box, Modal, IconButton, Button } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'

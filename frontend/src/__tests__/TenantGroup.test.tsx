@@ -1,3 +1,7 @@
+// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: 2023 Julian Tochman-Szewc <tochman-szewc@campus.tu-berlin.de>
+// SPDX-FileCopyrightText: 2023 Shahraz Nasir <shahraz.nasir@campus.tu-berlin.de>
+// SPDX-FileCopyrightText: 2023 Ziqi He <ziqi.he@fau.de>
 import React from 'react'
 import { render, screen } from '@testing-library/react'
 import { Provider } from 'react-redux'
@@ -12,6 +16,8 @@ const dataTest: Array<TenantInfo> = [
 			adminRoles: ['role1', 'role2'],
 			allowedClusters: ['cluster1', 'cluster2'],
 		},
+		numberOfNamespaces: 3,
+		numberOfTopics: 3,
 	},
 ]
 

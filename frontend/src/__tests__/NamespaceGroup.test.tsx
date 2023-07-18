@@ -1,3 +1,7 @@
+// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: 2023 Julian Tochman-Szewc <tochman-szewc@campus.tu-berlin.de>
+// SPDX-FileCopyrightText: 2023 Shahraz Nasir <shahraz.nasir@campus.tu-berlin.de>
+// SPDX-FileCopyrightText: 2023 Ziqi He <ziqi.he@fau.de>
 import React from 'react'
 import { render, screen } from '@testing-library/react'
 import { Provider } from 'react-redux'
@@ -9,14 +13,17 @@ const dataTest: Array<NamespaceInfo> = [
 	{
 		id: 'amos-namespace-2',
 		tenant: 'amos-tenant-2',
+		numberOfTopics: 3,
 	},
 	{
 		id: 'amos-namespace-3',
 		tenant: 'amos-tenant-3',
+		numberOfTopics: 3,
 	},
 	{
 		id: 'amos-namespace-4',
 		tenant: 'amos-tenant-4',
+		numberOfTopics: 3,
 	},
 ]
 
