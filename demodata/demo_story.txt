@@ -20,7 +20,7 @@
   6) Event-driven Architectures: Pulsar is often used as a backbone for event-driven architectures, where events are produced and consumed by various microservices and applications. It enables decoupled and asynchronous communication between different components, facilitating better scalability and fault tolerance.
 
 - Apache Pulsar is structured in a treelike arangement to create a logical separation of the data:
-  An installation can be replicated amongst different clusters and contains
+  An installation (or certain parts of it) can be replicated amongst different clusters and contains
   1) Tenents
   2) Namespaces
   3) Topics
