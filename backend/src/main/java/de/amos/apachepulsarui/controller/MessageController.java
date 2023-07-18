@@ -9,6 +9,7 @@ package de.amos.apachepulsarui.controller;
 import de.amos.apachepulsarui.dto.MessageDto;
 import de.amos.apachepulsarui.dto.MessagesDto;
 import de.amos.apachepulsarui.service.MessageService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,10 @@ public class MessageController {
     private final MessageService messageService;
 
     @GetMapping
+    @Operation(
+            summary = "Returns the latest messages of a topic ordered by publish time. " +
+                      "Be aware that messages are deduplicated by their id and you might get less messages than you requested."
+    )
     public ResponseEntity<MessagesDto> getMessages(@RequestParam String topic,
                                                    @RequestParam(required = false, defaultValue = "10") Integer numMessages,
                                                    @RequestParam(required = false, defaultValue = "") List<String> producers,
