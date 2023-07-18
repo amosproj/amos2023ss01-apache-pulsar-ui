@@ -24,7 +24,7 @@
   1) Tenents
   2) Namespaces
   3) Topics
-  Messages are grouped under the Topics and can be pusblished by a Producer and consumed by a Consumer
+  Messages are grouped under the Topics and can be pusblished by a Producer and consumed by Consumers
 
 => In summary, Apache Pulsar is a powerful messaging and streaming platform that offers scalability, durability, and flexibility for real-time data ingestion, processing, and delivery. It is widely used by companies to build high-performance, event-driven architectures and handle large-scale data streams.
 
